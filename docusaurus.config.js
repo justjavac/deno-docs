@@ -22,6 +22,7 @@ const config = {
         docs: {
           id: "runtime",
           path: "runtime",
+          editUrl: "https://github.com/justjavac/deno-docs/tree/main",
           routeBasePath: "runtime",
           sidebarPath: require.resolve("./sidebars/runtime.js"),
           remarkPlugins: [findReplace],
@@ -52,6 +53,7 @@ const config = {
       {
         id: "deploy",
         path: "deploy",
+        editUrl: "https://github.com/justjavac/deno-docs/tree/main",
         routeBasePath: "/deploy",
         sidebarPath: require.resolve("./sidebars/deploy.js"),
         remarkPlugins: [findReplace],
@@ -62,6 +64,7 @@ const config = {
       {
         id: "kv",
         path: "kv",
+        editUrl: "https://github.com/justjavac/deno-docs/tree/main",
         routeBasePath: "/kv",
         sidebarPath: require.resolve("./sidebars/kv.js"),
         remarkPlugins: [findReplace],
