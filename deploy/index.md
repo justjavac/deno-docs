@@ -23,9 +23,9 @@ Click on the **+New Project** button
 
 There are three ways to deploy a new project in Deno Deploy:
 
-- [Deploy with Github integration](./manual/ci_github)
-- [Deploy with `deployctl`](./manual/deployctl)
-- [Deploy with Deno Deploy Playground](./manual/playgrounds)
+- [Deploy with Github integration](./manual/ci_github.md)
+- [Deploy with `deployctl`](./manual/deployctl.md)
+- [Deploy with Deno Deploy Playground](./manual/playgrounds.md)
 
 Select one of these methods, depending on the kind of project you have.
 
@@ -34,15 +34,15 @@ Select one of these methods, depending on the kind of project you have.
 We generally recommend deploying with the Github integration because it is the
 fastest. If you need to run a CI build process first (for example generating
 static assets), we recommend deploying with the Github integration, and
-selecting [Github Action](./manual/ci_github#github-action)
+selecting [Github Action](./manual/ci_github.md#github-action)
 
 ## **Step 3:** Adjust project settings if necessary
 
 Once the project has been created, you can adjust a number of project settings
 on the **Settings** tab. For more details, follow the links below.
 
-- [Custom domain](./manual/custom-domains)
-- [Environment variables](./manual/environment-variables)
+- [Custom domain](./manual/custom-domains.md)
+- [Environment variables](./manual/environment-variables.md)
 
 ## **Step 4:** Find project URL
 
