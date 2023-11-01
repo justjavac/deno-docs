@@ -1,18 +1,17 @@
-# Where To Get Help
+# 获取帮助
 
-Stuck? Lost? Get Help from the Community.
+遇到问题？迷失了方向？寻求社区的帮助吧。
 
-## [Community Discord](https://discord.gg/deno)
+## [社区 Discord](https://discord.gg/deno)
 
-Ask questions and chat with community members in real-time.
+在实时中与社区成员交流并提出问题。
 
 ## [Stack Overflow](https://stackoverflow.com/questions/tagged/deno)
 
-Stack Overflow is a popular forum to ask code-level questions or if you're stuck
-with a specific error.
-[ask your own!](https://stackoverflow.com/questions/ask?tags=deno)
+Stack Overflow 是一个流行的论坛，可用于提问关于代码层面的问题或解决特定错误。
+[提出你自己的问题！](https://stackoverflow.com/questions/ask?tags=deno)
 
-## [DEV's Deno Community](https://dev.to/t/deno)
+## [DEV 的 Deno 社区](https://dev.to/t/deno)
 
-A great place to find interesting articles about best practices, application
-architecture and new learnings. Post your articles with the tag `deno`.
+一个寻找有关最佳实践、应用架构和新知识的有趣文章的好地方。发布你的文章时请加上标签
+`deno`。

@@ -100,7 +100,7 @@ const config = {
         {
           to: "/runtime/manual",
           position: "left",
-          label: "Runtime",
+          label: "运行时",
           activeBaseRegex: `^/runtime`,
         },
         {
@@ -150,7 +150,7 @@ const config = {
           title: "Deno 文档",
           items: [
             {
-              label: "Deno Runtime",
+              label: "Deno 运行时",
               to: "/runtime/manual",
             },
             /*
@@ -168,17 +168,17 @@ const config = {
               to: "/kv/manual",
             },
             {
-              label: "Standard Library",
+              label: "标准库",
               href: "https://deno.land/std",
             },
             {
-              label: "Deno by Example",
+              label: "示例",
               href: "https://examples.deno.land",
             },
           ],
         },
         {
-          title: "Community",
+          title: "社区",
           items: [
             {
               label: "Discord",

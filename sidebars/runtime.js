@@ -8,7 +8,7 @@ const mainMenu = [
   // https://docusaurus.io/docs/sidebar/items
   {
     type: "html",
-    value: "<div>Deno Runtime</div>",
+    value: "<div>Deno 运行时</div>",
     className: "product-header",
   },
   /*
@@ -22,18 +22,18 @@ const mainMenu = [
   {
     type: "link",
     href: "/runtime/manual",
-    label: "Manual",
+    label: "手册",
     className: "icon-menu-option icon-menu-user-guide",
   },
   {
     type: "link",
-    label: "Tutorials & Examples",
+    label: "教程和示例",
     href: "/runtime/tutorials",
     className: "icon-menu-option icon-menu-tutorials",
   },
   {
     type: "link",
-    label: "API Reference",
+    label: "API 参考",
     href: "https://deno.land/api?unstable=true",
     className: "icon-menu-option icon-menu-api __no-external",
   },
@@ -45,17 +45,17 @@ const sidebars = {
   runtimeGuideHome: mainMenu.concat([
     {
       type: "html",
-      value: "<div>Manual</div>",
+      value: "<div>手册</div>",
       className: "section-header",
     },
     {
       type: "doc",
-      label: "Quick Start",
+      label: "快速入门",
       id: "manual/index",
     },
     {
       type: "category",
-      label: "Deno Basics",
+      label: "Deno 基础",
       items: [
         "manual/getting_started/installation",
         "manual/getting_started/first_steps",
@@ -74,7 +74,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Using & Publishing Modules",
+      label: "使用与发布模块",
       items: [
         "manual/basics/modules/index",
         "manual/basics/modules/reloading_modules",
@@ -87,7 +87,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Deno Runtime APIs",
+      label: "Deno 运行时 API",
       items: [
         "manual/runtime/builtin_apis",
         "manual/runtime/http_server_apis",
@@ -100,7 +100,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Web Platform APIs",
+      label: "Web 平台 API",
       items: [
         "manual/runtime/web_platform_apis",
         "manual/runtime/location_api",
@@ -110,7 +110,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Interop with Node.js & npm",
+      label: "与 Node.js/npm 的互操作",
       items: [
         "manual/node/index",
         "manual/node/npm_specifiers",
@@ -125,7 +125,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "CLI Commands",
+      label: "CLI 命令",
       items: [
         "manual/tools/index",
         {
@@ -192,7 +192,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Testing",
+      label: "测试",
       items: [
         "manual/basics/testing/index",
         "manual/basics/testing/assertions",
@@ -214,7 +214,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Deploying & Embedding Deno",
+      label: "部署与嵌入 Deno",
       items: [
         "manual/advanced/deploying_deno/index",
         "manual/advanced/deploying_deno/aws_lightsail",
@@ -228,7 +228,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "TypeScript in Deno",
+      label: "Deno 中的 TypeScript",
       items: [
         "manual/advanced/typescript/overview",
         "manual/advanced/typescript/types",
@@ -249,7 +249,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "JSX and DOM APIs",
+      label: "JSX/DOM API",
       items: [
         "manual/advanced/jsx_dom/overview",
         "manual/advanced/jsx_dom/jsx",
@@ -271,7 +271,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Contributing to Deno",
+      label: "为 Deno 贡献代码",
       items: [
         "manual/references/contributing/index",
         "manual/references/contributing/architecture",
@@ -289,13 +289,13 @@ const sidebars = {
   runtimeTutorialsHome: mainMenu.concat([
     {
       type: "html",
-      value: "<div>Tutorials &amp; Examples</div>",
+      value: "<div>教程和示例</div>",
       className: "section-header",
     },
     "tutorials/index",
     {
       type: "category",
-      label: "Basic Examples",
+      label: "基础实例",
       items: [
         "tutorials/hello_world",
         "tutorials/manage_dependencies",
@@ -306,7 +306,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Advanced Examples",
+      label: "高级示例",
       items: [
         "tutorials/unix_cat",
         "tutorials/http_server",
@@ -320,7 +320,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "npm Module Examples",
+      label: "npm 模块示例",
       items: [
         "tutorials/how_to_with_npm/apollo",
         "tutorials/how_to_with_npm/express",
@@ -335,7 +335,7 @@ const sidebars = {
     },
     {
       type: "link",
-      label: "More on Deno by Example",
+      label: "更多 Deno 示例",
       href: "https://examples.deno.land",
     },
     spacer,

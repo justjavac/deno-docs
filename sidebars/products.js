@@ -1,7 +1,7 @@
 export const products = [
   {
-    name: "Deno Runtime",
-    shortName: "Runtime",
+    name: "Deno 运行时",
+    shortName: "运行时",
     slug: "runtime",
   },
   {

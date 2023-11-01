@@ -6,24 +6,19 @@ pagination_next: manual/getting_started/installation
 
 import { replacements } from "@site/src/components/Replacement";
 
-# Deno Runtime Quick Start
+# Deno Runtime 快速入门
 
 [Deno](https://www.deno.com)
-([/ˈdiːnoʊ/](http://ipa-reader.xyz/?text=%CB%88di%CB%90no%CA%8A), pronounced
-`dee-no`) is a JavaScript, TypeScript, and WebAssembly runtime with secure
-defaults and a great developer experience. It's built on [V8](https://v8.dev/),
-[Rust](https://www.rust-lang.org/), and [Tokio](https://tokio.rs/). 
+([/ˈdiːnoʊ/](http://ipa-reader.xyz/?text=%CB%88di%CB%90no%CA%8A)，发音为
+`dee-no`) 是一个具有安全默认设置和出色开发者体验的 JavaScript、TypeScript 和 WebAssembly 运行时。它构建在 [V8](https://v8.dev/)、[Rust](https://www.rust-lang.org/)和 [Tokio](https://tokio.rs/) 之上。
 
-Deno is free and open source software under the 
-[MIT license](https://github.com/denoland/deno/blob/main/LICENSE.md).
+Deno 是自由且开源的软件，采用 [MIT 许可证](https://github.com/denoland/deno/blob/main/LICENSE.md)。
 
-Let's create and run your first Deno program in under five minutes, and 
-introduce you to a few key features of the runtime.
+让我们在不到五分钟内创建并运行您的第一个 Deno 程序，并为您介绍一些运行时的关键特性。
 
-## Install Deno
+## 安装 Deno
 
-Install the Deno runtime on your system using one of the terminal commands
-below.
+使用以下终端命令之一在系统上安装 Deno 运行时。
 
 import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem';
 
@@ -31,40 +26,35 @@ import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem';
   <TabItem value="mac" label="macOS" default>
 
 ```sh
-curl -fsSL https://deno.land/x/install/install.sh | sh
+curl -fsSL https://x.deno.js.cn/install.sh | sh
 ```
 
 </TabItem>
   <TabItem  value="windows" label="Windows">
 
 ```powershell
-irm https://deno.land/install.ps1 | iex
+irm https://x.deno.js.cn/install.ps1 | iex
 ```
 
 </TabItem>
   <TabItem value="linux" label="Linux">
 
 ```sh
-curl -fsSL https://deno.land/x/install/install.sh | sh
+curl -fsSL https://x.deno.js.cn/install.sh | sh
 ```
 
 </TabItem>
 </Tabs>
 
-[Additional installation options can be found here](./getting_started/installation.md).
-After installation, you should have the `deno` executable available on your
-system path. You can confirm this is the case by running this command in your
-terminal:
+[其他安装选项可以在这里找到](./getting_started/installation.md)。安装后，您应该在系统路径上找到 `deno` 可执行文件。您可以通过在终端中运行以下命令来确认这一点：
 
 ```sh
 deno --version
 ```
 
-## Create and run a TypeScript program
+## 创建并运行一个 TypeScript 程序
 
-While you are welcome to use pure JavaScript, Deno has built-in support for
-[TypeScript](https://www.typescriptlang.org/) as well. In your terminal, create
-a new file called `hello.ts`, and include the following code.
+虽然您可以使用纯 JavaScript，但 Deno 还内置了对 [TypeScript](https://www.typescriptlang.org/) 的支持。在终端中，创建一个名为 `hello.ts` 的新文件，并包含以下代码。
 
 ```ts title="hello.ts"
 interface Person {
@@ -84,45 +74,30 @@ const ada: Person = {
 console.log(sayHello(ada));
 ```
 
-This program declares an
-[interface](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#interfaces)
-for a Person, and defines a function that prints a message to the console using
-this data type. You can execute the code in this example using the `deno run`
-command.
+此程序声明了一个用于表示个人信息的[接口](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#interfaces)，并定义了一个使用这种数据类型向控制台打印消息的函数。您可以使用 `deno run` 命令来执行此示例中的代码。
 
 ```
 deno run -A hello.ts
 ```
 
-You can
-[learn more about using TypeScript in Deno here](./advanced/typescript/overview.md).
+您可以在[这里了解有关在 Deno 中使用 TypeScript 的更多信息](./advanced/typescript/overview.md)。
 
-## Built-in web APIs and the Deno namespace
+## 内置 Web API 和 Deno 命名空间
 
-Deno aims to provide a browser-like programming environment,
-[implementing web standard APIs](./runtime/web_platform_apis.md) that exist in
-front-end JavaScript. For example, the
-[`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API is
-available in the global scope, just as in the browser. To see this in action,
-replace the contents of `hello.ts` with the following code.
+Deno 旨在提供一个类似浏览器的编程环境，[实现了存在于前端 JavaScript 中的 Web 标准 API](./runtime/web_platform_apis.md)。例如，[`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API 在全局范围内可用，就像在浏览器中一样。要查看这个示例，请将 `hello.ts` 的内容替换为以下代码。
 
 ```ts
 const site = await fetch("https://www.deno.com");
 console.log(await site.text());
 ```
 
-And then run it with:
+然后运行它：
 
 ```
 deno run -A hello.ts
 ```
 
-For APIs that don't exist as a web standard (like accessing variables from the
-system environment, or manipulating the file system), those APIs are exposed in
-the [`Deno` namespace](./runtime/builtin_apis.md). Replace the contents of
-`hello.ts` with the following code, which will start
-[an HTTP server](https://deno.land/api?s=Deno.serve) on
-[localhost:8000](http://localhost:8000).
+对于不存在于 Web 标准中的 API（例如从系统环境中访问变量或操作文件系统的 API），这些 API 会在 [`Deno` 命名空间](./runtime/builtin_apis.md)中公开。将 `hello.ts` 的内容替换为以下代码，它将在 [localhost:8000](http://localhost:8000) 上启动[一个 HTTP 服务器](https://deno.land/api?s=Deno.serve)。
 
 ```ts
 Deno.serve((_request: Request) => {
@@ -130,47 +105,36 @@ Deno.serve((_request: Request) => {
 });
 ```
 
-Run the script above with:
+使用以下命令运行上面的脚本：
 
 ```
 deno run -A hello.ts
 ```
 
-Learn more about the [web-standard APIs](./runtime/web_platform_apis.md) built
-in to Deno and the [`Deno` namespace APIs](./runtime/builtin_apis.md).
+了解更多关于内置在 Deno 中的 [Web 标准 API](./runtime/web_platform_apis.md) 以及 [`Deno` 命名空间 API](./runtime/builtin_apis.md) 的信息。
+## 运行时安全性
 
-## Runtime security
+Deno 的一个主要特性是默认提供[运行时安全性](./basics/permissions.md)，这意味着您作为开发者必须明确允许您的代码访问潜在敏感的 API，比如文件系统访问、网络连接和环境变量访问。
 
-A major feature of Deno is
-[runtime security by default](./basics/permissions.md), meaning that you as the
-developer must explicitly allow your code to access potentially sensitive APIs
-like file system access, network connectivity, and access to environment
-variables.
+到目前为止，我们一直在使用 `-A` 标志运行所有脚本，这会授予我们的脚本所有运行时功能的访问权限。这是运行 Deno 程序的最宽松模式，但通常您只希望授予您的代码运行所需的权限。
 
-So far, we've been running all of our scripts with the `-A` flag, which grants
-all runtime feature access to our scripts. This is the most permissive mode to
-run a Deno program, but usually you'll want to grant your code only the
-permissions it needs to run.
-
-To see this in action, let's replace the contents of `hello.ts` again with the
-`fetch` example from earlier.
+为了看到这一点的效果，让我们再次将 `hello.ts` 的内容替换为之前的 `fetch` 示例。
 
 ```ts
 const site = await fetch("https://www.deno.com");
 console.log(await site.text());
 ```
 
-Run this program **without** the `-A` flag - what happens then?
+不使用 `-A` 标志运行此程序 - 然后会发生什么？
 
 ```bash
 deno run hello.ts
 ```
 
-Without any permission flags passed in, you'll see security prompts that look
-something like this:
+如果没有传递任何权限标志，您将看到类似以下内容的安全提示：
 
 ```
-kevin@kevin-deno scratchpad % deno run index.ts
+justjavac@justjavac-deno scratchpad % deno run index.ts
 ✅ Granted net access to "www.deno.com".
 ┌ ⚠️  Deno requests net access to "deno.com".
 ├ Requested by `fetch()` API.
@@ -178,24 +142,17 @@ kevin@kevin-deno scratchpad % deno run index.ts
 └ Allow? [y/n/A] (y = yes, allow; n = no, deny; A = allow all net permissions) >
 ```
 
-In the prompt, you might have noticed that it mentions the CLI flag you'd need to run your code with permission to access the network - the `--allow-net` flag. If you run the script again using this flag, you won't be prompted to interactively grant network access to your script:
+在提示中，您可能已经注意到它提到了需要使用权限来访问网络的 CLI 标志 - `--allow-net` 标志。如果您使用此标志再次运行脚本，您将不会被提示交互式地授予网络访问权限：
 
 ```bash
 deno run --allow-net hello.ts
 ```
 
-For simplicity, we will sometimes show examples that use `deno run -A ...`, but
-whenever possible (and in your production or CI environments), we'd encourage
-you to take advantage of Deno's full suite of
-[configurable runtime security options](./basics/permissions.md).
+为简单起见，有时我们会展示使用 `deno run -A ...` 的示例，但在可能的情况下（在生产或 CI 环境中），我们鼓励您利用 Deno 的完整套[可配置的运行时安全选项](./basics/permissions.md)。
 
-## Importing JavaScript modules
+## 导入 JavaScript 模块
 
-Most of the time, you will want to break up your program into multiple files.
-Again favoring web standards and a browser-like programming model, Deno supports
-this through
-[ECMAScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules).
-Consider the earlier TypeScript example we showed you:
+大多数情况下，您会希望将程序拆分为多个文件。再次强调 Web 标准和类似浏览器的编程模型，Deno 通过 [ECMAScript 模块](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)支持这一点。考虑我们之前展示的 TypeScript 示例：
 
 ```ts title="hello.ts"
 interface Person {
@@ -215,9 +172,7 @@ const ada: Person = {
 console.log(sayHello(ada));
 ```
 
-You might want to break this program up such that the `Person` interface and the
-`sayHello` function are in a separate module. To do this, create a new file in
-the same directory called `person.ts` and include the following code:
+您可能希望将此程序拆分，使 `Person` 接口和 `sayHello` 函数位于一个单独的模块中。为此，在相同目录下创建一个名为 `person.ts` 的新文件，并包含以下代码：
 
 ```ts title="person.ts"
 export default interface Person {
@@ -230,13 +185,9 @@ export function sayHello(p: Person): string {
 }
 ```
 
-This module creates a
-[named export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#exporting_module_features)
-for the `sayHello` function, and a
-[default export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#default_exports_versus_named_exports)
-for the `Person` interface.
+这个模块为 `sayHello` 函数创建了一个[命名导出](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#exporting_module_features)，并为 `Person` 接口创建了一个[默认导出](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#default_exports_versus_named_exports)。
 
-Back in `hello.ts`, you would consume this module using the `import` keyword.
+回到 `hello.ts`，您可以使用 `import` 关键字来使用这个模块。
 
 ```ts title="hello.ts"
 import Person, { sayHello } from "./person.ts";
@@ -249,26 +200,19 @@ const ada: Person = {
 console.log(sayHello(ada));
 ```
 
-:::info File extensions required in imports
+:::info 导入时需要文件扩展名
 
-Note that **file extensions are required** when importing modules - import logic
-in Deno works as it does in the browser, where you would include the full file
-name of your imports.
+请注意，导入模块时**需要文件扩展名** - 在 Deno 中的导入逻辑与浏览器中的导入逻辑相同，您需要包含导入的完整文件名。
 
 :::
 
-[You can learn more about the module system in Deno here](./basics/modules/index.md).
+[您可以在此了解有关 Deno 模块系统的更多信息](./basics/modules/index.md)。
 
-## Remote modules and the Deno standard library
+## 远程模块和 Deno 标准库
 
-Deno supports loading and executing code from URLs, much as you would using a
-`<script>` tag in the browser. In Deno 1.x, the
-[standard library](https://deno.land/std) and most
-[third-party modules](https://deno.land/x) are distributed on HTTPS URLs.
+Deno 支持从 URL 加载和执行代码，就像在浏览器中使用 `<script>` 标签一样。在 Deno 1.x 中，[标准库](https://deno.land/std) 和大多数[第三方模块](https://deno.land/x)都是通过 HTTPS URL 分发的。
 
-To see this in action, let's create a test for the `person.ts` module we created
-above. Deno provides a [built-in test runner](./basics/testing/index.md), which
-uses an assertion module distributed via HTTPS URL.
+为了看到这一点的效果，让我们为我们上面创建的 `person.ts` 模块创建一个测试。Deno 提供了一个[内置的测试运行器](./basics/testing/index.md)，它使用通过 HTTPS URL 分发的断言模块。
 
 ```ts title="person_test.ts"
 import { assertEquals } from "https://deno.land/std@$STD_VERSION/assert/mod.ts";
@@ -284,62 +228,53 @@ Deno.test("sayHello function", () => {
 });
 ```
 
-Run this test with:
+使用以下命令运行此测试：
 
 ```
 deno test person_test.ts
 ```
 
-The output should look something like this:
+输出应该类似于以下内容：
 
 ```
-kevin@kevin-deno scratchpad % deno test person_test.ts
-Check file:///Users/kevin/dev/denoland/scratchpad/person_test.ts
+just java c@justjavac-deno scratchpad % deno test person_test.ts
+Check file:///Users/justjavac/dev/denoland/scratchpad/person_test.ts
 running 1 test from ./person_test.ts
 sayHello function ... ok (4ms)
 
 ok | 1 passed | 0 failed (66ms)
 ```
 
-There's much more to explore with [the standard library](https://deno.land/std)
-and [third-party modules](https://deno.land/x) - be sure to check them out!
+还有很多要探索的内容，[标准库](https://deno.land/std) 和[第三方模块](https://deno.land/x) - 一定要去了解它们！
 
-## Configure your project with deno.json
+## 使用 deno.json 配置项目
 
-Deno projects don't require a configuration file by default, but sometimes it's
-convenient to store settings, admin scripts, and dependency configuration in a
-well-known location. In Deno, that file is
-[`deno.json` or `deno.jsonc`](./getting_started/configuration_file.md). This
-file acts a bit like a `package.json` file in Node.js.
+Deno 项目默认不需要配置文件，但有时将设置、管理脚本和依赖项配置存储在一个众所周知的位置是方便的。在 Deno 中，这个文件是 [`deno.json` 或 `deno.jsonc`](./getting_started/configuration_file.md)。这个文件在某种程度上类似于 Node.js 中的 `package.json` 文件。
 
-One of the things you can use `deno.json` for is configuring an
-[import map](./basics/import_maps.md), which will let you set up aliases for
-frequently used modules. 
+你可以使用 `deno.json` 来配置[导入映射](./basics/import_maps.md)，它可以让你为经常使用的模块设置别名。
 
 <p>
-  To demonstrate, let's pin the version of the standard library we want to 
-  use in our project to version <code>{ replacements.STD_VERSION }</code>.
+  为了演示，让我们将我们项目中想要使用的标准库版本固定为 <code>{ replacements.STD_VERSION }</code>。
 </p>
 
-Create a `deno.jsonc` file with the following contents.
+创建一个包含以下内容的 `deno.jsonc` 文件。
 
 ```js title="deno.jsonc"
 {
   "imports": {
-    // The dollar sign in front of "std" isn't special - it's an optional
-    // convention to show that $std is an alias set up in an import map
+    // "std" 前面的美元符号不是特殊符号 - 它是导入映射中设置的别名的可选约定
     "$std/": "https://deno.land/std@$STD_VERSION/"
   }
 }
 ```
 
-Now, open up your test file from before, and change it to use this import alias.
+现在，打开之前的测试文件，并更改以使用这个导入别名。
 
 ```ts title="person_test.ts"
 import { assertEquals } from "$std/assert/mod.ts";
 import Person, { sayHello } from "./person.ts";
 
-Deno.test("sayHello function", () => {
+Deno.test("sayHello 函数", () => {
   const grace: Person = {
     lastName: "Hopper",
     firstName: "Grace",
@@ -349,25 +284,15 @@ Deno.test("sayHello function", () => {
 });
 ```
 
-Running the test with `deno test person_test.ts` should work just as before, but
-you might notice that Deno downloads a few extra files and generates a
-`deno.lock` file, specifying a set of files depended on by your code. Both
-`deno.jsonc` and `deno.lock` can be checked in to source control.
+使用 `deno test person_test.ts` 运行测试应该与之前一样工作，但你可能会注意到 Deno 下载了一些额外的文件并生成了一个 `deno.lock` 文件，其中指定了你的代码所依赖的一组文件。`deno.jsonc` 和 `deno.lock` 都可以检入到源代码控制中。
 
-Learn more about
-[configuring your project here](./getting_started/configuration_file.md).
+了解更多关于[配置你的项目的信息](./getting_started/configuration_file.md)。
 
-## Node.js APIs and npm packages
+## Node.js API 和 npm 包
 
-Deno provides a compatibility layer that enables your code to use
-[Node.js built-in modules and third-party modules from npm](./node/index.md).
-Using Node and npm modules in your code looks a lot like using standard Deno
-modules, except you'll use either a `node:` or `npm:` specifier when importing
-Node built-ins or npm moudles, respectively.
+Deno 提供了一个兼容层，使您的代码能够使用 [Node.js 内置模块和来自 npm 的第三方模块](./node/index.md)。在您的代码中使用 Node 和 npm 模块看起来很像使用标准的 Deno 模块，除了在导入 Node 内置模块或 npm 模块时，您将使用 `node:` 或 `npm:` 指示符。
 
-To see how it works, create a file called `server.js` and include the
-following - a simple HTTP server using the popular
-[Express](https://expressjs.com) framework.
+为了了解它是如何工作的，创建一个名为 `server.js` 的文件，并包含以下内容 - 一个使用流行的 [Express](https://expressjs.com) 框架创建的简单HTTP服务器。
 
 ```js
 import express from "npm:express@4";
@@ -381,77 +306,34 @@ app.get("/", (request, response) => {
 app.listen(3000);
 ```
 
-With `node:` and `npm:` specifiers, you can bring the best of the Node.js
-ecosystem with you to Deno.
-[Learn more about Node and npm support](./node/index.md).
+使用 `node:` 和 `npm:` 指示符，您可以将 Node.js 生态系统的优势带入 Deno 中。[了解更多关于 Node 和 npm 支持的信息](./node/index.md)。
 
-## Configure your IDE
+## 配置你的 IDE
 
-Deno development is supported in a number of 
-[major IDEs](./getting_started/setup_your_environment.md). A popular option is
-**Visual Studio Code**, with an 
-[official extension](./references/vscode_deno/index.md) maintained by the Deno
-team. 
-[Install the extension](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
-and enable it in your VS Code workspace by choosing the 
-`Deno: Initialize Workspace Configuration` option in the 
-[command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+Deno 开发在多个主要IDE中都得到了支持。其中一个流行的选项是 **Visual Studio Code**，它由 justjavac 创建目前由 Deno 团队维护着[官方扩展](./references/vscode_deno/index.md)。
+[安装扩展](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)，并在 VS Code 工作区中启用它，选择命令面板中的 `Deno: Initialize Workspace Configuration` 选项。
 
-![command palette setup](./images/command_palette.png)
+![命令面板设置](./images/command_palette.png)
 
+如果你不是 VS Code 的用户，可以在[这里](./getting_started/setup_your_environment.md)找到适合你喜欢的编辑器的集成。
 
-Not a VS Code user? Find an integration for your favorite editor 
-[here](./getting_started/setup_your_environment.md).
+## Web 应用程序框架
 
-## Web application frameworks
+Deno 的一个常见用例是构建数据驱动的 Web 应用程序。通常，这需要使用更高级别的Web框架，在 Deno 生态系统中存在许多选择。以下是一些最受欢迎的选择。
 
-A common use case for Deno is building data-driven web applications. Doing that
-usually requires use of a higher-level web framework, for which many options
-exist in the Deno ecosystem. Here are a few of the most popular choices.
+### Deno 本地框架
 
-### Deno-native frameworks
+- [Deno Fresh](https://fresh.deno.dev) - Fresh 是专为 Deno 设计的 Web 框架。页面默认由服务器呈现，还可以包含在客户端上运行 JavaScript 的交互式岛屿选项。如果您刚开始使用 Deno 并寻找一个起点，我们建议首先尝试 Fresh！
+- [Hono](https://hono.dev/getting-started/deno) - Hono 是一款轻量级 Web 框架，类似于 [Express](https://expressjs.com)。非常适用于 API 服务器和简单的 Web 应用程序。
 
-- [Deno Fresh](https://fresh.deno.dev) - Fresh is a web framework designed for
-  Deno. Pages are server-rendered by default, with the option to include
-  interactive islands that run JavaScript on the client. If you're new to Deno
-  and looking for a place to start, we recommend trying Fresh first!
-- [Hono](https://hono.dev/getting-started/deno) - Hono is a light-weight web 
-  framework in the tradition of [Express](https://expressjs.com). Great for 
-  API servers and simple web applications.
+### Deno兼容框架
 
-### Deno-compatible frameworks
+- [Astro](https://astro.build/) - Astro 是一个现代的Web框架，最初是为 Node.js 设计的，但在 Deno 上也运行得很好。我们建议从[这个模板](https://github.com/denoland/deno-astro-template)开始。
+- [SvelteKit](https://kit.svelte.dev/) - SvelteKit 是另一个更适用于运行时的 Web 框架，可以与 Deno 一起使用。我们建议从[这个模板](https://github.com/denoland/deno-sveltekit-template)开始。
+- [Nuxt (Vue)](https://nuxt.com/) - Nuxt 是一个混合 SSR 和客户端框架，可以 与Deno 一起使用。我们建议从[这个模板](https://github.com/denoland/deno-nuxt-template)开始。
 
-- [Astro](https://astro.build/) - Astro is a modern web framework that was
-  originally designed for Node.js, but runs great on Deno as well. We recommend
-  starting with
-  [this template](https://github.com/denoland/deno-astro-template).
-- [SvelteKit](https://kit.svelte.dev/) - SvelteKit is another more
-  runtime-agnostic web framework that can be used with Deno. We recommend 
-  starting with [this template](https://github.com/denoland/deno-sveltekit-template).
-- [Nuxt (Vue)](https://nuxt.com/) - Nuxt is a hybrid SSR and client-side
-  framework that works with Deno. We recommend 
-  starting with [this template](https://github.com/denoland/deno-nuxt-template).
+除了上面列出的框架外，还有更多支持 Deno 的框架，但我们建议从这些开始作为一个很好的起点。
 
-Many more frameworks support Deno than are listed here, but we'd recommend these
-as a great starting point.
+## 部署到生产环境
 
-## Deploying to production
-
-When you're ready to move into production, your easiest option will be
-[Deno Deploy](/deploy/manual). Deno Deploy makes it easy to create fast,
-globally distributed serverless applications with Deno.
-
-You can also host Deno
-[in almost any cloud environment](./advanced/deploying_deno/index.md).
-
-## Next Steps
-
-We've only just scratched the surface of what's possible with Deno. Here are a
-few resources you might want to check out next.
-
-- [Install & Setup](./getting_started/installation.md) - options for installing
-  and configuring Deno
-- [Tutorials and Examples](../tutorials/index.md) - Sample code and use cases
-  for Deno
-- [Deno by Example](https://examples.deno.land) - Code snippets to learn Deno by
-  example
+当你准备进入生产环境时，最简单的选择将是 [Deno Deploy](/deploy/manual)。Deno Deploy 使您能够轻松创建使用 Deno 的快速、全球分布的

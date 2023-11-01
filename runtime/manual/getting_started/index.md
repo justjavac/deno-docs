@@ -1,10 +1,10 @@
-# Getting Started
+# 入门指南
 
-In this chapter we'll discuss:
+在本章中，我们将讨论以下内容：
 
-- [Installing Deno](./installation.md)
-- [Setting Up Your Environment](./setup_your_environment.md)
-- [Running a `Hello World` Script](./first_steps.md)
-- [Command Line Interface](./command_line_interface.md)
-- [Configuration File](./configuration_file.md)
-- [Web Frameworks](./web_frameworks.md)
+- [安装 Deno](./installation.md)
+- [设置您的开发环境](./setup_your_environment.md)
+- [运行 'Hello World' 脚本](./first_steps.md)
+- [命令行界面](./command_line_interface.md)
+- [配置文件](./configuration_file.md)
+- [Web 框架](./web_frameworks.md)

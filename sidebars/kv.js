@@ -9,18 +9,18 @@ const mainMenu = [
   {
     type: "link",
     href: "/kv/manual",
-    label: "Manual",
+    label: "手册",
     className: "icon-menu-option icon-menu-user-guide",
   },
   {
     type: "link",
-    label: "Tutorials & Examples",
+    label: "教程和示例",
     href: "/kv/tutorials",
     className: "icon-menu-option icon-menu-tutorials",
   },
   {
     type: "link",
-    label: "API Reference",
+    label: "API 参考",
     href: "https://deno.land/api?unstable=true&s=Deno.Kv",
     className: "icon-menu-option icon-menu-api __no-external",
   },
@@ -32,12 +32,12 @@ const sidebars = {
   kvGuideHome: mainMenu.concat([
     {
       type: "html",
-      value: "<div>Manual</div>",
+      value: "<div>手册</div>",
       className: "section-header",
     },
     {
       type: "doc",
-      label: "Quick Start",
+      label: "快速入门",
       id: "manual/index",
     },
     "manual/key_space",
@@ -53,12 +53,12 @@ const sidebars = {
   kvTutorialsHome: mainMenu.concat([
     {
       type: "html",
-      value: "<div>Tutorials &amp; Examples</div>",
+      value: "<div>教程和示例</div>",
       className: "section-header",
     },
     {
       type: "doc",
-      label: "Overview",
+      label: "概述",
       id: "tutorials/index",
     },
     {

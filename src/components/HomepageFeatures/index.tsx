@@ -10,24 +10,20 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "Better out of the box",
+    title: "开箱即用",
     Svg: require("@site/static/img/deno-box.svg").default,
     description: (
       <>
-        The Deno runtime has support for TypeScript and JSX out of the box,
-        along with a built-in key/value store, linter, formatter, and testing
-        library.
+        Deno 运行时默认支持 TypeScript 和
+        JSX，同时还内置了键值存储、代码检查工具、代码格式化工具以及测试库。
       </>
     ),
   },
   {
-    title: "Secure by default",
+    title: "默认安全",
     Svg: require("@site/static/img/deno-shield.svg").default,
     description: (
-      <>
-        Fine-grained permissions let you control what APIs are accessible to
-        your programs and their dependencies.
-      </>
+      <>细粒度的权限允许您控制哪些API可以被您的程序及其依赖项访问。</>
     ),
   },
   {
@@ -36,7 +32,10 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         Easily create globally distributed app servers with&nbsp;
-        <a href="https://www.deno.com/deploy" target="_blank">Deno Deploy</a>.
+        <a href="https://www.deno.com/deploy" target="_blank">
+          Deno Deploy
+        </a>
+        .
       </>
     ),
   },

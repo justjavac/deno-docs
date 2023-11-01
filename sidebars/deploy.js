@@ -9,18 +9,18 @@ const mainMenu = [
   {
     type: "link",
     href: "/deploy/manual",
-    label: "Manual",
+    label: "手册",
     className: "icon-menu-option icon-menu-user-guide",
   },
   {
     type: "link",
-    label: "Tutorials & Examples",
+    label: "教程和示例",
     href: "/deploy/tutorials",
     className: "icon-menu-option icon-menu-tutorials",
   },
   {
     type: "link",
-    label: "API Reference",
+    label: "API 参考",
     href: "/deploy/api",
     className: "icon-menu-option icon-menu-api",
   },
@@ -32,17 +32,17 @@ const sidebars = {
   deployGuideHome: mainMenu.concat([
     {
       type: "html",
-      value: "<div>Manual</div>",
+      value: "<div>手册</div>",
       className: "section-header",
     },
     {
       type: "doc",
-      label: "Quick Start",
+      label: "快速入门",
       id: "manual/index",
     },
     {
       type: "category",
-      label: "Deploy Basics",
+      label: "Deploy 基础",
       items: [
         "manual/use-cases",
         "manual/playgrounds",
