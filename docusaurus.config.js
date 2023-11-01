@@ -3,16 +3,16 @@ const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 const config = {
-  title: "Deno Docs",
-  tagline: "Deno is the next generation runtime for JavaScript and TypeScript.",
+  title: "Deno 文档",
+  tagline: "Deno 是 JavaScript 和 TypeScript 的下一代运行时。",
   favicon: "img/favicon.ico",
-  url: "https://docs.deno.com",
+  url: "https://docs.denohub.com",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   i18n: {
-    defaultLocale: "en",
-    locales: ["en"],
+    defaultLocale: "zh-CN",
+    locales: ["zh-CN"],
   },
   presets: [
     [
@@ -23,15 +23,10 @@ const config = {
           path: "runtime",
           routeBasePath: "runtime",
           sidebarPath: require.resolve("./sidebars/runtime.js"),
-          remarkPlugins: [
-            findReplace,
-          ],
+          remarkPlugins: [findReplace],
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
-        },
-        googleTagManager: {
-          containerId: "GTM-5B5TH8ZJ",
         },
       },
     ],
@@ -58,9 +53,7 @@ const config = {
         path: "deploy",
         routeBasePath: "/deploy",
         sidebarPath: require.resolve("./sidebars/deploy.js"),
-        remarkPlugins: [
-          findReplace,
-        ],
+        remarkPlugins: [findReplace],
       },
     ],
     [
@@ -70,13 +63,12 @@ const config = {
         path: "kv",
         routeBasePath: "/kv",
         sidebarPath: require.resolve("./sidebars/kv.js"),
-        remarkPlugins: [
-          findReplace,
-        ],
+        remarkPlugins: [findReplace],
       },
     ],
     // Enables our custom pages in "src" to use Tailwind classes
-    async function tailwindPlugin(context, options) {
+    // deno-lint-ignore no-unused-vars
+    function tailwindPlugin(context, options) {
       return {
         name: "docusaurus-tailwindcss",
         configurePostCss(postcssOptions) {
@@ -89,14 +81,14 @@ const config = {
     },
   ],
 
-  themeConfig: ({
+  themeConfig: {
     // Social card
     image: "img/social.png",
     colorMode: {
       defaultMode: "light",
     },
     navbar: {
-      title: "Deno Docs",
+      title: "Deno 文档",
       logo: {
         alt: "Deno",
         src: "img/logo.svg",
@@ -135,8 +127,8 @@ const config = {
           },
           */
         {
-          href: "https://www.deno.com",
-          label: "deno.com",
+          href: "https://deno.js.cn",
+          label: "中文社区",
           position: "right",
         },
       ],
@@ -154,7 +146,7 @@ const config = {
       style: "light",
       links: [
         {
-          title: "Deno Docs",
+          title: "Deno 文档",
           items: [
             {
               label: "Deno Runtime",
@@ -210,10 +202,10 @@ const config = {
           ],
         },
         {
-          title: "Help & Feedback",
+          title: "帮助和反馈",
           items: [
             {
-              label: "Community Support",
+              label: "社区支持",
               href: "https://discord.gg/deno",
             },
             {
@@ -221,32 +213,32 @@ const config = {
               href: "https://www.denostatus.com",
             },
             {
-              label: "Deploy Feedback",
+              label: "Deploy 反馈",
               href: "https://github.com/denoland/deploy_feedback",
             },
             {
-              label: "Report a Problem",
+              label: "报告错误",
               href: "mailto:support@deno.com",
             },
           ],
         },
         {
-          title: "Company",
+          title: "公司",
           items: [
             {
-              label: "Blog",
+              label: "博客",
               href: "https://www.deno.com/blog",
             },
             {
-              label: "Careers",
+              label: "职业",
               href: "https://deno.com/jobs",
             },
             {
-              label: "Merch",
+              label: "商品",
               href: "https://merch.deno.com/",
             },
             {
-              label: "Privacy Policy",
+              label: "隐私条款",
               href: "/deploy/manual/privacy-policy",
             },
           ],
@@ -296,7 +288,7 @@ const config = {
       // to disable it)
       searchPagePath: "search",
     },
-  }),
+  },
 };
 
 module.exports = config;
