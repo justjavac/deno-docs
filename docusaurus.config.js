@@ -8,6 +8,7 @@ const config = {
   favicon: "img/favicon.ico",
   url: "https://docs.denohub.com",
   baseUrl: "/",
+  trailingSlash: false,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   i18n: {
