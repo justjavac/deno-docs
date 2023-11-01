@@ -1,0 +1,23 @@
+name: CI
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-22.04-xl
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+
+      - name: Build
+        run: npm install && npm run build
