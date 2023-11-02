@@ -85,6 +85,24 @@ const config = {
     },
   ],
 
+  themes: [
+    [
+      "@easyops-cn/docusaurus-search-local",
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      ({
+        hashed: true,
+        indexBlog: false,
+        language: ["en", "zh"],
+        docsRouteBasePath: ["/runtime", "/deploy", "/kv"],
+        docsDir: ["runtime", "deploy", "kv"],
+        searchContextByPaths: ["/runtime", "/deploy", "/kv"],
+        docsPluginIdForPreferredVersion: "runtime",
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+      }),
+    ],
+  ],
+
   themeConfig: {
     // Social card
     image: "img/social.png",
@@ -253,44 +271,6 @@ const config = {
     prism: {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
-    },
-    algolia: {
-      // The application ID provided by Algolia
-      appId: "KAQ4QIALEB",
-
-      // Public API key: it is safe to commit it
-      apiKey: "0795dfc12048ff344a54bb4c04c9000b",
-
-      indexName: "deno",
-
-      insights: true,
-
-      // Optional: see doc section below
-      contextualSearch: true,
-
-      // Optional: Specify domains where the navigation should occur through
-      // window.location instead on history.push. Useful when our Algolia
-      // config crawls multiple documentation sites and we want to navigate
-      // with window.location.href to them.
-      // externalUrlRegex: "external\\.com|domain\\.com",
-
-      // Optional: Replace parts of the item URLs from Algolia. Useful when
-      // using the same search index for multiple deployments using a
-      // different baseUrl. You can use regexp or string in the `from` param.
-      // For example: localhost:3000 vs myCompany.com/docs
-      /*
-        replaceSearchResultPathname: {
-          from: "/docs/", // or as RegExp: /\/docs\//
-          to: "/",
-        },
-        */
-
-      // Optional: Algolia search parameters
-      searchParameters: {},
-
-      // Optional: path for search page that enabled by default (`false`
-      // to disable it)
-      searchPagePath: "search",
     },
   },
 };
