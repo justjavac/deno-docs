@@ -10,7 +10,7 @@ Deno Deploy 是一个全球分布式的无服务器 JavaScript 应用平台。�
 
 ## 选项 1：使用模板开始
 
-如果您想首先部署一个预构建的模板应用程序，只需[登录到 Deno Deploy 仪表板](https://dash.deno.com)并单击"新项目"按钮。您可以选择使用 [Fresh](https://fresh.deno.dev)或我们支持的任何 Web 框架部署入门 Web 应用程序。
+如果您想首先部署一个预构建的模板应用程序，只需[登录到 Deno Deploy 仪表板](https://dash.deno.com)并单击"新项目"按钮。您可以选择使用 [Fresh](https://fresh.deno.dev) 或我们支持的任何 Web 框架部署入门 Web 应用程序。
 
 ## 选项 2：使用现有应用程序开始
 
@@ -18,11 +18,11 @@ Deno Deploy 是一个全球分布式的无服务器 JavaScript 应用平台。�
 
 ## 选项 3：从头开始
 
-一个[playground](./playgrounds.md)是一个基于浏览器的编辑器，让您可以立即编写和运行 JavaScript 代码。这是一个很好的选择，用于测试 Deno 和 Deno Deploy！[从 Deno Deploy 仪表板](https://dash.deno.com)中，单击"新项目"按钮，选择带有"尝试使用 playground"按钮的任何选项。
+一个 [playground](./playgrounds.md) 是一个基于浏览器的编辑器，让您可以立即编写和运行 JavaScript 代码。这是一个很好的选择，用于测试 Deno 和 Deno Deploy！[从 Deno Deploy 仪表板](https://dash.deno.com)中，单击"新项目"按钮，选择带有"尝试使用 playground"按钮的任何选项。
 
 ## 选项 4：从头开始
 
-如果您想在本地开发和部署一个简单的应用程序，请按照以下说明开始。我们将使用[`deployctl`](./deployctl.md)命令行实用程序从计算机部署本地的 Deno 脚本。
+如果您想在本地开发和部署一个简单的应用程序，请按照以下说明开始。我们将使用 [`deployctl`](./deployctl.md) 命令行实用程序从计算机部署本地的 Deno 脚本。
 
 ### 安装 Deno 和`deployctl`
 
@@ -58,7 +58,7 @@ curl -fsSL https://deno.land/x/install/install.sh | sh
 deno install -A --no-check -r -f https://deno.land/x/deploy/deployctl.ts
 ```
 
-您可以通过运行以下命令来确认`deployctl`已正确安装：
+您可以通过运行以下命令来确认 `deployctl` 已正确安装：
 
 ```
 deployctl --help
@@ -68,7 +68,7 @@ deployctl --help
 
 ### 编写和测试 Deno 程序
 
-在终端中创建一个名为`server.ts`的文件，包括以下"Hello World" Web 服务器：
+在终端中创建一个名为 `server.ts` 的文件，包括以下 "Hello World" Web 服务器：
 
 ```ts title="server.ts"
 Deno.serve(() => new Response("Hello, world!"));
@@ -88,15 +88,15 @@ deno run --allow-net server.ts
 
 在创建项目之后，记下为您生成的名称 - 您将需要这个项目名称来从命令行部署。
 
-在此示例中，项目名称是`deep-zebra-47` - 我们将在下面的命令中使用这个名称。
+在此示例中，项目名称是 `deep-zebra-47` - 我们将在下面的命令中使用这个名称。
 
 ### 创建并导出 Deploy 访问令牌
 
-为了使用`deployctl`从命令行控制您的 Deno Deploy 帐户，您将需要一个访问令牌。
+为了使用 `deployctl` 从命令行控制您的 Deno Deploy 帐户，您将需要一个访问令牌。
 
 这个令牌可以在[仪表板中找到](https://dash.deno.com/account#access-tokens)。单击"新访问令牌"，为令牌命名，然后将新生成的令牌复制到计算机上的安全位置。
 
-在终端中，您需要将这个令牌导出为一个可以被`deployctl`使用的系统环境变量。
+在终端中，您需要将这个令牌导出为一个可以被 `deployctl` 使用的系统环境变量。
 
 <Tabs groupId="shells">
 <TabItem value="bash" label="macOS / Linux" default>
@@ -118,7 +118,7 @@ $env:DENO_DEPLOY_TOKEN = 'your_access_token_here'
 
 ### 部署！
 
-现在您已经创建了一个项目并创建了一个访问令牌，您可以准备部署您的应用程序。在您之前创建的`server.ts`文件所在的目录中，运行以下命令：
+现在您已经创建了一个项目并创建了一个访问令牌，您可以准备部署您的应用程序。在您之前创建的 `server.ts` 文件所在的目录中，运行以下命令：
 
 ```sh
 deployctl deploy --project=deep-zebra-47 --prod server.ts
