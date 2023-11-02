@@ -1,3 +1,3 @@
 # Deno KV
 
-_This URL redirected in production to [/kv/manual](/kv/manual)._
+_这个 URL 在生产环境中重定向到 [/kv/manual](/kv/manual)._

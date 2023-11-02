@@ -1,30 +1,26 @@
-# Fair use policy
+# 合理使用政策
 
-The public beta for the Deno Deploy service includes resources (CPU time,
-request counts) that are subject to this Fair Use policy. This document can give
-a rough estimate to what we consider as "Fair Use", and what we do not.
+Deno Deploy 服务的公测包括资源（CPU
+时间、请求计数）受到本合理使用政策的约束。本文件可以给出对于我们认为的“合理使用”和不合理使用的粗略估计。
 
-### Examples of Fair Use
+### 合理使用示例
 
-- ✅ Server-side rendered websites
-- ✅ Jamstack sites and apps
-- ✅ Single page applications
-- ✅ APIs that query a DB or external API
-- ✅ A personal blog
-- ✅ A company website
-- ✅ An e-commerce site
+- ✅ 服务器端渲染的网站
+- ✅ Jamstack 网站和应用程序
+- ✅ 单页面应用程序
+- ✅ 查询数据库或外部 API 的 API
+- ✅ 个人博客
+- ✅ 公司网站
+- ✅ 电子商务网站
 
-### Not Fair Use
+### 不合理使用
 
-- ❌ Crypto mining
-- ❌ Highly CPU-intensive load (e.g. machine learning)
-- ❌ Media hosting for external sites
-- ❌ Scrapers
-- ❌ Proxy or VPN
+- ❌ 加密货币挖矿
+- ❌ 高度 CPU 密集型负载（例如机器学习）
+- ❌ 为外部站点提供媒体托管
+- ❌ 网页抓取器
+- ❌ 代理或 VPN
 
-## Guidelines
+## 指南
 
-We expect most projects to fall well within the usage limits. We will notify you
-if your projects usage significantly deviates from the norm. We will reach out
-to you where possible before taking any action to address unreasonable burdens
-on our infrastructure.
+我们预期大多数项目都会在使用限制范围内。如果您的项目的使用明显偏离正常情况，我们将通知您。在采取任何措施来解决对我们基础设施的不合理负担之前，我们将在可能的情况下与您联系。

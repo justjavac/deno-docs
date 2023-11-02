@@ -1,19 +1,18 @@
 # Workers
 
-Deno supports
-[`Web Worker API`](https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker).
+Deno 支持
+[`Web Worker API`](https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker)。
 
-Workers can be used to run code on multiple threads. Each instance of `Worker`
-is run on a separate thread, dedicated only to that worker.
+工作线程可用于在多个线程上运行代码。每个 `Worker`
+实例都在一个单独的线程上运行，专门为该工作线程提供服务。
 
-Currently Deno supports only `module` type workers; thus it's essential to pass
-the `type: "module"` option when creating a new worker.
+目前，Deno 仅支持 `module` 类型的工作线程；因此，在创建新工作线程时，必须传递
+`type: "module"` 选项。
 
-Use of relative module specifiers in the main worker are only supported with
-`--location <href>` passed on the CLI. This is not recommended for portability.
-You can instead use the `URL` constructor and `import.meta.url` to easily create
-a specifier for some nearby script. Dedicated workers, however, have a location
-and this capability by default.
+在主工作线程中使用相对模块规范符仅受支持于通过 CLI 传递
+`--location <href>`。这不建议用于可移植性。相反，您可以使用 `URL` 构造函数和
+`import.meta.url`
+轻松创建附近脚本的规范符。但是，专用工作线程默认具有位置和此功能。
 
 ```ts
 // Good
@@ -25,32 +24,27 @@ new Worker(new URL("./worker.js", import.meta.url).href, { type: "classic" });
 new Worker("./worker.js", { type: "module" });
 ```
 
-As with regular modules, you can use top-level `await` in worker modules.
-However, you should be careful to always register the message handler before the
-first `await`, since messages can be lost otherwise. This is not a bug in Deno,
-it's just an unfortunate interaction of features, and it also happens in all
-browsers that support module workers.
+与常规模块一样，您可以在工作线程模块中使用顶层 `await`。但是，务必在第一个
+`await` 之前始终注册消息处理程序，否则消息可能会丢失。这不是 Deno
+中的错误，这只是功能交互的不幸，它也会在支持模块工作线程的所有浏览器中发生。
 
 ```ts, ignore
 import { delay } from "https://deno.land/std@$STD_VERSION/async/delay.ts";
 
-// First await: waits for a second, then continues running the module.
+// 第一个 await：等待一秒，然后继续运行模块。
 await delay(1000);
 
-// The message handler is only set after that 1s delay, so some of the messages
-// that reached the worker during that second might have been fired when no
-// handler was registered.
+// 消息处理程序仅在 1 秒延迟之后设置，因此在那一秒内到达工作线程的某些消息可能在没有注册处理程序时被触发。
 self.onmessage = (evt) => {
   console.log(evt.data);
 };
 ```
 
-## Instantiation permissions
+## 实例化权限
 
-Creating a new `Worker` instance is similar to a dynamic import; therefore Deno
-requires appropriate permission for this action.
+创建新的 `Worker` 实例类似于动态导入；因此，Deno 需要适当的权限来执行此操作。
 
-For workers using local modules; `--allow-read` permission is required:
+对于使用本地模块的工作线程，需要 `--allow-read` 权限：
 
 **main.ts**
 
@@ -73,7 +67,7 @@ $ deno run --allow-read main.ts
 hello world
 ```
 
-For workers using remote modules; `--allow-net` permission is required:
+对于使用远程模块的工作线程，需要 `--allow-net` 权限：
 
 **main.ts**
 
@@ -81,7 +75,7 @@ For workers using remote modules; `--allow-net` permission is required:
 new Worker("https://example.com/worker.ts", { type: "module" });
 ```
 
-**worker.ts** (at https://example.com/worker.ts)
+**worker.ts**（位于 https://example.com/worker.ts）
 
 ```ts
 console.log("hello world");
@@ -96,11 +90,11 @@ $ deno run --allow-net main.ts
 hello world
 ```
 
-## Using Deno in worker
+## 在工作线程中使用 Deno
 
-> Starting in v1.22 the `Deno` namespace is available in worker scope by
-> default. To enable the namespace in earlier versions pass
-> `deno: { namespace: true }` when creating a new worker.
+> 从 v1.22 开始，`Deno`
+> 命名空间默认在工作线程范围内可用。要在较早版本中启用命名空间，请在创建新工作线程时传递
+> `deno: { namespace: true }`。
 
 **main.js**
 
@@ -134,28 +128,23 @@ $ deno run --allow-read main.js
 hello world
 ```
 
-> Starting in v1.23 `Deno.exit()` no longer exits the process with the provided
-> exit code. Instead is an alias to `self.close()`, which causes only the worker
-> to shutdown. This better aligns with the Web platform, as there is no way in
-> the browser for a worker to close the page.
+> 从 v1.23 开始，`Deno.exit()` 不再以提供的退出代码退出进程。而是是
+> `self.close()` 的别名，仅导致工作线程关闭。这更符合 Web
+> 平台，因为在浏览器中，工作线程无法关闭页面。
 
-## Specifying worker permissions
+## 指定工作线程权限
 
-> This is an unstable Deno feature. Learn more about
-> [unstable features](./stability.md).
+> 这是 Deno 的不稳定功能。了解更多关于 [不稳定特性](./stability.md)。
 
-The permissions available for the worker are analogous to the CLI permission
-flags, meaning every permission enabled there can be disabled at the level of
-the Worker API. You can find a more detailed description of each of the
-permission options [here](../basics/permissions.md).
+工作线程的权限与 CLI 权限标志类似，这意味着在 Worker API
+级别可以禁用每个启用的权限。您可以在 [这里](../basics/permissions.md)
+找到每个权限选项的更详细描述。
 
-By default a worker will inherit permissions from the thread it was created in,
-however in order to allow users to limit the access of this worker we provide
-the `deno.permissions` option in the worker API.
+默认情况下，工作线程将继承它所创建的线程的权限，但为了允许用户限制该工作线程的访问权限，我们在工作线程
+API 中提供了 `deno.permissions` 选项。
 
-- For permissions that support granular access you can pass in a list of the
-  desired resources the worker will have access to, and for those who only have
-  the on/off option you can pass true/false respectively.
+- 对于支持粒度访问的权限，您可以传递工作线程将具有访问权限的所需资源列表，对于只有开/关选项的权限，您可以传递
+  true/false 分别。
 
   ```ts
   const worker = new Worker(new URL("./worker.js", import.meta.url).href, {
@@ -175,71 +164,60 @@ the `deno.permissions` option in the worker API.
   });
   ```
 
-- Granular access permissions receive both absolute and relative routes as
-  arguments, however take into account that relative routes will be resolved
-  relative to the file the worker is instantiated in, not the path the worker
-  file is currently in
+- 粒度访问权限接受绝对路由和相对路由作为参数，但要注意，相对路由将相对于实例化工作线程的文件进行解析，而不是工作线程文件当前的路径。
 
   ```ts
   const worker = new Worker(
-    new URL("./worker/worker.js", import.meta.url).href,
-    {
-      type: "module",
-      deno: {
-        permissions: {
-          read: [
-            "/home/user/Documents/deno/worker/file_1.txt",
-            "./worker/file_2.txt",
-          ],
-        },
-      },
-    },
-  );
+    new URL("./worker/
   ```
 
-- Both `deno.permissions` and its children support the option `"inherit"`, which
-  implies it will borrow its parent permissions.
+worker.js", import.meta.url).href, { type: "module", deno: { permissions: {
+read: [ "/home/user/Documents/deno/worker/file_1.txt", "./worker/file_2.txt", ],
+}, }, }, );
 
-  ```ts
-  // This worker will inherit its parent permissions
-  const worker = new Worker(new URL("./worker.js", import.meta.url).href, {
-    type: "module",
-    deno: {
-      permissions: "inherit",
+````
+- `deno.permissions` 及其子级都支持选项 `"inherit"`，这意味着它将借用其父权限。
+
+```ts
+// 此工作线程将继承其父权限
+const worker = new Worker(new URL("./worker.js", import.meta.url).href, {
+  type: "module",
+  deno: {
+    permissions: "inherit",
+  },
+});
+````
+
+```ts
+// 此工作线程将仅继承其父的 net 权限
+const worker = new Worker(new URL("./worker.js", import.meta.url).href, {
+  type: "module",
+  deno: {
+    permissions: {
+      env: false,
+      hrtime: false,
+      net: "inherit",
+      ffi: false,
+      read: false,
+      run: false,
+      write: false,
     },
-  });
-  ```
+  },
+});
+```
+
+- 如果不指定 `deno.permissions`
+  选项或其子级中的某个选项，工作线程将默认继承权限。
 
   ```ts
-  // This worker will inherit only the net permissions of its parent
-  const worker = new Worker(new URL("./worker.js", import.meta.url).href, {
-    type: "module",
-    deno: {
-      permissions: {
-        env: false,
-        hrtime: false,
-        net: "inherit",
-        ffi: false,
-        read: false,
-        run: false,
-        write: false,
-      },
-    },
-  });
-  ```
-
-- Not specifying the `deno.permissions` option or one of its children will cause
-  the worker to inherit by default.
-
-  ```ts
-  // This worker will inherit its parent permissions
+  // 此工作线程将继承其父权限
   const worker = new Worker(new URL("./worker.js", import.meta.url).href, {
     type: "module",
   });
   ```
 
   ```ts
-  // This worker will inherit all the permissions of its parent BUT net
+  // 此工作线程将继承其父的所有权限，除了 net 权限
   const worker = new Worker(new URL("./worker.js", import.meta.url).href, {
     type: "module",
     deno: {
@@ -250,11 +228,10 @@ the `deno.permissions` option in the worker API.
   });
   ```
 
-- You can disable the permissions of the worker all together by passing `"none"`
-  to the `deno.permissions` option.
+- 您可以通过将 `"none"` 传递给 `deno.permissions` 选项来完全禁用工作线程的权限。
 
   ```ts
-  // This worker will not have any permissions enabled
+  // 此工作线程将不具备任何权限
   const worker = new Worker(new URL("./worker.js", import.meta.url).href, {
     type: "module",
     deno: {

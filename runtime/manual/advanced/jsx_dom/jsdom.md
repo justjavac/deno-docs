@@ -1,33 +1,27 @@
-# Using jsdom with Deno
+# 在 Deno 中使用 jsdom
 
-[jsdom](https://github.com/jsdom/jsdom) is a pure JavaScript implementation of
-many web standards, notably the WHATWG DOM and HTML Standards. It's main goal is
-to be comprehensive and standards compliant and does not specifically consider
-performance.
+[jsdom](https://github.com/jsdom/jsdom) 是许多 Web 标准的纯 JavaScript
+实现，特别是 WHATWG DOM 和 HTML
+标准。它的主要目标是全面和符合标准，不专门考虑性能。
 
-If you are interested in server side rendering, then both
-[deno-dom](./deno_dom.md) and [LinkeDOM](./linkedom.md) are better choices. If
-you are trying to run code in a "virtual" browser that needs to be standards
-based, then it is possible that jsdom is suitable for you.
+如果你对服务器端渲染感兴趣，那么[deno-dom](./deno_dom.md) 和
+[LinkeDOM](./linkedom.md)
+都是更好的选择。如果你试图在一个“虚拟”浏览器中运行代码，需要符合标准，那么 jsdom
+可能适合你。
 
-While jsdom works under the Deno CLI, it does not type check. This means you
-have to use the `--no-check=remote` option on the command line to avoid
-diagnostics stopping the execution of your programme.
+虽然 jsdom 在 Deno CLI 下工作，但它不进行类型检查。这意味着你必须在命令行上使用
+`--no-check=remote` 选项，以避免诊断停止程序的执行。
 
-Having sound typing in an editor requires some changes to the workflow as well,
-as the way jsdom types are provided are declared as a global type definition
-with a globally named module, as well as leveraging the built in types from the
-built-in DOM libraries.
+在编辑器中具有良好的类型和智能自动完成需要一些额外的步骤，因为 jsdom
+类型的提供方式被声明为全局类型定义，以及利用内置 DOM 库中的内置类型。
 
-This means if you want strong typing and intelligent auto-completion in your
-editor while using the Deno language server, you have to perform some extra
-steps.
+这意味着，如果你希望在使用 Deno
+语言服务器的同时在编辑器中获得强类型和智能自动完成，你需要执行一些额外的步骤。
 
-### Defining an `import_map.json`
+### 定义 `import_map.json`
 
-You need to map the bare specifier `"jsdom"` to the imported version of jsdom.
-This allows Deno to correctly apply the types to the import in the way they were
-specified.
+你需要将裸导入符号 `"jsdom"` 映射到 jsdom 的导入版本。这允许 Deno
+正确应用类型到导入，就像它们被指定的那样。
 
 ```json
 {
@@ -35,11 +29,10 @@ specified.
 }
 ```
 
-### Setting up a configuration file
+### 设置配置文件
 
-You will want to set up a `deno.jsonc` configuration file in the root of your
-workspace with both TypeScript library information as well as specifying the
-import map defined above:
+你将希望在工作区的根目录中设置一个 `deno.jsonc` 配置文件，其中包括 TypeScript
+库信息以及上面定义的导入映射：
 
 ```jsonc
 {
@@ -55,14 +48,13 @@ import map defined above:
 }
 ```
 
-> Note: we are using an unpinned version of jsdom above. You should consider
-> pinning the version to the version you know you want to use.
+> 注意：上面我们使用了一个不固定版本的
+> jsdom。你应该考虑将版本固定在你想要使用的版本上。
 
-## Basic example
+## 基本示例
 
-This example will take a test string and parse it as HTML and generate a DOM
-structure based on it. It will then query that DOM structure, picking out the
-first heading it encounters and print out the text content of that heading:
+这个示例将获取一个测试字符串，并将其解析为 HTML，然后生成一个基于它的 DOM
+结构。然后查询该 DOM 结构，选择出它遇到的第一个标题，并打印出该标题的文本内容：
 
 ```ts, ignore
 import { JSDOM } from "jsdom";

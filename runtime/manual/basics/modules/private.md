@@ -1,85 +1,70 @@
-# Private Modules and Repositories
+# 私有模块和仓库
 
-There may be instances where you want to load a remote module that is located in
-a _private_ repository, like a private repository on GitHub.
+在某些情况下，您可能希望加载位于私有仓库中的远程模块，例如 GitHub 上的私有仓库。
 
-Deno supports sending bearer tokens when requesting a remote module. Bearer
-tokens are the predominant type of access token used with OAuth 2.0, and are
-broadly supported by hosting services (e.g., GitHub, GitLab, Bitbucket,
-Cloudsmith, etc.).
+Deno 支持在请求远程模块时发送令牌。Bearer 令牌是 OAuth 2.0
+中广泛使用的访问令牌类型，并得到许多托管服务的广泛支持（例如
+GitHub、GitLab、Bitbucket、Cloudsmith 等）。
 
 ## DENO_AUTH_TOKENS
 
-The Deno CLI will look for an environment variable named `DENO_AUTH_TOKENS` to
-determine what authentication tokens it should consider using when requesting
-remote modules. The value of the environment variable is in the format of _n_
-number of tokens delimited by a semi-colon (`;`) where each token is either:
+Deno CLI 将查找名为 `DENO_AUTH_TOKENS`
+的环境变量，以确定在请求远程模块时应考虑使用哪些认证令牌。环境变量的值采用以下格式，由分号
+(`;`) 分隔的 _n_ 个令牌，其中每个令牌是以下之一：
 
-- a bearer token in the format of `{token}@{hostname[:port]}` or
+- 格式为 `{token}@{hostname[:port]}` 的 Bearer 令牌
 
-- basic auth data in the format of `{username}:{password}@{hostname[:port]}`
+- 格式为 `{username}:{password}@{hostname[:port]}` 的基本认证数据
 
-For example, a single token for `deno.land` would look something like this:
+例如，对于 `deno.land` 的单个令牌如下所示：
 
 ```sh
 DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land
 ```
 
-or:
+或者：
 
 ```sh
 DENO_AUTH_TOKENS=username:password@deno.land
 ```
 
-And multiple tokens would look like this:
+多个令牌的示例如下：
 
 ```sh
 DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land;f1e2d3c4b5a6@example.com:8080;username:password@deno.land
 ```
 
-When Deno goes to fetch a remote module, where the hostname matches the hostname
-of the remote module, Deno will set the `Authorization` header of the request to
-the value of `Bearer {token}` or `Basic {base64EncodedData}`. This allows the
-remote server to recognize that the request is an authorized request tied to a
-specific authenticated user, and provide access to the appropriate resources and
-modules on the server.
+当 Deno 获取远程模块时，如果主机名与远程模块的主机名匹配，Deno 将将请求的
+`Authorization` 标头设置为 `Bearer {token}` 或 `Basic {base64EncodedData}`
+的值。这允许远程服务器识别该请求是经过授权的请求，与特定认证用户相关联，并提供对服务器上的适当资源和模块的访问。
 
 ## GitHub
 
-To access private repositories on GitHub, you would need to issue yourself a
-_personal access token_. You do this by logging into GitHub and going under
-_Settings -> Developer settings -> Personal access tokens_:
+要访问 GitHub 上的私有仓库，您需要颁发自己一个 _个人访问令牌_。您可以通过登录到
+GitHub 并进入 _设置 -> 开发人员设置 -> 个人访问令牌_ 来执行此操作：
 
-![Personal access tokens settings on GitHub](../../images/private-pat.png)
+![GitHub 上的个人访问令牌设置](../../images/private-pat.png)
 
-You would then choose to _Generate new token_ and give your token a description
-and appropriate access:
+然后，您可以选择 _生成新令牌_ 并为您的令牌添加描述和适当的访问权限：
 
-![Creating a new personal access token on GitHub](../../images/private-github-new-token.png)
+![在 GitHub 上创建新的个人访问令牌](../../images/private-github-new-token.png)
 
-And once created GitHub will display the new token a single time, the value of
-which you would want to use in the environment variable:
+创建后，GitHub 将仅显示新令牌一次，您将希望将其用作环境变量中的值：
 
-![Display of newly created token on GitHub](../../images/private-github-token-display.png)
+![在 GitHub 上显示新创建的令牌](../../images/private-github-token-display.png)
 
-In order to access modules that are contained in a private repository on GitHub,
-you would want to use the generated token in the `DENO_AUTH_TOKENS` environment
-variable scoped to the `raw.githubusercontent.com` hostname. For example:
+为了访问存储在 GitHub 上的私有仓库中的模块，您将希望在 `DENO_AUTH_TOKENS`
+环境变量中使用生成的令牌，作用域限定为 `raw.githubusercontent.com`
+主机名。例如：
 
 ```sh
 DENO_AUTH_TOKENS=a1b2c3d4e5f6@raw.githubusercontent.com
 ```
 
-This should allow Deno to access any modules that the user who the token was
-issued for has access to.
+这应该允许 Deno 访问由颁发令牌的用户可以访问的任何模块。
 
-When the token is incorrect, or the user does not have access to the module,
-GitHub will issue a `404 Not Found` status, instead of an unauthorized status.
-So if you are getting errors that the modules you are trying to access are not
-found on the command line, check the environment variable settings and the
-personal access token settings.
+当令牌不正确或用户无法访问模块时，GitHub 将发出 `404 未找到`
+状态，而不是未经授权的状态。因此，如果在命令行上出现试图访问的模块未找到的错误，请检查环境变量设置和个人访问令牌设置。
 
-In addition, `deno run -L debug` should print out a debug message about the
-number of tokens that are parsed out of the environment variable. It will print
-an error message if it feels any of the tokens are malformed. It won't print any
-details about the tokens for security purposes.
+此外，`deno run -L debug`
+应该会打印关于从环境变量中解析出的令牌数量的调试消息。如果感到任何令牌格式错误，它将打印出错误消息。出于安全原因，它不会打印出有关令牌的任何详细信息。

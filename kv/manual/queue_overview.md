@@ -1,84 +1,81 @@
 import Admonition from "./_admonition.mdx";
 
-# Using Queues
+# 使用队列
 
 <Admonition />
 
-The Deno runtime includes a queueing API that supports offloading larger
-workloads for async processing, with guaranteed at-least-once delivery of queued
-messages. Queues can be used to offload tasks in a web application, or to
-schedule units of work for a time in the future.
+Deno 运行时包括一个支持异步处理的排队
+API，确保排队消息至少被传递一次。队列可用于在 Web
+应用程序中卸载任务，或者计划将工作单元推迟到将来的某个时间。
 
-The primary APIs you'll use with queues are in the `Deno.Kv` namespace as
+与队列一起使用的主要 API 位于 `Deno.Kv` 命名空间中，如
 [`enqueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.enqueue)
-and
-[`listenQueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.listenQueue).
+和
+[`listenQueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.listenQueue)。
 
-## Enqueue a message
+## 排队消息
 
-To enqueue a message for processing, use the `enqueue` method on an instance of
-[`Deno.Kv`](https://deno.land/api?unstable=true&s=Deno.Kv). In the example
-below, we show what it might look like to enqueue a notification for delivery.
+要排队处理消息，请使用
+[`Deno.Kv`](https://deno.land/api?unstable=true&s=Deno.Kv) 实例上的 `enqueue`
+方法。在下面的示例中，我们展示了排队传递通知的可能外观。
 
 ```ts title="queue_example.ts"
-// Describe the shape of your message object (optional)
+// 描述消息对象的形状（可选）
 interface Notification {
   forUser: string;
   body: string;
 }
 
-// Get a reference to a KV instance
+// 获取对KV实例的引用
 const kv = await Deno.openKv();
 
-// Create a notification object
+// 创建通知对象
 const message: Notification = {
   forUser: "alovelace",
   body: "You've got mail!",
 };
 
-// Enqueue the message for immediate delivery
+// 为立即传递排队消息
 await kv.enqueue(message);
 ```
 
-You can enqueue a message for later delivery by specifying a `delay` option in
-milliseconds.
+通过指定以毫秒为单位的 `delay` 选项，您还可以为将来的传递排队消息。
 
 ```ts
-// Enqueue the message for delivery in 3 days
+// 将消息排队以在 3 天后传递
 const delay = 1000 * 60 * 60 * 24 * 3;
 await kv.enqueue(message, { delay });
 ```
 
-You can also specify a key in Deno KV where your message value will be stored if
-your message isn't delivered for any reason.
+如果由于任何原因未传递消息，还可以指定 Deno KV 中的键，其中将存储消息值。
 
 ```ts
-// Configure a key where a failed message would be sent
+// 配置一个失败消息将被发送的键
 const backupKey = ["failed_notifications", "alovelace", Date.now()];
 await kv.enqueue(message, { keysIfUndelivered: [backupKey] });
 
-// ... disaster strikes ...
+// ... 发生灾难 ...
 
-// Get the unsent message
+// 获取未发送的消息
 const r = await kv.get<Notification>(backupKey);
-// This is the message that didn't get sent:
+// 这是未发送的消息：
 console.log("Found failed notification for:", r.value?.forUser);
 ```
 
-## Listening for messages
+## 监听消息
 
-You can configure a JavaScript function that will process items added to your
-queue with the `listenQueue` method on an instance of
-[`Deno.Kv`](https://deno.land/api?unstable=true&s=Deno.Kv).
+您可以配置一个 JavaScript 函数，该函数将处理添加到队列中的项目，使用
+[`Deno.Kv`](https://deno.land/api?unstable=true&s=Deno.Kv) 实例上的
+`listenQueue` 方法。
 
 ```ts title="listen_example.ts"
-// Define the shape of the object we expect as a message in the queue
+// 定义我们期望作为队列消息的对象的形状
 interface Notification {
   forUser: string;
   body: string;
 }
 
-// Create a type guard to check the type of the incoming message
+// 创建一个类型保护，以检查传入消息的类型
 function isNotification(o: unknown): o is Notification {
   return (
     ((o as Notification)?.forUser !== undefined &&
@@ -88,27 +85,26 @@ function isNotification(o: unknown): o is Notification {
   );
 }
 
-// Get a reference to a KV database
+// 获取对KV数据库的引用
 const kv = await Deno.openKv();
 
-// Register a handler function to listen for values - this example shows
-// how you might send a notification
+// 注册一个处理程序函数以监听值 - 本例显示了如何发送通知
 kv.listenQueue((msg: unknown) => {
-  // Use type guard - then TypeScript compiler knows msg is a Notification
+  // 使用类型保护 - 然后TypeScript编译器知道msg是Notification
   if (isNotification(msg)) {
     console.log("Sending notification to user:", msg.forUser);
-    // ... do something to actually send the notification!
+    // ... 做些实际发送通知的事情！
   } else {
-    // If the message is of an unknown type, it might be an error
+    // 如果消息是未知类型，可能是错误
     console.error("Unknown message received:", msg);
   }
 });
 ```
 
-## Queue API with KV atomic transactions
+## KV 原子事务与队列 API
 
-You can combine the queue API with [KV atomic transactions](./transactions.mdx)
-to atomically enqueue messages and modify keys in the same transaction.
+您可以将队列 API 与 [KV 原子事务](./transactions.mdx)
+结合使用，以原子方式排队消息并修改相同事务中的键。
 
 ```ts title="kv_transaction_example.ts"
 const kv = await Deno.openKv();
@@ -116,7 +112,7 @@ const kv = await Deno.openKv();
 kv.listenQueue(async (msg: unknown) => {
   const nonce = await kv.get(["nonces", msg.nonce]);
   if (nonce.value === null) {
-    // This messaged was already processed
+    // 这个消息已经处理过了
     return;
   }
 
@@ -125,17 +121,17 @@ kv.listenQueue(async (msg: unknown) => {
   const liz = await kv.get(["balance", "liz"]);
 
   const success = await kv.atomic()
-    // Ensure this message was not yet processed
+    // 确保此消息尚未处理
     .check({ key: nonce.key, versionstamp: nonce.versionstamp })
     .delete(nonce.key)
     .sum(["processed_count"], 1n)
-    .check(bob, liz) // balances did not change
+    .check(bob, liz) // 余额没有改变
     .set(["balance", "bob"], bob.value - change)
     .set(["balance", "liz"], liz.value + change)
     .commit();
 });
 
-// Modify keys and enqueue messages in the same KV transaction!
+// 在同一KV事务中修改键并排队消息！
 const nonce = crypto.randomUUID();
 await kv
   .atomic()
@@ -146,104 +142,82 @@ await kv
   .commit();
 ```
 
-## Queue behavior
+## 队列行为
 
-### Message delivery guarantees
+### 消息传递保证
 
-The runtime guarantees at-least-once delivery. This means that for majority of
-enqueued messages, the
+运行时保证至少一次传递。这意味着对于大多数排队消息，将为每条消息调用一次
 [`listenQueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.listenQueue)
-handler will be invoked once for each message. In some failure scenarios, the
-handler may be invoked multiple times for the same message to ensure delivery.
-It's important to design your applications such that duplicate messages are
-handled correctly.
+处理程序。在某些故障情况下，将为同一消息多次调用处理程序，以确保传递。设计应用程序以正确处理重复消息非常重要。
 
-You may use queues in combination with
-[KV atomic transactions](https://docs.deno.com/kv/manual/transactions)
-primitives to ensure that your queue handler KV updates are performed exactly
-once per message. See
-[Queue API with KV atomic transactions](#queue-api-with-kv-atomic-transactions).
+您可以将队列与 [KV 原子事务](https://docs.deno.com/kv/manual/transactions)
+原语结合使用，以确保队列处理程序 KV 更新对每条消息仅执行一次。参见
+[带有 KV 原子事务的队列 API](#queue-api-with-kv-atomic-transactions)。
 
-### Automatic retries
+### 自动重试
 
+当排队消息准备传递时，将调用
 [`listenQueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.listenQueue)
-handler is invoked to process your queued messages when they're ready for
-delivery. If your handler throws an exception the runtime will automatically
-retry to call the handler again until it succeeds or until maximum retry
-attempts are reached. The message is considered to be succesfully processed once
-the
+处理程序以处理您的排队消息。如果处理程序引发异常，运行时将自动重试调用处理程序，直到成功或达到最
+
+大重试尝试次数为止。只有在
 [`listenQueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.listenQueue)
-handler invocation completes succesfully. The message will be dropped if the
-handler consistently fails on retries.
+处理程序调用成功完成后，消息才被视为已成功处理。如果处理程序在重试过程中一直失败，消息将被丢弃。
 
-### Message delivery order
+### 消息传递顺序
 
-The runtime makes best effort to deliver messages in the order they were
-enqueued. However, there is not strict order guarantee. Occasionally, messages
-may be delivered out of order to ensure maximum throughput.
+运行时尽力按照排队的顺序传递消息。但是，没有严格的顺序保证。偶尔，为了确保最大吞吐量，消息可能会无序传递。
 
-## Queues on Deno Deploy
+## Deno Deploy 上的队列
 
-Deno Deploy offers global, serverless, distributed implementation of the
-queueing API, designed for high availability and throughput. You can use it to
-build applications that scale to handle large workloads.
+Deno Deploy 提供了全球、无服务器、分布式实现的排队
+API，专为高可用性和吞吐量而设计。您可以使用它来构建可以处理大型工作负载的应用程序。
 
-### Just-in-time isolate spin-up
+### 即时隔离启动
 
-When using queues with Deno Deploy, isolates are automatically spun up on demand
-to invoke your
+在 Deno Deploy 中使用队列时，隔离会在消息变为可处理时自动启动，以调用您的
 [`listenQueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.listenQueue)
-handler when a message becomes available for processing. Defining
+处理程序。定义
 [`listenQueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.listenQueue)
-handler is the only requirement to enable queue processing in your Deno Deploy
-application, no additional configuration is needed.
+处理程序是启用 Deno Deploy 应用程序中的队列处理的唯一要求，不需要其他配置。
 
-### Queue size limit
+### 队列大小限制
 
-The maximum number of undelivered queue messages is limited to 100,000.
-[`enqueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.enqueue)
-method will fail with an error if the queue is full.
+未传递队列消息的最大数量限制为
+100,000。如果队列已满，[`enqueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.enqueue)
+方法将失败并显示错误。
 
-### Pricing details and limits
+### 定价详细信息和限制
 
-- [`enqueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.enqueue)
-  is treated just like other
-  [`Deno.Kv`](https://deno.land/api?unstable=true&s=Deno.Kv) write operations.
-  Enqueued messages consume KV storage and write units.
-- Messages delivered through
+- [`enqueue`](https://deno.land/api?unstable=true&s=dDeno.Kv&p=prototype.enqueue)
+  与其他 [`Deno.Kv`](https://deno.land/api?unstable=true&s=Deno.Kv)
+  写入操作一样处理。通过排队消息消耗 KV 存储和写入单元。
+- 通过
   [`listenQueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.listenQueue)
-  consume requests and KV write units.
-- See [Pricing details](https://deno.com/deploy/docs/pricing) for more
-  information.
+  传递的消息消耗请求和 KV 写入单元。
+- 有关更多信息，请参见 [定价详细信息](https://deno.com/deploy/docs/pricing)。
 
-## Use cases
+## 用例
 
-Queues can be useful in many different scenarios, but there are a few use cases
-you might see a lot when building web applications.
+队列可以在许多不同的场景中很有用，但在构建 Web
+应用程序时可能会看到一些常见用例。
 
-### Offloading async processes
+### 卸载异步进程
 
-Sometimes a task that's initiated by a client (like sending a notification or
-API request), may take long enough where you don't want to make clients wait for
-that task to be completed before returning a response. Other times, clients
-don't actually need a response at all, such as when a client is sending your
-application a [webhook request](https://en.wikipedia.org/wiki/Webhook), so
-there's no need to wait for the underlying task to be completed before returning
-a response.
+有时，由客户端启动的任务（如发送通知或 API
+请求）可能需要花费足够长的时间，以至于在返回响应之前不希望等待任务完成。其他情况下，客户端实际上根本不需要响应，例如当客户端发送应用程序的
+[webhook 请求](https://en.wikipedia.org/wiki/Webhook)
+时，没有必要等待底层任务完成，然后返回响应。
 
-In these cases, you can offload work to a queue to keep your web application
-responsive and send immediate feedback to clients. To see an example of this use
-case in action, check out our
-[webhook processing example](../tutorials/webhook_processor.md).
+在这些情况下，您可以将工作卸载到队列中，以保持 Web
+应用程序的响应性，并立即向客户端发送反馈。要查看此用例在操作中的示例，请查看我们的
+[webhook 处理示例](../tutorials/webhook_processor.md)。
 
-### Scheduling work for the future
+### 计划将来的工作
 
-Another helpful application of queues (and queue APIs like this one), is to
-schedule work to happen at an appropriate time in the future. Maybe you'd like
-to send a notification to a new customer a day after they have placed an order
-to send them a satisfaction survey. You can schedule a queue message to be
-delivered 24 hours into the future, and set up a listener to send out the
-notification at that time.
+队列的另一个有用应用（以及像这样的队列
+API），是在将来的适当时间计划工作。也许您希望在新客户下订单后的一天后发送满意度调查通知。您可以安排将来的消息在未来的
+24 小时内传递，并设置一个监听器，在那时发送通知。
 
-To see an example of scheduling a notification to go out in the future, check
-out our [notification example](../tutorials/schedule_notification.md).
+要查看将来安排通知的示例，请查看我们的
+[通知示例](../tutorials/schedule_notification.md)。

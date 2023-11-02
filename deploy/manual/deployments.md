@@ -1,47 +1,39 @@
-# Deployments
+# 部署
 
-A deployment is a snapshot of all code and environment variables required to run
-an application. Deployments are immutable after they have been created. To
-deploy a new version of the code for an application, a new deployment must be
-created.
+部署是运行应用程序所需的所有代码和环境变量的快照。创建后，部署是不可变的。要部署应用程序的新代码版本，必须创建新的部署。
 
-## Custom domains
+## 自定义域名
 
-There can also be other URLs that can point to a deployment, like
-[custom domains](custom-domains).
+还可以有其他 URL 指向部署，例如 [自定义域名](custom-domains)。
 
-## Branch domains
+## 分支域名
 
-`<projectname--branchname>.deno.dev` is also supported.
+`<projectname--branchname>.deno.dev` 也受支持。
 
-## Production vs. preview deployments
+## 生产与预览部署
 
-All deployments have a preview URL that can be used to view this specific
-deployment. Preview URLs have the format
-`{project_name}-{deployment_id}.deno.dev`.
+所有部署都有一个预览 URL，可用于查看此特定部署。预览 URL 的格式为
+`{project_name}-{deployment_id}.deno.dev`。
 
-![image](../docs-images/preview_deployment.png)
+![图片](../docs-images/preview_deployment.png)
 
-A deployment can either be a production or a preview deployment. These
-deployments do not have any differences in runtime functionality. The only
-distinguishing factor is that a project's production deployment will receive
-traffic from the project URL (e.g. `myproject.deno.dev`), and from custom
-domains in addition to traffic to the deployment's preview URL.
+部署可以是生产部署或预览部署。这些部署在运行时功能上没有任何区别。唯一的区别是项目的生产部署将接收来自项目
+URL（例如 `myproject.deno.dev`）以及部署的预览 URL
+的流量，还包括来自自定义域名的流量。
 
-## Promoting preview deployments to production deployments via Deno Deploy UI
+## 通过 Deno Deploy UI 将预览部署升级为生产部署
 
-Preview deployments can be "promoted" to production via the Deno Deploy UI:
+可以通过 Deno Deploy UI 将预览部署“升级”为生产部署：
 
-1. Navigate to the project page.
-2. Click on the **Deployments** tab.
-3. Click on the three dots next to the deployment you want to promote to
-   production and select **Promote to Production**
-   ![promote_to_production](../docs-images/promote_to_production.png)
+1. 转到项目页面。
+2. 单击 **部署** 选项卡。
+3. 单击要升级为生产部署的部署旁边的三个点，然后选择 **升级为生产部署**
+   ![升级为生产部署](../docs-images/promote_to_production.png)
 
-## Creating production deployments via `deployctl`
+## 通过 `deployctl` 创建生产部署
 
-If you are deploying your Deno code with `deployctl`, you can deploy to
-production with the `--prod` flag:
+如果您正在使用 `deployctl` 部署您的 Deno 代码，可以使用 `--prod`
+标志进行生产部署：
 
 ```sh
 deployctl deploy --prod --project=helloworld main.ts

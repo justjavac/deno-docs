@@ -1,34 +1,28 @@
-# Using React with Deno
+# 使用 React
 
-To use React with Deno, we recommend using one of the third-party frameworks
-below.
+要在 Deno 中使用 React，我们建议使用以下其中一个第三方框架。
 
-If you want to better understand how JSX and Deno interface under the hood, read
-on [here](../advanced/jsx_dom).
+如果您想更好地了解 JSX 和 Deno 的内部接口，请在 [这里](../advanced/jsx_dom)
+阅读。
 
-Note: Fresh and Aleph.js provide a framework for developing React-like websites.
-However, Fresh uses an alternative foundational technology, Preact to provide a
-better, more performant experience.
+注意：Fresh 和 Aleph.js 提供了一个用于开发类似 React 的网站的框架。但是，Fresh
+使用了一种替代的基础技术，Preact，以提供更好、更高性能的体验。
 
 ## Fresh
 
-[Fresh](https://fresh.deno.dev/) is the most popular React framework for Deno.
-It uses a model where you send no JavaScript to clients by default. The majority
-of rendering is done on a server, and the client is only responsible for
-re-rendering small
-[islands of interactivity](https://jasonformat.com/islands-architecture/). This
-means the developer explicitly opts in to client side rendering for specific
-components.
+[Fresh](https://fresh.deno.dev/) 是 Deno 中最流行的 React
+框架。它采用了一种模式，其中默认情况下不向客户端发送任何
+JavaScript。大多数渲染工作都在服务器上完成，客户端只负责重新渲染小的
+[交互区域](https://jasonformat.com/islands-architecture/)。这意味着开发人员明确选择为特定组件启用客户端渲染。
 
 ## Aleph
 
-[Aleph.js](https://alephjs.org/docs/get-started) is the second most popular
-React framework for Deno. It gives you the same sort of quick-start with React
-as Create-React-App. Like Next.js, Aleph provides SSR and SSG out of the box in
-order to allow developers to create SEO-friendly apps. In addition, Aleph
-provides some other built-in features that don't come out of the box in Next.js,
-such as:
+[Aleph.js](https://alephjs.org/docs/get-started) 是 Deno 中第二流行的 React
+框架。它为您提供了与 Create-React-App 类似的快速启动。与 Next.js 一样，Aleph
+默认提供了服务器端渲染（SSR）和静态站点生成（SSG），以使开发人员能够创建友好于
+SEO 的应用程序。此外，Aleph 还提供了一些其他内置功能，这些功能在 Next.js
+中默认情况下不包括，例如：
 
-- Hot Reloading (Using React Fast Refresh)
-- ESM Import Syntax (No need for webpack)
-- TypeScript-Ready
+- 热重载（使用 React 快速刷新）
+- ESM 导入语法（无需使用 webpack）
+- 准备好的 TypeScript

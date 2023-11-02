@@ -1,13 +1,12 @@
-# Using Web Platform APIs
+# 使用 Web 平台 API
 
-One way Deno simplifies web and cloud development is by using Web Platform APIs
-(like `fetch`) over proprietary APIs. This means if you've ever built for the
-browser, you're likely already familiar with Deno, and if you're learning Deno,
-you're also investing in your knowledge of the web.
+Deno 简化 Web 和云开发的一种方式是使用 Web 平台 API（比如 `fetch`）而不是专有的
+API。这意味着如果你曾经为浏览器构建过应用，你很可能已经熟悉
+Deno，而如果你正在学习 Deno，你也在增加对 Web 的知识投资。
 
-## Supported APIs
+## 支持的 API
 
-Here's a partial list of supported web platform APIs in Deno:
+以下是 Deno 中支持的部分 Web 平台 API 列表：
 
 - [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob)
 - [BroadcastChannel](https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel)
@@ -34,138 +33,72 @@ Here's a partial list of supported web platform APIs in Deno:
 - [Web Workers API](https://developer.mozilla.org/en-US/docs/Web/API/Worker)
 - [`WebSocket`](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
 
-You can find the Deno reference for these APIs [here](https://deno.land/api). To
-check if a Web Platform API is available in Deno, click on
-[the interface on MDN](https://developer.mozilla.org/en-US/docs/Web/API#interfaces)
-and refer to
-[its Browser Compatibility table](https://developer.mozilla.org/en-US/docs/Web/API/AbortController#browser_compatibility)
-(link as an example).
+你可以在 [这里](https://deno.land/api) 找到这些 API 的 Deno 参考。要检查 Web
+平台 API 是否在 Deno 中可用，点击
+[MDN 上的接口](https://developer.mozilla.org/en-US/docs/Web/API#interfaces)，并参考
+[其浏览器兼容性表](https://developer.mozilla.org/en-US/docs/Web/API/AbortController#browser_compatibility)（作为示例链接）。
 
 ## `fetch` API
 
-## Overview
+## 概述
 
-The `fetch` API can be used to make HTTP requests. It is implemented as
-specified in the [WHATWG `fetch` spec](https://fetch.spec.whatwg.org/).
+`fetch` API 可用于发起 HTTP 请求。它的实现按照
+[WHATWG `fetch` 规范](https://fetch.spec.whatwg.org/)。
 
-You can find documentation about this API on
-[MDN](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+您可以在 [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+上找到有关此 API 的文档。
 
-## Spec deviations
+## 规范偏差
 
-- The Deno user agent does not have a cookie jar. As such, the `set-cookie`
-  header on a response is not processed, or filtered from the visible response
-  headers.
-- Deno does not follow the same-origin policy, because the Deno user agent
-  currently does not have the concept of origins, and it does not have a cookie
-  jar. This means Deno does not need to protect against leaking authenticated
-  data cross origin. Because of this Deno does not implement the following
-  sections of the WHATWG `fetch` specification:
-  - Section `3.1. 'Origin' header`.
-  - Section `3.2. CORS protocol`.
-  - Section `3.5. CORB`.
-  - Section `3.6. 'Cross-Origin-Resource-Policy' header`.
-  - `Atomic HTTP redirect handling`.
-  - The `opaqueredirect` response type.
-- A `fetch` with a `redirect` mode of `manual` will return a `basic` response
-  rather than an `opaqueredirect` response.
-- The specification is vague on how
-  [`file:` URLs are to be handled](https://fetch.spec.whatwg.org/#scheme-fetch).
-  Firefox is the only mainstream browser that implements fetching `file:` URLs,
-  and even then it doesn't work by default. As of Deno 1.16, Deno supports
-  fetching local files. See the next section for details.
-- The `request` and `response` header guards are implemented, but unlike
-  browsers do not have any constraints on which header names are allowed.
-- The `referrer`, `referrerPolicy`, `mode`, `credentials`, `cache`, `integrity`,
-  `keepalive`, and `window` properties and their relevant behaviours in
-  `RequestInit` are not implemented. The relevant fields are not present on the
-  `Request` object.
-- Request body upload streaming is supported (on HTTP/1.1 and HTTP/2). Unlike
-  the current fetch proposal, the implementation supports duplex streaming.
-- The `set-cookie` header is not concatenated when iterated over in the
-  `headers` iterator. This behaviour is in the
-  [process of being specified](https://github.com/whatwg/fetch/pull/1346).
+- Deno 用户代理没有 Cookie 存储。因此，响应上的 `set-cookie`
+  标头不会被处理或从可见的响应标头中过滤。
+- Deno 不遵循同源策略，因为 Deno 用户代理当前没有源的概念，也没有 Cookie
+  存储。这意味着 Deno 不需要防止跨源泄露认证数据。因此，Deno 不实现 WHATWG
+  `fetch` 规范的以下部分：
+  - 第 3.1 节“'Origin'标头”。
+  - 第 3.2 节 CORS 协议。
+  - 第 3.5 节 CORB。
+  - 第 3.6 节'Cross-Origin-Resource-Policy'标头。
+  - 原子 HTTP 重定向处理。
+  - 'opaqueredirect'响应类型。
+- 具有“手动”重定向模式的 `fetch`
+  将返回一个“basic”响应，而不是“opaqueredirect”响应。
+- 规范对如何处理 [`file:` URL](https://fetch.spec.whatwg.org/#scheme-fetch)
+  模糊不清。Firefox 是唯一支持获取 `file:` URL
+  的主流浏览器，即使在默认情况下也无法正常工作。截至 Deno 1.16，Deno
+  支持获取本地文件。有关详细信息，请参见下一节。
+- 已实现 `request` 和 `response`
+  标头保护，但与浏览器不同，没有对允许使用的标头名称进行任何约束。
+- `referrer`、`referrerPolicy`、`mode`、`credentials`、`cache`、`integrity`、`keepalive`
+  和 `window` 属性及其在 `RequestInit` 中的相关行为未实现。这些相关字段不在
+  `Request` 对象上存在。
+- 支持请求体上传流（在 HTTP/1.1 和 HTTP/2 上）。与当前的 fetch
+  提案不同，该实现支持双向流。
+- 当在 `headers` 迭代时，`set-cookie` 标头不会被连接。这种行为正在
+  [被规范化过程中](https://github.com/whatwg/fetch/pull/1346)。
 
-## Fetching local files
+## 获取本地文件
 
-As of Deno 1.16, Deno supports fetching `file:` URLs. This makes it easier to
-write code that uses the same code path on a server as local, as well as easier
-to author code that works both with the Deno CLI and Deno Deploy.
+截至 Deno 1.16，Deno 支持获取 `file:`
+URL。这使得在服务器上和本地使用相同代码路径更容易，也更容易编写既适用于 Deno CLI
+又适用于 Deno Deploy 的代码。
 
-Deno only supports absolute file URLs, this means that `fetch("./some.json")`
-will not work. It should be noted though that if
-[`--location`](./location_api.md) is specified, relative URLs use the
-`--location` as the base, but a `file:` URL cannot be passed as the
-`--location`.
+Deno 仅支持绝对文件 URL，这意味着 `fetch("./some.json")`
+不起作用。但需要注意的是，如果指定了 [`--location`](./location_api.md)，相对 URL
+将使用 `--location` 作为基础，但不能将 `file:` URL 传递为 `--location`。
 
-To be able to fetch some resource, relative to the current module, which would
-work if the module is local or remote, you would want to use `import.meta.url`
-as the base. For example, something like:
+为了能够获取相对于当前模块的某些资源，无论模块是本地还是远程，都应该使用
+`import.meta.url` 作为基础。例如，像这样的内容：
 
 ```js
 const response = await fetch(new URL("./config.json", import.meta.url));
 const config = await response.json();
 ```
 
-Notes on fetching local files:
+获取本地文件的注意事项：
 
-- Permissions are applied to reading resources, so an appropriate `--allow-read`
-  permission is needed to be able to read a local file.
-- Fetching locally only supports the `GET` method, and will reject the promise
-  with any other method.
-- A file that does not exist simply rejects the promise with a vague
-  `TypeError`. This is to avoid the potential of fingerprinting attacks.
-- No headers are set on the response. Therefore it is up to the consumer to
-  determine things like the content type or content length.
-- Response bodies are streamed from the Rust side, so large files are available
-  in chunks, and can be cancelled.
-
-## `CustomEvent`, `EventTarget` and `EventListener`
-
-## Overview
-
-The DOM Event API can be used to dispatch and listen to events happening in an
-application. It is implemented as specified in the
-[WHATWG DOM spec](https://dom.spec.whatwg.org/#events).
-
-You can find documentation about this API on
-[MDN](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget).
-
-## Spec deviations
-
-- Events do not bubble, because Deno does not have a DOM hierarchy, so there is
-  no tree for Events to bubble/capture through.
-- `timeStamp` property is always set to `0`.
-
----
-
-## Typings
-
-The TypeScript definitions for the implemented web APIs can be found in the
-[`lib.deno.shared_globals.d.ts`](https://github.com/denoland/deno/blob/$CLI_VERSION/cli/dts/lib.deno.shared_globals.d.ts)
-and
-[`lib.deno.window.d.ts`](https://github.com/denoland/deno/blob/$CLI_VERSION/cli/dts/lib.deno.window.d.ts)
-files.
-
-Definitions that are specific to workers can be found in the
-[`lib.deno.worker.d.ts`](https://github.com/denoland/deno/blob/$CLI_VERSION/cli/dts/lib.deno.worker.d.ts)
-file.
-
-## Deviations of other APIs from spec
-
-### Cache API
-
-Only the following APIs are implemented:
-
-- [CacheStorage::open()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/open)
-- [CacheStorage::has()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/has)
-- [CacheStorage::delete()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/delete)
-- [Cache::match()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/match)
-- [Cache::put()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/put)
-- [Cache::delete()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/delete)
-
-A few things that are different compared to browsers:
-
-1. You cannot pass relative paths to the APIs. The request can be an instance of
-   Request or URL or a url string.
-2. `match()` & `delete()` don't support query options yet.
+- 适用于读取资源的权限，因此需要适当的 `--allow-read` 权限才能读取本地文件。
+- 本地只支持 `GET` 方法，并会拒绝承诺与其他方法。
+- 不存在的文件只会拒绝承诺并显示模糊的“TypeError”。这是为了避免指纹攻击的潜在风险。
+- 不会在响应上设置标头。因此，消费者需要确定诸如内容类型或内容长度等信息。
+- 响应正文从 Rust 侧以流的形式提供，因此大文件以块的形式提供，并且可以被取消。

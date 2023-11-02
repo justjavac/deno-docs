@@ -1,7 +1,7 @@
-# `npm:` specifiers
+# `npm:` 规范符
 
-Since version 1.28, Deno has native support for importing npm packages. This is
-done by importing using `npm:` specifiers. For example the following code:
+自 1.28 版本以来，Deno 原生支持导入 npm 包。这是通过使用 `npm:`
+规范符导入完成的。例如，以下代码：
 
 ```ts
 import { emojify } from "npm:node-emoji@2";
@@ -9,99 +9,89 @@ import { emojify } from "npm:node-emoji@2";
 console.log(emojify(":t-rex: :heart: NPM"));
 ```
 
-Can be run with:
+可以运行：
 
 ```sh
 $ deno run main.js
 🦖 ❤️ NPM
 ```
 
-When doing this, no `npm install` is necessary and no `node_modules` folder is
-created. These packages are also subject to the same
-[permissions](../basics/permissions.md) as other code in Deno.
+这样做时，无需进行 `npm install`，也不会创建 `node_modules`
+文件夹。这些包也受到与 Deno 中其他代码相同的 [权限](../basics/permissions.md)
+的限制。
 
-npm specifiers have the following format:
+npm 规范具有以下格式：
 
 ```
 npm:<package-name>[@<version-requirement>][/<sub-path>]
 ```
 
-For examples with popular libraries, please refer to our
-[tutorial section](/runtime/tutorials).
+有关流行库的示例，请参考我们的 [tutorial section](/runtime/tutorials)。
 
-## TypeScript types
+## TypeScript 类型
 
-Many packages ship with types out of the box, you can import those and use them
-with types easily:
+许多包已经默认包含类型，您可以轻松导入并使用这些类型：
 
 ```ts
 import chalk from "npm:chalk@5";
 ```
 
-Some packages do not though, but you can specify their types with a
-[`@deno-types`](../advanced/typescript/types.md) directive. For example, using a
+尽管某些包没有默认类型，但您可以使用
+[`@deno-types`](../advanced/typescript/types.md) 指令指定它们的类型。例如，使用
 [`@types`](https://www.typescriptlang.org/docs/handbook/2/type-declarations.html#definitelytyped--types)
-package:
+包：
 
 ```ts
-// @deno-types="npm:@types/express@^4.17"
+// @deno-types = "npm:@types/express@^4.17"
 import express from "npm:express@^4.17";
 ```
 
-### Module resolution
+### 模块解析
 
-The official TypeScript compiler `tsc` supports different
+官方的 TypeScript 编译器 `tsc` 支持不同的
 [moduleResolution](https://www.typescriptlang.org/tsconfig#moduleResolution)
-settings. Deno only supports the modern `node16` resolution. Unfortunately many
-NPM packages fail to correctly provide types under node16 module resolution,
-which can result in `deno check` reporting type errors, that `tsc` does not
-report.
+设置。Deno 只支持现代的 `node16` 解析。不幸的是，许多 NPM 包未能正确提供 node16
+模块解析下的类型，这可能导致 `deno check` 报告类型错误，而 `tsc` 则不会报告。
 
-If a default export from an `npm:` import appears to have a wrong type (with the
-right type seemingly being available under the `.default` property), it's most
-likely that the package provides wrong types under node16 module resolution for
-imports from ESM. You can verify this by checking if the error also occurs with
-`tsc --module node16` and `"type": "module"` in `package.json` or by consulting
-the [Are the types wrong?](https://arethetypeswrong.github.io/) website
-(particularly the "node16 from ESM" row).
+如果从 `npm:` 导入的默认导出似乎具有错误的类型（正确的类型似乎可用于 `.default`
+属性下），那么很可能是该包在 ESM 导入的情况下为 node16
+模块解析提供了错误的类型。您可以通过检查是否使用 `tsc --module node16` 和
+`package.json` 中的 `"type": "module"` 也会发生错误，或者请咨询
+[类型是否错误？](https://arethetypeswrong.github.io/) 网站（特别是 "node16 from
+ESM" 行）来验证这一点。
 
-If you want to use a package that doesn't support TypeScript's node16 module
-resolution, you can:
+如果您想使用不支持 TypeScript 的 node16 模块解析的包，您可以：
 
-1. Open an issue at the issue tracker of the package about the problem. (And
-   perhaps contribute a fix :) (Although there unfortunately currently is a lack
-   of tooling for packages to support both ESM and CJS, since default exports
-   require different syntaxes, see also
-   [microsoft/TypeScript#54593](https://github.com/microsoft/TypeScript/issues/54593))
-2. Use a [CDN](./cdns.md), that rebuilds the packages for Deno support, instead
-   of an `npm:` identifier.
-3. Ignore the type errors you get in your code base with `// @ts-expect-error`
-   or `// @ts-ignore`.
+1. 在包的问题跟踪器中报告问题。 （也许贡献一个修复 :)
+   （尽管不幸的是，目前缺少支持包同时支持 ESM 和 CJS
+   的工具，因为默认导出需要不同的语法，参见
+   [microsoft/TypeScript#54593](https://github.com/microsoft/TypeScript/issues/54593)）
+2. 使用 [CDN](./cdns.md)，为 Deno 支持重建包，而不是使用 `npm:` 标识符。
+3. 在代码库中忽略您收到的类型错误，使用 `// @ts-expect-error` 或
+   `// @ts-ignore`。
 
-### Including Node types
+### 包括 Node 类型
 
-Node ships with many built-in types like `Buffer` that might be referenced in an
-npm package's types. To load these you must add a types reference directive to
-the `@types/node` package:
+Node 包含许多内置类型，如 `Buffer`，可能会在 npm
+包的类型中引用。要加载这些类型，您必须向 `@types/node` 包添加一个类型引用指令：
 
 ```ts
 /// <reference types="npm:@types/node" />
 ```
 
-Note that it is fine to not specify a version for this in most cases because
-Deno will try to keep it in sync with its internal Node code, but you can always
-override the version used if necessary.
+请注意，在大多数情况下，不指定版本是可以的，因为 Deno 将尝试与其内部 Node
+代码保持同步，但如果有必要，您始终可以覆盖使用的版本。
 
-## npm executable scripts
+## npm 可执行脚本
 
-npm packages with `bin` entries can be executed from the command line without an
-`npm install` using a specifier in the following format:
+带有 `bin` 条目的 npm 包可以在命令行中执行，无需使用
+`npm install`，使用以下格式的规范：
 
 ```
 npm:<package-name>[@<version-requirement>][/<binary-name>]
 ```
 
-For example:
+例如：
 
 ```sh
 $ deno run --allow-read npm:cowsay@1.5.0 Hello there!
@@ -125,16 +115,14 @@ $ deno run --allow-read npm:cowsay@1.5.0/cowthink What to eat?
                 ||     ||
 ```
 
-## `--node-modules-dir` flag
+## `--node-modules-dir` 标志
 
-npm specifiers resolve npm packages to a central global npm cache. This works
-well in most cases and is ideal since it uses less space and doesn't require a
-node_modules directory. That said, you may find cases where an npm package
-expects itself to be executing from a `node_modules` directory. To improve
-compatibility and support those packages, you can use the `--node-modules-dir`
-flag.
+npm 规范将 npm 包解析为一个中央全局 npm
+缓存。在大多数情况下，这很有效，并且理想情况下，因为它使用的空间较少，不需要
+`node_modules` 目录。不过，您可能会发现某些 npm 包希望自己从 `node_modules`
+目录执行。为了提高兼容性并支持这些包，您可以使用 `--node-modules-dir` 标志。
 
-For example, given `main.ts`:
+例如，给定 `main.ts`：
 
 ```ts
 import chalk from "npm:chalk@5";
@@ -142,30 +130,28 @@ import chalk from "npm:chalk@5";
 console.log(chalk.green("Hello"));
 ```
 
-Running this script with a `--node-modules-dir` like so...
+使用 `--node-modules-dir` 运行此脚本，如下所示...
 
 ```sh
 deno run --node-modules-dir main.ts
 ```
 
-...will create a `node_modules` folder in the current directory with a similar
-folder structure to npm.
+...会在当前目录中创建一个 `node_modules` 文件夹，其文件夹结构与 npm 类似。
 
 ![](../images/node_modules_dir.png)
 
-Note that this is all done automatically when calling deno run and there is no
-separate install command necessary.
+请注意，当调用 `deno run` 时，所有这些都会自动完成，不需要单独的安装命令。
 
-Alternatively, if you wish to disable the creation of a `node_modules` directory
-entirely, you can set this flag to false (ex. `--node-modules-dir=false`) or add
-a `"nodeModulesDir": false` entry to your deno.json configuration file to make
-the setting apply to the entire directory tree.
+或者，如果您希望完全禁用 `node_modules` 目录的创建，您可以将此标志设置为
+false（例如，`--node-modules-dir=false`），或在您的 `deno.json`
+配置文件中添加一个 `"nodeModulesDir": false` 条目，以使该设置适用于整
 
-In the case where you want to modify the contents of the `node_modules`
-directory before execution, you can run `deno cache` with `--node-modules-dir`,
-modify the contents, then run the script.
+个目录树。
 
-For example:
+在您希望在执行之前修改 `node_modules` 目录的内容的情况下，您可以使用
+`--node-modules-dir` 运行 `deno cache`，修改内容，然后运行脚本。
+
+例如：
 
 ```sh
 deno cache --node-modules-dir main.ts

@@ -1,25 +1,26 @@
-# Read-Eval-Print-Loop
+# repl
 
-`deno repl` starts a read-eval-print-loop, which lets you interactively build up
-program state in the global context, it is especially useful for quick
-prototyping and checking snippets of code.
+# 读取-求值-打印-循环
 
-> ⚠️ Deno REPL supports JavaScript as well as TypeScript, however TypeScript code
-> is not type-checked, instead it is transpiled to JavaScript behind the scenes.
+`deno repl`
+启动一个读取-求值-打印-循环，允许您以全局上下文的方式交互地构建程序状态，特别适用于快速原型设计和检查代码片段。
 
-> ⚠️ To make it easier to copy-paste code samples, Deno REPL supports import and
-> export declarations. It means that you can paste code containing
-> `import ... from ...;`, `export class ...` or `export function ...` and it
-> will work as if you were executing a regular ES module.
+> ⚠️ Deno REPL 支持 JavaScript 和 TypeScript，但不对 TypeScript
+> 代码进行类型检查，而是在幕后将其转译为 JavaScript。
 
-## Special variables
+> ⚠️ 为了更容易复制粘贴代码示例，Deno REPL
+> 支持导入和导出声明。这意味着您可以粘贴包含
+> `import ... from ...;`、`export class ...` 或 `export function ...`
+> 的代码，它将像执行常规 ES 模块一样工作。
 
-The REPL provides a couple of special variables, that are always available:
+## 特殊变量
 
-| Identifier | Description                          |
-| ---------- | ------------------------------------ |
-| _          | Yields the last evaluated expression |
-| _error     | Yields the last thrown error         |
+REPL 提供了一些始终可用的特殊变量：
+
+| 标识符 | 描述                 |
+| ------ | -------------------- |
+| _      | 返回上次求值的表达式 |
+| _error | 返回上次抛出的错误   |
 
 ```
 Deno 1.14.3
@@ -34,20 +35,19 @@ undefined
 undefined
 ```
 
-## Special functions
+## 特殊函数
 
-The REPL provides several functions in the global scope:
+REPL 在全局范围内提供了多个函数：
 
-| Function | Description                       |
-| -------- | --------------------------------- |
-| clear()  | Clears the entire terminal screen |
-| close()  | Close the current REPL session    |
+| 函数    | 描述                 |
+| ------- | -------------------- |
+| clear() | 清除整个终端屏幕     |
+| close() | 关闭当前的 REPL 会话 |
 
-## `--eval` flag
+## `--eval` 标志
 
-`--eval` flag allows you to run some code in the runtime before you are dropped
-into the REPL. This is useful for importing some code you commonly use in the
-REPL, or modifying the runtime in some way:
+`--eval` 标志允许您在进入 REPL 之前在运行时运行一些代码。这对于导入常用于 REPL
+中的代码或以某种方式修改运行时非常有用：
 
 ```
 $ deno repl --allow-net --eval 'import { assert } from "https://deno.land/std/assert/mod.ts"'
@@ -61,17 +61,14 @@ Uncaught AssertionError
     at <anonymous>:2:1
 ```
 
-## `--eval-file` flag
+## `--eval-file` 标志
 
-`--eval-file` flag allows you to run code from specified files before you are
-dropped into the REPL. Like the `--eval` flag, this is useful for importing code
-you commonly use in the REPL, or modifying the runtime in some way.
+`--eval-file` 标志允许您在进入 REPL 之前运行指定文件中的代码。与 `--eval`
+标志类似，这对于导入常用于 REPL 中的代码或以某种方式修改运行时非常有用。
 
-Files can be specified as paths or URLs. URL files are cached and can be
-reloaded via the `--reload` flag.
+文件可以指定为路径或 URL。URL 文件会被缓存，并可以通过 `--reload` 标志重新加载。
 
-If `--eval` is also specified, then `--eval-file` files are run before the
-`--eval` code.
+如果同时指定了 `--eval`，则 `--eval-file` 文件将在 `--eval` 代码之前运行。
 
 ```
 $ deno repl --eval-file=https://examples.deno.land/hello-world.ts,https://deno.land/std/encoding/ascii85.ts
@@ -80,17 +77,15 @@ Hello, World!
 Download https://deno.land/std/encoding/ascii85.ts
 Deno 1.20.5
 exit using ctrl+d or close()
-> rfc1924 // local (not exported) variable defined in ascii85.ts
+> rfc1924 // 在 ascii85.ts 中定义的本地（未导出）变量
 "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~"
 ```
 
-### Relative Import Path Resolution
+### 相对导入路径解析
 
-If `--eval-file` specifies a code file that contains relative imports, then the
-runtime will try to resolve the imports relative to the current working
-directory. It will not try to resolve them relative to the code file's location.
-This can cause "Module not found" errors when `--eval-file` is used with module
-files:
+如果 `--eval-file`
+指定了包含相对导入的代码文件，那么运行时将尝试相对于当前工作目录解析导入。它不会尝试相对于代码文件的位置解析导入。当
+`--eval-file` 与模块文件一起使用时，这可能会导致“模块未找到”的错误：
 
 ```
 $ deno repl --eval-file=https://deno.land/std/hash/md5.ts
@@ -106,10 +101,10 @@ exit using ctrl+d or close()
 >
 ```
 
-## Tab completions
+## 制表完成
 
-Tab completions are crucial feature for quick navigation in REPL. After hitting
-`tab` key, Deno will now show a list of all possible completions.
+制表完成是 REPL 中快速导航的关键功能。按下 `tab` 键后，Deno
+现在将显示所有可能的完成列表。
 
 ```
 $ deno repl
@@ -120,50 +115,43 @@ readTextFile      readFile          readDirSync       readLinkSync      readAll 
 readTextFileSync  readFileSync      readDir           readLink          readAllSync       readSync
 ```
 
-## Keyboard shortcuts
+## 键盘快捷键
 
-| Keystroke             | Action                                                                                           |
-| --------------------- | ------------------------------------------------------------------------------------------------ |
-| Ctrl-A, Home          | Move cursor to the beginning of line                                                             |
-| Ctrl-B, Left          | Move cursor one character left                                                                   |
-| Ctrl-C                | Interrupt and cancel the current edit                                                            |
-| Ctrl-D                | If if line _is_ empty, signal end of line                                                        |
-| Ctrl-D, Del           | If line is _not_ empty, delete character under cursor                                            |
-| Ctrl-E, End           | Move cursor to end of line                                                                       |
-| Ctrl-F, Right         | Move cursor one character right                                                                  |
-| Ctrl-H, Backspace     | Delete character before cursor                                                                   |
-| Ctrl-I, Tab           | Next completion                                                                                  |
-| Ctrl-J, Ctrl-M, Enter | Finish the line entry                                                                            |
-| Ctrl-K                | Delete from cursor to end of line                                                                |
-| Ctrl-L                | Clear screen                                                                                     |
-| Ctrl-N, Down          | Next match from history                                                                          |
-| Ctrl-P, Up            | Previous match from history                                                                      |
-| Ctrl-R                | Reverse Search history (Ctrl-S forward, Ctrl-G cancel)                                           |
-| Ctrl-T                | Transpose previous character with current character                                              |
-| Ctrl-U                | Delete from start of line to cursor                                                              |
-| Ctrl-V                | Insert any special character without performing its associated action                            |
-| Ctrl-W                | Delete word leading up to cursor (using white space as a word boundary)                          |
-| Ctrl-X Ctrl-U         | Undo                                                                                             |
-| Ctrl-Y                | Paste from Yank buffer                                                                           |
-| Ctrl-Y                | Paste from Yank buffer (Meta-Y to paste next yank instead)                                       |
-| Ctrl-Z                | Suspend (Unix only)                                                                              |
-| Ctrl-_                | Undo                                                                                             |
-| Meta-0, 1, ..., -     | Specify the digit to the argument. `–` starts a negative argument.                               |
-| Meta-<                | Move to first entry in history                                                                   |
-| Meta->                | Move to last entry in history                                                                    |
-| Meta-B, Alt-Left      | Move cursor to previous word                                                                     |
-| Meta-Backspace        | Kill from the start of the current word, or, if between words, to the start of the previous word |
-| Meta-C                | Capitalize the current word                                                                      |
-| Meta-D                | Delete forwards one word                                                                         |
-| Meta-F, Alt-Right     | Move cursor to next word                                                                         |
-| Meta-L                | Lower-case the next word                                                                         |
-| Meta-T                | Transpose words                                                                                  |
-| Meta-U                | Upper-case the next word                                                                         |
-| Meta-Y                | See Ctrl-Y                                                                                       |
-| Ctrl-S                | Insert a new line                                                                                |
+| 按键                  | 动作                                         |
+| --------------------- | -------------------------------------------- |
+| Ctrl-A, Home          | 移动光标到行首                               |
+| Ctrl-B, Left          | 将光标左移一个字符                           |
+| Ctrl-C                | 中断并取消当前编辑                           |
+| Ctrl-D                | 如果行为空，则表示行尾                       |
+| Ctrl-D, Del           | 如果行不为空，则删除光标下的字符             |
+| Ctrl-E, End           | 将光标移动到行尾                             |
+| Ctrl-F, Right         | 将光标右移一个字符                           |
+| Ctrl-H, Backspace     | 删除光标前的字符                             |
+| Ctrl-I, Tab           | 下一个完成                                   |
+| Ctrl-J, Ctrl-M, Enter | 完成行输入                                   |
+| Ctrl-K                | 删除从光标到行尾的内容                       |
+| Ctrl-L                | 清除屏幕                                     |
+| Ctrl-N, Down          | 从历史记录中获取下一个匹配                   |
+| Ctrl-P, Up            | 从历史记录中获取上一个匹配                   |
+| Ctrl-R                | 反向搜索历史记录（Ctrl-S 前进，Ctrl-G 取消） |
+| Ctrl-T                | 与前一个字符交换当前字符                     |
+| Ctrl-U                | 删除从行首到光标的内容                       |
+| Ctrl-V                | 插入任何特殊字符，而不执行其相关操作         |
+
+| ----------------- |
+------------------------------------------------------------------ | | Ctrl-W |
+删除光标之前的单词（使用空格作为单词边界） | | Ctrl-X Ctrl-U | 撤销 | | Ctrl-Y |
+从拷贝缓冲区粘贴 | | Ctrl-Y | 从拷贝缓冲区粘贴（使用 Meta-Y 粘贴下一个拷贝） | |
+Ctrl-Z | 挂起（仅适用于 Unix） | | Ctrl-_ | 撤销 | | Meta-0, 1, ..., - |
+指定参数的数字。`–` 开始一个负参数。 | | Meta-< | 移动到历史记录的第一个条目 | |
+Meta-> | 移动到历史记录的最后一个条目 | | Meta-B, Alt-Left |
+移动光标到前一个单词 | | Meta-Backspace |
+从当前单词的开头删除，或者如果在单词之间，则从前一个单词的开头删除 | | Meta-C |
+大写下一个单词 | | Meta-D | 删除下一个单词 | | Meta-F, Alt-Right |
+移动光标到下一个单词 | | Meta-L | 下一个单词小写 | | Meta-T | 交换单词 | |
+Meta-U | 大写下一个单词 | | Meta-Y | 参见 Ctrl-Y | | Ctrl-S | 插入新行 |
 
 ## `DENO_REPL_HISTORY`
 
-You can use `DENO_REPL_HISTORY` environmental variable to control where Deno
-stores the REPL history file. You can set it to an empty value, Deno will not
-store the history file.
+您可以使用 `DENO_REPL_HISTORY` 环境变量来控制 Deno 存储 REPL
+历史文件的位置。您可以将其设置为空值，Deno 将不会存储历史文件。

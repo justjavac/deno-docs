@@ -1,36 +1,33 @@
-# Read and Write Files
+# 读写文件
 
-## Concepts
+## 概念
 
-- Deno's runtime API provides the
-  [Deno.readTextFile](https://deno.land/api?s=Deno.readTextFile) and
-  [Deno.writeTextFile](https://deno.land/api?s=Deno.writeTextFile) asynchronous
-  functions for reading and writing entire text files.
-- Like many of Deno's APIs, synchronous alternatives are also available. See
-  [Deno.readTextFileSync](https://deno.land/api?s=Deno.readTextFileSync) and
-  [Deno.writeTextFileSync](https://deno.land/api?s=Deno.writeTextFileSync).
-- Use `--allow-read` and `--allow-write` permissions to gain access to the file
-  system.
+- Deno 的运行时 API 提供了
+  [Deno.readTextFile](https://deno.land/api?s=Deno.readTextFile) 和
+  [Deno.writeTextFile](https://deno.land/api?s=Deno.writeTextFile) 异步
+  函数，用于读取和写入整个文本文件。
+- 与许多 Deno 的 API 一样，也提供了同步的替代方法。参见
+  [Deno.readTextFileSync](https://deno.land/api?s=Deno.readTextFileSync) 和
+  [Deno.writeTextFileSync](https://deno.land/api?s=Deno.writeTextFileSync)。
+- 使用 `--allow-read` 和 `--allow-write` 权限来访问文件系统。
 
-## Overview
+## 概览
 
-Interacting with the filesystem to read and write files is a common requirement.
-Deno provides a number of ways to do this via the
-[standard library](https://deno.land/std) and the
-[Deno runtime API](https://deno.land/api).
+与文件系统交互以读取和写入文件是一个常见的需求。 Deno 通过
+[标准库](https://deno.land/std) 和 [Deno 运行时 API](https://deno.land/api)
+提供了多种方式来实现这一需求。
 
-As highlighted in the [Fetch Data example](./fetch_data.md) Deno restricts
-access to Input / Output by default for security reasons. Therefore when
-interacting with the filesystem the `--allow-read` and `--allow-write` flags
-must be used with the `deno run` command.
+正如在 [获取数据示例](./fetch_data.md) 中所强调的，出于安全原因，Deno
+默认情况下限制了对输入/输出的访问。因此，在与文件系统交互时，必须在 `deno run`
+命令中使用 `--allow-read` 和 `--allow-write` 标志。
 
-## Reading a text file
+## 读取文本文件
 
-The Deno runtime API makes it possible to read text files via the
-`Deno.readTextFile()` method, it just requires a path string or URL object. The
-method returns a promise which provides access to the file's text data.
+Deno 运行时 API 允许通过 `Deno.readTextFile()`
+方法读取文本文件，只需提供路径字符串或 URL 对象即可。该方法返回一个 promise，该
+promise 提供对文件文本数据的访问。
 
-**Command:** `deno run --allow-read read.ts`
+**命令:** `deno run --allow-read read.ts`
 
 ```typescript
 /**
@@ -40,7 +37,7 @@ const text = await Deno.readTextFile("./people.json");
 console.log(text);
 
 /**
- * Output:
+ * 输出:
  *
  * [
  *   {"id": 1, "name": "John", "age": 23},
@@ -50,45 +47,44 @@ console.log(text);
  */
 ```
 
-## Writing a text file
+## 写入文本文件
 
-The Deno runtime API allows developers to write text to files via the
-`Deno.writeTextFile()` method. It just requires a file path and text string. The
-method returns a promise which resolves when the file was successfully written.
+Deno 运行时 API 允许开发人员通过 `Deno.writeTextFile()`
+方法将文本写入文件，只需提供文件路径和文本字符串即可。该方法返回一个
+promise，当文件成功写入时解析该 promise。
 
-To run the command the `--allow-write` flag must be supplied to the `deno run`
-command.
+要运行该命令，必须向 `deno run` 命令提供 `--allow-write` 标志。
 
-**Command:** `deno run --allow-write write.ts`
+**命令:** `deno run --allow-write write.ts`
 
 ```typescript
 /**
  * write.ts
  */
 await Deno.writeTextFile("./hello.txt", "Hello World!");
-console.log("File written to ./hello.txt");
+console.log("文件已写入 ./hello.txt");
 
 /**
- * Output: File written to ./hello.txt
+ * 输出: 文件已写入 ./hello.txt
  */
 ```
 
-You can _append_ text to a file like this:
+您可以像这样向文件追加文本：
 
 ```typescript
-await Deno.writeTextFile("./hello.txt", "This text will be appended.", {
+await Deno.writeTextFile("./hello.txt", "这个文本将被追加。", {
   append: true,
 });
 ```
 
-By combining `Deno.writeTextFile` and `JSON.stringify` you can easily write
-serialized JSON objects to a file. This example uses synchronous
-`Deno.writeTextFileSync`, but this can also be done asynchronously using
-`await Deno.writeTextFile`.
+通过结合 `Deno.writeTextFile` 和 `JSON.stringify`，您可以轻松地将序列化的 JSON
+对象写入文件。此示例使用同步的
+`Deno.writeTextFileSync`，但也可以使用异步方式执行，使用
+`await Deno.writeTextFile`。
 
-To execute the code the `deno run` command needs the write flag.
+要执行此代码，`deno run` 命令需要写入标志。
 
-**Command:** `deno run --allow-write write.ts`
+**命令:** `deno run --allow-write write.ts`
 
 ```typescript
 /**
@@ -98,7 +94,7 @@ function writeJson(path: string, data: object): string {
   try {
     Deno.writeTextFileSync(path, JSON.stringify(data));
 
-    return "Written to " + path;
+    return "已写入 " + path;
   } catch (e) {
     return e.message;
   }
@@ -107,6 +103,6 @@ function writeJson(path: string, data: object): string {
 console.log(writeJson("./data.json", { hello: "World" }));
 
 /**
- * Output: Written to ./data.json
+ * 输出: 已写入 ./data.json
  */
 ```

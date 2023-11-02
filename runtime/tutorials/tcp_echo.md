@@ -1,17 +1,15 @@
 # TCP echo Server
 
-## Concepts
+## 概念
 
-- Listening for TCP port connections with
-  [Deno.listen](https://deno.land/api?s=Deno.listen).
-- Use [Deno.Conn.readable](https://deno.land/api?s=Deno.Conn#prop_readable) and
-  [Deno.Conn.writable](https://deno.land/api?s=Deno.Conn#prop_writable) to take
-  inbound data and redirect it to be outbound data.
+- 使用 [Deno.listen](https://deno.land/api?s=Deno.listen) 监听 TCP 端口连接。
+- 使用 [Deno.Conn.readable](https://deno.land/api?s=Deno.Conn#prop_readable) 和
+  [Deno.Conn.writable](https://deno.land/api?s=Deno.Conn#prop_writable) 来接收
+  进入的数据并将其重定向为出站数据。
 
-## Example
+## 示例
 
-This is an example of a server which accepts connections on port 8080, and
-returns to the client anything it sends.
+这是一个服务器的示例，它在端口 8080 上接受连接，并返回客户端发送的任何内容。
 
 ```ts
 /**
@@ -24,16 +22,15 @@ for await (const conn of listener) {
 }
 ```
 
-Run with:
+使用以下命令运行：
 
 ```shell
 deno run --allow-net echo_server.ts
 ```
 
-To test it, try sending data to it with
-[netcat](https://en.wikipedia.org/wiki/Netcat) (Linux/MacOS only). Below
-`'hello world'` is sent over the connection, which is then echoed back to the
-user:
+要测试它，请尝试使用 [netcat](https://en.wikipedia.org/wiki/Netcat)
+向其发送数据（仅限 Linux/MacOS）。在连接上传送了 `'hello world'`
+后，它会回显给用户：
 
 ```shell
 $ nc localhost 8080
@@ -41,6 +38,5 @@ hello world
 hello world
 ```
 
-Like the [cat.ts example](./unix_cat.md), the `pipeTo()` method here also does
-not make unnecessary memory copies. It receives a packet from the kernel and
-sends back, without further complexity.
+与 [cat.ts 示例](./unix_cat.md) 一样，这里的 `pipeTo()`
+方法也不会进行不必要的内存复制。它从内核接收一个数据包并将其发送回，没有进一步的复杂性。

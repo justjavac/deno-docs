@@ -1,28 +1,25 @@
-# File Server
+# 文件服务器
 
-## Concepts
+## 概念
 
-- Use [Deno.open](https://deno.land/api?s=Deno.open) to read a file's content in
-  chunks.
-- Transform a Deno file into a
-  [ReadableStream](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream).
-- Use Deno's integrated HTTP server to run your own file server.
+- 使用 [Deno.open](https://deno.land/api?s=Deno.open) 以块的方式读取文件内容。
+- 将 Deno 文件转换成
+  [ReadableStream](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream)。
+- 使用 Deno 集成的 HTTP 服务器来运行您自己的文件服务器。
 
-## Overview
+## 概览
 
-Sending files over the network is a common requirement. As seen in the
-[Fetch Data example](./fetch_data.md), because files can be of any size, it is
-important to use streams in order to prevent having to load entire files into
-memory.
+通过网络发送文件是一个常见的需求。正如在 [获取数据示例](./fetch_data.md)
+中所看到的，由于文件可以是任何大小，因此使用流以避免将整个文件加载到内存中是非常重要的。
 
-## Example
+## 示例
 
-**Command:** `deno run --allow-read=. --allow-net file_server.ts`
+**命令：** `deno run --allow-read=. --allow-net file_server.ts`
 
 ```ts
-// Start listening on port 8080 of localhost.
+// 在本地主机的端口 8080 上开始监听。
 const server = Deno.listen({ port: 8080 });
-console.log("File server running on http://localhost:8080/");
+console.log("文件服务器在 http://localhost:8080/ 上运行。");
 
 for await (const conn of server) {
   handleHttp(conn).catch(console.error);
@@ -31,80 +28,77 @@ for await (const conn of server) {
 async function handleHttp(conn: Deno.Conn) {
   const httpConn = Deno.serveHttp(conn);
   for await (const requestEvent of httpConn) {
-    // Use the request pathname as filepath
+    // 将请求路径名用作文件路径
     const url = new URL(requestEvent.request.url);
     const filepath = decodeURIComponent(url.pathname);
 
-    // Try opening the file
+    // 尝试打开文件
     let file;
     try {
       file = await Deno.open("." + filepath, { read: true });
     } catch {
-      // If the file cannot be opened, return a "404 Not Found" response
+      // 如果无法打开文件，返回“404 未找到”响应
       const notFoundResponse = new Response("404 Not Found", { status: 404 });
       await requestEvent.respondWith(notFoundResponse);
       continue;
     }
 
-    // Build a readable stream so the file doesn't have to be fully loaded into
-    // memory while we send it
+    // 构建可读流，以便在发送文件时不必完全加载到内存中
     const readableStream = file.readable;
 
-    // Build and send the response
+    // 构建并发送响应
     const response = new Response(readableStream);
     await requestEvent.respondWith(response);
   }
 }
 ```
 
-## Using the `std/http` file server
+## 使用 `std/http` 文件服务器
 
-The Deno standard library provides you with a
-[file server](https://deno.land/std/http/file_server.ts) so that you don't have
-to write your own.
+Deno 标准库提供了一个
+[文件服务器](https://deno.land/std/http/file_server.ts)，这样您就不必自己编写了。
 
-To use it, first install the remote script to your local file system. This will
-install the script to the Deno installation root's bin directory, e.g.
-`/home/alice/.deno/bin/file_server`.
+要使用它，首先将远程脚本安装到本地文件系统。这将安装脚本到 Deno 安装根目录的 bin
+目录，例如 `/home/alice/.deno/bin/file_server`。
 
 ```shell
 deno install --allow-net --allow-read https://deno.land/std/http/file_server.ts
 ```
 
-You can now run the script with the simplified script name. Run it:
+现在可以使用简化的脚本名称运行该脚本。运行它：
 
 ```shell
 $ file_server .
-Downloading https://deno.land/std/http/file_server.ts...
+正在下载 https://deno.land/std/http/file_server.ts...
 [...]
-HTTP server listening on http://0.0.0.0:4507/
+HTTP 服务器正在监听 http://0.0.0.0:4507/
 ```
 
-Now go to [http://0.0.0.0:4507/](http://0.0.0.0:4507/) in your web browser to
-see your local directory contents.
+现在在您的网络浏览器中转到
+[http://0.0.0.0: 4507/](http://0.0.0.0:4507/)，以查看您的本地目录内容。
 
-The complete list of options are available via:
+完整的选项列表可通过以下方式获取：
 
 ```shell
 file_server --help
 ```
 
-Example output:
+示例输出：
 
 ```
-Deno File Server
-    Serves a local directory in HTTP.
-  INSTALL:
+Deno 文件服务器
+    以 HTTP 方式提供本地目录。
+  安装:
     deno install --allow-net --allow-read https://deno.land/std/http/file_server.ts
-  USAGE:
-    file_server [path] [options]
-  OPTIONS:
-    -h, --help          Prints help information
-    -p, --port <PORT>   Set port
-    --cors              Enable CORS via the "Access-Control-Allow-Origin" header
-    --host     <HOST>   Hostname (default is 0.0.0.0)
-    -c, --cert <FILE>   TLS certificate file (enables TLS)
-    -k, --key  <FILE>   TLS key file (enables TLS)
-    --no-dir-listing    Disable directory listing
-    All TLS options are required when one is provided.
+  使用:
+    file_server [路径] [选项]
+  选项:
+    -h, --help          打印帮助信息
+    -p, --port <PORT>   设置端口
+    --cors              通过 "Access-Control-Allow-Origin" 标头启用 CORS
+    --host     <HOST>   主机名（默认为 0.0.0.0）
+    -c, --cert <FILE>   TLS 证书文件（启用 TLS）
+    -k, --key  <FILE>   TLS 密钥文件（启用 TLS）
+    --no-dir-listing    禁用目录列表
+    提供 TLS 选项时，需要提供所有 TLS 选项。
 ```

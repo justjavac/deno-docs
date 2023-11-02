@@ -1,24 +1,24 @@
-# Language Server Overview
+# 语言服务器概述
 
-The Deno Language Server provides a server implementation of the
+Deno 语言服务器提供了
 [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
-which is specifically tailored to provide a _Deno_ view of code. It is
-integrated into the command line and can be started via the `lsp` sub-command.
+的服务器实现，专门为提供 _Deno_ 代码视图而定制。它已集成到命令行，并可以通过
+`lsp` 子命令启动。
 
-Most users will never interact with the server directly, but instead will via
-[`vscode_deno`](../../references/vscode_deno/index.md) or another
-[editor extension](../../getting_started/setup_your_environment.md). This
-documentation is for those implementing a editor client.
+大多数用户将不会直接与服务器交互，而是通过
+[`vscode_deno`](../../references/vscode_deno/index.md) 或其他
+[编辑器扩展](../../getting_started/setup_your_environment.md)
+进行交互。本文档是为那些实现编辑器客户端的人员编写的。
 
-## Structure
+## 结构
 
-When the language server is started, a `LanguageServer` instance is created
-which holds all of the state of the language server. It also defines all of the
-methods that the client calls via the Language Server RPC protocol.
+当语言服务器启动时，将创建一个 `LanguageServer`
+实例，它保存了语言服务器的所有状态。它还定义了客户端通过 Language Server RPC
+协议调用的所有方法。
 
-## Settings
+## 设置
 
-There are several settings that the language server supports for a workspace:
+语言服务器支持工作区的多个设置：
 
 - `deno.enable`
 - `deno.enablePaths`
@@ -42,17 +42,15 @@ There are several settings that the language server supports for a workspace:
 - `deno.unsafelyIgnoreCertificateErrors`
 - `deno.unstable`
 
-There are settings that are supported on a per resource basis by the language
-server:
+语言服务器按资源的基础支持以下设置：
 
 - `deno.enable`
 - `deno.enablePaths`
 - `deno.codeLens.test`
 
-There are several points in the process where Deno analyzes these settings.
-First, when the `initialize` request from the client, the
-`initializationOptions` will be assumed to be an object that represents the
-`deno` namespace of options. For example, the following value:
+在 Deno 分析这些设置的过程中，首先在客户端的 `initialize`
+请求时，`initializationOptions` 将被假定为表示 `deno`
+选项命名空间的对象。例如，以下值：
 
 ```json
 {
@@ -61,53 +59,40 @@ First, when the `initialize` request from the client, the
 }
 ```
 
-Would enable Deno with the unstable APIs for this instance of the language
-server.
+将启用具有不稳定 API 的 Deno 的此语言服务器实例。
 
-When the language server receives a `workspace/didChangeConfiguration`
-notification, it will assess if the client has indicated if it has a
-`workspaceConfiguration` capability. If it does, it will send a
-`workspace/configuration` request which will include a request for the workspace
-configuration as well as the configuration of all URIs that the language server
-is currently tracking.
+当语言服务器接收到 `workspace/didChangeConfiguration`
+通知时，它将评估客户端是否指示具有 `workspaceConfiguration`
+能力。如果有，它将发送一个 `workspace/configuration`
+请求，其中包括对工作区配置的请求以及语言服务器当前正在跟踪的所有 URI 的配置。
 
-If the client has the `workspaceConfiguration` capability, the language server
-will send a configuration request for the URI when it received the
-`textDocument/didOpen` notification in order to get the resources specific
-settings.
+如果客户端具有 `workspaceConfiguration` 能力，语言服务器将为客户端接收到的
+`textDocument/didOpen` 通知的 URI 发送配置请求，以获取特定资源的设置。
 
-If the client does not have the `workspaceConfiguration` capability, the
-language server will assume the workspace setting applies to all resources.
+如果客户端没有 `workspaceConfiguration`
+能力，语言服务器将假定工作区设置适用于所有资源。
 
-## Commands
+## 命令
 
-There are several commands that might be issued by the language server to the
-client, which the client is expected to implement:
+语言服务器可能向客户端发出多个命令，客户端预期实现这些命令：
 
-- `deno.cache` - This is sent as a resolution code action when there is an
-  un-cached module specifier that is being imported into a module. It will be
-  sent with and argument that contains the resolved specifier as a string to be
-  cached.
-- `deno.showReferences` - This is sent as the command on some code lenses to
-  show locations of references. The arguments contain the specifier that is the
-  subject of the command, the start position of the target and the locations of
-  the references to show.
-- `deno.test` - This is sent as part of a test code lens to, of which the client
-  is expected to run a test based on the arguments, which are the specifier the
-  test is contained in and the name of the test to filter the tests on.
+- `deno.cache` -
+  当未缓存的模块规范被导入到模块中时，将其作为分辨率代码操作发送。它将被发送并包含解析后的规范作为要缓存的字符串的参数。
+- `deno.showReferences` -
+  这是作为一些代码镜头的命令发送的，用于显示引用的位置。参数包含了作为命令主题的规范，目标的起始位置以及要显示的引用的位置。
+- `deno.test` -
+  这是作为测试代码镜头的一部分发送的，客户端预期根据参数运行测试，参数是包含测试的规范和要筛选测试的名称。
 
-## Requests
+## 请求
 
-The LSP currently supports the following custom requests. A client should
-implement these in order to have a fully functioning client that integrates well
-with Deno:
+LSP 目前支持以下自定义请求。客户端应该实现这些请求，以便具有与 Deno
+很好集成的完全功能客户端：
 
-- `deno/cache` - This command will instruct Deno to attempt to cache a module
-  and all of its dependencies. If a `referrer` only is passed, then all
-  dependencies for the module specifier will be loaded. If there are values in
-  the `uris`, then only those `uris` will be cached.
+- `deno/cache` - 此命令将指示 Deno 尝试缓存模块及其所有依赖项。如果只传递了一个
+  `referrer`，则将加载模块规范的所有依赖项。如果在 `uris`
+  中有值，那么只会缓存那些 `uris`。
 
-  It expects parameters of:
+  它期望的参数是：
 
   ```ts, ignore
   interface CacheParams {
@@ -115,27 +100,22 @@ with Deno:
     uris: TextDocumentIdentifier[];
   }
   ```
-- `deno/performance` - Requests the return of the timing averages for the
-  internal instrumentation of Deno.
+- `deno/performance` - 请求返回 Deno 内部仪器的定时平均值。
 
-  It does not expect any parameters.
-- `deno/reloadImportRegistries` - Reloads any cached responses from import
-  registries.
+  它不期望任何参数。
+- `deno/reloadImportRegistries` - 重新加载从导入注册表中缓存的响应。
 
-  It does not expect any parameters.
-- `deno/virtualTextDocument` - Requests a virtual text document from the LSP,
-  which is a read only document that can be displayed in the client. This allows
-  clients to access documents in the Deno cache, like remote modules and
-  TypeScript library files built into Deno. The Deno language server will encode
-  all internal files under the custom schema `deno:`, so clients should route
-  all requests for the `deno:` schema back to the `deno/virtualTextDocument`
-  API.
+  它不期望任何参数。
+- `deno/virtualTextDocument` - 请求从 LSP
+  获取虚拟文本文档，这是客户端中可以显示的只读文档。这允许客户端访问 Deno
+  缓存中的文档，如远程模块和内置于 Deno 中的 TypeScript 库文件。Deno
+  语言服务器将在自定义模式 `deno:` 下编码所有内部文件，因此客户端应将对 `deno:`
+  模式的所有请求路由到 `deno/virtualTextDocument` API。
 
-  It also supports a special URL of `deno:/status.md` which provides a markdown
-  formatted text document that contains details about the status of the LSP for
-  display to a user.
+  它还支持一个特殊的 URL，`deno:/status.md`，其中包含有关 LSP 状态的详细信息的
+  markdown 格式文本文档供显示给用户。
 
-  It expects parameters of:
+  它期望的参数是：
 
   ```ts, ignore
   interface VirtualTextDocumentParams {
@@ -143,49 +123,47 @@ with Deno:
   }
   ```
 
-- `deno/task` - Requests the return of available deno tasks, see
-  [task_runner](../../tools/task_runner.md).
+- `deno/task` - 请求返回可用的 Deno 任务，请参阅
+  [task_runner](../../tools/task_runner.md)。
 
-  It does not expect any parameters.
+  它不期望任何参数。
 
-## Notifications
+## 通知
 
-There is currently one custom notification that is sent from the server to the
-client:
+目前，服务器向客户端发送一条自定义通知：
 
-- `deno/registryState` - when `deno.suggest.imports.autoDiscover` is `true` and
-  an origin for an import being added to a document is not explicitly set in
-  `deno.suggest.imports.hosts`, the origin will be checked and the notification
-  will be sent to the client of the status.
+- `deno/registryState` - 当 `deno.suggest.imports.autoDiscover` 为 `true`
+  且将导入添加到文档的源未明确设置在 `deno.suggest.imports.hosts`
+  中时，将检查源并将
 
-  When receiving the notification, if the param `suggestion` is `true`, the
-  client should offer the user the choice to enable the origin and add it to the
-  configuration for `deno.suggest.imports.hosts`. If `suggestion` is `false` the
-  client should add it to the configuration of as `false` to stop the language
-  server from attempting to detect if suggestions are supported.
+状态通知发送到客户端。
 
-  The params for the notification are:
+在接收通知时，如果参数 `suggestion` 为
+`true`，客户端应该为用户提供选择启用源并将其添加到 `deno.suggest.imports.hosts`
+配置中。如果 `suggestion` 为
+`false`，客户端应该将其添加到配置中，以阻止语言服务器尝试检测是否支持建议。
 
-  ```ts
-  interface RegistryStatusNotificationParams {
-    origin: string;
-    suggestions: boolean;
-  }
-  ```
+通知的参数是：
 
-## Language IDs
+```ts
+interface RegistryStatusNotificationParams {
+  origin: string;
+  suggestions: boolean;
+}
+```
 
-The language server supports diagnostics and formatting for the following
-[text document language IDs](https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocumentItem):
+## 语言标识
+
+语言服务器支持以下文本文档语言标识的诊断和格式化：
 
 - `"javascript"`
 - `"javascriptreact"`
-- `"jsx"` _non standard, same as `javascriptreact`_
+- `"jsx"` _非标准，与 `javascriptreact` 相同_
 - `"typescript"`
 - `"typescriptreact"`
-- `"tsx"` _non standard, same as `typescriptreact`_
+- `"tsx"` _非标准，与 `typescriptreact` 相同_
 
-The language server supports only formatting for the following language IDs:
+语言服务器仅支持以下语言标识的格式化：
 
 - `"json"`
 - `"jsonc"`

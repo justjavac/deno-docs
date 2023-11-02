@@ -1,31 +1,25 @@
-# Using LinkeDOM with Deno
+# 使用 LinkeDOM 与 Deno
 
-[LinkeDOM](https://github.com/WebReflection/linkedom) is a DOM-like namespace to
-be used in environments, like Deno, which don't implement the DOM.
+[LinkeDOM](https://github.com/WebReflection/linkedom) 是一种类似于 DOM
+的命名空间，可用于像 Deno 这样不实现 DOM 的环境。
 
-LinkeDOM focuses on being fast and implementing features useful for server side
-rendering. It may allow you to do things that are invalid DOM operations.
-[deno-dom](./deno_dom.md) and [jsdom](./jsdom.md) focus on correctness. While
-currently deno-dom is slower than LinkeDOM in some cases, both are significantly
-faster than jsdom, so if you require correctness or features not related to
-server side rendering, consider deno-dom.
+LinkeDOM 专注于速度和实现对服务器端渲染有用的功能。它可能允许您执行无效的 DOM
+操作。[deno-dom](./deno_dom.md) 和 [jsdom](./jsdom.md)
+专注于正确性。虽然目前在某些情况下 deno-dom 比 LinkeDOM 慢，但两者都比 jsdom
+快得多，因此如果您需要正确性或与服务器端渲染无关的功能，请考虑使用 deno-dom。
 
-While LinkeDOM works under the Deno CLI, it does not type check. While the
-provided types work well when using an editor like VSCode, attempting to
-strictly type check them, like Deno does by default, at runtime, it will fail.
-This is the same if you were to use `tsc` to type check the code. The maintainer
-has indicated they aren't interested in
-[fixing this issue](https://github.com/WebReflection/linkedom/issues/87). This
-means for Deno, you need to use the `--no-check=remote` to avoid diagnostics
-stopping the execution of your programme.
+虽然 LinkeDOM 在 Deno CLI 下运行，但它不进行类型检查。虽然在像 VSCode
+这样的编辑器中使用提供的类型效果很好，但尝试在运行时像 Deno
+默认情况下所做的那样进行严格类型检查将失败。如果您使用 `tsc`
+进行代码类型检查也是一样的。维护者已经表示他们对修复这个问题不感兴趣。这意味着对于
+Deno，您需要使用 `--no-check=remote` 以避免诊断停止执行您的程序。
 
-LinkedDOM runs under Deno Deploy, along with deno_dom, but jsdom does not.
+LinkedDOM 可在 Deno Deploy 下运行，以及 deno_dom，但 jsdom 不行。
 
-## Basic example
+## 基本示例
 
-This example will take a test string and parse it as HTML and generate a DOM
-structure based on it. It will then query that DOM structure, picking out the
-first heading it encounters and print out the text content of that heading:
+此示例将采用测试字符串并将其解析为 HTML，然后基于其生成 DOM 结构。然后查询该 DOM
+结构，选择遇到的第一个标题并打印出该标题的文本内容：
 
 ```ts
 import { DOMParser } from "https://esm.sh/linkedom";
@@ -57,12 +51,11 @@ assert(h1);
 console.log(h1.textContent);
 ```
 
-## Alternative API
+## 替代 API
 
-For the `parseHTML()` can be better suited for certain SSR workloads. This is
-similar to jsdom's `JSDOM()` function, in the sense it gives you a "sandbox" of
-a `window` scope you can use to access API's outside of the scope of the
-`document`. For example:
+对于 `parseHTML()` 可更适合某些服务器端渲染工作负载。这类似于 jsdom 的 `JSDOM()`
+函数，因为它为您提供了一个可以用来访问文档范围之外的 API 的 "沙盒"，例如
+`window` 范围。例如：
 
 ```ts, ignore
 import { parseHTML } from "https://esm.sh/linkedom";
@@ -94,5 +87,5 @@ customElements.define(
 
 document.body.appendChild(document.createElement("custom-element"));
 
-document.toString(); // the string of the document, ready to send to a client
+document.toString(); // 文档的字符串，准备发送给客户端
 ```

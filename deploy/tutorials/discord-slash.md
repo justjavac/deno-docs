@@ -1,39 +1,32 @@
-# Discord Slash Command
+# Discord 斜杠命令
 
-Discord has a new feature called **Slash Commands**. They allow you to type `/`
-followed by a command name to perform some action. For example, you can type
-`/giphy cats` (a built-in command) to get some cat gifs.
+Discord 有一个名为**斜杠命令**的新功能。它允许您键入
+`/`，然后是命令名称来执行一些操作。例如，您可以键入
+`/giphy cats`（内置命令）以获取一些猫的 GIF 图像。
 
-Discord Slash Commands work by making a request to a URL whenever someone issues
-a command. You don't need your app to be running all the time for Slash Commands
-to work, which makes Deno Deploy a perfect solution to build such commands.
+Discord 斜杠命令通过向 URL
+发出请求来工作，每当有人发出命令时。您无需一直运行应用程序以使斜杠命令起作用，这使得
+Deno Deploy 成为构建此类命令的理想解决方案。
 
-In this post, let's see how we can build a hello world Slash Command using Deno
-Deploy.
+在本篇文章中，让我们看看如何使用 Deno Deploy 构建一个你好世界斜杠命令。
 
-## **Step 1:** Create an application on Discord Developer Portal
+## **步骤 1：** 在 Discord 开发者门户上创建应用程序
 
-1. Go to
+1. 转到
    [https://discord.com/developers/applications](https://discord.com/developers/applications)
-   (login using your discord account if required).
-2. Click on **New Application** button available at left side of your profile
-   picture.
-3. Name your application and click on **Create**.
-4. Go to **Bot** section, click on **Add Bot**, and finally on **Yes, do it!**
-   to confirm.
+   （如果需要，请使用您的 Discord 帐户登录）。
+2. 单击您的个人资料图片左侧可用的**新应用程序**按钮。
+3. 命名您的应用程序，然后单击**创建**。
+4. 转到**机器人**部分，单击**添加机器人**，最后单击**是的，执行！**以确认。
 
-That's it. A new application is created which will hold our Slash Command. Don't
-close the tab as we need information from this application page throughout our
-development.
+就这样。一个新的应用程序被创建，将保存我们的斜杠命令。不要关闭选项卡，因为我们需要从此应用程序页面获取信息，贯穿整个开发过程。
 
-## **Step 2:** Register Slash command with Discord app
+## **步骤 2：** 在 Discord 应用程序中注册斜杠命令
 
-Before we can write some code, we need to curl a Discord endpoint to register a
-Slash Command in our app.
+在我们可以编写代码之前，我们需要使用 Discord 端点来注册应用程序中的斜杠命令。
 
-Fill `BOT_TOKEN` with the token available in the **Bot** section and `CLIENT_ID`
-with the ID available on the **General Information** section of the page and run
-the command on your terminal.
+将 `BOT_TOKEN` 填充为**机器人**部分提供的令牌，将 `CLIENT_ID`
+填充为页面的**通用信息**部分提供的 ID，并在终端上运行以下命令。
 
 ```sh
 BOT_TOKEN='replace_me_with_bot_token'
@@ -45,44 +38,38 @@ curl -X POST \
 "https://discord.com/api/v8/applications/$CLIENT_ID/commands"
 ```
 
-This will register a Slash Command named `hello` that accepts a parameter named
-`name` of type string.
+这将注册一个名为 `hello` 的斜杠命令，接受一个名为 `name` 的字符串类型参数。
 
-## **Step 3:** Create and deploy the hello world Slash Command on Deno Deploy
+## **步骤 3：** 创建并部署 Deno Deploy 上的你好世界斜杠命令
 
-Next, we need to create a server to respond to Discord when it makes a POST
-request with someone's slash command.
+接下来，我们需要创建一个服务器，以响应 Discord 在发出某人的斜杠命令时发出的 POST
+请求。
 
-1. Navigate to https://dash.deno.com/new and click **Play** under the
-   **Playground** card.
-2. On the next page, in the editor, click the **Settings** icon on the top menu.
-   In the modal that pops up, select **+ Add Variable**.
-3. Input `DISCORD_PUBLIC_KEY` as KEY. The VALUE should be the public key
-   available in **General Information** section in the Discord application page.
-4. Copy and paste the following code into the editor:
+1. 转到 https://dash.deno.com/new 并在**Playground**卡下单击**Play**。
+2. 在下一页中，在编辑器中，单击顶部菜单上的**设置**图标。在弹出的模态对话框中，选择**+添加变量**。
+3. 将 `DISCORD_PUBLIC_KEY` 输入为键。VALUE 应为 Discord
+   应用程序页面的**通用信息**部分中提供的公钥。
+4. 将以下代码复制并粘贴到编辑器中：
 
    ```ts
-   // Sift is a small routing library that abstracts away details like starting a
-   // listener on a port, and provides a simple function (serve) that has an API
-   // to invoke a function for a specific path.
+   // Sift 是一个小型路由库，它抽象了启动端口监听器等详细信息，并提供了一个简单的函数（serve），
+   // 用于为特定路径调用函数的 API。
    import {
      json,
      serve,
      validateRequest,
    } from "https://deno.land/x/sift@0.6.0/mod.ts";
-   // TweetNaCl is a cryptography library that we use to verify requests
-   // from Discord.
+   // TweetNaCl 是我们用来验证来自 Discord 的请求的密码库。
    import nacl from "https://cdn.skypack.dev/tweetnacl@v1.0.3?dts";
 
-   // For all requests to "/" endpoint, we want to invoke home() handler.
+   // 对于所有对 "/" 端点的请求，我们希望调用 home() 处理程序。
    serve({
      "/": home,
    });
 
-   // The main logic of the Discord Slash Command is defined in this function.
+   // Discord 斜杠命令的主要逻辑在此函数中定义。
    async function home(request: Request) {
-     // validateRequest() ensures that a request is of POST method and
-     // has the following headers.
+     // validateRequest() 确保请求是 POST 方法，并且具有以下标头。
      const { error } = await validateRequest(request, {
        POST: {
          headers: ["X-Signature-Ed25519", "X-Signature-Timestamp"],
@@ -92,9 +79,8 @@ request with someone's slash command.
        return json({ error: error.message }, { status: error.status });
      }
 
-     // verifySignature() verifies if the request is coming from Discord.
-     // When the request's signature is not valid, we return a 401 and this is
-     // important as Discord sends invalid requests to test our verification.
+     // verifySignature() 验证请求是否来自 Discord。
+     // 当请求的签名无效时，我们返回 401，这很重要，因为 Discord 会发送无效请求来测试我们的验证。
      const { valid, body } = await verifySignature(request);
      if (!valid) {
        return json(
@@ -106,87 +92,73 @@ request with someone's slash command.
      }
 
      const { type = 0, data = { options: [] } } = JSON.parse(body);
-     // Discord performs Ping interactions to test our application.
-     // Type 1 in a request implies a Ping interaction.
+     // Discord 执行 Ping 交互以测试我们的应用程序。
+     // 请求中的 Type 1 意味着 Ping 交互。
      if (type === 1) {
        return json({
-         type: 1, // Type 1 in a response is a Pong interaction response type.
+         type: 1, // 响应中的 Type 1 是 Pong 交互响应类型。
        });
      }
 
-     // Type 2 in a request is an ApplicationCommand interaction.
-     // It implies that a user has issued a command.
+     // 请求中的 Type 2 是 ApplicationCommand 交互。
+     // 它意味着用户发出了一个命令。
      if (type === 2) {
        const { value } = data.options.find((option) => option.name === "name");
        return json({
-         // Type 4 responds with the below message retaining the user's
-         // input at the top.
+         // 响应中的 Type 4 包含下面的消息，保留用户的输入在顶部。
          type: 4,
          data: {
-           content: `Hello, ${value}!`,
+           content: `你好，${value}！`,
          },
        });
      }
 
-     // We will return a bad request error as a valid Discord request
-     // shouldn't reach here.
+     // 我们将返回一个坏请求错误，因为有效的 Discord 请求不应该到达这里。
      return json({ error: "bad request" }, { status: 400 });
    }
 
-   /** Verify whether the request is coming from Discord. */
-   async function verifySignature(
-     request: Request,
-   ): Promise<{ valid: boolean; body: string }> {
-     const PUBLIC_KEY = Deno.env.get("DISCORD_PUBLIC_KEY")!;
-     // Discord sends these headers with every request.
-     const signature = request.headers.get("X-Signature-Ed25519")!;
-     const timestamp = request.headers.get("X-Signature-Timestamp")!;
-     const body = await request.text();
-     const valid = nacl.sign.detached.verify(
-       new TextEncoder().encode(timestamp + body),
-       hexToUint8Array(signature),
-       hexToUint8Array(PUBLIC_KEY),
-     );
-
-     return { valid, body };
-   }
-
-   /** Converts a hexadecimal string to Uint8Array. */
-   function hexToUint8Array(hex: string) {
-     return new Uint8Array(
-       hex.match(/.{1,2}/g)!.map((val) => parseInt(val, 16)),
-     );
-   }
+   /** 验证请求是否来
    ```
 
-5. Click **Save & Deploy** to deploy the server
-6. Note the project URL once the file has been deployed. It will be on the upper
-   right hand side of the editor, and end in `.deno.dev`.
+自 Discord。 */ async function verifySignature( request: Request, ): Promise<{
+valid: boolean; body: string }> { const PUBLIC_KEY =
+Deno.env.get("DISCORD_PUBLIC_KEY")!; // Discord 在每个请求中发送这些标头。 const
+signature = request.headers.get("X-Signature-Ed25519")!; const timestamp =
+request.headers.get("X-Signature-Timestamp")!; const body = await
+request.text(); const valid = nacl.sign.detached.verify( new
+TextEncoder().encode(timestamp + body), hexToUint8Array(signature),
+hexToUint8Array(PUBLIC_KEY), );
 
-## **Step 3:** Configure Discord application to use our URL as interactions endpoint URL
+    return { valid, body };
 
-1. Go back to your application (Greeter) page on Discord Developer Portal
-2. Fill **INTERACTIONS ENDPOINT URL** field with the Deno Deploy project URL
-   from above and click on **Save Changes**.
+}
 
-The application is now ready. Let's proceed to the next section to install it.
+/** 将十六进制字符串转换为 Uint8Array。 */ function hexToUint8Array(hex: string)
+{ return new Uint8Array( hex.match(/.{1,2}/g)!.map((val) => parseInt(val, 16)),
+); }
 
-## **Step 4:** Install the Slash Command on your Discord server
+```
+5. 单击**保存并部署**以部署服务器
+6. 一旦文件已经部署，注意项目 URL。它将位于编辑器右上角，以 `.deno.dev` 结尾。
 
-So to use the `hello` Slash Command, we need to install our Greeter application
-on our Discord server. Here are the steps:
+## **步骤 3：** 配置 Discord 应用程序以将我们的 URL 用作交互端点 URL
 
-1. Go to **OAuth2** section of the Discord application page on Discord Developer
-   Portal
-2. Select `applications.commands` scope and click on the **Copy** button below.
-3. Now paste and visit the URL on your browser. Select your server and click on
-   **Authorize**.
+1. 返回 Discord Developer Portal 上 Discord 应用程序（Greeter）页面
+2. 在**通用信息**部分填写**交互端点 URL**字段与上面 Deno Deploy 项目 URL 并单击**保存更改**。
 
-Open Discord, type `/hello Deno Deploy` and press **Enter**. The output will
-look something like below.
+应用程序现在已准备好。让我们继续到下一节来安装它。
+
+## **步骤 4：** 在您的 Discord 服务器上安装斜杠命令
+
+因此，为了使用 `hello` 斜杠命令，我们需要在我们的 Discord 服务器上安装我们的 Greeter 应用程序。以下是步骤：
+
+1. 转到 Discord Developer Portal 上 Discord 应用程序页面的**OAuth2**部分
+2. 选择 `applications.commands` 范围并单击下方的**复制**按钮。
+3. 现在在浏览器中粘贴并访问 URL。选择您的服务器，然后单击**授权**。
+
+打开 Discord，键入 `/hello Deno Deploy`，然后按**输入**。输出将如下所示。
 
 ![Hello, Deno Deploy!](../docs-images/discord-slash-command.png)
 
-Congratulations for completing the tutorial! Go ahead and build some awesome
-Discord Slash Commands! And do share them with us on **deploy** channel of
-[the Deno Discord server](https://discord.gg/deno).
+恭喜您完成本教程！继续构建一些令人惊叹的 Discord 斜杠命令！并在 [Deno Discord 服务器的 deploy 频道](https://discord.gg/deno) 上与我们分享。
+```

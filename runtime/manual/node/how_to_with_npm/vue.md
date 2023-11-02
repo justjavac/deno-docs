@@ -1,52 +1,49 @@
-# How to use Vue with Deno
+# 如何在 Deno 中使用 Vue
 
-[Vue](https://vuejs.org/) is a progressive front-end JavaScript framework, built
-for performance and versatility.
+[Vue](https://vuejs.org/) 是一款渐进式前端 JavaScript
+框架，专为性能和多功能性而构建。
 
-This How To guide will show you how to create a simple app using Deno, Vite, and
-Vue.
+本教程将向您展示如何使用 Deno、Vite 和 Vue 创建一个简单的应用程序。
 
-[View source](https://github.com/denoland/examples/tree/main/with-vue) or
-[follow the video guide](https://www.youtube.com/watch?v=MDPauM8fZDE).
+[查看源码](https://github.com/denoland/examples/tree/main/with-vue) 或
+[查看视频教程](https://www.youtube.com/watch?v=MDPauM8fZDE)。
 
-## Run `npm:create-vite-extra`
+## 运行 `npm:create-vite-extra`
 
-We'll use Vite to scaffold our Vue app. First, run:
+我们将使用 Vite 来创建我们的 Vue 应用程序。首先，运行：
 
 ```shell, ignore
 deno run --allow-read --allow-write --allow-env npm:create-vite-extra@latest
 ```
 
-Name your project, then select "deno-vue".
+为您的项目命名，然后选择 "deno-vue"。
 
-Then, `cd` into your new project and run:
+然后，进入您的新项目并运行：
 
 ```shell, ignore
 deno task dev
 ```
 
-You should now be able to view your default Deno and Vue app in your browser:
+现在，您应该能够在浏览器中查看您的默认 Deno 和 Vue 应用程序：
 
-![default vue app](../../images/how-to/vue/default-vue-app.png)
+![默认 Vue 应用程序](../../images/how-to/vue/default-vue-app.png)
 
-## Add a backend
+## 添加后端
 
-The next step is to add a backend API. We'll create a very simple API that
-returns information about dinosaurs.
+下一步是添加后端 API。我们将创建一个非常简单的 API，用于返回有关恐龙的信息。
 
-In the directory, let's create an `api` folder. In that folder, we'll create a
-`main.ts` file, which will run the server, and a `data.json`, which is the hard
-coded data.
+在目录中，让我们创建一个 `api` 文件夹。在该文件夹中，我们将创建一个 `main.ts`
+文件，用于运行服务器，以及一个 `data.json` 文件，其中包含硬编码的数据。
 
 ```shell, ignore
 mkdir api && touch api/data.json && touch api/main.ts
 ```
 
-Copy and paste
-[this json file](https://github.com/denoland/deno-vue-example/blob/main/api/data.json)
-into your `api/data.json`.
+将
+[此 JSON 文件](https://github.com/denoland/deno-vue-example/blob/main/api/data.json)
+复制并粘贴到您的 `api/data.json` 中。
 
-Then, let's update `api/main.ts`:
+然后，让我们更新 `api/main.ts`：
 
 ```ts, ignore
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
@@ -56,7 +53,7 @@ import data from "./data.json" assert { type: "json" };
 const router = new Router();
 router
   .get("/", (context) => {
-    context.response.body = "Welcome to dinosaur API!";
+    context.response.body = "欢迎访问恐龙API！";
   })
   .get("/api", (context) => {
     context.response.body = data;
@@ -69,63 +66,59 @@ router
       if (found) {
         context.response.body = found;
       } else {
-        context.response.body = "No dinosaurs found.";
+        context.response.body = "没有找到恐龙。";
       }
     }
   });
 
 const app = new Application();
-app.use(oakCors()); // Enable CORS for All Routes
+app.use(oakCors()); // 为所有路由启用CORS
 app.use(router.routes());
 app.use(router.allowedMethods());
 
 await app.listen({ port: 8000 });
 ```
 
-This is a very simple API server using [`oak`](https://deno.land/x/oak) that
-will return dinosaur information based on the route. Let's start the API server:
+这是一个使用 [`oak`](https://deno.land/x/oak) 的非常简单的 API
+服务器，根据路由返回恐龙信息。让我们启动 API 服务器：
 
 ```shell, ignore
 deno run --allow-env --allow-net api/main.ts
 ```
 
-If we go to `localhost:8000/api`, we see:
+如果我们访问 `localhost:8000/api`，我们会看到：
 
-![json response of dinosaurs](../../images/how-to/vue/api-response.png)
+![恐龙的 JSON 响应](../../images/how-to/vue/api-response.png)
 
-Lookin' good so far.
+到目前为止看起来很不错。
 
-## Add Vue components
+## 添加 Vue 组件
 
-Let's update `src/components`. We'll add the files:
+让我们更新 `src/components`。我们将添加以下文件：
 
-- `HomePage.vue`, the component for the home page
-- `Dinosaurs.vue`, the component that lists all dinosaur names as anchor links,
-  and
-- `Dinosaur.vue`, the component that shows an individual dinosaur's name and
-  description
+- `HomePage.vue`，首页的组件
+- `Dinosaurs.vue`，列出所有恐龙名称的组件，作为锚链接
+- `Dinosaur.vue`，显示单个恐龙的名称和描述的组件
 
 ```shell, ignore
 touch src/components/HomePage.vue src/components/Dinosaurs.vue src/components/Dinosaur.vue
 ```
 
-Before we create the components, let's add some state management.
+在创建这些组件之前，让我们添加一些状态管理。
 
-## Maintain state with `store`
+## 使用 `store` 维护状态
 
-In order to maintain state across our `<Dinosaur>` and `<Dinosaurs>` components,
-we'll use
-[Vue store](https://vuejs.org/manual/scaling-up/state-management.html). Note for
-more complex state management, check out the Vue-endorsed
-[Pinia](https://pinia.vuejs.org/) library.
+为了在 `<Dinosaur>` 和 `<Dinosaurs>` 组件之间保持状态，我们将使用
+[Vue store](https://vuejs.org/manual/scaling-up/state-management.html)。对于更复杂的状态管理，可以查看
+Vue 认可的 [Pinia](https://pinia.vuejs.org/) 库。
 
-Create a `src/store.js` file:
+创建一个 `src/store.js` 文件：
 
 ```shell, ignore
 touch src/store.js
 ```
 
-And in it, let's add:
+并在其中添加以下内容：
 
 ```js, ignore
 import { reactive } from "vue";
@@ -139,20 +132,20 @@ export const store = reactive({
 });
 ```
 
-We'll import `store` into both `Dinosaurs.vue` and `Dinosaur.vue` to set and
-retrieve dinosaur name and description.
+我们将在 `Dinosaurs.vue` 和 `Dinosaur.vue` 中导入
+`store`，以设置和检索恐龙的名称和描述。
 
-## Update Vue components
+## 更新 Vue 组件
 
-In `Dinosaurs.vue`, we'll do three things:
+在 `Dinosaurs.vue` 中，我们将执行三个操作：
 
-- send a `GET` request to our API and return that as `dinosaurs`
-- iterate through `dinosaurs` and render each `dinosaur` in `<router-link>` that
-  points to the `<Dinosaur>` component
-- add `store.setDinosaur()` to `@click` on each `dinosaur`, which will set the
+- 发送 `GET` 请求到我们的 API，并将其返回为 `dinosaurs`
+- 遍历 `dinosaurs` 并在 `<router-link>` 中呈现每个 `dinosaur`，该链接指向
+  `<Dinosaur>` 组件
+- 在每个 `dinosaur` 的 `@click` 事件上添加 `store.setDinosaur()`，这将设置
   `store`
 
-Here is the complete code below:
+以下是完整的代码：
 
 ```tsx, ignore
 <script>
@@ -202,14 +195,16 @@ export default ({
 </style>
 ```
 
-In `Dinosaur.vue`, we'll add:
+在 `Dinosaur.vue` 中，我们将添加：
 
-- importing `store`
-- rendering `store.dinosaur` in the HTML
+- 导入 `store`
+- 在 HTML 中呈现 `store.dinosaur`
 
 ```tsx, ignore
 <script>
-import { store } from '../store.js';
+import { store
+
+ from '../store.js';
 export default {
   data() {
     return {
@@ -226,10 +221,9 @@ export default {
 </template>
 ```
 
-Next, we'll update `HomePage.vue`. Since the `Dinosaurs` component needs to
-fetch the data from the API, we'll use
-[`<Suspense>`](https://vuejs.org/manual/built-ins/suspense.html), which manages
-async dependencies in a component tree.
+接下来，我们将更新 `HomePage.vue`。由于 `Dinosaurs` 组件需要从 API
+中获取数据，我们将使用
+[`<Suspense>`](https://vuejs.org/manual/built-ins/suspense.html)，它管理组件树中的异步依赖关系。
 
 ```tsx, ignore
 <script>
@@ -253,12 +247,12 @@ export default {
   </Suspense>
 
   <p>
-    Check out
+    查看
     <a href="https://vuejs.org/manual/quick-start.html#local" target="_blank"
       >create-vue</a
-    >, the official Vue + Vite starter
+    >，官方的Vue + Vite入门
   </p>
-  <p class="read-the-docs">Learn more about using Deno and Vite.</p>
+  <p class="read-the-docs">了解如何使用Deno和Vite。</p>
 </template>
 
 <style scoped>
@@ -268,7 +262,7 @@ export default {
 </style>
 ```
 
-Tying it all together, let's update `src/App.vue`:
+将所有内容联系起来，让我们更新 `src/App.vue`：
 
 ```tsx, ignore
 <template>
@@ -276,13 +270,12 @@ Tying it all together, let's update `src/App.vue`:
 </template>;
 ```
 
-## Add routing
+## 添加路由
 
-You'll notice that we have used `<router-link>` and `<router-view>`. These
-components are part of the [`vue-router` library](https://router.vuejs.org/),
-which we'll have to setup and configure in another file.
+您会注意到我们已经使用了 `<router-link>` 和 `<router-view>`。这些组件属于
+[`vue-router` 库](https://router.vuejs.org/)，我们需要在另一个文件中设置和配置它。
 
-First, let's import `vue-router` in our `vite.config.mjs` file:
+首先，让我们在 `vite.config.mjs` 文件中导入 `vue-router`：
 
 ```ts, ignore
 import { defineConfig } from "npm:vite@^3.1.3";
@@ -297,15 +290,16 @@ export default defineConfig({
 });
 ```
 
-Next, let's create a folder named `router`. In it, let's create `index.ts`:
+接下来，让我们创建一个名为 `router` 的文件夹。在其中，我们将创建 `index.ts`
+文件：
 
 ```
 mkdir router && touch router/index.ts
 ```
 
-In `router/index.ts`, we'll create `router`, which contains information about
-each route and their component, and export it. For more information on using
-`vue-router`, check out their [guide](https://router.vuejs.org/guide).
+在 `router/index.ts` 中，我们将创建
+`router`，其中包含每个路由及其组件的信息，并将其导出。有关使用 `vue-router`
+的更多信息，请查看他们的 [指南](https://router.vuejs.org/guide)。
 
 ```ts, ignore
 import { createRouter, createWebHistory } from "vue-router";
@@ -334,8 +328,8 @@ const router = createRouter({
 export default router;
 ```
 
-Next, in our `src/main.ts` file, which contains all of the logic for the
-frontend app, we'll have to import and use `router`:
+接下来，在我们的 `src/main.ts`
+文件中，该文件包含前端应用程序的所有逻辑，我们需要导入并使用 `router`：
 
 ```ts, ignore
 import { createApp } from "vue";
@@ -348,8 +342,8 @@ app.use(router);
 app.mount("#app");
 ```
 
-Let's run it and see what we get so far:
+让我们运行它，看看我们到目前为止得到了什么：
 
-![Clicking on a dinosaur to get to an individual dinosaur page](../../images/how-to/vue/vue-demo.gif)
+![单击恐龙以进入单个恐龙页面](../../images/how-to/vue/vue-demo.gif)
 
-Awesome!
+太棒了！

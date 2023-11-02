@@ -1,3 +1,3 @@
-# Build a blog with Hugo
+# 使用 Hugo 构建博客
 
-Tutorial [here](https://deno.com/blog/hugo-blog-with-deno-deploy).
+教程 [在这里](https://deno.com/blog/hugo-blog-with-deno-deploy)。

@@ -1,33 +1,32 @@
-# Linter
+# 代码检查工具
 
-Deno ships with a built-in code linter for JavaScript and TypeScript.
+Deno 集成了 JavaScript 和 TypeScript 的内置代码检查工具。
 
 ```shell
-# lint all JS/TS files in the current directory and subdirectories
+检查当前目录和子目录中的所有 JS/TS 文件
 deno lint
-# lint specific files
+# 检查特定文件
 deno lint myfile1.ts myfile2.ts
-# lint all JS/TS files in specified directory and subdirectories
+# 检查指定目录和子目录中的所有 JS/TS 文件
 deno lint src/
-# print result as JSON
+# 以 JSON 格式输出结果
 deno lint --json
-# read from stdin
+# 从标准输入读取
 cat file.ts | deno lint -
 ```
 
-For more detail, run `deno lint --help`.
+有关更多详细信息，请运行 `deno lint --help`。
 
-## Available rules
+## 可用规则
 
-For a complete list of supported rules visit
-[the deno_lint rule documentation](https://lint.deno.land).
+要查看受支持规则的完整列表，请访问
+[deno_lint 规则文档](https://lint.deno.land)。
 
-## Ignore directives
+## 忽略指令
 
-### Files
+### 文件
 
-To ignore whole file `// deno-lint-ignore-file` directive should placed at the
-top of the file:
+要忽略整个文件，应在文件顶部放置 `// deno-lint-ignore-file` 指令：
 
 ```ts
 // deno-lint-ignore-file
@@ -37,13 +36,13 @@ function foo(): any {
 }
 ```
 
-Ignore directive must be placed before first statement or declaration:
+忽略指令必须放在第一个语句或声明之前：
 
 ```ts, ignore
-// Copyright 2020 the Deno authors. All rights reserved. MIT license.
+// 版权所有 2020 年的 Deno 作者。保留所有权利。MIT 许可证。
 
 /**
- * Some JS doc
+ * 一些 JS 文档
  */
 
 // deno-lint-ignore-file
@@ -55,7 +54,7 @@ function foo(): any {
 }
 ```
 
-You can also ignore certain diagnostics in the whole file
+您还可以在整个文件中忽略某些诊断信息
 
 ```ts
 // deno-lint-ignore-file no-explicit-any no-empty
@@ -65,10 +64,10 @@ function foo(): any {
 }
 ```
 
-### Diagnostics
+### 诊断信息
 
-To ignore certain diagnostic `// deno-lint-ignore <codes...>` directive should
-be placed before offending line. Specifying ignored rule name is required:
+要忽略特定诊断信息，应在有问题的行之前放置 `// deno-lint-ignore <codes...>`
+指令。必须指定要忽略的规则名称：
 
 ```ts
 // deno-lint-ignore no-explicit-any
@@ -82,18 +81,17 @@ function bar(a: any) {
 }
 ```
 
-## Configuration
+## 配置
 
-Starting with Deno v1.14 a linter can be customized using either
-[a configuration file](../getting_started/configuration_file.md) or following
-CLI flags:
+从 Deno v1.14 开始，代码检查工具可以使用
+[配置文件](../getting_started/configuration_file.md) 或以下 CLI 标志进行自定义：
 
-- `--rules-tags` - List of tag names that will be run. Empty list disables all
-  tags and will only use rules from `include`. Defaults to "recommended".
+- `--rules-tags` - 将运行的标记名称列表。空列表会禁用所有标记，并仅使用
+  `include` 中的规则。默认为 "recommended"。
 
-- `--rules-exclude` - List of rule names that will be excluded from configured
-  tag sets. Even if the same rule is in `include` it will be excluded; in other
-  words, `--rules-exclude` has higher precedence over `--rules-include`.
+- `--rules-exclude` - 从配置的标记集中排除的规则名称列表。即使相同的规则位于
+  `include` 中，也会被排除在外；换句话说，`--rules-exclude` 优先级高于
+  `--rules-include`。
 
-- `--rules-include` - List of rule names that will be run. If the same rule is
-  in `exclude` it will be excluded.
+- `--rules-include` - 将运行的规则名称列表。如果相同的规则位于 `exclude`
+  中，它将被排除。

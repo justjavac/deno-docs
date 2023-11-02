@@ -1,78 +1,46 @@
-# Set Up Your Environment
+# 设置您的环境
 
-The Deno CLI contains a lot of the tools that are commonly needed for developing
-applications, including a full language server to help power your IDE of choice.
-[Installing](./installation.md) is all you need to do to make these
-[tools](./command_line_interface.md) available to you.
+Deno CLI
+包含了开发应用程序常常需要的工具，包括完整的语言服务器，以帮助强化您选择的IDE。只需[安装](./installation.md)这些[工具](./command_line_interface.md)，即可使用。
 
-Outside using Deno with your favorite IDE, this section also documents
-[shell completions](#shell-completions) and
-[environment variables](#environment-variables).
+在使用Deno与您喜欢的IDE之外，本节还记录了[shell完成](#shell-completions)和[环境变量](#environment-variables)。
 
-## Using an editor/IDE
+## 使用编辑器/IDE
 
-There is broad support for Deno in editors/IDEs. The following sections provide
-information about how to use Deno with editors. Most editors integrate directly
-into Deno using the Language Server Protocol and the language server that is
-integrated into the Deno CLI.
+编辑器/IDE广泛支持Deno。以下部分提供了如何在编辑器中使用Deno的信息。大多数编辑器直接集成到Deno中，使用语言服务器协议和Deno
+CLI中集成的语言服务器。
 
-If you are trying to write or support a community integration to the Deno
-language server, there is some
-[documentation](https://github.com/denoland/deno/tree/main/cli/lsp#deno-language-server)
-located in the Deno CLI code repository, but also feel free to join the
-[Discord community](https://discord.gg/deno) in the `#dev-lsp` channel.
+如果您尝试编写或支持Deno语言服务器的社区集成，Deno
+CLI代码仓库中有一些[文档](https://github.com/denoland/deno/tree/main/cli/lsp#deno-language-server)，也可以加入[Discord社区](https://discord.gg/deno)的`#dev-lsp`频道。
 
 ### Visual Studio Code
 
-There is an official extension for
-[Visual Studio Code](https://code.visualstudio.com/) called
-[vscode_deno](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno).
-When installed, it will connect to the language server built into the Deno CLI.
+有一个官方扩展 [Visual Studio Code](https://code.visualstudio.com/)叫做
+[vscode_deno](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)。
+安装后，它将连接到Deno CLI中内置的语言服务器。
 
-Because most people work in mixed environments, the extension does not enable a
-workspace as _Deno enabled_ by default, and it requires that the `"deno.enable"`
-flag to be set. You can change the settings yourself, or you can choose
-`Deno: Initialize Workspace Configuration` from the command palette to enable
-your project.
+由于大多数人在混合环境中工作，该扩展默认不会启用工作区作为“Deno启用”，需要设置`"deno.enable"`标志。您可以自己更改设置，或者可以选择从命令面板中选择`Deno: 初始化工作区配置`来启用您的项目。
 
-More information can be found in the
-[Using Visual Studio Code](../references/vscode_deno/index.md) section of the
-manual.
+更多信息可以在手册的[使用Visual Studio Code](../references/vscode_deno/index.md)部分找到。
 
-### JetBrains IDEs
+### JetBrains IDE
 
-You can get support for Deno in WebStorm and other
-[JetBrains IDEs](https://www.jetbrains.com/products/#type=ide), including
-PhpStorm, IntelliJ IDEA Ultimate, and PyCharm Professional. For this, install
-the [official Deno plugin](https://plugins.jetbrains.com/plugin/14382-deno) from
-_Preferences / Settings | Plugins - Marketplace_.
+您可以在WebStorm和其他[JetBrains IDEs](https://www.jetbrains.com/products/#type=ide)上获得对Deno的支持，包括PhpStorm、IntelliJ
+IDEA Ultimate和PyCharm
+Professional。为此，请安装[官方Deno插件](https://plugins.jetbrains.com/plugin/14382-deno)从“首选项/设置
+| 插件 - 市场”中。
 
-Check out
-[this blog post](https://blog.jetbrains.com/webstorm/2020/06/deno-support-in-jetbrains-ides/)
-to learn more about how to get started with Deno.
+查看[此博客文章](https://blog.jetbrains.com/webstorm/2020/06/deno-support-in-jetbrains-ides/)以了解更多关于如何入门Deno的信息。
 
-### Vim/Neovim via plugins
+### 通过插件在Vim/Neovim中使用
 
-Deno is well-supported on both [Vim](https://www.vim.org/) and
-[Neovim](https://neovim.io/) via
-[coc.nvim](https://github.com/neoclide/coc.nvim),
-[vim-easycomplete](https://github.com/jayli/vim-easycomplete) and
-[ALE](https://github.com/dense-analysis/ale). coc.nvim offers plugins to
-integrate to the Deno language server while ALE supports it _out of the box_.
+Deno在[Vim](https://www.vim.org/)和[Neovim](https://neovim.io/)上都得到了良好的支持，通过[coc.nvim](https://github.com/neoclide/coc.nvim)、[vim-easycomplete](https://github.com/jayli/vim-easycomplete)和[ALE](https://github.com/dense-analysis/ale)可以实现集成。coc.nvim提供了用于集成Deno语言服务器的插件，而ALE则在“开箱即用”情况下支持它。
 
-### Neovim 0.6+ using the built-in language server
+### 使用内置语言服务器的Neovim 0.6+
 
-To use the Deno language server install
-[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/) and follow the
-instructions to enable the
-[supplied Deno configuration](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#denols).
+要使用Deno语言服务器，请安装[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)并按照说明启用[提供的Deno配置](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#denols)。
 
-Note that if you also have `tsserver` as an LSP client, you may run into issues
-where both `tsserver` and `denols` are attached to your current buffer. To
-resolve this, make sure to set some unique `root_dir` for both `tsserver` and
-`denols`. You may also need to set `single_file_support` to `false` for
-`tsserver` to prevent it from running in `single file mode`. Here is an example
-of such a configuration:
+请注意，如果您还将`tsserver`配置为LSP客户端，可能会遇到`tsserver`和`denols`都附加到当前缓冲区的问题。要解决这个问题，请确保为`tsserver`和`denols`分别设置唯一的`root_dir`。您可能还需要将`tsserver`的`single_file_support`设置为`false`，以防止它在“单文件模式”下运行。以下是这种配置的示例：
 
 ```lua
 local nvim_lsp = require('lspconfig')
@@ -88,57 +56,37 @@ nvim_lsp.tsserver.setup {
 }
 ```
 
-For Deno, the example above assumes a `deno.json` or `deno.jsonc` file exists at
-the root of the project.
+对于Deno，上面的示例假定项目的根目录存在`deno.json`或`deno.jsonc`文件。
 
 #### coc.nvim
 
-Once you have
-[coc.nvim](https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim)
-installed, you need to install the required
-[coc-deno](https://github.com/fannheyward/coc-deno) via `:CocInstall coc-deno`.
+一旦您安装了[coc.nvim](https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim)，您需要通过`:CocInstall coc-deno`安装所需的[coc-deno](https://github.com/fannheyward/coc-deno)。
 
-Once the plugin is installed, and you want to enable Deno for a workspace, run
-the command `:CocCommand deno.initializeWorkspace` and you should be able to
-utilize commands like `gd` (goto definition) and `gr` (go/find references).
+安装插件后，如果要在工作区中启用Deno，请运行命令`:CocCommand deno.initializeWorkspace`，然后您应该能够使用命令如`gd`（跳转到定义）和`gr`（查找引用）。
 
 #### ALE
 
-ALE supports Deno via the Deno language server out of the box and in many uses
-cases doesn't require additional configuration. Once you have
-[ALE installed](https://github.com/dense-analysis/ale#installation) you can
-perform the command
-[`:help ale-typescript-deno`](https://github.com/dense-analysis/ale/blob/master/doc/ale-typescript.txt)
-to get information on the configuration options available.
+ALE通过内置的Deno语言服务器支持Deno，不需要额外的配置。一旦您安装了[ALE](https://github.com/dense-analysis/ale#installation)，您可以执行命令[`:help ale-typescript-deno`](https://github.com/dense-analysis/ale/blob/master/doc/ale-typescript.txt)以获取有关可用配置选项的信息。
 
-For more information on how to setup ALE (like key bindings) refer to the
-[official documentation](https://github.com/dense-analysis/ale#usage).
+有关如何设置ALE（例如键绑定）的更多信息，请参阅[官方文档](https://github.com/dense-analysis/ale#usage)。
 
 #### Vim-EasyComplete
 
-Vim-EasyComplete supports Deno without any other configuration. Once you have
-[vim-easycomplete installed](https://github.com/jayli/vim-easycomplete#installation),
-you need install deno via `:InstallLspServer deno` if you haven't installed
-deno. You can get more information from
-[official documentation](https://github.com/jayli/vim-easycomplete).
+Vim-EasyComplete支持Deno，无需其他配置。一旦您安装了[vim-easycomplete](https://github.com/jayli/vim-easycomplete#installation)，如果您尚未安装Deno，您需要通过`:InstallLspServer deno`安装Deno。您可以从[官方文档](https://github.com/jayli/vim-easycomplete)获取更多信息。
 
 ### Emacs
 
 #### lsp-mode
 
-Emacs supports Deno via the Deno language server using
-[lsp-mode](https://emacs-lsp.github.io/lsp-mode/). Once
-[lsp-mode is installed](https://emacs-lsp.github.io/lsp-mode/page/installation/)
-it should support Deno, which can be
-[configured](https://emacs-lsp.github.io/lsp-mode/page/lsp-deno/) to support
-various settings.
+Emacs通过[lsp-mode](https://emacs-lsp.github.io/lsp-mode/)支持Deno语言服务器。一旦安装了[lsp-mode](https://emacs-lsp.github.io/lsp-mode/page/install
+
+ation/)，它应该支持Deno，并且可以[配置](https://emacs-lsp.github.io/lsp-mode/page/lsp-deno/)以支持各种设置。
 
 #### eglot
 
-You can also use built-in Deno language server by using
-[`eglot`](https://github.com/joaotavora/eglot).
+您还可以通过使用[`eglot`](https://github.com/joaotavora/eglot)来使用内置的Deno语言服务器。
 
-An example configuration for Deno via eglot:
+通过eglot实现Deno的示例配置：
 
 ```elisp
 (add-to-list 'eglot-server-programs '((js-mode typescript-mode) . (eglot-deno "deno" "lsp")))
@@ -154,23 +102,14 @@ An example configuration for Deno via eglot:
 
 ### Pulsar
 
-The [Pulsar editor, formerly known as Atom](https://pulsar-edit.dev/) supports
-integrating with the Deno language server via the
-[atom-ide-deno](https://web.pulsar-edit.dev/packages/atom-ide-deno) package.
-`atom-ide-deno` requires that the Deno CLI be installed and the
-[atom-ide-base](https://web.pulsar-edit.dev/packages/atom-ide-base) package to
-be installed as well.
+[Pulsar编辑器，以前称为Atom](https://pulsar-edit.dev/)支持通过[atom-ide-deno](https://web.pulsar-edit.dev/packages/atom-ide-deno)包与Deno语言服务器集成。`atom-ide-deno`要求安装Deno
+CLI以及安装[atom-ide-base](https://web.pulsar-edit.dev/packages/atom-ide-base)包。
 
 ### Sublime Text
 
-[Sublime Text](https://www.sublimetext.com/) supports connecting to the Deno
-language server via the [LSP package](https://packagecontrol.io/packages/LSP).
-You may also want to install the
-[TypeScript package](https://packagecontrol.io/packages/TypeScript) to get full
-syntax highlighting.
+[Sublime Text](https://www.sublimetext.com/)支持通过[LSP包](https://packagecontrol.io/packages/LSP)连接到Deno语言服务器。您可能还希望安装[TypeScript包](https://packagecontrol.io/packages/TypeScript)以获取完整的语法高亮。
 
-Once you have the LSP package installed, you will want to add configuration to
-your `.sublime-project` configuration like the below:
+一旦安装了LSP包，您需要将以下配置添加到您的`.sublime-project`配置中：
 
 ```jsonc
 {
@@ -179,9 +118,9 @@ your `.sublime-project` configuration like the below:
       "deno": {
         "command": ["deno", "lsp"],
         "initializationOptions": {
-          // "config": "", // Sets the path for the config file in your project
+          // "config": "", // 设置项目中配置文件的路径
           "enable": true,
-          // "importMap": "", // Sets the path for the import-map in your project
+          // "importMap": "", // 设置项目中导入映射的路径
           "lint": true,
           "unstable": false
         },
@@ -228,35 +167,31 @@ your `.sublime-project` configuration like the below:
 
 ### Nova
 
-The [Nova editor](https://nova.app) can integrate the Deno language server via
-the
-[Deno extension](https://extensions.panic.com/extensions/jaydenseric/jaydenseric.deno).
+[Nova编辑器](https://nova.app) 可以通过
+[Deno扩展](https://extensions.panic.com/extensions/jaydenseric/jaydenseric.deno)
+来集成 Deno 语言服务器。
 
 ### GitHub Codespaces
 
-[GitHub Codespaces](https://github.com/features/codespaces) allows you to
-develop fully online or remotely on your local machine without needing to
-configure or install Deno. It is currently in early access.
+[GitHub Codespaces](https://github.com/features/codespaces)
+允许您在本地计算机上完全在线或远程开发，无需配置或安装
+Deno。目前它处于早期访问阶段。
 
-If a project is a Deno enabled project and contains the `.devcontainer`
-configuration as part of the repository, opening the project in GitHub
-Codespaces should just "work". If you are starting a new project, or you want to
-add Deno support to an existing code space, it can be added by selecting the
-`Codespaces: Add Development Container Configuration Files...` from the command
-pallet and then selecting `Show All Definitions...` and then searching for the
-`Deno` definition.
+如果一个项目是一个启用了 Deno 的项目，并包含仓库的 `.devcontainer` 配置，那么在
+GitHub Codespaces 中打开该项目应该会正常工作。如果您要启动一个新项目，或者要将
+Deno 支持添加到现有的代码空间，可以通过选择命令面板中的
+`Codespaces: Add Development Container Configuration Files...`，然后选择
+`Show All Definitions...`，再搜索 `Deno` 定义来添加它。
 
-Once selected, you will need to rebuild your container so that the Deno CLI is
-added to the container. After the container is rebuilt, the code space will
-support Deno.
+一旦选择了它，您需要重新构建容器，以便将 Deno CLI
+添加到容器中。容器重建后，代码空间将支持 Deno。
 
 ### Kakoune
 
-[Kakoune](http://kakoune.org/) supports connecting to the Deno language server
-via the [kak-lsp](https://github.com/kak-lsp/kak-lsp) client. Once
-[kak-lsp is installed](https://github.com/kak-lsp/kak-lsp#installation) an
-example of configuring it up to connect to the Deno language server is by adding
-the following to your `kak-lsp.toml`:
+[Kakoune](http://kakoune.org/) 支持通过
+[kak-lsp](https://github.com/kak-lsp/kak-lsp) 客户端连接到 Deno 语言服务器。一旦
+[安装 kak-lsp](https://github.com/kak-lsp/kak-lsp#installation)，将以下内容添加到您的
+`kak-lsp.toml` 配置文件中，以将其配置连接到 Deno 语言服务器：
 
 ```toml
 [language.typescript]
@@ -269,11 +204,11 @@ enable = true
 lint = true
 ```
 
-## Shell completions
+## Shell 自动完成
 
-Built into the Deno CLI is support to generate shell completion information for
-the CLI itself. By using `deno completions <shell>`, the Deno CLI will output to
-stdout the completions. Current shells that are supported:
+Deno CLI 内置支持生成 CLI 自动完成信息。通过使用
+`deno completions <shell>`，Deno CLI 将将 CLI
+自动完成信息输出到标准输出。当前支持的 shell 包括：
 
 - bash
 - elvish
@@ -281,43 +216,43 @@ stdout the completions. Current shells that are supported:
 - powershell
 - zsh
 
-### bash example
+### bash 示例
 
-Output the completions and add them to the environment:
+输出自动完成信息并将其添加到环境中：
 
 ```shell
 > deno completions bash > /usr/local/etc/bash_completion.d/deno.bash
 > source /usr/local/etc/bash_completion.d/deno.bash
 ```
 
-### PowerShell example
+### PowerShell 示例
 
-Output the completions:
+输出自动完成信息：
 
 ```shell
 > deno completions powershell >> $profile
 > .$profile
 ```
 
-This will create a Powershell profile at
-`$HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1`, and it
-will be run whenever you launch the PowerShell.
+这将创建一个 Powershell 配置文件在
+`$HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1`，并且每当您启动
+Powershell 时都会运行它。
 
-### zsh example
+### zsh 示例
 
-You should have a directory where the completions can be saved:
+您应该有一个目录，可以保存自动完成信息：
 
 ```shell
 > mkdir ~/.zsh
 ```
 
-Then output the completions:
+然后输出自动完成信息：
 
 ```shell
 > deno completions zsh > ~/.zsh/_deno
 ```
 
-And ensure the completions get loaded in your `~/.zshrc`:
+并确保在您的 `~/.zshrc` 中加载自动完成信息：
 
 ```shell
 fpath=(~/.zsh $fpath)
@@ -325,24 +260,23 @@ autoload -Uz compinit
 compinit -u
 ```
 
-If after reloading your shell and completions are still not loading, you may
-need to remove `~/.zcompdump/` to remove previously generated completions and
-then `compinit` to generate them again.
+如果重新加载 shell 后自动完成信息仍未加载，您可能需要删除 `~/.zcompdump/`
+以删除之前生成的自动完成信息，然后使用 `compinit` 重新生成它们。
 
-### zsh example with ohmyzsh and antigen
+### 使用 ohmyzsh 和 antigen 的 zsh 示例
 
-[ohmyzsh](https://github.com/ohmyzsh/ohmyzsh) is a configuration framework for
-zsh and can make it easier to manage your shell configuration.
-[antigen](https://github.com/zsh-users/antigen) is a plugin manager for zsh.
+[ohmyzsh](https://github.com/ohmyzsh/ohmyzsh) 是 zsh
+的配置框架，可以更轻松地管理您的 shell 配置。
+[antigen](https://github.com/zsh-users/antigen) 是 zsh 的插件管理器。
 
-Create the directory to store the completions and output the completions:
+创建一个目录来存储自动完成信息，并输出自动完成信息：
 
 ```shell
 > mkdir ~/.oh-my-zsh/custom/plugins/deno
 > deno completions zsh > ~/.oh-my-zsh/custom/plugins/deno/_deno
 ```
 
-Then your `.zshrc` might look something like this:
+然后您的 `.zshrc` 可能如下所示：
 
 ```shell
 source /path-to-antigen/antigen.zsh
@@ -353,62 +287,54 @@ antigen use oh-my-zsh
 antigen bundle deno
 ```
 
-### fish example
+### fish 示例
 
-Output the completions to a `deno.fish` file into the completions directory in
-the fish config folder:
+将自动完成信息输出到 `deno.fish` 文件中，保存到 fish
+配置文件夹中的自动完成目录：
 
 ```shell
 > deno completions fish > ~/.config/fish/completions/deno.fish
 ```
 
-## Environment variables
+## 环境变量
 
-There are several environment variables which can impact the behavior of Deno:
+有一些环境变量可以影响 Deno 的行为：
 
-- `DENO_AUTH_TOKENS` - a list of authorization tokens which can be used to allow
-  Deno to access remote private code. See the
-  [Private modules and repositories](../basics/modules/private.md) section for
-  more details.
-- `DENO_TLS_CA_STORE` - a list of certificate stores which will be used when
-  establishing TLS connections. The available stores are `mozilla` and `system`.
-  You can specify one, both or none. Certificate chains attempt to resolve in
-  the same order in which you specify them. The default value is `mozilla`. The
-  `mozilla` store will use the bundled Mozilla certs provided by
-  [`webpki-roots`](https://crates.io/crates/webpki-roots). The `system` store
-  will use your platform's
-  [native certificate store](https://crates.io/crates/rustls-native-certs). The
-  exact set of Mozilla certs will depend on the version of Deno you are using.
-  If you specify no certificate stores, then no trust will be given to any TLS
-  connection without also specifying `DENO_CERT` or `--cert` or specifying a
-  specific certificate per TLS connection.
-- `DENO_CERT` - load a certificate authority from a PEM encoded file. This
-  "overrides" the `--cert` option. See the
-  [Proxies](../basics/modules/proxies.md) section for more information.
-- `DENO_DIR` - this will set the directory where cached information from the CLI
-  is stored. This includes items like cached remote modules, cached transpiled
-  modules, language server cache information and persisted data from local
-  storage. This defaults to the operating system's default cache location and
-  then under the `deno` path.
-- `DENO_INSTALL_ROOT` - When using `deno install` where the installed scripts
-  are stored. This defaults to `$HOME/.deno/bin`.
-- `DENO_NO_PACKAGE_JSON` - Set to disable auto-resolution of package.json files.
-- `DENO_NO_PROMPT` - Set to disable permission prompts on access (alternative to
-  passing `--no-prompt` on invocation).
-- `DENO_NO_UPDATE_CHECK` - Set to disable checking if a newer Deno version is
-  available.
-- `DENO_WEBGPU_TRACE` - The directory to use for WebGPU traces.
-- `HTTP_PROXY` - The proxy address to use for HTTP requests. See the
-  [Proxies](../basics/modules/proxies.md) section for more information.
-- `HTTPS_PROXY` - The proxy address to use for HTTPS requests. See the
-  [Proxies](../basics/modules/proxies.md) section for more information.
-- `NO_COLOR` - If set, this will prevent the Deno CLI from sending ANSI color
-  codes when writing to stdout and stderr. See the website
-  <https://no-color.org/> for more information on this _de facto_ standard. The
-  value of this flag can be accessed at runtime without permission to read the
-  environment variables by checking the value of `Deno.noColor`.
-- `NO_PROXY` - Indicates hosts which should bypass the proxy set in the other
-  environment variables. See the [Proxies](../basics/modules/proxies.md) section
-  for more information.
-- `NPM_CONFIG_REGISTRY` - The npm registry to use when loading modules via
-  [npm specifiers](../node/npm_specifiers.md)
+- `DENO_AUTH_TOKENS` - 用于允许 Deno 访问远程私有代码的授权令牌列表。请参阅
+  [Private modules and repositories](../basics/modules/private.md)
+  部分获取更多详情。
+- `DENO_TLS_CA_STORE` - 在建立 TLS 连接时使用的证书存储列表。支持的存储包括
+  `mozilla` 和
+  `system`。您可以指定其中一个、两者或都不指定。证书链尝试以指定的顺序解析。默认值为
+  `mozilla`。`mozilla` 存储将使用由
+  [`webpki-roots`](https://crates.io/crates/webpki-roots) 提供的捆绑 Mozilla
+  证书。`system`
+  存储将使用您的平台的[本机证书存储](https://crates.io/crates/rustls-native-certs)。Mozilla
+  证书的确切集合取决于您使用的 Deno
+  版本。如果未指定证书存储，那么将不给予任何未指定 `DENO_CERT` 或 `--cert` 的
+  TLS 连接信任，或未指定每个 TLS 连接的特定证书。
+- `DENO_CERT` - 从 PEM
+  编码文件中加载证书颁发机构。这将“覆盖”`--cert`选项。请参阅
+  [Proxies](../basics/modules/proxies.md) 部分获取更多信息。
+- `DENO_DIR` - 这将设置 CLI
+  缓存信息的存储目录。这包括缓存的远程模块、已编译模块、语言服务器缓存信息以及本地存
+
+储的持久数据等。默认情况下，它使用操作系统的默认缓存位置，然后是 `deno` 路径。
+
+- `DENO_INSTALL_ROOT` - 在使用 `deno install` 时，存储已安装脚本的位置。默认值为
+  `$HOME/.deno/bin`。
+- `DENO_NO_PACKAGE_JSON` - 设置为禁用 package.json 文件的自动解析。
+- `DENO_NO_PROMPT` - 设置为禁用权限提示（与在调用时传递 `--no-prompt` 相对应）。
+- `DENO_NO_UPDATE_CHECK` - 设置为禁用检查是否有更新的 Deno 版本可用。
+- `DENO_WEBGPU_TRACE` - 用于 WebGPU 跟踪的目录。
+- `HTTP_PROXY` - 用于 HTTP 请求的代理地址。请参阅
+  [Proxies](../basics/modules/proxies.md) 部分获取更多信息。
+- `HTTPS_PROXY` - 用于 HTTPS 请求的代理地址。请参阅
+  [Proxies](../basics/modules/proxies.md) 部分获取更多信息。
+- `NO_COLOR` - 如果设置，将阻止 Deno CLI 在写入 stdout 和 stderr 时发送 ANSI
+  颜色代码。请参阅网站<https://no-color.org/>获取有关这个事实上的标准的更多信息。可以在运行时通过检查
+  `Deno.noColor` 的值来访问此标志，而无需读取环境变量的权限。
+- `NO_PROXY` - 指示应绕过在其他环境变量中设置的代理的主机。请参阅
+  [Proxies](../basics/modules/proxies.md) 部分获取更多信息。
+- `NPM_CONFIG_REGISTRY` - 在通过 [npm specifiers](../node/npm_specifiers.md)
+  加载模块时要使用的 npm 注册表。

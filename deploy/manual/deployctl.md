@@ -1,60 +1,57 @@
-# Using deployctl on the command line
+# 在命令行上使用 deployctl
 
-`deployctl` is a command line tool (CLI) that lets you work with the Deno Deploy
-platform.
+`deployctl` 是一个命令行工具（CLI），允许您与 Deno Deploy 平台进行交互。
 
-## Install `deployctl`
+## 安装 `deployctl`
 
-You can install the `deployctl` command with the below command:
+您可以使用以下命令安装 `deployctl`：
 
     deno install --allow-all --no-check -r -f https://deno.land/x/deploy/deployctl.ts
 
-You also need to set the `DENO_DEPLOY_TOKEN` environment variable to your
-personal access token. You can generate your Personal Access Token in
-https://dash.deno.com/account#access-tokens.
+您还需要设置 `DENO_DEPLOY_TOKEN` 环境变量为您的个人访问令牌。您可以在
+https://dash.deno.com/account#access-tokens 生成您的个人访问令牌。
 
-## Usage
+## 使用
 
-To deploy a local script:
+要部署本地脚本：
 
     deployctl deploy --project=helloworld main.ts
 
-To deploy a remote script:
+要部署远程脚本：
 
     deployctl deploy --project=helloworld https://deno.com/examples/hello.js
 
-To deploy a remote script without static files:
+要部署远程脚本而不包括静态文件：
 
     deployctl deploy --project=helloworld --no-static https://deno.com/examples/hello.js
 
-To ignore the node_modules directory while deploying:
+要在部署时忽略 node_modules 目录：
 
     deployctl deploy --project=helloworld --exclude=node_modules main.tsx
 
-See the help message (`deployctl -h`) for more details.
+有关更多详细信息，请查看帮助消息（`deployctl -h`）。
 
-## `deno` CLI and local development
+## `deno` CLI 和本地开发
 
-For local development you can use the `deno` CLI. To install `deno`, follow the
-instructions in the
-[Deno manual](https://deno.land/manual/getting_started/installation).
+对于本地开发，您可以使用 `deno` CLI。要安装 `deno`，请按照
+[Deno 手册](https://deno.land/manual/getting_started/installation)
+中的说明操作。
 
-After installation, you can run your scripts locally:
+安装后，您可以在本地运行您的脚本：
 
 ```shell
 $ deno run --allow-net=:8000 https://deno.com/examples/hello.js
-Listening on http://localhost:8000
+在 http://localhost:8000 上监听
 ```
 
-To watch for file changes add the `--watch` flag:
+要监视文件更改，请添加 `--watch` 标志：
 
 ```shell
 $ deno run --allow-net=:8000 --watch ./main.js
-Listening on http://localhost:8000
+在 http://localhost:8000 上监听
 ```
 
-For more information about the Deno CLI, and how to configure your development
-environment and IDE, visit the Deno Manual's [Getting Started][manual-gs]
-section.
+有关 Deno CLI 的更多信息，以及如何配置您的开发环境和 IDE，请访问 Deno
+手册的[入门][manual-gs]部分。
 
-[manual-gs]: https://deno.land/manual/getting_started
+[manual-gs]: https://docs.denohub.com/runtime/manual

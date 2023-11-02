@@ -1,28 +1,27 @@
-# Building a Word Finder App with Deno
+# 使用 Deno 构建一个单词查找应用
 
-## Getting Started
+## 入门
 
-In this tutorial we'll create a simple Word Finder web application using Deno.
-No prior knowledge of Deno is required.
+在本教程中，我们将使用 Deno 创建一个简单的单词查找网络应用程序。 不需要先前对
+Deno 的了解。
 
-## Introduction
+## 介绍
 
-Our Word Finder application will take a pattern string provided by the user and
-return all words in the English dictionary that match the pattern. The pattern
-can include alphabetical characters as well as `_` and `?`. The `?` can stand
-for any letter that isn't present in the pattern. `_` can stand for any letter.
+我们的单词查找应用程序将接受用户提供的模式字符串，
+并返回与该模式匹配的英语词典中的所有单词。 模式可以包括字母字符以及 `_` 和 `?`。
+`?` 可以表示不在模式中的任何字母。`_` 可以表示任何字母。
 
-For example, the pattern `c?t` matches "cat" and "cut". The pattern `go?d`
-matches the words "goad" and "gold" (but not "good").
+例如，模式 `c?t` 匹配 "cat" 和 "cut"。 模式 `go?d` 匹配单词 "goad" 和
+"gold"（但不匹配 "good"）。
 
 ![Untitled](../manual/images/word_finder.png)
 
-## Building the View
+## 构建视图
 
-The function below renders the HTML that creates the simple UI displayed above.
-You can specify a pattern and list of words to customize the HTML content. If a
-pattern is specified then it will show up in the search text box. If the word
-list is specified, then a bulleted list of words will be rendered.
+下面的函数渲染创建上面显示的简单用户界面的 HTML。
+您可以指定模式和单词列表以自定义 HTML 内容。
+如果指定了模式，它将显示在搜索文本框中。
+如果指定了单词列表，将呈现单词的项目符号列表。
 
 ```jsx
 // render.js
@@ -61,10 +60,12 @@ export function renderHtml(pattern, words) {
         <h2>Instructions</h2>
   
         <p>
-            Enter a word using _ and ? as needed for unknown characters. Using ? means to include letters that aren't already used (you can think of it as a "Wheel of Fortune" placeholder). Using _ will find words that contain any character (whether it's currently "revealed" or not).
+            使用 _ 和 ? 输入单词，以便用于未知字符。
+            使用 ? 表示包含未在单词中出现的字母（可以将其视为“幸运大转盘”占位符）。
+            使用 _ 将找到包含任何字符的单词（无论它是否已“揭示”）。
             <br />
             <br />
-            For example, d__d would return:
+            例如，d__d 会返回：
             <ul>
                 <li>dand</li>
                 <li>daud</li>
@@ -77,7 +78,7 @@ export function renderHtml(pattern, words) {
                 <li>dyad</li>
             </ul>
             <br />
-            And go?d would return:
+            而 go?d 会返回：
             <ul>
                 <li>goad</li>
                 <li>gold</li>
@@ -89,17 +90,16 @@ export function renderHtml(pattern, words) {
 }
 ```
 
-## Searching the Dictionary
+## 查找词典
 
-We also need a simple search function which scans the dictionary and returns all
-words that match the specified pattern. The function below takes a pattern and
-dictionary and then returns all matched words.
+我们还需要一个简单的搜索函数，它会扫描词典并返回与指定模式匹配的所有单词。
+下面的函数接受模式和词典，然后返回所有匹配的单词。
 
 ```jsx
 // search.js
 
 export function search(pattern, dictionary) {
-  // Create regex pattern that excludes characters already present in word
+  // 创建正则表达式模式，排除已存在于单词中的字符
   let excludeRegex = "";
   for (let i = 0; i < pattern.length; i++) {
     const c = pattern[i];
@@ -109,13 +109,13 @@ export function search(pattern, dictionary) {
   }
   excludeRegex = "[" + excludeRegex + "]";
 
-  // Let question marks only match characters not already present in word
+  // 仅让问号匹配不在单词中已存在的字符
   let searchPattern = pattern.replace(/\?/g, excludeRegex);
 
-  // Let underscores match anything
+  // 让下划线匹配任何字符
   searchPattern = "^" + searchPattern.replace(/\_/g, "[a-z]") + "$";
 
-  // Find all words in dictionary that match pattern
+  // 查找与模式匹配的词典中的所有单词
   let matches = [];
   for (let i = 0; i < dictionary.length; i++) {
     const word = dictionary[i];
@@ -128,14 +128,14 @@ export function search(pattern, dictionary) {
 }
 ```
 
-## Running a Deno Server
+## 运行 Deno 服务器
 
-[Oak](https://deno.land/x/oak@v11.1.0) is a framework that lets you easily setup
-a server in Deno (analogous to JavaScript's Express) and we'll be using it to
-host our application. Our server will use our search function to populate our
-HTML template with data and then return the customized HTML back to the viewer.
-We can conveniently rely on the `/usr/share/dict/words` file as our dictionary
-which is a standard file present on most Unix-like operating systems.
+[Oak](https://deno.land/x/oak@v11.1.0) 是一个让您能够轻松设置 Deno
+服务器的框架（类似于 JavaScript 的 Express），
+我们将使用它来托管我们的应用程序。 我们的服务器将使用我们的搜索函数来填充我们的
+HTML 模板，并将定制的 HTML 返回给查看者。 我们可以方便地依赖于
+`/usr/share/dict/words` 文件作为我们的词典， 这是大多数类 Unix
+操作系统上都存在的标准文件。
 
 ```jsx, ignore
 // server.js
@@ -169,17 +169,12 @@ console.log("Listening at http://localhost:" + port);
 await app.listen({ port });
 ```
 
-We can start our server with the following command. Note we need to explicitly
-grant access to the file system and network because Deno is secure by default.
+我们可以使用以下命令启动服务器。请注意，由于 Deno 默认是安全的，
+所以我们需要明确授予文件系统和网络访问权限。
 
 ```bash
 deno run --allow-read --allow-net server.js
 ```
 
-Now if you visit [http://localhost:8080](http://localhost:8080/) you should be
-able to view the Word Finder app.
-
-## Example Code
-
-You can find the entire example code
-[here](https://github.com/awelm/deno-word-finder).
+现在，如果您访问 [http://localhost: 8080](http://localhost:8080/)，
+您应该能够查看单词查找应用程序。

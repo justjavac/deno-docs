@@ -1,115 +1,92 @@
-# Permissions
+# 权限
 
-Deno is secure by default. Therefore, unless you specifically enable it, a
-program run with Deno has no file, network, or environment access. Access to
-security sensitive functionality requires that permissions have been granted to
-an executing script through command line flags, or a runtime permission prompt.
-This is a major difference from Node, where dependencies are automatically
-granting full access to everything, introducing hidden vulnerabilities in your
-project.
+Deno 默认情况下是安全的。因此，除非您明确启用它，否则使用 Deno
+运行的程序没有文件、网络或环境访问权限。要访问安全敏感功能，需要通过命令行标志或运行时权限提示向执行脚本授予权限。这与
+Node 有很大不同，Node
+的依赖项会自动授予对一切的完全访问权限，从而引入项目中隐藏的漏洞。
 
-## Run untrusted code with confidence
+## 自信地运行不受信任的代码
 
-Since Deno provides no I/O access by default, it's useful for running untrusted
-code and auditing third-party code. If you're building or extending a platform
-that runs user generated code, you can use Deno for running third-party code
-securely and host this code through
-[Deno Subhosting](https://deno.com/subhosting) or any other cloud platform of
-your choice.
+由于 Deno 默认情况下不提供 I/O
+访问权限，因此它非常适合运行不受信任的代码和审核第三方代码。如果您正在构建或扩展一个运行用户生成的代码的平台，您可以使用
+Deno 来安全地运行第三方代码，并通过
+[Deno Subhosting](https://deno.com/subhosting)
+或您选择的任何其他云平台托管此代码。
 
-For the following example `mod.ts` has been granted read-only access to the file
-system. It cannot write to the file system, or perform any other security
-sensitive functions.
+在以下示例中，`mod.ts`
+已被授予对文件系统的只读访问权限。它不能对文件系统进行写操作，也不能执行任何其他安全敏感功能。
 
 ```shell
 deno run --allow-read mod.ts
 ```
 
-## Permissions list
+## 权限列表
 
-The following permissions are available:
+以下权限可用：
 
-- **--allow-env=\<VARIABLE_NAME\>** Allow environment access for things like
-  getting and setting of environment variables. Since Deno 1.9, you can specify
-  an optional, comma-separated list of environment variables to provide an
-  allow-list of allowed environment variables.
-- **--allow-sys=\<API_NAME\>** Allow access to APIs that provide information
-  about user's operating system, eg. `Deno.osRelease()` and
-  `Deno.systemMemoryInfo()`. You can specify a comma-separated list of allowed
-  interfaces from the following list: `hostname`, `osRelease`, `osUptime`,
-  `loadavg`, `networkInterfaces`, `systemMemoryInfo`, `uid`, and `gid`. These
-  strings map to functions in the `Deno` namespace that provide OS info, like
-  [Deno.systemMemoryInfo](https://deno.land/api?s=Deno.SystemMemoryInfo).
-- **--allow-hrtime** Allow high-resolution time measurement. High-resolution
-  time can be used in timing attacks and fingerprinting.
-- **--allow-net=\<IP/HOSTNAME\>** Allow network access. You can specify an
-  optional, comma-separated list of IP addresses or hostnames (optionally with
-  ports) to provide an allow-list of allowed network addresses.
-- **--allow-ffi=\<PATH\>** Allow loading of dynamic libraries. You can specify
-  an optional, comma-separated list of directories or files to provide an
-  allow-list of allowed dynamic libraries to load. Be aware that dynamic
-  libraries are not run in a sandbox and therefore do not have the same security
-  restrictions as the Deno process. Therefore, use with caution. Please note
-  that --allow-ffi is an unstable feature.
-- **--allow-read=\<PATH\>** Allow file system read access. You can specify an
-  optional, comma-separated list of directories or files to provide an
-  allow-list of allowed file system access.
-- **--allow-run=\<PROGRAM_NAME\>** Allow running subprocesses. Since Deno 1.9,
-  You can specify an optional, comma-separated list of subprocesses to provide
-  an allow-list of allowed subprocesses. Be aware that subprocesses are not run
-  in a sandbox and therefore do not have the same security restrictions as the
-  Deno process. Therefore, use with caution.
-- **--allow-write=\<PATH\>** Allow file system write access. You can specify an
-  optional, comma-separated list of directories or files to provide an
-  allow-list of allowed file system access.
-- **-A, --allow-all** Allow all permissions. This enables all security sensitive
-  functions. Use with caution.
+- **--allow-env =\<VARIABLE_NAME\>** 允许访问环境，如获取和设置环境变量。自 Deno
+  1.9
+  以来，您可以指定一个可选的逗号分隔的环境变量列表，以提供允许的环境变量白名单。
+- **--allow-sys =\<API_NAME\>** 允许访问提供有关用户操作系统信息的 API，例如
+  `Deno.osRelease()` 和
+  `Deno.systemMemoryInfo()`。您可以指定一个逗号分隔的允许接口列表，包括
+  `hostname`、`osRelease`、`osUptime`、`loadavg`、`networkInterfaces`、`systemMemoryInfo`、`uid`
+  和 `gid`。这些字符串映射到 `Deno` 命名空间中提供操作系统信息的函数，如
+  [Deno.systemMemoryInfo](https://deno.land/api?s=Deno.SystemMemoryInfo)。
+- **--allow-hrtime**
+  允许高分辨率时间测量。高分辨率时间可用于计时攻击和指纹识别。
+- **--allow-net =\<IP/HOSTNAME\>** 允许网络访问。您可以指定一个可选的逗号分隔的
+  IP 地址或主机名列表（可选包括端口），以提供允许的网络地址白名单。
+- **--allow-ffi =\<PATH\>**
+  允许加载动态库。您可以指定一个可选的逗号分隔的目录或文件列表，以提供允许加载的动态库白名单。请注意，动态库不在沙箱中运行，因此与
+  Deno 进程不具有相同的安全限制。因此，请谨慎使用。请注意，--allow-ffi
+  是一个不稳定的功能。
+- **--allow-read =\<PATH\>**
+  允许文件系统读取权限。您可以指定一个可选的逗号分隔的目录或文件列表，以提供允许的文件系统访问白名单。
+- **--allow-run =\<PROGRAM_NAME\>** 允许运行子进程。自 Deno 1.9
+  以来，您可以指定一个可选的逗号分隔的子进程列表，以提供允许的子进程白名单。请注意，子进程不在沙箱中运行，因此与
+  Deno 进程不具有相同的安全限制。因此，请谨慎使用。
+- **--allow-write =\<PATH\>**
+  允许文件系统写入权限。您可以指定一个可选的逗号分隔的目录或文件列表，以提供允许的文件系统访问白名单。
+- **-A, --allow-all** 允许所有权限。这会启用所有安全敏感功能。请谨慎使用。
 
-Starting with Deno 1.36 following flags are available:
+从 Deno 1.36 开始，以下标志可用：
 
-- **--deny-env=\<VARIABLE_NAME\>** Deny environment access for things like
-  getting and setting of environment variables. You can specify an optional,
-  comma-separated list of environment variables to provide an allow-list of
-  allowed environment variables. Any environment variables specified here will
-  be denied access, even if they are specified in --allow-env.
-- **--deny-sys=\<API_NAME\>** Deny access to APIs that provide information about
-  user's operating system.
-- **--deny-hrtime** Disable high-resolution time measurement. High-resolution
-  time can be used in timing attacks and fingerprinting.
-- **--deny-net=\<IP/HOSTNAME\>** Disable network access. You can specify an
-  optional, comma-separated list of IP addresses or hostnames (optionally with
-  ports) to provide a deny-list of network addresses. Any addresses specified
-  here will be denied access, even if they are specified in --allow-net.
-- **--deny-ffi=\<PATH\>** Deny loading of dynamic libraries. You can specify an
-  optional, comma-separated list of directories or files to provide a deny-list
-  of allowed dynamic libraries to load. Any libraries specified here will be
-  denied access, even if they are specified in --allow-ffi. Please note that
-  --deny-ffi is an unstable feature.
-- **--deny-read=\<PATH\>** Deny file system read access. You can specify an
-  optional, comma-separated list of directories or files to provide a deny-list
-  of allowed file system access. Any paths specified here will be denied access,
-  even if they are specified in --allow-read.
-- **--deny-run=\<PROGRAM_NAME\>** Deny running subprocesses. You can specify an
-  optional, comma-separated list of subprocesses to provide a deny-list of
-  allowed subprocesses. Be aware that subprocesses are not run in a sandbox and
-  therefore do not have the same security restrictions as the Deno process.
-  Therefore, use with caution. Any programs specified here will be denied
-  access, even if they are specified in --allow-run.
-- **--deny-write=\<PATH\>** Deny file system write access. You can specify an
-  optional, comma-separated list of directories or files to provide a deny-list
-  of allowed file system access. Any paths specified here will be denied access,
-  even if they are specified in --allow-write.
+- **--deny-env =\<VARIABLE_NAME\>**
+  拒绝访问环境，如获取和设置环境变量。您可以指定一个可选的逗号分隔的环境变量列表，以提供允许的环境变量白名单。这里指定的任何环境变量将被拒绝访问，即使它们在--allow-env
+  中指定。
+- **--deny-sys =\<API_NAME\>** 拒绝访问提供有关用户操作系统信息的 API。
+- **--deny-hrtime** 禁用高分辨率时间测量。高分辨率时间可用于计时攻击和指纹识别。
+- **--deny-net =\<IP/HOSTNAME\>** 禁止网络访问。您可以指定一个可选的逗号分隔的
+  IP
+  地址或主机名列表（可选包括端口），以提供网络地址的拒绝名单。这里指定的任何地址将被拒绝访问，即使它们在--allow-net
+  中指定。
+- **--deny-ffi =\<PATH\>**
+  拒绝加载动态库。您可以指定一个可选的逗号分隔的目录或文件列表，以提供允许加载的动态库的拒绝名单。这里指定的任何库将被拒绝访问，即使它们在--allow-ffi
+  中指定。请注意，--deny-ffi 是一个不稳定的功能。
+- **--deny-read =\<PATH\>**
+  拒绝文件系统读取权限。您可以指定一个可选的逗号分隔的目录或文件列表，以提
 
-## Configurable permissions
+供文件系统访问的拒绝名单。这里指定的任何路径将被拒绝访问，即使它们在--allow-read
+中指定。
 
-Some permissions allow you to grant access to a specific list of entities
-(files, servers, etc) rather than to everything.
+- **--deny-run =\<PROGRAM_NAME\>**
+  拒绝运行子进程。您可以指定一个可选的逗号分隔的子进程列表，以提供子进程的拒绝名单。请注意，子进程不在沙箱中运行，因此与
+  Deno
+  进程不具有相同的安全限制。因此，请谨慎使用。这里指定的任何程序将被拒绝访问，即使它们在--allow-run
+  中指定。
+- **--deny-write =\<PATH\>**
+  拒绝文件系统写入权限。您可以指定一个可选的逗号分隔的目录或文件列表，以提供文件系统访问的拒绝名单。这里指定的任何路径将被拒绝访问，即使它们在--allow-write
+  中指定。
 
-### File system access
+## 可配置的权限
 
-This example restricts file system access by allowing read-only access to the
-`/usr` directory. In consequence the execution fails as the process was
-attempting to read a file in the `/etc` directory:
+一些权限允许您授予对特定实体（文件、服务器等）的访问权限，而不是对一切的访问权限。
+
+### 文件系统访问
+
+此示例通过允许只读访问 `/usr` 目录来限制文件系统访问。因此，当进程试图读取
+`/etc` 目录中的文件时，执行会失败：
 
 ```shell
 $ deno run --allow-read=/usr https://deno.land/std@0.198.0/examples/cat.ts /etc/passwd
@@ -119,15 +96,13 @@ error: Uncaught PermissionDenied: read access to "/etc/passwd", run again with t
     ...
 ```
 
-Try it out again with the correct permissions by allowing access to `/etc`
-instead:
+通过允许访问 `/etc` 来再次尝试：
 
 ```shell
 deno run --allow-read=/etc https://deno.land/std@0.198.0/examples/cat.ts /etc/passwd
 ```
 
-You can further restrict some sub-paths to not be accessible, using
-`--deny-read` flag:
+您还可以使用 `--deny-read` 标志进一步限制某些子路径的访问权限：
 
 ```shell
 deno run --allow-read=/etc --deny-read=/etc/hosts https://deno.land/std@0.198.0/examples/cat.ts /etc/passwd
@@ -135,96 +110,88 @@ deno run --allow-read=/etc --deny-read=/etc/hosts https://deno.land/std@0.198.0/
 error: Uncaught PermissionDenied: read access to "/etc/hosts"...
 ```
 
-`--allow-write` works the same as `--allow-read`.
+`--allow-write` 的工作方式与 `--allow-read` 相同。
 
-> Note for Windows users: the `/etc` and `/usr` directories and the
-> `/etc/passwd` file do not exist on Windows. If you want to run this example
-> yourself, replace `/etc/passwd` with `C:\Windows\System32\Drivers\etc\hosts`,
-> and `/usr` with `C:\Users`.
+> 对于 Windows 用户的注意事项：在 Windows 上，`/etc` 和 `/usr` 目录以及
+> `/etc/passwd` 文件不存在。如果您想自己运行此示例，请将 `/etc/passwd` 替换为
+> `C:\Windows\System32\Drivers\etc\hosts`，将 `/usr` 替换为 `C:\Users`。
 
-### Network access
+### 网络访问
 
 ```js
 // fetch.js
 const result = await fetch("https://deno.land/");
 ```
 
-This is an example of how to allow network access to specific hostnames or IP
-addresses, optionally locked to a specified port:
+这是一个允许访问特定主机名或 IP 地址的网络访问示例，可以选择锁定到指定的端口：
 
 ```shell
-# Multiple hostnames, all ports allowed
+允许多个主机名，所有端口均允许
 deno run --allow-net=github.com,deno.land fetch.js
 
-# A hostname at port 80:
+# 主机名位于端口 80：
 deno run --allow-net=deno.land:80 fetch.js
 
-# An IPv4 address on port 443
+# IPv4 地址位于端口 443
 deno run --allow-net=1.1.1.1:443 fetch.js
 
-# An IPv6 address, all ports allowed
+# IPv6 地址，所有端口均允许
 deno run --allow-net=[2606:4700:4700::1111] fetch.js
 ```
 
-You can restrict certain domains to never be accessible by using the
-`--deny-net` flag:
+您可以使用 `--deny-net` 标志限制某些域永远不可访问：
 
 ```shell
-# Allow to make network connections to all addresses except myserver.com.
+允许与所有地址建立网络连接，但拒绝访问 myserver.com。
 deno run --allow-net --deny-net=myserver.com fetch.js
 ```
 
-If `fetch.js` tries to establish network connections to any hostname or IP not
-explicitly allowed, the relevant call will throw an exception.
+如果 `fetch.js` 试图建立到任何未明确允许的主机名或 IP
+的网络连接，相关调用将引发异常。
 
-Allow net calls to any hostname/IP:
+允许对任何主机名/IP 进行 net 调用：
 
 ```shell
 deno run --allow-net fetch.js
 ```
 
-### Environment variables
+### 环境变量
 
 ```js
 // env.js
 Deno.env.get("HOME");
 ```
 
-This is an example of how to allow access to environment variables:
+这是一个允许访问环境变量的示例：
 
 ```shell
-# Allow all environment variables
+允许所有环境变量
 deno run --allow-env env.js
 
-# Allow access to only the HOME env var
+# 仅允许访问 HOME 环境变量
 deno run --allow-env=HOME env.js
 ```
 
-> Note for Windows users: environment variables are case insensitive on Windows,
-> so Deno also matches them case insensitively (on Windows only).
+> 对于 Windows 用户的注意事项：在 Windows 上，环境变量不区分大小写，因此 Deno
+> 也会在 Windows 上不区分大小写地匹配它们。
 
-You can restrict certain env vars to never be accessible by using the
-`--deny-env` flag:
+您可以使用 `--deny-env` 标志限制某些环境变量永远不可访问：
 
 ```shell
-# Allow all environment variables except AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.
+允许访问所有环境变量，但拒绝访问 AWS_ACCESS_KEY_ID 和 AWS_SECRET_ACCESS_KEY。
 deno run --allow-env --deny-env=AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY env.js
 ```
 
-### Subprocess permissions
+### 子进程权限
 
-Subprocesses are very powerful, and can be a little scary: they access system
-resources regardless of the permissions you granted to the Deno process that
-spawns them. The `cat` program on unix systems can be used to read files from
-disk. If you start this program through the `Deno.run` API it will be able to
-read files from disk even if the parent Deno process can not read the files
-directly. This is often referred to as privilege escalation.
+子进程非常强大，可能有些令人担忧：它们可以访问系统资源，而不受您为生成它们的
+Deno 进程授予的权限的限制。Unix 系统上的 `cat`
+程序可用于从磁盘上读取文件。如果通过 `Deno.run` API 启动此程序，即使父 Deno
+进程无法直接读取文件，它仍可以读取磁盘上的文件。这通常被称为特权升级。
 
-Because of this, make sure you carefully consider if you want to grant a program
-`--allow-run` access: it essentially invalidates the Deno security sandbox. If
-you really need to spawn a specific executable, you can reduce the risk by
-limiting which programs a Deno process can start by passing specific executable
-names to the `--allow-run` flag.
+因此，请仔细考虑是否要授予程序 `--allow-run` 权限：这实际上会使 Deno
+安全沙箱无效。如果确实需要启动特定可执行文件，可以通过将特定的可执行文件名称传递给
+`--allow-run` 标志
 
 ```js
 // run.js
@@ -232,21 +199,19 @@ const proc = Deno.run({ cmd: ["whoami"] });
 ```
 
 ```shell
-# Allow only spawning a `whoami` subprocess:
+允许仅生成 `whoami` 子进程：
 deno run --allow-run=whoami run.js
 
-# Allow running any subprocess:
+# 允许运行任何子进程：
 deno run --allow-run run.js
 ```
 
-You can only limit the executables that are allowed; if permission is granted to
-execute it then any parameters can be passed. For example if you pass
-`--allow-run=cat` then the user can use `cat` to read any file.
+只能限制允许的可执行文件；如果允许执行，那么可以传递任何参数。例如，如果传递
+`--allow-run=cat`，则用户可以使用 `cat` 读取任何文件。
 
-You can restrict certain executables to never be accessible by using the
-`--deny-run` flag:
+您可以使用 `--deny-run` 标志来禁止访问某些可执行文件：
 
 ```shell
-# Disallow spawning `git`.
+禁止生成 `git`。
 deno run --allow-run --deny-run=git run.js
 ```

@@ -1,83 +1,81 @@
-# Handle OS Signals
+# 处理操作系统信号
 
-> ⚠️ Windows only supports listening for SIGINT and SIGBREAK as of Deno v1.23.
+> ⚠️ 截止到 Deno v1.23，Windows 仅支持监听 SIGINT 和 SIGBREAK。
 
-## Concepts
+## 概念
 
-- [Deno.addSignalListener()](https://deno.land/api?s=Deno.addSignalListener) can
-  be used to capture and monitor OS signals.
+- [Deno.addSignalListener()](https://deno.land/api?s=Deno.addSignalListener)
+  可以用于捕获和监控操作系统信号。
 - [Deno.removeSignalListener()](https://deno.land/api?s=Deno.removeSignalListener)
-  can be used to stop watching the signal.
+  可以用于停止监听信号。
 
-## Set up an OS signal listener
+## 设置操作系统信号监听器
 
-APIs for handling OS signals are modelled after already familiar
+处理操作系统信号的 API 设计参考了已经熟悉的
 [`addEventListener`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)
-and
+和
 [`removeEventListener`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener)
-APIs.
+API。
 
-> ⚠️ Note that listening for OS signals doesn't prevent event loop from
-> finishing, ie. if there are no more pending async operations the process will
-> exit.
+> ⚠️
+> 请注意，监听操作系统信号不会阻止事件循环完成，即使没有挂起的异步操作，进程仍然会退出。
 
-You can use `Deno.addSignalListener()` function for handling OS signals:
+您可以使用 `Deno.addSignalListener()` 函数来处理操作系统信号：
 
 ```ts
 /**
  * add_signal_listener.ts
  */
-console.log("Press Ctrl-C to trigger a SIGINT signal");
+console.log("按 Ctrl-C 触发 SIGINT 信号");
 
 Deno.addSignalListener("SIGINT", () => {
-  console.log("interrupted!");
+  console.log("被中断！");
   Deno.exit();
 });
 
-// Add a timeout to prevent process exiting immediately.
+// 添加一个超时以防止进程立即退出。
 setTimeout(() => {}, 5000);
 ```
 
-Run with:
+使用以下命令运行：
 
 ```shell
 deno run add_signal_listener.ts
 ```
 
-You can use `Deno.removeSignalListener()` function to unregister previously
-added signal handler.
+您可以使用 `Deno.removeSignalListener()` 函数来取消先前添加的信号处理程序。
 
 ```ts
 /**
  * signal_listeners.ts
  */
-console.log("Press Ctrl-C to trigger a SIGINT signal");
+console.log("按 Ctrl-C 触发 SIGINT 信号");
 
 const sigIntHandler = () => {
-  console.log("interrupted!");
+  console.log("被中断！");
   Deno.exit();
 };
 Deno.addSignalListener("SIGINT", sigIntHandler);
 
-// Add a timeout to prevent process existing immediately.
+// 添加一个超时以防止进程立即退出。
 setTimeout(() => {}, 5000);
 
-// Stop listening for a signal after 1s.
+// 在 1 秒后停止监听信号。
 setTimeout(() => {
   Deno.removeSignalListener("SIGINT", sigIntHandler);
 }, 1000);
 ```
 
-Run with:
+使用以下命令运行：
 
 ```shell
 deno run signal_listeners.ts
 ```
 
-## Async iterator example
+## 异步迭代器示例
 
-If you prefer to handle signals using an async iterator, you can use
-[`signal()`](https://deno.land/std/signal/mod.ts) API available in `deno_std`:
+如果您更喜欢使用异步迭代器处理信号，您可以使用 `deno_std` 中可用的
+[`signal()`](https://deno.land/std/signal/mod.ts) API：
 
 ```ts
 /**
@@ -87,15 +85,15 @@ import { signal } from "https://deno.land/std/signal/mod.ts";
 
 const sig = signal("SIGUSR1", "SIGINT");
 
-// Add a timeout to prevent process exiting immediately.
+// 添加一个超时以防止进程立即退出。
 setTimeout(() => {}, 5000);
 
 for await (const _ of sig) {
-  console.log("interrupt or usr1 signal received");
+  console.log("接收到中断或 usr1 信号");
 }
 ```
 
-Run with:
+使用以下命令运行：
 
 ```shell
 deno run async_iterator_signal.ts

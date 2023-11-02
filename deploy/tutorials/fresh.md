@@ -1,42 +1,42 @@
-# Basic Fresh site
+# Fresh 站点
 
-This tutorial will cover how to deploy a Fresh application on Deno Deploy.
+本教程将介绍如何在 Deno Deploy 上部署 Fresh 应用程序。
 
-Fresh is a web framework built for Deno, akin to Express for Node.
+Fresh 是专为 Deno 构建的 Web 框架，类似于 Node 上的 Express。
 
-## **Step 1:** Create Fresh application
+## **步骤 1：** 创建 Fresh 应用程序
 
 ```sh
 deno run -A -r https://fresh.deno.dev fresh-site
 ```
 
-To run this application locally:
+要在本地运行此应用程序：
 
 ```sh
 deno task start
 ```
 
-You can edit `routes/index.js` to modify the application.
+您可以编辑 `routes/index.js` 以修改应用程序。
 
-## **Step 2:** Create a new Github repo and link your local Fresh application.
+## **步骤 2：** 创建一个新的 Github 存储库并将其链接到本地的 Fresh 应用程序。
 
-1. Create a new Github repo and record the git repo remote URL
-2. From your local `fresh-site`, initialize git and push to the new remote repo:
+1. 创建一个新的 Github 存储库并记录 Git 存储库的远程 URL
+2. 从本地的 `fresh-site`，初始化 Git 并推送到新的远程存储库：
 
    ```sh
    git init
    git add .
-   git commit -m "First commit"
+   git commit -m "首次提交"
    git remote add <remote-url>
    git push origin main
    ```
 
-## **Step 3:** Deploy to Deno Deploy
+## **步骤 3：** 部署到 Deno Deploy
 
-1. Navigate to https://dash.deno.com/new and click the **+New Project** button.
-2. On the next page, choose the **Deploy from Github repository** card.
-3. To fill in the values on the form, choose:
-   - the new `fresh-site` Github repo that you just created
-     - automatic (fastest)
-   - `main` branch
-   - `main.ts` as the entrypoint file
+1. 转到 https://dash.deno.com/new 并单击 **+新项目** 按钮。
+2. 在下一页上，选择 **从 Github 存储库部署** 卡片。
+3. 填写表单上的值，选择：
+   - 刚刚创建的 `fresh-site` Github 存储库
+     - 自动（最快）
+   - `main` 分支
+   - `main.ts` 作为入口文件。

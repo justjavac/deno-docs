@@ -1,94 +1,81 @@
-# Types and Type Declarations
+# 类型和类型声明
 
-One of the design principles of Deno is no non-standard module resolution. When
-TypeScript is type checking a file, it only cares about the types for the file,
-and the `tsc` compiler has a lot of logic to try to resolve those types. By
-default, it expects _ambiguous_ module specifiers with an extension, and will
-attempt to look for the file under the `.ts` specifier, then `.d.ts`, and
-finally `.js` (plus a whole other set of logic when the module resolution is set
-to `"node"`). Deno deals with explicit specifiers.
+Deno 的一个设计原则之一是不使用非标准的模块解析。当 TypeScript
+检查文件类型时，它只关心文件的类型以及 `tsc`
+编译器具有许多逻辑来尝试解析这些类型。默认情况下，它期望带有扩展名的_模糊_模块规范，并将尝试查找
+`.ts` 规范下的文件，然后 `.d.ts`，最后 `.js`（当模块解析设置为 `"node"`
+时还有一整套逻辑）。Deno 处理显式规范。
 
-This can cause a couple problems though. For example, let's say I want to
-consume a TypeScript file that has already been transpiled to JavaScript along
-with a type definition file. So I have `mod.js` and `mod.d.ts`. If I try to
-import `mod.js` into Deno, it will only do what I ask it to do, and import
-`mod.js`, but that means my code won't be as well type checked as if TypeScript
-was considering the `mod.d.ts` file in place of the `mod.js` file.
+然而，这可能会引发一些问题。例如，假设我想使用已经被转译为 JavaScript 的
+TypeScript 文件以及一个类型定义文件。所以我有 `mod.js` 和
+`mod.d.ts`。如果我尝试将 `mod.js` 导入到
+Deno，它只会执行我要求它执行的操作，并导入 `mod.js`，但这意味着我的代码不会像
+TypeScript 将 `mod.d.ts` 文件视为 `mod.js`
+文件的替代品时一样经过良好的类型检查。
 
-In order to support this in Deno, Deno has two solutions, of which there is a
-variation of a solution to enhance support. The two main situations you come
-across would be:
+为了在 Deno 中支持这一点，Deno
+提供了两种解决方案，其中有一种增强支持的变体。您可能遇到的两种主要情况分别是：
 
-- As the importer of a JavaScript module, I know what types should be applied to
-  the module.
-- As the supplier of the JavaScript module, I know what types should be applied
-  to the module.
+- 作为 JavaScript 模块的导入方，我知道应用于该模块的类型。
+- 作为 JavaScript 模块的提供方，我知道应用于该模块的类型。
 
-The latter case is the better case, meaning you as the provider or host of the
-module, everyone can consume it without having to figure out how to resolve the
-types for the JavaScript module, but when consuming modules that you may not
-have direct control over, the ability to do the former is also required.
+后一种情况是更好的情况，这意味着您作为模块的提供者或主机，每个人都可以使用它，而不必找出如何解析
+JavaScript
+模块的类型，但在使用您可能无法直接控制的模块时，也需要能够执行前一种情况。
 
-## Providing types when importing
+## 导入时提供类型
 
-If you are consuming a JavaScript module and you have either created types (a
-`.d.ts` file) or have otherwise obtained the types, you want to use, you can
-instruct Deno to use that file when type checking instead of the JavaScript file
-using the `@deno-types` compiler hint. `@deno-types` needs to be a single line
-double slash comment, where when used impacts the next import or re-export
-statement.
+如果您正在使用 JavaScript 模块，并且已经创建了类型（一个 `.d.ts`
+文件）或以其他方式获得了您想要使用的类型，您可以使用 `@deno-types`
+编译器提示指示 Deno 在类型检查时使用该文件，而不是 JavaScript
+文件。`@deno-types`
+必须是一个单行双斜杠注释，使用它会影响下一个导入或重新导出语句。
 
-For example if I have a JavaScript modules `coolLib.js` and I had a separate
-`coolLib.d.ts` file that I wanted to use, I would import it like this:
+例如，如果我有一个 JavaScript 模块 `coolLib.js`，并且我有一个单独的
+`coolLib.d.ts` 文件，我想要使用它，我可以这样导入它：
 
 ```ts, ignore
 // @deno-types="./coolLib.d.ts"
 import * as coolLib from "./coolLib.js";
 ```
 
-When type checking `coolLib` and your usage of it in the file, the
-`coolLib.d.ts` types will be used instead of looking at the JavaScript file.
+在对 `coolLib` 进行类型检查以及在文件中使用它时，将使用 `coolLib.d.ts`
+中的类型，而不是查看 JavaScript 文件。
 
-The pattern matching for the compiler hint is somewhat forgiving and will accept
-quoted and non-question values for the specifier as well as it accepts
-whitespace before and after the equals sign.
+编译器提示的模式匹配有些宽容，它将接受带引号和非问号值的规范符，以及在等号前后接受空白。
 
-## Providing types when hosting
+## 主机时提供类型
 
-If you are in control of the source code of the module, or you are in control of
-how the file is hosted on a web server, there are two ways to inform Deno of the
-types for a given module, without requiring the importer to do anything special.
+如果您控制模块的源代码，或者控制文件在 Web
+服务器上的托管方式，有两种方法可以通知 Deno
+关于给定模块的类型，而不需要导入者采取特殊操作。
 
-### Using the triple-slash reference directive
+### 使用三斜线引用指令
 
-Deno supports using the triple-slash reference `types` directive, which adopts
-the reference comment used by TypeScript in TypeScript files to _include_ other
-files and applies it only to JavaScript files.
+Deno 支持使用三斜线引用 `types` 指令，它采用 TypeScript
+文件中用于_包含_其他文件的引用注释，并仅将其应用于 JavaScript 文件。
 
-For example, if I had created `coolLib.js` and along side of it I had created my
-type definitions for my library in `coolLib.d.ts` I could do the following in
-the `coolLib.js` file:
+例如，如果我创建了 `coolLib.js`，并在其旁边创建了我的库的类型定义文件
+`coolLib.d.ts`，那么在 `coolLib.js` 文件中，我可以这样做：
 
 ```js, ignore
 /// <reference types="./coolLib.d.ts" />
 
-// ... the rest of the JavaScript ...
+// ... 其余的 JavaScript 代码 ...
 ```
 
-When Deno encounters this directive, it would resolve the `./coolLib.d.ts` file
-and use that instead of the JavaScript file when TypeScript was type checking
-the file, but still load the JavaScript file when running the program.
+当 Deno 遇到此指令时，它将解析 `./coolLib.d.ts` 文件，并在 TypeScript
+检查文件类型时使用该文件，但在运行程序时仍然加载 JavaScript 文件。
 
-> ℹ️ _Note_ this is a repurposed directive for TypeScript that only applies to
-> JavaScript files. Using the triple-slash reference directive of `types` in a
-> TypeScript file works under Deno as well, but has essentially the same
-> behavior as the `path` directive.
+> ℹ️ _注意_，这是 TypeScript 的一种重新配置指令，只适用于 JavaScript 文件。在
+> Deno 下，也可以在 TypeScript 文件中使用三斜线引用指令，但其行为基本与 `path`
+> 指令相同。
 
-### Using X-TypeScript-Types header
+### 使用 X-TypeScript-Types 标头
 
-Similar to the triple-slash directive, Deno supports a header for remote modules
-that instructs Deno where to locate the types for a given module. For example, a
-response for `https://example.com/coolLib.js` might look something like this:
+与三斜线指令类似，Deno 支持远程模块的标头，该标头指示 Deno
+在给定模块的类型何处定位。例如，`https://example.com/coolLib.js`
+的响应可能如下所示：
 
 ```
 HTTP/1.1 200 OK
@@ -97,17 +84,15 @@ Content-Length: 648
 X-TypeScript-Types: ./coolLib.d.ts
 ```
 
-When seeing this header, Deno would attempt to retrieve
-`https://example.com/coolLib.d.ts` and use that when type checking the original
-module.
+当看到此标头时，Deno 将尝试检索 `https://example.com/coolLib.d.ts`
+并在类型检查原始模块时使用它。
 
-## Using ambient or global types
+## 使用环境或全局类型
 
-Overall it is better to use module/UMD type definitions with Deno, where a
-module expressly imports the types it depends upon. Modular type definitions can
-express
-[augmentation of the global scope](https://www.typescriptlang.org/docs/handbook/declaration-files/templates/global-modifying-module-d-ts.html)
-via the `declare global` in the type definition. For example:
+总的来说，最好在 Deno 中使用模块/UMD
+类型定义，其中模块明确导入它所依赖的类型。模块化类型定义可以通过类型定义中的
+`declare global` 来表达
+[全局范围的增强](https://www.typescriptlang.org/docs/handbook/declaration-files/templates/global-modifying-module-d-ts.html)。例如：
 
 ```ts
 declare global {
@@ -115,36 +100,27 @@ declare global {
 }
 ```
 
-This would make `AGlobalString` available in the global namespace when importing
-the type definition.
+当导入类型定义时，将在全局命名空间中提供 `AGlobalString`。
 
-In some cases though, when leveraging other existing type libraries, it may not
-be possible to leverage modular type definitions. Therefore there are ways to
-include arbitrary type definitions when type checking programmes.
+但在某些情况下，当利用其他现有类型库时，可能无法利用模块化类型定义。因此，在类型检查程序时，有一些方法可以包含任意类型定义。
 
-### Using a triple-slash directive
+### 使用三斜线指令
 
-This option couples the type definitions to the code itself. By adding a
-triple-slash `types` directive near the type of a module, type checking the file
-will include the type definition. For example:
+此选项将类型定义与代码本身耦合。通过在模
+
+块类型的附近添加三斜线 `types` 指令，类型检查文件将包括类型定义。例如：
 
 ```ts, ignore
 /// <reference types="./types.d.ts" />
 ```
 
-The specifier provided is resolved just like any other specifier in Deno, which
-means it requires an extension, and is relative to the module referencing it. It
-can be a fully qualified URL as well:
+提供的规范符像 Deno
+中的其他规范符一样被解析，这意味着它需要一个扩展名，并且是相对于引用它的模块的路径的。
 
-```ts, ignore
-/// <reference types="https://deno.land/x/pkg@1.0.0/types.d.ts" />
-```
+### 使用配置文件
 
-### Using a configuration file
-
-Another option is to use a configuration file that is configured to include the
-type definitions, by supplying a `"types"` value to the `"compilerOptions"`. For
-example:
+另一个选项是使用配置文件，配置文件配置为包括类型定义，通过向 `"compilerOptions"`
+提供 `"types"` 值。例如：
 
 ```json
 {
@@ -158,49 +134,40 @@ example:
 }
 ```
 
-Like the triple-slash reference above, the specifier supplied in the `"types"`
-array will be resolved like other specifiers in Deno. In the case of relative
-specifiers, it will be resolved relative to the path to the config file. Make
-sure to tell Deno to use this file by specifying `--config=path/to/file` flag.
+与上面的三斜线引用一样，`"types"` 数组中提供的规范符将像 Deno
+中的其他规范符一样解析。对于相对规范符，它将相对于配置文件的路径解析。请确保通过指定
+`--config=path/to/file` 标志来告诉 Deno 使用此文件。
 
-## Type Checking Web Workers
+## 检查 Web Workers 的类型
 
-When Deno loads a TypeScript module in a web worker, it will automatically type
-check the module and its dependencies against the Deno web worker library. This
-can present a challenge in other contexts like `deno cache` or in editors. There
-are a couple of ways to instruct Deno to use the worker libraries instead of the
-standard Deno libraries.
+当 Deno 在 Web Worker 中加载 TypeScript
+模块时，它将自动对模块及其依赖项进行类型检查，针对 Deno Web Worker
+库。这可能在其他上下文中，比如 `deno cache`
+或编辑器中，构成挑战。有一些方法可以指示 Deno 使用工作程序库而不是标准 Deno 库。
 
-### Using triple-slash directives
+### 使用三斜线指令
 
-This option couples the library settings with the code itself. By adding the
-following triple-slash directives near the top of the entry point file for the
-worker script, Deno will now type check it as a Deno worker script, irrespective
-of how the module is analyzed:
+此选项将库设置与代码本身耦合。通过在工作程序脚本的入口点文件的顶部附近添加以下三斜线指令，Deno
+将现在将其作为 Deno 工作程序脚本进行类型检查，而不考虑模块的分析方式：
 
 ```ts, ignore
 /// <reference no-default-lib="true" />
 /// <reference lib="deno.worker" />
 ```
 
-The first directive ensures that no other default libraries are used. If this is
-omitted, you will get some conflicting type definitions, because Deno will try
-to apply the standard Deno library as well. The second instructs Deno to apply
-the built-in Deno worker type definitions plus dependent libraries (like
-`"esnext"`).
+第一个指令确保不使用其他默认库。如果省略此指令，将会得到一些冲突的类型定义，因为
+Deno 还会尝试应用标准 Deno 库。第二个指示 Deno 应用内置的 Deno
+工作程序类型定义以及依赖库（如 `"esnext"`）。
 
-When you run a `deno cache` or `deno bundle` command or use an IDE which uses
-the Deno language server, Deno should automatically detect these directives and
-apply the correct libraries when type checking.
+当运行 `deno cache` 或 `deno bundle` 命令，或者使用使用 Deno 语言服务器的 IDE
+时，Deno 应该会自动检测到这些指令并在类型检查时应用正确的库。
 
-The one disadvantage of this, is that it makes the code less portable to other
-non-Deno platforms like `tsc`, as it is only Deno which has the `"deno.worker"`
-library built into it.
+这种方法的一个缺点是，它使代码在其他非 Deno 平台上（如
+`tsc`）的可移植性降低，因为只有 Deno 具有内置的 `"deno.worker"` 库。
 
-### Using a configuration file
+### 使用配置文件
 
-Another option is to use a configuration file that is configured to apply the
-library files. A minimal file that would work would look something like this:
+另一个选项是使用配置文件，该配置文件配置为应用库文件。一个可以工作的最小文件可能如下所示：
 
 ```json
 {
@@ -211,88 +178,75 @@ library files. A minimal file that would work would look something like this:
 }
 ```
 
-Then when running a command on the command line, you would need to pass the
-`--config path/to/file` argument, or if you are using an IDE which leverages the
-Deno language server, set the `deno.config` setting.
+然后，在命令行上运行命令时，您需要传递 `--config path/to/file`
+参数，或者如果您使用利用 Deno 语言服务器的 IDE，则设置 `deno.config` 设置。
 
-If you also have non-worker scripts, you will either need to omit the `--config`
-argument, or have one that is configured to meet the needs of your non-worker
-scripts.
+如果还有非工作程序脚本，您将需要省略 `--config`
+参数，或者配置一个以满足非工作程序脚本需求的配置。
 
-## Important points
+## 重要要点
 
-### Type declaration semantics
+### 类型声明语义
 
-Type declaration files (`.d.ts` files) follow the same semantics as other files
-in Deno. This means that declaration files are assumed to be module declarations
-(_UMD declarations_) and not ambient/global declarations. It is unpredictable
-how Deno will handle ambient/global declarations.
+类型声明文件（`.d.ts` 文件）遵循与 Deno
+中的其他文件相同的语义。这意味着声明文件被视为模块声明（_UMD
+声明_），而不是环境/全局声明。无法预测 Deno 如何处理环境/全局声明。
 
-In addition, if a type declaration imports something else, like another `.d.ts`
-file, its resolution follow the normal import rules of Deno. For a lot of the
-`.d.ts` files that are generated and available on the web, they may not be
-compatible with Deno.
+此外，如果类型声明导入其他内容，比如另一个 `.d.ts` 文件，它的解析会遵循 Deno
+的常规导入规则。对于许多生成并在网络上提供的 `.d.ts` 文件，它们可能与 Deno
+不兼容。
 
-To overcome this problem, some solution providers, like the
-[Skypack CDN](https://www.skypack.dev/), will automatically bundle type
-declarations just like they provide bundles of JavaScript as ESM.
+为了解决这个问题，一些解决方案提供商，比如
+[Skypack CDN](https://www.skypack.dev/)，会自动捆绑类型声明，就像它们提供 ESM
+JavaScript 捆绑一样。
 
-### Deno Friendly CDNs
+### Deno 友好的 CDN
 
-There are CDNs which host JavaScript modules that integrate well with Deno.
+有一些 CDN 主机托管的 JavaScript 模块与 Deno 集成得很好。
 
-- [esm.sh](https://esm.sh) is a CDN which provides type declarations by default
-  (via the `X-TypeScript-Types` header). It can be disabled by appending
-  `?no-dts` to the import URL:
+- [esm.sh](https://esm.sh) 是一个 CDN，通过默认提供类型声明（通过
+  `X-TypeScript-Types` 标头）。可以通过在导入 URL 后附加 `?no-dts` 来禁用它：
 
   ```ts
   import React from "https://esm.sh/react?no-dts";
   ```
-- [Skypack.dev](https://docs.skypack.dev/skypack-cdn/code/deno) is another CDN
-  which also provides type declarations (via the `X-TypeScript-Types` header)
-  when you append `?dts` as a query string to your remote module import
-  statements. Here's an example:
+
+- [Skypack.dev](https://docs.skypack.dev/skypack-cdn/code/deno) 是另一个
+  CDN，也提供类型声明（通过 `X-TypeScript-Types` 标头），当您将 `?dts`
+  作为查询字符串附加到远程模块导入语句时。以下是一个示例：
 
   ```ts
   import React from "https://cdn.skypack.dev/react?dts";
   ```
 
-## Behavior of JavaScript when type checking
+## 在进行类型检查时 JavaScript 的行为
 
-If you import JavaScript into TypeScript in Deno and there are no types, even if
-you have `checkJs` set to `false` (the default for Deno), the TypeScript
-compiler will still access the JavaScript module and attempt to do some static
-analysis on it, to at least try to determine the shape of the exports of that
-module to validate the import in the TypeScript file.
+如果您在 Deno 中将 JavaScript 导入 TypeScript，并且没有类型，即使您已将
+`checkJs` 设置为 `false`（Deno 的默认设置），TypeScript 编译器仍将访问
+JavaScript 模块，并尝试对其进行一些静态分析，至少尝试确定该模块的导出形状以验证
+TypeScript 文件中的导入。
 
-This is usually never a problem when trying to import a "regular" ES module, but
-in some cases if the module has special packaging, or is a global _UMD_ module,
-TypeScript's analysis of the module can fail and cause misleading errors. The
-best thing to do in this situation is provide some form of types using one of
-the methods mention above.
+这通常在尝试导入“常规” ES
+模块时永远不会出现问题，但在某些情况下，如果模块具有特殊的打包方式或者是全局
+_UMD_ 模块，TypeScript
+对模块的分析可能会失败并导致误导性错误。在这种情况下最好的做法是使用上述其中一种方法提供某种类型。
 
-### Internals
+### 内部工作原理
 
-While it isn't required to understand how Deno works internally to be able to
-leverage TypeScript with Deno well, it can help to understand how it works.
+虽然不必了解 Deno 在内部的工作方式就能够很好地利用 TypeScript 与
+Deno，但了解它的工作方式可能会有所帮助。
 
-Before any code is executed or compiled, Deno generates a module graph by
-parsing the root module, and then detecting all of its dependencies, and then
-retrieving and parsing those modules, recursively, until all the dependencies
-are retrieved.
+在执行或编译任何代码之前，Deno
+通过解析根模块，检测其所有依赖项，然后检索和解析这些模块，递归地进行填充模块图，直到检索到所有依赖项。
 
-For each dependency, there are two potential "slots" that are used. There is the
-code slot and the type slot. As the module graph is filled out, if the module is
-something that is or can be emitted to JavaScript, it fills the code slot, and
-type only dependencies, like `.d.ts` files fill the type slot.
+对于每个依赖项，都存在两种潜在的“槽位”。有代码槽位和类型槽位。随着模块图的填充，如果模块是可以转换为
+JavaScript 的内容，它将填充代码槽位，而只有类型的依赖项，如 `.d.ts`
+文件，填充类型槽位。
 
-When the module graph is built, and there is a need to type check the graph,
-Deno starts up the TypeScript compiler and feeds it the names of the modules
-that need to be potentially emitted as JavaScript. During that process, the
-TypeScript compiler will request additional modules, and Deno will look at the
-slots for the dependency, offering it the type slot if it is filled before
-offering it the code slot.
+当构建模块图并需要对图进行类型检查时，Deno 启动 TypeScript
+编译器并向其提供需要潜在地转换为 JavaScript 的模块的名称。在此过程中，TypeScript
+编译器会请求额外的模块，Deno
+会查看依赖项的槽位，如果在提供代码槽位之前已经填充了类型槽位，则会向其提供类型槽位。
 
-This means when you import a `.d.ts` module, or you use one of the solutions
-above to provide alternative type modules for JavaScript code, that is what is
-provided to TypeScript instead when resolving the module.
+这意味着当您导入一个 `.d.ts` 模块，或者使用上述解决方案之一来为 JavaScript
+代码提供替代类型模块时，在解析模块时提供给 TypeScript 的内容就是这样的。

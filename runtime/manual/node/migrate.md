@@ -1,30 +1,25 @@
-# Migrating from Node.js to Deno
+# 从 Node.js 迁移到 Deno
 
-To migrate an existing Node.js program to Deno, there are a number of
-differences to take into account between the Node and Deno runtimes. This guide
-will attempt to call out several of those differences, and describe how you can
-begin to migrate your Node.js project to work on Deno.
+将现有的 Node.js 程序迁移到 Deno 时，需要考虑 Node 和 Deno
+运行时之间的许多差异。本指南将尝试指出其中的一些差异，并描述如何开始将你的
+Node.js 项目迁移到 Deno 上运行。
 
-:::info About Node.js Compatibility
+::: info 关于 Node.js 兼容性
 
-Node.js compatibility is an ongoing project in Deno - you may encounter some
-modules or packages on npm that do not work as you expect. If you do run into a
-problem with Node.js compatibility, please let us know by
-[opening an issue on GitHub](https://github.com/denoland/deno/issues).
+Node.js 兼容性是 Deno 中的一个持续项目 - 你可能会遇到一些在 npm
+上不按照你期望的方式工作的模块或包。如果你在 Node.js 兼容性方面遇到问题，请通过
+[GitHub 上开一个问题](https://github.com/denoland/deno/issues) 告诉我们。
 
 :::
 
-## Module imports and exports
+## 模块导入和导出
 
-Deno supports [ECMAScript modules](../basics/modules/index.md) exclusively,
-rather than a combination of ESM and
-[CommonJS](https://nodejs.org/api/modules.html), as found in Node. If your
-Node.js code uses `require`, you should update it to use `import` statements
-instead. If your internal code uses CommonJS-style exports, those will need to
-be changed as well.
+Deno 仅支持 [ECMAScript 模块](../basics/modules/index.md)，而不支持 Node
+中发现的 ESM 和 [CommonJS](https://nodejs.org/api/modules.html) 的组合。如果你的
+Node.js 代码使用 `require`，你应该将其更新为使用 `import`
+语句。如果你的内部代码使用 CommonJS 风格的导出，那些也需要更改。
 
-Consider the following two files in a Node.js program, located in the same
-directory:
+考虑一个位于同一目录中的 Node.js 程序中的以下两个文件：
 
 ```js title="index.js"
 const addNumbers = require("./add_numbers");
@@ -37,29 +32,28 @@ module.exports = function addNumbers(num1, num2) {
 };
 ```
 
-Running `node index.js` with the files above works fine in Node.js 20 and
-earlier. However, this code will not run unchanged if you attempt to use
-`deno run index.js` instead. You will need to change both the code that is
-consuming the module, and how you export functionality from the `add_numbers`
-module.
+使用上述文件在 Node.js 20 及更早版本中运行 `node index.js`
+是没有问题的。然而，如果你尝试使用 `deno run index.js`
+运行此代码，它将无法正常运行。你需要同时更改消耗模块的代码以及从 `add_numbers`
+模块导出功能的方式。
 
-### Replace `require` with `import`
+### 用 `import` 替换 `require`
 
-Replace `require` statements with an `import`, like so:
+用 `import` 语句替换 `require` 语句，如下所示：
 
 ```js
 import addNumbers from "./add_numbers.js";
 ```
 
-This statement uses the ES6 module standard, but does pretty much the same
-thing. Also, note that we **include the full file extension when importing
-modules**, much as you would in the browser. There is also no special handling
-of files named `index.js`.
+这个语句使用了 ES6
+模块标准，但基本上做了相同的事情。此外，请注意，我们在导入模块时
+**包括完整的文件扩展名**，就像在浏览器中一样。没有特殊处理命名为 `index.js`
+的文件。
 
-### Replace `module.exports` with `export default`
+### 用 `export default` 替换 `module.exports`
 
-In the `add_numbers.js` file that exports the function, we would use a default
-export from ES6 modules rather than the `module.exports` provided by CommonJS.
+在导出该函数的 `add_numbers.js` 文件中，我们应该使用 ES6 模块的默认导出，而不是
+CommonJS 提供的 `module.exports`。
 
 ```js title="add_numbers.js"
 export default function addNumbers(num1, num2) {
@@ -67,63 +61,55 @@ export default function addNumbers(num1, num2) {
 }
 ```
 
-After making those two changes, this code would run successfully with
-`deno run index.js`. Learn more about
-[ES modules in Deno here](../basics/modules/index.md).
+在进行这两个更改后，此代码将能够成功运行 `deno run index.js`。了解更多关于
+[Deno 中的 ES 模块](../basics/modules/index.md)。
 
-## Node.js built-ins
+## Node.js 内置模块
 
-In Node.js 20 and earlier, built-in modules in the Node.js standard library
-could be imported with "bare specifiers". Consider the Node program below with a
-`.mjs` extension:
+在 Node.js 20 及更早版本中，Node.js 标准库中的内置模块可以使用 "bare specifiers"
+导入。考虑下面具有 `.mjs` 扩展的 Node 程序：
 
 ```js title="index.mjs"
 import * as os from "os";
 console.log(os.cpus());
 ```
 
-The [`os` module](https://nodejs.org/api/os.html#oscpus) is built in to the
-Node.js runtime, and can be imported using a bare specifier as above.
+[`os` 模块](https://nodejs.org/api/os.html#oscpus) 内置在 Node.js
+运行时中，可以像上面那样使用裸规范导入。
 
-:::info .mjs extensions not required in Deno
+::: info 在 Deno 中不需要 `.mjs` 扩展
 
-The `.mjs` file extension is supported but not required in Deno. Because Node
-doesn't support ESM by default, it requires you to name any files that use ESM
-with a `.mjs` file extension.
+在 Deno 中支持 `.mjs` 文件扩展名，但不是必需的。因为 Node 默认不支持
+ESM，它要求你为使用 ESM 的任何文件命名为 `.mjs` 文件扩展名。
 
 :::
 
-Deno provides a compatibility layer that allows the use of Node.js built-in APIs
-within Deno programs. However, in order to use them, you will need to add the
-[`node:` specifier](./node_specifiers.md) to any import statements that use
-them.
+Deno 提供了一个兼容层，允许在 Deno 程序中使用 Node.js 内置
+API。但是，为了使用它们，你需要在使用它们的导入语句中添加
+[`node:` specifier](./node_specifiers.md)。
 
-For example - if you update the code above to be this instead:
+例如 - 如果你将上面的代码更新为以下内容：
 
 ```js
 import * as os from "node:os";
 console.log(os.cpus());
 ```
 
-And run it with `deno run index.mjs` - you will notice you get the same output
-as running the program in Node.js. Updating any imports in your application to
-use `node:` specifiers should enable any code using Node built-ins to function
-as it did in Node.js.
+并使用 `deno run index.mjs` 运行它 - 你将注意到得到与在 Node.js
+中运行程序相同的输出。将应用程序中的任何导入更改为使用 `node:` specifier
+应该使使用 Node 内置功能的任何代码能够像在 Node.js 中一样运行。
 
-## Runtime permissions in Deno
+## Deno 中的运行时权限
 
-Deno features [runtime security by default](../basics/permissions.md), meaning
-that you as the developer must opt in to giving your code access to the
-filesystem, network, system environment, and more. Doing this prevents supply
-chain attacks and other potential vulnerabilities in your code. By comparison,
-Node.js has no concept of runtime security, with all code executed with the same
-level of permission as the user running the code.
+Deno 默认提供
+[默认情况下的运行时安全性](../basics/permissions.md)，这意味着作为开发人员，你必须选择允许你的代码访问文件系统、网络、系统环境等。这样做可以防止供应链攻击和代码中的其他潜在漏洞。相比之下，Node.js
+没有运行时安全性的概念，所有代码都以运行代码的用户拥有的权限级别执行。
 
-### Running your code with only the necessary flags
+### 仅使用必要的标志运行你的代码
 
-When you run a Node.js project ported to Deno for the first time, the runtime
-will likely prompt you for access to the permissions it needs to execute your
-code. Consider the following simple [express](https://expressjs.com/) server:
+当你首次将 Node.js 项目迁移到 Deno
+运行时时，运行时可能会要求你授予执行代码所需的权限。考虑下面这个简单的
+[express](https://expressjs.com/) 服务器：
 
 ```js
 import express from "npm:express@4";
@@ -139,22 +125,20 @@ app.listen(3000, () => {
 });
 ```
 
-If you run it with `deno run server.js`, it would prompt you for a number of
-permissions required to execute the code and its dependencies. These prompts can
-show you what runtime permission flags need to be passed in to grant the access
-you need. Running the code above with the necessary permissions provided would
-look like this:
+如果你使用 `deno run server.js`
+运行它，它将提示你授予执行代码及其依赖项所需的权限。这些提示可以显示需要传递的运行时权限标志，以授予所需的访问权限。以提供必要权限运行上述代码将如下所示：
 
 ```shell
-deno run --allow-net --allow-read --allow-env server.js
+deno run --allow-net --allow
+
+-read --allow-env server.js
 ```
 
-### Reusing runtime flag configuration with `deno task`
+### 使用 `deno task` 重用运行时标志配置
 
-A common pattern for configuring a set of runtime flags is to set up scripts to
-be run with [`deno task`](../tools/task_runner.md). The following `deno.json`
-file has a task called `dev` which will run the express server from above with
-all the necessary flags.
+配置一组运行时标志的常见模式是设置要使用 [`deno task`](../tools/task_runner.md)
+运行的脚本。下面的 `deno.json` 文件有一个名为 `dev`
+的任务，它将使用所有必要的标志运行上面的 express 服务器。
 
 ```json
 {
@@ -164,31 +148,29 @@ all the necessary flags.
 }
 ```
 
-You can then run the task with `deno task dev`.
+然后你可以使用 `deno task dev` 运行该任务。
 
-### Running with all permissions enabled
+### 启用所有权限运行
 
-It is possible, but not recommended in production or sensitive environments, to
-run your programs with all runtime permissions enabled. This would be the
-default behavior of Node, which lacks a permission system. To run a program with
-all permissions enabled, you can do so with:
+在生产环境或敏感环境中不建议，但是可以在你的程序中启用所有运行时权限。这将是
+Node 默认行为，它没有权限系统。要以启用所有权限运行程序，你可以使用以下命令：
 
 ```shell
 deno run -A server.js
 ```
 
-## Running scripts from `package.json`
+## 从 `package.json` 运行脚本
 
-Many Node.js projects make use of
-[npm scripts](https://docs.npmjs.com/cli/v9/using-npm/scripts) to drive local
-development. In Deno, you can continue to use your existing npm scripts while
-migrating over time to [`deno task`](../tools/task_runner.md).
+许多 Node.js 项目使用
+[npm 脚本](https://docs.npmjs.com/cli/v9/using-npm/scripts) 来驱动本地开发。在
+Deno 中，你可以继续使用现有的 npm 脚本，同时逐渐迁移到
+[`deno task`](../tools/task_runner.md)。
 
-### Running npm scripts in Deno
+### 在 Deno 中运行 npm 脚本
 
-One of the ways [Deno supports existing `package.json` files](./package_json.md)
-is by executing any scripts configured there with `deno task`. Consider the
-following Node.js project with a package.json and a script configured within it.
+[Deno 支持现有的 `package.json` 文件](./package_json.md)
+中配置的脚本的一种方式是使用 `deno task` 执行其中配置的任何脚本。考虑下面的
+Node.js 项目，其中有一个包含在其中的 package.json 文件和一个配置了脚本的文件。
 
 ```js title="bin/my_task.mjs"
 console.log("running my task...");
@@ -203,22 +185,20 @@ console.log("running my task...");
 }
 ```
 
-You can execute this script with Deno by running `deno task start`.
+你可以使用 `deno task start` 运行这个脚本。
 
-## Using and managing npm dependencies
+## 使用和管理 npm 依赖
 
-Deno supports
-[managing npm dependencies through a `package.json` file](./package_json.md).
-Note that unlike using npm at the command line, you can simply run your project
-with `deno run`, and the first time your script runs, Deno will cache all the
-necessary dependencies for your application.
+Deno 支持通过 `package.json` 文件来
+[管理 npm 依赖](./package_json.md)。请注意，与在命令行使用 npm
+不同，你可以简单地使用 `deno run` 运行你的项目，而在首次运行你的脚本时，Deno
+将缓存应用程序所需的所有依赖关系。
 
-Going forward, we'd recommend that you manage dependencies through
-[`deno.json`](../getting_started/configuration_file.md) instead, which supports
-other types of imports as well.
+未来，我们建议你通过 [`deno.json`](../getting_started/configuration_file.md)
+来管理依赖项，它还支持其他类型的导入。
 
-When importing npm packages, you would use the `npm:` specifier, much like you
-would the `node:` specifier for any built-in Node modules.
+在导入 npm 包时，你将使用 `npm:` specifier，就像你对任何内置 Node 模块使用
+`node:` specifier 一样。
 
 ```js
 import express from "npm:express@4";
@@ -234,19 +214,14 @@ app.listen(3000, () => {
 });
 ```
 
-## Node.js global objects
+## Node.js 全局对象
 
-In Node.js, there are a number of
-[global objects](https://nodejs.org/api/globals.html) that are available in the
-scope of all programs, like the `process` object or `__dirname` and
-`__filename`.
+在 Node.js 中，有许多 [全局对象](https://nodejs.org/api/globals.html)
+可以在所有程序的范围内使用，比如 `process` 对象、`__dirname` 和 `__filename`。
 
-Deno does not add additional objects and variables to the global scope, other
-than the [`Deno` namespace](../runtime/builtin_apis.md). Any API that doesn't
-exist as a web standard browser API will be found in this namespace.
-
-The equivalent Deno expression for every Node.js built-in global object will
-vary, but it should be possible to accomplish everything you can do in Node
-using a slightly different method in Deno. For example, the
-[process.cwd()](https://nodejs.org/api/process.html#processcwd) function in
-Node.js exists in Deno as [Deno.cwd()](https://www.deno.com/api?s=Deno.cwd).
+Deno 不会将额外的对象和变量添加到全局作用域中，除了
+[`Deno` 命名空间](../runtime/builtin_apis.md)。每个 Node.js 内置全局对象的等效
+Deno 表达式都会有所不同，但应该可以使用 Deno 中的稍微不同的方法来完成在 Node
+中可以完成的任何事情。例如，Node.js 中的
+[process.cwd()](https://nodejs.org/api/process.html#processcwd) 函数在 Deno
+中存在为 [Deno.cwd()](https://www.deno.com/api?s=Deno.cwd)。

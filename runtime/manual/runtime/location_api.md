@@ -1,14 +1,14 @@
 # Location API
 
-Deno supports the
+Deno 支持来自 Web 的
 [`location`](https://developer.mozilla.org/en-US/docs/Web/API/Window/location)
-global from the web. Please read on.
+全局对象。请继续阅读。
 
-## Location flag
+## Location 标志
 
-There is no "web page" whose URL we can use for a location in a Deno process. We
-instead allow users to emulate a document location by specifying one on the CLI
-using the `--location` flag. It can be a `http` or `https` URL.
+在 Deno 进程中，我们无法使用“网页”的 URL 作为 Location。相反，我们允许用户通过在
+CLI 中指定 `--location` 标志来模拟文档 Location。它可以是 `http` 或 `https`
+URL。
 
 ```ts
 // deno run --location https://example.com/path main.ts
@@ -17,8 +17,8 @@ console.log(location.href);
 // "https://example.com/path"
 ```
 
-You must pass `--location <href>` for this to work. If you don't, any access to
-the `location` global will throw an error.
+要使其工作，您必须传递 `--location <href>`。如果不传递，访问 `location`
+全局对象将引发错误。
 
 ```ts
 // deno run main.ts
@@ -27,8 +27,8 @@ console.log(location.href);
 // error: Uncaught ReferenceError: Access to "location", run again with --location <href>.
 ```
 
-Setting `location` or any of its fields will normally cause navigation in
-browsers. This is not applicable in Deno, so it will throw in this situation.
+在浏览器中，设置 `location` 或其字段通常会导致导航。在 Deno
+中，这不适用，因此在这种情况下会引发错误。
 
 ```ts
 // deno run --location https://example.com/path main.ts
@@ -37,11 +37,10 @@ location.pathname = "./foo";
 // error: Uncaught NotSupportedError: Cannot set "location.pathname".
 ```
 
-## Extended usage
+## 扩展用法
 
-On the web, resource resolution (excluding modules) typically uses the value of
-`location.href` as the root on which to base any relative URLs. This affects
-some web APIs adopted by Deno.
+在网络上，资源解析（不包括模块）通常使用 `location.href` 的值作为任何相对 URL
+的基础。这会影响 Deno 采用的某些网络 API。
 
 ### Fetch API
 
@@ -49,28 +48,26 @@ some web APIs adopted by Deno.
 // deno run --location https://api.github.com/ --allow-net main.ts
 
 const response = await fetch("./orgs/denoland");
-// Fetches "https://api.github.com/orgs/denoland".
+// 获取 "https://api.github.com/orgs/denoland"。
 ```
 
-The `fetch()` call above would throw if the `--location` flag was not passed,
-since there is no web-analogous location to base it onto.
+上面的 `fetch()` 调用如果没有传递 `--location`
+标志，将会引发错误，因为没有与网络相对应的位置用于基础。
 
-### Worker modules
+### Worker 模块
 
 ```ts
 // deno run --location https://example.com/index.html --allow-net main.ts
 
 const worker = new Worker("./workers/hello.ts", { type: "module" });
-// Fetches worker module at "https://example.com/workers/hello.ts".
+// 获取 "https://example.com/workers/hello.ts" 处的 Worker 模块。
 ```
 
-## Only use if necessary
+## 仅在必要时使用
 
-For the above use cases, it is preferable to pass URLs in full rather than
-relying on `--location`. You can manually base a relative URL using the `URL`
-constructor if needed.
+对于上述用例，最好传递完整的 URL，而不是依赖于
+`--location`。如果需要，您可以手动使用 `URL` 构造函数来构建相对 URL。
 
-The `--location` flag is intended for those who have some specific purpose in
-mind for emulating a document location and are aware that this will only work at
-application-level. However, you may also use it to silence errors from a
-dependency which is frivolously accessing the `location` global.
+`--location`
+标志适用于那些对模拟文档位置有特定目的并且了解这只能在应用程序级别工作的人。但是，您还可以使用它来消除依赖项无谓访问
+`location` 全局对象时产生的错误。

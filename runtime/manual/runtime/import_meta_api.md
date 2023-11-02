@@ -1,24 +1,22 @@
 # `import.meta` API
 
-Deno supports a number of methods on the
+Deno 支持一系列方法，用于
 [`import.meta`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta)
-API:
+API：
 
-- `import.meta.url`: returns the URL of the current module.
-- `import.meta.main`: returns whether the current module is the entry point to
-  your program.
-- `import.meta.resolve`: resolve specifiers relative to the current module.
+- `import.meta.url`：返回当前模块的 URL。
+- `import.meta.main`：返回当前模块是否是程序的入口点。
+- `import.meta.resolve`：相对于当前模块解析规范。
 
-## `import.meta.resolve` Example
+## `import.meta.resolve` 示例
 
 ```ts
 const worker = new Worker(import.meta.resolve("./worker.ts"));
 ```
 
-The `import.meta.resolve` API takes into account the currently applied import
-map, which gives you the ability to resolve "bare" specifiers as well.
+`import.meta.resolve` API 考虑了当前应用的导入映射，这使您能够解析“裸”规范。
 
-With such import map loaded...
+有了这样的导入映射加载...
 
 ```json
 {
@@ -28,7 +26,7 @@ With such import map loaded...
 }
 ```
 
-...you can now resolve:
+...现在您可以解析：
 
 ```js
 // resolve.js

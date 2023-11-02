@@ -1,17 +1,16 @@
-# Connecting to databases
+# 连接到数据库
 
-The Deno community has published a number of third-party modules that make it
-easy to connect to popular databases like MySQL, Postgres, and MongoDB.
+Deno 社区已经发布了许多第三方模块，使连接到流行的数据库如 MySQL、Postgres 和
+MongoDB 变得容易。
 
-They are hosted at Deno's third-party module site
-[deno.land/x](https://deno.land/x).
+它们托管在 Deno 的第三方模块网站 [deno.land/x](https://deno.land/x)。
 
 ## MySQL
 
-[deno_mysql](https://deno.land/x/mysql) is a MySQL and MariaDB database driver
-for Deno.
+[deno_mysql](https://deno.land/x/mysql) 是一个用于 Deno 的 MySQL 和 MariaDB
+数据库驱动程序。
 
-### Connect to MySQL with deno_mysql
+### 使用 deno_mysql 连接到 MySQL
 
 ```ts, ignore
 import { Client } from "https://deno.land/x/mysql/mod.ts";
@@ -26,10 +25,10 @@ const client = await new Client().connect({
 
 ## Postgres
 
-[postgresjs](https://deno.land/x/postgresjs) is a full featured Postgres client
-for Node.js and Deno.
+[postgresjs](https://deno.land/x/postgresjs) 是一个完整的 Node.js 和 Deno 的
+Postgres 客户端。
 
-### Connect to Postgres with postgresjs
+### 使用 postgresjs 连接到 Postgres
 
 ```js, ignore
 import postgres from "https://deno.land/x/postgresjs/mod.js";
@@ -39,20 +38,20 @@ const sql = postgres("postgres://username:password@host:port/database");
 
 ## MongoDB
 
-[deno_mongo](https://deno.land/x/mongo) is a MongoDB database driver developed
-for Deno.
+[deno_mongo](https://deno.land/x/mongo) 是为 Deno 开发的 MongoDB
+数据库驱动程序。
 
-### Connect to MongoDB with deno_mongo
+### 使用 deno_mongo 连接到 MongoDB
 
 ```ts, ignore
 import { MongoClient } from "https://deno.land/x/mongo@LATEST_VERSION/mod.ts";
 
 const client = new MongoClient();
 
-// Connecting to a Local Database
+// 连接到本地数据库
 await client.connect("mongodb://127.0.0.1:27017");
 
-// Connecting to a Mongo Atlas Database
+// 连接到Mongo Atlas数据库
 await client.connect({
   db: "<db_name>",
   tls: true,
@@ -70,7 +69,7 @@ await client.connect({
   },
 });
 
-// Connect using srv url
+// 使用srv url连接
 await client.connect(
   "mongodb+srv://<username>:<password>@<db_cluster_url>/<db_name>?authMechanism=SCRAM-SHA-1",
 );
@@ -78,12 +77,12 @@ await client.connect(
 
 ## SQLite
 
-There are two primary solutions to connect to SQLite in Deno:
+在 Deno 中连接到 SQLite 有两种主要解决方案：
 
-### Connect to SQLite with the FFI Module
+### 使用 FFI 模块连接到 SQLite
 
-[sqlite3](https://deno.land/x/sqlite3) provides JavaScript bindings to the
-SQLite3 C API, using [Deno FFI](../runtime/ffi_api.md).
+[sqlite3](https://deno.land/x/sqlite3) 提供了与 SQLite3 C API 的 JavaScript
+绑定，使用了 [Deno FFI](../runtime/ffi_api.md)。
 
 ```ts, ignore
 import { Database } from "https://deno.land/x/sqlite3@LATEST_VERSION/mod.ts";
@@ -93,11 +92,10 @@ const db = new Database("test.db");
 db.close();
 ```
 
-### Connect to SQLite with the WASM-Optimized Module
+### 使用 WASM 优化模块连接到 SQLite
 
-[sqlite](https://deno.land/x/sqlite) is a SQLite module for JavaScript and
-TypeScript. The wrapper made specifically for Deno and uses a version of SQLite3
-compiled to WebAssembly (WASM).
+[sqlite](https://deno.land/x/sqlite) 是 JavaScript 和 TypeScript 的 SQLite
+模块，专门为 Deno 制作，使用了编译为 WebAssembly（WASM）的 SQLite3 版本。
 
 ```ts, ignore
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
@@ -109,12 +107,12 @@ db.close();
 
 ## Firebase
 
-To connect to Firebase with Deno, import the
-[firestore npm module](https://firebase.google.com/docs/firestore/quickstart)
-with the [skypak CDN](https://www.skypack.dev/). To learn more about using npm
-modules in Deno with a CDN, see [Using npm packages with CDNs](../node/cdns.md).
+要在 Deno 中连接到 Firebase，使用
+[firestore npm 模块](https://firebase.google.com/docs/firestore/quickstart)，并使用
+[skypak CDN](https://www.skypack.dev/) 导入它。要了解如何在 Deno 中使用 CDN 与
+npm 包，请参阅 [使用 CDN 的 npm 包](../node/cdns.md)。
 
-### Connect to Firebase with the firestore npm module
+### 使用 firestore npm 模块连接到 Firebase
 
 ```js, ignore
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
@@ -135,7 +133,7 @@ import {
   where,
 } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
 
-import { getAuth } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
+import { getAuth } from "https://www.gstatic.comfirebasejs/9.8.1/firebase-auth.js";
 
 const app = initializeApp({
   apiKey: Deno.env.get("FIREBASE_API_KEY"),
@@ -152,12 +150,12 @@ const auth = getAuth(app);
 
 ## Supabase
 
-To connect to Supabase with Deno, import the
-[supabase-js npm module](https://supabase.com/docs/reference/javascript) with
-the [esm.sh CDN](https://esm.sh/). To learn more about using npm modules in Deno
-with a CDN, see [Using npm packages with CDNs](../node/cdns.md).
+要在 Deno 中连接到 Supabase，使用
+[supabase-js npm 模块](https://supabase.com/docs/reference/javascript)，并使用
+[esm.sh CDN](https://esm.sh/) 导入它。要了解如何在 Deno 中使用 CDN 与 npm
+包，请参阅 [使用 CDN 的 npm 包](../node/cdns.md)。
 
-### Connect to Supabase with the supabase-js npm module
+### 使用 supabase-js npm 模块连接到 Supabase
 
 ```js, ignore
 import { createClient } from "https://esm.sh/@supabase/supabase-js";
@@ -177,19 +175,17 @@ const supabase = createClient(
 );
 ```
 
-## ORMs
+## ORM
 
-Object-Relational Mappings (ORM) define your data models as classes that you can
-persist to a database. You can read and write data in your database through
-instances of these classes.
+对象关系映射（ORM）将您的数据模型定义为可以持久保存到数据库的类。您可以通过这些类的实例在数据库中读取和写入数据。
 
-Deno supports multiple ORMs, including Prisma and DenoDB.
+Deno 支持多个 ORM，包括 Prisma 和 DenoDB。
 
 ### DenoDB
 
-[DenoDB](https://deno.land/x/denodb) is a Deno-specific ORM.
+[DenoDB](https://deno.land/x/denodb) 是一个特定于 Deno 的 ORM。
 
-#### Connect to DenoDB
+#### 连接到 DenoDB
 
 ```ts, ignore
 import {
@@ -211,17 +207,18 @@ const db = new Database(connection);
 
 ## GraphQL
 
-GraphQL is an API query language often used to compose disparate data sources
-into client-centric APIs. To set up a GraphQL API, you should first set up a
-GraphQL server. This server exposes your data as a GraphQL API that your client
-applications can query for data.
+GraphQL 是一个 API 查询语言，通常用于组合不同的数据源以创建面向客户端的
+API。要设置一个 GraphQL API，您首先应该设置一个 GraphQL
+服务器。该服务器将您的数据公开为 GraphQL API，供客户端应用程序查询数据。
 
-### Server
+### 
 
-You can use [gql](https://deno.land/x/gql), an universal GraphQL HTTP middleware
-for Deno, to run a GraphQL API server in Deno.
+服务器
 
-#### Run a GraphQL API server with gql
+您可以使用 [gql](https://deno.land/x/gql)，这是一个通用的 Deno GraphQL HTTP
+中间件，用于在 Deno 中运行 GraphQL API 服务器。
+
+#### 使用 gql 运行 GraphQL API 服务器
 
 ```ts, ignore
 import { Server } from "https://deno.land/std@$STD_VERSION/http/server.ts";
@@ -259,17 +256,17 @@ const s = new Server({
 
 s.listenAndServe();
 
-console.log(`Started on http://localhost:3000`);
+console.log(`已启动，访问地址：http://localhost:3000`);
 ```
 
-### Client
+### 客户端
 
-To make GraphQL client calls in Deno, import the
-[graphql npm module](https://www.npmjs.com/package/graphql) with the
-[esm CDN](https://esm.sh/). To learn more about using npm modules in Deno via
-CDN read [here](../node/cdns.md).
+要在 Deno 中进行 GraphQL 客户端调用，使用
+[graphql npm 模块](https://www.npmjs.com/package/graphql)，并使用
+[esm CDN](https://esm.sh/) 导入它。要了解如何通过 CDN 在 Deno 中使用 npm
+模块，请阅读 [这里](../node/cdns.md)。
 
-#### Make GraphQL client calls with the graphql npm module
+#### 使用 graphql npm 模块进行 GraphQL 客户端调用
 
 ```js, ignore
 import { buildSchema, graphql } from "https://esm.sh/graphql";

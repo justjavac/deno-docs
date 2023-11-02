@@ -1,49 +1,40 @@
-# Import Completions and Intelligent Registries
+# 导入补全和智能注册
 
-The language server, supports completions for URLs.
+语言服务器支持 URL 的补全。
 
-## Local import completions
+## 本地导入补全
 
-When attempting to import a relative module specifier (one that starts with `./`
-or `../`), import completions are provided for directories and files that Deno
-thinks it can run (ending with the extensions `.ts`, `.js`, `.tsx`, `.jsx`, or
-`.mjs`).
+当尝试导入一个相对模块标识符（以 `./` 或 `../` 开头的标识符）时，会为 Deno
+认为可以运行的目录和文件（以扩展名 `.ts`、`.js`、`.tsx`、`.jsx` 或 `.mjs`
+结尾）提供导入补全。
 
-## Workspace import completions
+## 工作区导入补全
 
-When attempting to import a remote URL that isn't configured as a registry (see
-below), the extension will provide remote modules that are already part of the
-workspace.
+当尝试导入一个远程 URL
+但未配置为注册表（见下文）时，扩展将提供已包含在工作区中的远程模块。
 
-## Module registry completions
+## 模块注册表补全
 
-Module registries that support it can be configured for auto completion. This
-provides a handy way to explore a module registry from the "comfort" of your
-IDE.
+支持它的模块注册表可配置为自动完成。这为您提供了一种从您的 IDE
+的“舒适区”探索模块注册表的便捷方式。
 
-### Auto-discovery
+### 自动发现
 
-The Deno language server, by default, will attempt to determine if a server
-supports completion suggestions. If the host/origin has not been explicitly
-configured, it will check the server, and if it supports completion suggestions
-you will be prompted to choose to enable it or not.
+Deno
+语言服务器默认情况下将尝试确定服务器是否支持补全建议。如果主机/来源未明确配置，它将检查服务器，如果支持补全建议，您将被提示选择启用或不启用。
 
-You should only enable this for registries you trust, as the remote server could
-provide suggestions for modules which are an attempt to get you to run
-un-trusted code.
+您应仅为信任的注册表启用此功能，因为远程服务器可能提供用于运行不受信任代码的模块的建议。
 
-### Configuration
+### 配置
 
-Settings for configuring registries for auto completions:
+用于配置自动完成的注册表的设置：
 
-- `deno.suggest.imports.autoDiscover` - If enabled, when the language server
-  discovers a new origin that isn't explicitly configured, it will check to see
-  if that origin supports import completions and prompt you to enable it or not.
-  This is `true` by default.
-- `deno.suggest.imports.hosts` - These are the _origins_ that are configured to
-  provide import completions. The target host needs to support Deno import
-  completions (detailed below). The value is an object where the key is the host
-  and the value is if it is enabled or not. For example:
+- `deno.suggest.imports.autoDiscover` -
+  如果启用，当语言服务器发现未明确配置的新来源时，它将检查该来源是否支持导入补全，并提示您是否启用它。默认值为
+  `true`。
+- `deno.suggest.imports.hosts` - 这些是配置为提供导入补全的
+  _来源_。目标主机需要支持 Deno
+  导入补全（下文有详细说明）。该值是一个对象，其中键是主机，值是启用或禁用。例如：
 
   ```json
   {
@@ -53,76 +44,63 @@ Settings for configuring registries for auto completions:
   }
   ```
 
-### How does it work?
+### 它是如何工作的？
 
-On startup of the extension and language server, Deno will attempt to fetch
-`/.well-known/deno-import-intellisense.json` from any of the hosts that are
-configured and enabled. This file provides the data necessary to form auto
-completion of module specifiers in a highly configurable way (meaning you aren't
-tied into any particular module registry in order to get a rich editor
-experience).
+在扩展和语言服务器启动时，Deno 将尝试从配置并启用的主机中获取
+`/.well-known/deno-import-intellisense.json`。此文件提供了以高度可配置的方式形成模块标识符的自动完成所需的数据（这意味着您不必绑定到特定的模块注册表以获得丰富的编辑器体验）。
 
-As you build or edit your module specifier, Deno will go and fetch additional
-parts of the URL from the host based on what is configured in the JSON
-configuration file.
+当您构建或编辑模块标识符时，Deno 将根据 JSON 配置文件中的内容从主机获取 URL
+的附加部分。
 
-When you complete the module specifier, if it isn't already cached locally for
-you, Deno will attempt to fetch the completed specifier from the registry.
+当您完成模块标识符时，如果它尚未在本地缓存中，Deno
+将尝试从注册表中获取已完成的模块标识符。
 
-### Does it work with all remote modules?
+### 它适用于所有远程模块吗？
 
-No, as the extension and Deno need to understand how to _find_ modules. The
-configuration file provides a highly flexible way to allow people to describe
-how to build up a URL, including supporting things like semantic versioning if
-the module registry supports it.
+不是，因为扩展和 Deno 需要了解如何 _查找_
+模块。配置文件提供了一种高度灵活的方式，使人们能够描述如何构建
+URL，包括支持语义版本控制的模块注册表。
 
-## Registry support for import completions
+## 支持导入补全的注册表
 
-In order to support having a registry be discoverable by the Deno language
-server, the registry needs to provide a few things:
+为了支持 Deno 语言服务器可以发现的注册表，注册表需要提供一些内容：
 
-- A schema definition file. This file needs to be located at
-  `/.well-known/deno-import-intellisense.json`. This file provides the
-  configuration needed to allow the Deno language server _query_ the registry
-  and construct import specifiers.
-- A series of API endpoints that provide the values to be provided to the user
-  to complete an import specifier.
+- 一个模式定义文件。此文件需要位于
+  `/.well-known/deno-import-intellisense.json`。此文件提供了允许 Deno 语言服务器
+  _查询_ 注册表和构建导入标识符所需的配置。
 
-### Configuration schema
+- 一系列提供要提供给用户的导入标识符的值的 API 端点，以完成导入标识符。
 
-The JSON response to the schema definition needs to be an object with two
-required properties:
+### 配置模式
 
-- `"version"` - a number, which must be equal to `1` or `2`.
-- `"registries"` - an array of registry objects which define how the module
-  specifiers are constructed for this registry.
+对于模式定义的 JSON 响应，需要具有两个必需属性：
 
-[There is a JSON Schema document which defines this
-schema available as part of the CLI's source code.](https://deno.land/x/deno/cli/schemas/registry-completions.v2.json)
+- `"version"` - 一个数字，必须等于 `1` 或 `2`。
 
-While the v2 supports more features than v1 did, they were introduced in a
-non-breaking way, and the language server automatically handles v1 or v2
-versions, irrespective of what version is supplied in the `"version"` key, so
-technically a registry could profess itself to be v1 but use all the v2
-features. This is not recommended though, because while there is no specific
-branches in code to support the v2 features currently, that doesn't mean there
-will not be in the future in order to support a _v3_ or whatever.
+- `"registries"` - 一个定义了为此注册表构建模块标识符的注册表对象数组。
 
-### Registries
+[有一个 JSON 模式文档可在 CLI 源代码的一部分找到，它定义了此模式。](https://deno.land/x/deno/cli/schemas/registry-completions.v2.json)
 
-In the configuration schema, the `"registries"` property is an array of
-registries, which are objects which contain two required properties:
+尽管 v2 支持比 v1 更多的功能，但它们以一种非破坏性的方式引入，语言服务器自动处理
+v1 或 v2 版本，不管在 `"version"`
+键中提供哪个版本，所以从技术上讲，注册表可以宣称自己是 v1，但使用所有 v2
+的功能。但不建议这样做，因为虽然目前代码中没有特定的分支来支持 v2
+功能，但这并不意味着未来不会出现这样的分支以支持 _v3_ 或其他版本。
 
-- `"schema"` - a string, which is an Express-like path matching expression,
-  which defines how URLs are built on the registry. The syntax is directly based
-  on [path-to-regexp](https://github.com/pillarjs/path-to-regexp). For example,
-  if the following was the specifier for a URL on the registry:
+### 注册表
+
+在配置模式中，`"registries"` 属性是包含两个必需属性的注册表对象数组：
+
+- `"schema"` - 一个字符串，它是类似 Express
+  的路径匹配表达式，用于定义在注册表上构建 URL 的方式。语法直接基于
+  [path-to-regexp](https://github.com/pillarjs/path-to-regexp)。例如，如果以下是注册表上的
+  URL 的标识符：
 
   ```
   https://example.com/a_package@v1.0.0/mod.ts
   ```
 
-  The schema value might be something like this:
+  模式值可能如下所示：
 
   ```json
   {
@@ -135,35 +113,31 @@ registries, which are objects which contain two required properties:
   }
   ```
 
-- `"variables"` - for the keys defined in the schema, a corresponding variable
-  needs to be defined, which informs the language server where to fetch
-  completions for that part of the module specifier. In the example above, we
-  had 3 variables of `package`, `version` and `path`, so we would expect a
-  variable definition for each.
+- `"variables"` -
+  对于在模式中定义的键，需要定义相应的变量，以通知语言服务器从模块标识符的那一部分获取补全。在上面的示例中，我们有
+  3 个变
 
-### Variables
+量，`package`、`version` 和 `path`，因此我们期望为每个变量定义。
 
-In the configuration schema, the `"variables"` property is an array of variable
-definitions, which are objects with two required properties:
+### 变量
 
-- `"key"` - a string which matches the variable key name specifier in the
-  `"schema"` property.
-- `"documentation"` - An optional URL where the language server can fetch the
-  documentation for an individual variable entry. Variables can be substituted
-  in to build the final URL. Variables with a single brace format like
-  `${variable}` will be added as matched out of the string, and those with
-  double format like `${{variable}}` will be percent-encoded as a URI component
-  part.
-- `"url"` - A URL where the language server can fetch the completions for the
-  variable. Variables can be substituted in to build the URL. Variables with a
-  single brace format like `${variable}` will be added as matched out of the
-  string, and those with double format like `${{variable}}` will be
-  percent-encoded as a URI component part. If the variable the value of the
-  `"key"` is included, then the language server will support incremental
-  requests for partial modules, allowing the server to provide completions as a
-  user types part of the variable value. If the URL is not fully qualified, the
-  URL of the schema file will be used as a base. In our example above, we had
-  three variables and so our variable definition might look like:
+在配置模式中，`"variables"` 属性是变量定义数组，这些对象具有两个必需属性：
+
+- `"key"` - 一个与模式属性中的变量键名匹配的字符串。
+
+- `"documentation"` - 一个可选的
+  URL，语言服务器可以从中获取单个变量条目的文档。变量可以被替换以构建最终的
+  URL。具有单括号格式的变量，如
+  `${variable}`，将被添加为字符串中的匹配部分，而具有双括号格式的变量，如
+  `${{variable}}`，将被作为 URI 组件部分进行百分比编码。
+
+- `"url"` - 语言服务器可以从中获取变量的补全的 URL。变量可以被替换以构建
+  URL。具有单括号格式的变量，如
+  `${variable}`，将被添加为字符串中的匹配部分，而具有双括号格式的变量，如
+  `${{variable}}`，将被作为 URI 组件部分进行百分比编码。如果包含 `"key"`
+  的值，则语言服务器将支持对部分模块的增量请求，允许服务器在用户输入变量值的一部分时提供补全。如果
+  URL 不是完全合格的，将使用模式文件的 URL
+  作为基础。在我们上面的示例中，我们有三个变量，所以我们的变量定义可能如下所示：
 
   ```json
   {
@@ -192,26 +166,23 @@ definitions, which are objects with two required properties:
   }
   ```
 
-#### URL endpoints
+#### URL 端点
 
-The response from each URL endpoint needs to be a JSON document that is an array
-of strings or a _completions list_:
+每个 URL 端点的响应需要是一个字符串数组或一个 _补全列表_ 的 JSON 文档：
 
 ```typescript
 interface CompletionList {
-  /** The list (or partial list) of completion items. */
+  /** 补全项列表（或部分列表）。 */
   items: string[];
-  /** If the list is a partial list, and further queries to the endpoint will
-   * change the items, set `isIncomplete` to `true`. */
+  /** 如果列表是部分列表，并且对端点的进一步查询将更改项目，请将 `isIncomplete` 设置为 `true`。 */
   isIncomplete?: boolean;
-  /** If one of the items in the list should be preselected (the default
-   * suggestion), then set the value of `preselect` to the value of the item. */
+  /** 如果列表中的某一项应预先选择（默认建议），则将 `preselect` 的值设置为该项的值。 */
   preselect?: string;
 }
 ```
 
-Extending our example from above the URL `https://api.example.com/packages`
-would be expected to return something like:
+从上面的示例中，URL `https://api.example.com/packages`
+预计将返回类似以下的内容：
 
 ```json
 [
@@ -221,7 +192,7 @@ would be expected to return something like:
 ]
 ```
 
-Or something like this:
+或类似以下：
 
 ```json
 {
@@ -235,8 +206,8 @@ Or something like this:
 }
 ```
 
-And a query to `https://api.example.com/packages/a_package/versions` would
-return something like:
+而对 `https://api.example.com/packages/a_package/versions`
+的查询将返回类似以下的内容：
 
 ```json
 [
@@ -247,7 +218,7 @@ return something like:
 ]
 ```
 
-Or:
+或：
 
 ```json
 {
@@ -261,9 +232,8 @@ Or:
 }
 ```
 
-And a query to
-`https://api.example.com/packages/a_package/versions/v1.0.0/paths` would return
-something like:
+查询 `https://api.example.com/packages/a_package/versions/v1.0.0/paths`
+将返回类似于：
 
 ```json
 [
@@ -273,7 +243,7 @@ something like:
 ]
 ```
 
-Or:
+或：
 
 ```json
 {
@@ -287,15 +257,14 @@ Or:
 }
 ```
 
-#### Multi-part variables and folders
+#### 多部分变量和文件夹
 
-Navigating large file listings can be a challenge for the user. With the
-registry V2, the language server has some special handling of returned items to
-make it easier to complete a path to file in sub-folders easier.
+对于用户来说，导航大型文件列表可能是一项挑战。通过 注册表
+V2，语言服务器对返回的项目进行了特殊处理 以更容易完成子文件夹中的文件路径。
 
-When an item is returned that ends in `/`, the language server will present it
-to the client as a "folder" which will be represented in the client. So a
-registry wishing to provide sub-navigation to a folder structure like this:
+当返回以 `/` 结尾的项目时，语言服务器将其呈现给客户端
+作为一个“文件夹”，将在客户端中表示。因此
+希望提供子导航到像这样的文件夹结构的注册表：
 
 ```
 examples/
@@ -307,10 +276,9 @@ sub-mod/
 mod.ts
 ```
 
-And had a schema like `/:package([a-z0-9_]*)@:version?/:path*` and an API
-endpoint for `path` like
-`https://api.example.com/packages/${package}/${{version}}/${path}` would want to
-respond to the path of `/packages/pkg/1.0.0/` with:
+并且具有类似 `/:package([a-z0-9_]*)@:version?/:path*` 的架构和 API `path`
+的端点如下 `https://api.example.com/packages/${package}/${{version}}/${path}`
+将希望 以 `/packages/pkg/1.0.0/` 的路径响应：
 
 ```json
 {
@@ -323,7 +291,7 @@ respond to the path of `/packages/pkg/1.0.0/` with:
 }
 ```
 
-And to a path of `/packages/pkg/1.0.0/examples/` with:
+以 `/packages/pkg/1.0.0/examples/` 的路径响应：
 
 ```json
 {
@@ -335,14 +303,12 @@ And to a path of `/packages/pkg/1.0.0/examples/` with:
 }
 ```
 
-This would allow the user to select the folder `examples` in the IDE before
-getting the listing of what was in the folder, making it easier to navigate the
-file structure.
+这将允许用户在获取文件结构之前选择 IDE 中的文件夹 `examples`，
+从而更容易导航文件结构。
 
-#### Documentation endpoints
+#### 文档端点
 
-Documentation endpoints should return a documentation object with any
-documentation related to the requested entity:
+文档端点应返回与请求的实体相关的文档对象：
 
 ```typescript
 interface Documentation {
@@ -351,41 +317,33 @@ interface Documentation {
 }
 ```
 
-For extending the example from above, a query to
-`https://api.example.com/packages/a_package` would return something like:
+为了扩展上面的示例，查询到 `https://api.example.com/packages/a_package`
+将返回类似于：
 
 ```json
 {
   "kind": "markdown",
-  "value": "some _markdown_ `documentation` here..."
+  "value": "一些 _markdown_ `documentation` 在这里..."
 }
 ```
 
-### Schema validation
+### 模式验证
 
-When the language server is started up (or the configuration for the extension
-is changed) the language server will attempt to fetch and validate the schema
-configuration for the domain hosts specifier in the configuration.
+当语言服务器启动时（或扩展的配置更改时），语言服务器将尝试获取并验证配置中域主机指定的架构配置。
 
-The validation attempts to make sure that all registries defined are valid, that
-the variables contained in those schemas are specified in the variables, and
-that there aren't extra variables defined that are not included in the schema.
-If the validation fails, the registry won't be enabled and the errors will be
-logged to the Deno Language Server output in vscode.
+验证试图确保所有定义的注册表都是有效的，那些架构中包含的变量在变量中指定，并且没有定义未包含在架构中的额外变量。
+如果验证失败，注册表将不会启用，并且错误将记录到 vscode 中的 Deno Language
+Server 输出中。
 
-If you are a registry maintainer and need help, advice, or assistance in setting
-up your registry for auto-completions, feel free to open up an
-[issue](https://github.com/denoland/deno/issues/new?labels=lsp&title=lsp%3A%20registry%20configuration)
-and we will try to help.
+如果您是注册表维护者，并且需要帮助、建议或协助设置 为自动完成而打开一个
+[问题](https://github.com/denoland/deno/issues/new?labels=lsp&title=lsp%3A%20registry%20configuration)
+我们将尽力提供帮助。
 
-## Known registries
+## 已知的注册表
 
-The following is a list of registries known to support the scheme. All you need
-to do is add the domain to `deno.suggest.imports.hosts` and set the value to
-`true`:
+以下是已知支持该方案的注册表列表。您只需将域添加到 `deno.suggest.imports.hosts`
+中，并将值设置为 `true`：
 
-- `https://deno.land/` - both the 3rd party `/x/` registry and the `/std/`
-  library registry are available.
-- `https://nest.land/` - a module registry for Deno on the blockweave.
-- `https://crux.land/` - a free open-source registry for permanently hosting
-  small scripts.
+- `https://deno.land/` - 3rd party `/x/` 注册表和 `/std/` 库注册表都可用。
+- `https://nest.land/` - 适用于 Deno 的模块注册表，基于 blockweave。
+- `https://crux.land/` - 用于永久托管小型脚本的自由开源注册表。

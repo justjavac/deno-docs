@@ -1,88 +1,78 @@
-# Configuring TypeScript in Deno
+# 在 Deno 中配置 TypeScript
 
-TypeScript comes with a lot of different options that can be configured, but
-Deno strives to make it easy to use TypeScript with Deno. Lots of different
-options frustrates that goal. To make things easier, Deno configures TypeScript
-to "just work" and shouldn't require additional configuration.
+TypeScript 提供了许多不同的配置选项，但 Deno 旨在使 TypeScript 与 Deno
+一起使用变得简单。各种不同的选项可能会让人感到困惑。为了使事情变得更容易，Deno
+配置了 TypeScript 以 "即插即用"，不需要额外的配置。
 
-That being said, Deno does support using a TypeScript configuration file. To use
-a TypeScript configuration file with Deno, you may provide a path on the command
-line, or use the default. For example:
+话虽如此，Deno 确实支持使用 TypeScript 配置文件。要在 Deno 中使用 TypeScript
+配置文件，可以在命令行上提供路径，或者使用默认设置。例如：
 
 ```
 > deno run --config ./deno.json main.ts
 ```
 
-> ⚠️ Do consider though that if you are creating libraries that require a
-> configuration file, all of the consumers of your modules will require that
-> configuration file too if you distribute your modules as TypeScript. In
-> addition, there could be settings you do in the configuration file that make
-> other TypeScript modules incompatible. Honestly it is best to use the Deno
-> defaults and to think long and hard about using a configuration file.
+> ⚠️ 请注意，如果您正在创建需要配置文件的库，那么如果将您的模块分发为
+> TypeScript，那么您模块的所有使用者也将需要该配置文件。此外，配置文件中可能有一些设置，会使其他
+> TypeScript 模块不兼容。老实说，最好使用 Deno
+> 的默认设置，并仔细考虑是否使用配置文件。
 
-> ⚠️ Deno v1.14 started supporting a more general configuration file that is no
-> longer confined to specifying TypeScript compiler settings. Using
-> `tsconfig.json` as a file name will still work, but we recommend to use
-> `deno.json` or `deno.jsonc`, as an automatic lookup of this file is planned
-> for an upcoming release.
+> ⚠️ Deno v1.14 开始支持更通用的配置文件，不再仅限于指定 TypeScript
+> 编译器设置。使用 `tsconfig.json` 作为文件名仍然有效，但我们建议使用
+> `deno.json` 或 `deno.jsonc`，因为计划在即将发布的版本中自动查找此文件。
 
-## How Deno uses a configuration file
+## Deno 如何使用配置文件
 
-Deno does not process a TypeScript configuration file like `tsc` does, as there
-are lots of parts of a TypeScript configuration file that are meaningless in a
-Deno context or would cause Deno to not function properly if they were applied.
+Deno 不像 `tsc` 那样处理 TypeScript 配置文件，因为 TypeScript
+配置文件的许多部分在 Deno 上下文中没有意义，或者如果应用了这些部分会导致 Deno
+无法正常工作。
 
-Deno only looks at the `compilerOptions` section of a configuration file, and
-even then it only considers certain compiler options, with the rest being
-ignored.
+Deno 只关注配置文件的 `compilerOptions`
+部分，即使在这个部分，它只考虑某些编译器选项，其余的选项会被忽略。
 
-Here is a table of compiler options that can be changed, their default in Deno
-and any other notes about that option:
+下面是可以更改的编译器选项的表格，它们在 Deno
+中的默认值以及有关该选项的其他注释：
 
-| Option                           | Default                 | Notes                                                                                                                                     |
-| -------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `allowJs`                        | `true`                  | This almost never needs to be changed                                                                                                     |
-| `allowUnreachableCode`           | `false`                 |                                                                                                                                           |
-| `allowUnusedLabels`              | `false`                 |                                                                                                                                           |
-| `checkJs`                        | `false`                 | If `true` causes TypeScript to type check JavaScript                                                                                      |
-| `jsx`                            | `"react"`               |                                                                                                                                           |
-| `jsxFactory`                     | `"React.createElement"` |                                                                                                                                           |
-| `jsxFragmentFactory`             | `"React.Fragment"`      |                                                                                                                                           |
-| `keyofStringsOnly`               | `false`                 |                                                                                                                                           |
-| `lib`                            | `[ "deno.window" ]`     | The default for this varies based on other settings in Deno. If it is supplied, it overrides the default. See below for more information. |
-| `noErrorTruncation`              | `false`                 |                                                                                                                                           |
-| `noFallthroughCasesInSwitch`     | `false`                 |                                                                                                                                           |
-| `noImplicitAny`                  | `true`                  |                                                                                                                                           |
-| `noImplicitReturns`              | `false`                 |                                                                                                                                           |
-| `noImplicitThis`                 | `true`                  |                                                                                                                                           |
-| `noImplicitUseStrict`            | `true`                  |                                                                                                                                           |
-| `noStrictGenericChecks`          | `false`                 |                                                                                                                                           |
-| `noUnusedLocals`                 | `false`                 |                                                                                                                                           |
-| `noUnusedParameters`             | `false`                 |                                                                                                                                           |
-| `noUncheckedIndexedAccess`       | `false`                 |                                                                                                                                           |
-| `reactNamespace`                 | `React`                 |                                                                                                                                           |
-| `strict`                         | `true`                  |                                                                                                                                           |
-| `strictBindCallApply`            | `true`                  |                                                                                                                                           |
-| `strictFunctionTypes`            | `true`                  |                                                                                                                                           |
-| `strictPropertyInitialization`   | `true`                  |                                                                                                                                           |
-| `strictNullChecks`               | `true`                  |                                                                                                                                           |
-| `suppressExcessPropertyErrors`   | `false`                 |                                                                                                                                           |
-| `suppressImplicitAnyIndexErrors` | `false`                 |                                                                                                                                           |
-| `useUnknownInCatchVariables`     | `false`                 |                                                                                                                                           |
+| 选项                             | 默认值                  | 注释                                                                                         |
+| -------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------- |
+| `allowJs`                        | `true`                  | 这几乎不需要更改                                                                             |
+| `allowUnreachableCode`           | `false`                 |                                                                                              |
+| `allowUnusedLabels`              | `false`                 |                                                                                              |
+| `checkJs`                        | `false`                 | 如果设置为 `true`，会导致 TypeScript 对 JavaScript 进行类型检查                              |
+| `jsx`                            | `"react"`               |                                                                                              |
+| `jsxFactory`                     | `"React.createElement"` |                                                                                              |
+| `jsxFragmentFactory`             | `"React.Fragment"`      |                                                                                              |
+| `keyofStringsOnly`               | `false`                 |                                                                                              |
+| `lib`                            | `[ "deno.window" ]`     | 默认值因 Deno 中其他设置而变化。如果提供它，它会覆盖默认值。有关更多信息，请参见下面的内容。 |
+| `noErrorTruncation`              | `false`                 |                                                                                              |
+| `noFallthroughCasesInSwitch`     | `false`                 |                                                                                              |
+| `noImplicitAny`                  | `true`                  |                                                                                              |
+| `noImplicitReturns`              | `false`                 |                                                                                              |
+| `noImplicitThis`                 | `true`                  |                                                                                              |
+| `noImplicitUseStrict`            | `true`                  |                                                                                              |
+| `noStrictGenericChecks`          | `false`                 |                                                                                              |
+| `noUnusedLocals`                 | `false`                 |                                                                                              |
+| `noUnusedParameters`             | `false`                 |                                                                                              |
+| `noUncheckedIndexedAccess`       | `false`                 |                                                                                              |
+| `reactNamespace`                 | `React`                 |                                                                                              |
+| `strict`                         | `true`                  |                                                                                              |
+| `strictBindCallApply`            | `true`                  |                                                                                              |
+| `strictFunctionTypes`            | `true`                  |                                                                                              |
+| `strictPropertyInitialization`   | `true`                  |                                                                                              |
+| `strictNullChecks`               | `true`                  |                                                                                              |
+| `suppressExcessPropertyErrors`   | `false`                 |                                                                                              |
+| `suppressImplicitAnyIndexErrors` | `false`                 |                                                                                              |
+| `useUnknownInCatchVariables`     | `false`                 |                                                                                              |
 
-For a full list of compiler options and how they affect TypeScript, please refer
-to the
-[TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
+有关编译器选项的完整列表以及它们如何影响 TypeScript，请参考
+[TypeScript 手册](https://www.typescriptlang.org/docs/handbook/compiler-options.html)。
 
-## What an implied tsconfig.json looks like
+## 隐含的 tsconfig.json 长什么样
 
-It is impossible to get `tsc` to behave like Deno. It is also difficult to get
-the TypeScript language service to behave like Deno. This is why we have built a
-language service directly into Deno. That being said, it can be useful to
-understand what is implied.
+让 `tsc` 表现得像 Deno 是不可能的。让 TypeScript 语言服务表现得像 Deno
+也很困难。这就是为什么我们在 Deno
+中直接构建了语言服务的原因。话虽如此，了解隐含的配置也是有用的。
 
-If you were to write a `tsconfig.json` for Deno, it would look something like
-this:
+如果你要为 Deno 编写一个 `tsconfig.json`，它会类似于这样：
 
 ```json
 {
@@ -103,69 +93,59 @@ this:
 }
 ```
 
-You can't copy paste this into a configuration file and get it to work,
-specifically because of the built-in type libraries that are custom to Deno
-which are provided to the TypeScript compiler. This can somewhat be mocked by
-running `deno types` on the command line and piping the output to a file and
-including that in the files as part of the program, removing the `"lib"` option,
-and setting the `"noLib"` option to `true`.
+你不能简单复制粘贴这个到配置文件中并使其工作，具体原因是 Deno 为 TypeScript
+编译器提供了自定义的类型库。这可以通过在命令行上运行 `deno types`
+并将输出导出到文件中，然后将其包含在程序的文件中，移除 `"lib"` 选项并将
+`"noLib"` 选项设置为 `true` 来模拟。
 
-If you use the `--unstable` flag, Deno will change the `"lib"` option to
-`[ "deno.window", "deno.unstable" ]`. If you are trying to load a worker, that
-is type checked with `"deno.worker"` instead of `"deno.window"`. See
-[Type Checking Web Workers](./types.md#type-checking-web-workers) for more
-information on this.
+如果使用 `--unstable` 标志，Deno 将将 `"lib"` 选项更改为
+`[ "deno.window", "deno.unstable" ]`。如果要加载一个 worker，将使用 `" den
 
-## Using the "lib" property
+o.worker "`进行类型检查，而不是`" deno.window "`。请查看
+[Type Checking Web Workers](./types.md#type-checking-web-workers)
+获取更多相关信息。
 
-Deno has several libraries built into it that are not present in other
-platforms, like `tsc`. This is what enables Deno to properly check code written
-for Deno. In some situations though, this automatic behavior can cause
-challenges, for example like writing code that is intended to also run in a
-browser. In these situations the `"lib"` property of a `compilerOptions` can be
-used to modify the behavior of Deno when type checking code.
+## 使用 "lib" 属性
 
-The built-in libraries that are of interest to users:
+Deno 内置了一些库，这些库在其他平台（如 `tsc`）中不存在。这就是使 Deno
+能够正确检查为 Deno
+编写的代码的原因。然而，在某些情况下，这种自动行为可能会带来挑战，例如编写旨在在浏览器中运行的代码。在这些情况下，`compilerOptions`
+的 `"lib"` 属性可以用于修改 Deno 在类型检查代码时的行为。
 
-- `"deno.ns"` - This includes all the custom `Deno` global namespace APIs plus
-  the Deno additions to `import.meta`. This should generally not conflict with
-  other libraries or global types.
-- `"deno.unstable"` - This includes the addition unstable `Deno` global
-  namespace APIs.
-- `"deno.window"` - This is the "default" library used when checking Deno main
-  runtime scripts. It includes the `"deno.ns"` as well as other type libraries
-  for the extensions that are built into Deno. This library will conflict with
-  libraries like `"dom"` and `"dom.iterable"` that are standard TypeScript
-  libraries.
-- `"deno.worker"` - This is the library used when checking a Deno web worker
-  script. For more information about web workers, check out
-  [Type Checking Web Workers](./types.md#type-checking-web-workers).
-- `"dom.asynciterable"` - TypeScript currently does not include the DOM async
-  iterables that Deno implements (plus several browsers), so we have implemented
-  it ourselves until it becomes available in TypeScript.
+对用户感兴趣的内置库有：
 
-These are common libraries that Deno doesn't use, but are useful when writing
-code that is intended to also work in another runtime:
+- `"deno.ns"` - 包括所有自定义的 `Deno` 全局命名空间 API，以及 `import.meta` 的
+  Deno 扩展。这通常不会与其他库或全局类型冲突。
+- `"deno.unstable"` - 包括不稳定的 `Deno` 全局命名空间 API。
+- `"deno.window"` - 这是检查 Deno 主运行时脚本时使用的 "默认" 库。它包括
+  `"deno.ns"` 以及内置到 Deno 的扩展的其他类型库。这个库会与标准 TypeScript
+  类库，如 `"dom"` 和 `"dom.iterable"` 冲突。
+- `"deno.worker"` - 这是在检查 Deno Web Worker 脚本时使用的库。有关 Web Worker
+  的更多信息，请查看
+  [Type Checking Web Workers](./types.md#type-checking-web-workers)。
+- `"dom.asynciterable"` - TypeScript 目前不包括 Deno 实现的 DOM
+  异步可迭代性，所以我们自己实现了它，直到它在 TypeScript 中可用。
 
-- `"dom"` - The main browser global library that ships with TypeScript. The type
-  definitions conflict in many ways with `"deno.window"` and so if `"dom"` is
-  used, then consider using just `"deno.ns"` to expose the Deno specific APIs.
-- `"dom.iterable"` - The iterable extensions to the browser global library.
-- `"scripthost"` - The library for the Microsoft Windows Script Host.
-- `"webworker"` - The main library for web workers in the browser. Like `"dom"`
-  this will conflict with `"deno.window"` or `"deno.worker"`, so consider using
-  just `"deno.ns"` to expose the Deno specific APIs.
-- `"webworker.importscripts"` - The library that exposes the `importScripts()`
-  API in the web worker.
-- `"webworker.iterable"` - The library that adds iterables to objects within a
-  web worker. Modern browsers support this.
+这些是 Deno 不使用的常见库，但在编写旨在在其他运行时环境中运行的代码时非常有用：
 
-### Targeting Deno and the Browser
+- `"dom"` - 随 TypeScript 一起提供的主要浏览器全局库。类型定义在许多方面与
+  `"deno.window"` 冲突，因此如果使用 `"dom"`，则考虑只使用 `"deno.ns"` 来公开
+  Deno 特定的 API。
+- `"dom.iterable"` - 浏览器全局库的可迭代扩展。
+- `"scripthost"` - 用于 Microsoft Windows Script Host 的库。
+- `"webworker"` - 浏览器中 Web Worker 的主要库。与 `"dom"` 类似，它将与
+  `"deno.window"` 或 `"deno.worker"` 冲突，因此考虑只使用 `"deno.ns"` 来公开
+  Deno 特定的 API。
+- `"webworker.importscripts"` - 该库公开了 Web Worker 中的 `importScripts()`
+  API。
+- `"webworker.iterable"` - 该库为 Web Worker
+  内的对象添加了可迭代性。现代浏览器支持此功能。
 
-A common use case is writing code that works in Deno and the browser: using a
-conditional check to determine the environment in which the code is executing
-before using any APIs which are exclusive to one or the other. If that is the
-case, a common configuration of a `compilerOptions` would look like this:
+### 针对 Deno 和浏览器的目标
+
+一个常见的用例是编写适用于 Deno 和浏览器的代码：在使用专门适用于其中一个的 API
+之前，使用条件检查来确定代码正在执行的环境。如果是这种情况，`compilerOptions`
+的常见配置如下：
 
 ```json
 {
@@ -176,10 +156,10 @@ case, a common configuration of a `compilerOptions` would look like this:
 }
 ```
 
-This should allow most code to be type checked properly by Deno.
+这应该允许 Deno 正确地类型检查大多数代码。
 
-If you expect to run the code in Deno with the `--unstable` flag, then you will
-want to add that library to the mix as well:
+如果您期望在 Deno 中使用 `--unstable`
+标志运行代码，那么您还需要将该库加入到混合中：
 
 ```json
 {
@@ -196,18 +176,15 @@ want to add that library to the mix as well:
 }
 ```
 
-Typically when you use the `"lib"` option in TypeScript, you need to include an
-"es" library as well. In the case of `"deno.ns"` and `"deno.unstable"`, they
-automatically include `"esnext"` when you bring them in.
+通常在 TypeScript 中使用 `"lib"` 选项时，需要同时包括一个 "es" 库。在
+`"deno.ns"` 和 `"deno.unstable"` 的情况下，当引入它们时，它们会自动包括
+`"esnext"`。
 
-The biggest "danger" when doing something like this, is that the type checking
-is significantly looser, and there is no way to validate that you are doing
-sufficient and effective feature detection in your code, which may lead to what
-could be trivial errors becoming runtime errors.
+这样做的最大 "危险"
+是，类型检查会变得相对松散，无法验证您在代码中执行的功能检测是否足够有效，这可能会导致本应为微不足道的错误变成运行时错误。
 
-## Using the "types" property
+## 使用 "types" 属性
 
-The `"types"` property in `"compilerOptions"` can be used to specify arbitrary
-type definitions to include when type checking a program. For more information
-on this see
-[Using ambient or global types](./types.md#using-ambient-or-global-types).
+`compilerOptions` 中的 `"types"`
+属性可用于在类型检查程序时指定任意类型定义。有关更多信息，请参见
+[使用环境或全局类型](./types.md#using-ambient-or-global-types)。

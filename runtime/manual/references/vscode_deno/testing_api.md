@@ -1,84 +1,63 @@
-# Testing API
+# 测试 API
 
-The `vscode_deno` extension implements a client for the vscode
-[Testing API](https://code.visualstudio.com/api/extension-guides/testing) and
-when using a version of Deno that supports the testing API, tests in your
-project will be displayed within your IDE for Deno enabled projects.
+`vscode_deno` 扩展实现了 vscode 的客户端
+[Testing API](https://code.visualstudio.com/api/extension-guides/testing) 和
+当使用支持测试 API 的 Deno 版本时，您的项目中的测试将显示在 Deno 启用项目的 IDE
+中。
 
-## Test display
+## 测试显示
 
-When both the editor and the version of Deno support the testing API, the _Test
-Explorer_ view will activate represented by a beaker icon, which will provide
-you with a side panel of tests that have been discovered in your project.
+当编辑器和 Deno 版本都支持测试 API 时，_测试资源管理器_
+视图将激活，表示为烧杯图标，它将为您提供一个侧边栏，显示在项目中发现的测试。
 
-Also, next to tests identified in the code, there will be decorations which
-allow you to run and see the status of each test, as well as there will be
-entries in the command palette for tests.
+此外，在代码中标识的测试旁边，将有装饰，允许您运行和查看每个测试的状态，还将在命令面板中有测试的条目。
 
-## Discovering tests
+## 发现测试
 
-Currently, Deno will only discover tests that are part of the "known" modules
-inside a workspace. A module becomes "known" when it is opened in the editor, or
-another module which imports that module is "known" inside the editor.
+目前，Deno
+只会发现作为工作区中的“已知”模块的测试。当在编辑器中打开模块或导入该模块的另一个模块时，该模块将成为“已知”。
 
-In the future, tests will be discovered in a similar fashion to the way the
-`deno test` subcommand discovers tests as part of the root of the workspace.
+将来，测试将以与工作区根目录的 `deno test` 子命令发现测试的方式类似。
 
-## Running tests
+## 运行测试
 
-You can run tests from the Test Explorer view, from the decorations next to the
-tests when viewing the test code, or via the command palette. You can also use
-the filter function in the Text Explorer view to exclude certain tests from a
-test run.
+您可以从测试资源管理器视图、查看测试代码时测试旁边的装饰或命令面板中运行测试。您还可以使用
+Text Explorer 视图中的筛选功能来排除测试运行中的某些测试。
 
-Currently, Deno only supports the "run" test capability. We will be adding a
-debug run mode as well as a coverage run mode in the future. We will also be
-integrating the benchmarking tests as a _tag_, so they can be run (or excluded)
-from your test runs.
+目前，Deno
+只支持“运行”测试功能。将来，我们将添加调试运行模式以及覆盖率运行模式。我们还将将基准测试作为一个
+_标签_ 集成，因此可以在测试运行中运行（或排除）它们。
 
-The Deno language server does not spin up a new CLI subprocess. It instead
-spawns a new thread and JavaScript runtime per test module to execute the tests.
+Deno 语言服务器不会启动新的 CLI 子进程。相反，它为每个测试模块生成一个新的线程和
+JavaScript 运行时来执行测试。
 
-## Test output
+## 测试输出
 
-Any `console.log()` that occurs in your tests will be sent to the test output
-window within vscode.
+您的测试中发生的任何 `console.log()` 都将被发送到 vscode 中的测试输出窗口。
 
-When a test fails, the failure message, including the stack trace, will be
-available when inspecting the test results in vscode.
+当测试失败时，包括堆栈跟踪在内的失败消息将在检查 vscode 中的测试结果时可用。
 
-## How tests are structured
+## 测试的结构
 
-Test will be displayed in the Test Explorer at the top level with the module
-that contains the test. Inside the module will be all the tests that have been
-discovered, and if you are using test steps, they will be included under the
-test.
+测试将显示在测试资源管理器中的顶层，其中包含包含测试的模块。在模块内部，将包括已发现的所有测试，如果您使用测试步骤，它们将包括在测试下方。
 
-In most cases, the Deno language server will be able to statically identify
-tests, but if you are generating tests dynamically, Deno may not be aware of
-them until runtime. In these cases it may not be possible to filter these tests
-out of a run, but they will be added to the explorer view as they are
-encountered.
+在大多数情况下，Deno 语言服务器将能够静态识别测试，但如果您动态生成测试，则 Deno
+可能在运行时不知道它们。在这些情况下，可能无法从运行中筛选这些测试，但它们将在资源管理器视图中遇到时添加。
 
-## Configuration
+## 配置
 
-By default, tests are executed in a similar fashion to if you were to use
-`deno test --allow-all` on the command line. These default arguments can be
-changed by setting the _Deno > Testing: Args_ option in your user or workspace
-settings (or `deno.testing.args` if you are configuring manually). Add
-individual arguments here which you would have used with the `deno test`
-subcommand.
+默认情况下，测试的执行方式类似于在命令行上使用
+`deno test --allow-all`。可以通过设置用户或工作区设置中的 _Deno > Testing: Args_
+选项（或手动配置时的 `deno.testing.args`）来更改这些默认参数。在此处添加您希望与
+`deno test` 子命令一起使用的单独参数。
 
-Based on other settings that you have, those options will be automatically
-merged into the "command line" used when running tests unless explicitly
-provided in the _Deno > Testing: Args_ setting. For example if you have a _Deno:
-Import Map_ (`deno.importMap`) set, the value of that will be used unless you
-have provided an explicit `--import-map` value in the testing args setting.
+根据您的其他设置，这些选项将自动合并到运行测试时使用的“命令行”中，除非在 _Deno >
+Testing: Args_ 设置中明确提供。例如，如果您设置了 _Deno: Import Map_
+(`deno.importMap`)，那么该值将在测试参数设置中提供明确的 `--import-map`
+值之前使用。
 
-## Known limitations and caveats
+## 已知限制和注意事项
 
-Because of the way the Deno test runner runs, it is not possible to exclude (or
-explicitly include) a test step. While the vscode UI will allow you to do this,
-by for example, choosing to run a specific test step, all test steps in that
-test will be run (but vscode will not update the results for them). So if there
-are other side effects in the test case, they may occur.
+由于 Deno 测试运行器的运行方式，无法排除（或显式包括）测试步骤。尽管 vscode
+允许您这样做，例如选择运行特定测试步骤，但该测试中的所有测试步骤都将运行（但
+vscode 不会更新其结果）。因此，如果测试用例中存在其他副作用，它们可能会发生。

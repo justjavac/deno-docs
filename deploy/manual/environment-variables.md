@@ -1,36 +1,30 @@
-# Environment variables
+# 环境变量
 
-Environment variables are useful to store values like access tokens of web
-services. You can create them in the project dashboard and access them in your
-code via the `Deno.env` API. They are made available to both production and
-preview deployments.
+环境变量对于存储诸如 Web
+服务的访问令牌之类的值非常有用。您可以在项目仪表板中创建它们，然后通过
+`Deno.env` API 在您的代码中访问它们。它们可供生产和预览部署使用。
 
-## Add an environment variable
+## 添加环境变量
 
-To add an environment variable to your project, click on the **Settings** button
-on the project page and then on **Environment Variables** from the sidebar. Fill
-in the key/value fields and click on "Add" to add an environment variable to
-your project. A new production deployment will be created automatically with the
-new environment variables.
+要向您的项目添加环境变量，请单击项目页面上的 **设置** 按钮，然后单击侧边栏中的
+**环境变量**。填写键/值字段，然后单击 "添加"
+以将环境变量添加到您的项目。新的生产部署将自动创建，其中包含新的环境变量。
 
 ![environment_variable](../docs-images/fauna2.png)
 
-Note that currently, this is the only way to add an environment variable. Even
-if you deployed with `deployctl` or the Github integration, to add environment
-variables, you must do so from the project page UI.
+请注意，目前，这是添加环境变量的唯一方式。即使您使用 `deployctl` 或 GitHub
+集成部署，也必须从项目页面 UI 中添加环境变量。
 
-### Preset Variables
+### 预设变量
 
-Every deployment has the following environment variables preset, which you can
-access from your code.
+每个部署都有以下预设的环境变量，您可以从您的代码中访问它们。
 
 1. `DENO_REGION`
 
-   It holds the region code of the region in which the deployment is running.
-   You can use this variable to serve region-specific content.
+   它保存部署运行的区域的区域代码。您可以使用此变量提供区域特定的内容。
 
-   You can refer to the region code from the [regions page](regions).
+   您可以从 [regions 页面](regions) 中引用区域代码。
 
 1. `DENO_DEPLOYMENT_ID`
 
-   It holds the ID of the deployment.
+   它保存部署的 ID。

@@ -55,7 +55,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Projects & Organizations",
+      label: "项目与组织",
       items: [
         "manual/deployments",
         "manual/custom-domains",
@@ -66,7 +66,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Connect to Databases",
+      label: "连接到数据库",
       items: [
         {
           type: "link",
@@ -81,7 +81,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Policies & Fair Use",
+      label: "政策与合理使用",
       items: [
         "manual/fair-use-policy",
         "manual/privacy-policy",
@@ -97,7 +97,7 @@ const sidebars = {
   deployTutorialsHome: mainMenu.concat([
     {
       type: "html",
-      value: "<div>Tutorials &amp; Examples</div>",
+      value: "<div>教程和示例</div>",
       className: "section-header",
     },
     {
@@ -106,7 +106,7 @@ const sidebars = {
     },
     {
       type: "link",
-      label: "More on Deno by Example",
+      label: "更多 Deno 示例",
       href: "https://examples.deno.land",
     },
     {
@@ -118,7 +118,7 @@ const sidebars = {
   deployAPIHome: mainMenu.concat([
     {
       type: "html",
-      value: "<div>API Reference</div>",
+      value: "<div>API 参考</div>",
       className: "section-header",
     },
     "api/index",

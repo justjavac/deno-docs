@@ -1,83 +1,83 @@
-# HTTP Request
+# HTTP 请求
 
-The [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request)
-interface is part of the Fetch API and represents the request of fetch().
+[请求](https://developer.mozilla.org/en-US/docs/Web/API/Request) 接口是 Fetch
+API 的一部分，代表了 fetch() 的请求。
 
-- [Constructor](#constructor)
-  - [Parameters](#parameters)
-- [Properties](#properties)
-- [Methods](#methods)
-- [Example](#example)
+- [构造函数](#constructor)
+  - [参数](#parameters)
+- [属性](#properties)
+- [方法](#methods)
+- [示例](#example)
 
-## Constructor
+## 构造函数
 
-The Request() constructor creates a new Request instance.
+Request() 构造函数创建一个新的 Request 实例。
 
 ```ts
 let request = new Request(input, init);
 ```
 
-#### Parameters
+#### 参数
 
-| name     | type                          | optional | description                                                               |
-| -------- | ----------------------------- | -------- | ------------------------------------------------------------------------- |
-| resource | `Request` or `USVString`      | `false`  | The resource can either be a request object or a URL string.              |
-| init     | [`RequestInit`](#requestinit) | `true`   | The init object lets you set optional parameters to apply to the request. |
+| 名称   | 类型                          | 可选    | 描述                                       |
+| ------ | ----------------------------- | ------- | ------------------------------------------ |
+| 资源   | `Request` 或 `USVString`      | `false` | 资源可以是请求对象或 URL 字符串。          |
+| 初始化 | [`RequestInit`](#requestinit) | `true`  | 初始化对象允许您设置应用于请求的可选参数。 |
 
-The return type is a `Request` instance.
+返回类型是 `Request` 实例。
 
 ##### `RequestInit`
 
-| name                         | type                                                                                    | default        | description                                                |
-| ---------------------------- | --------------------------------------------------------------------------------------- | -------------- | ---------------------------------------------------------- |
-| [`method`][method]           | `string`                                                                                | `GET`          | The method of the request.                                 |
-| [`headers`][headers]         | `Headers` or `{ [key: string]: string }`                                                | none           | Th Headers for the request.                                |
-| [`body`][body]               | `Blob`, `BufferSource`, `FormData`, `URLSearchParams`, `USVString`, or `ReadableStream` | none           | The body of the request.                                   |
-| [`cache`][cache]             | `string`                                                                                | none           | The cache mode of the request.                             |
-| [`credentials`][credentials] | `string`                                                                                | `same-origin`  | The credentials mode of the request.                       |
-| [`integrity`][integrity]     | `string`                                                                                | none           | The crypotographic hash of the request's body.             |
-| [`mode`][mode]               | `string`                                                                                | `cors`         | The request mode you want to use.                          |
-| [`redirect`][redirect]       | `string`                                                                                | `follow`       | The mode of how redirects are handled.                     |
-| [`referrer`][referrer]       | `string`                                                                                | `about:client` | A `USVString` specifying `no-referrer`, `client` or a URL. |
+| 名称                         | 类型                                                                                   | 默认值         | 描述                                                      |
+| ---------------------------- | -------------------------------------------------------------------------------------- | -------------- | --------------------------------------------------------- |
+| [`method`][method]           | `string`                                                                               | `GET`          | 请求的方法。                                              |
+| [`headers`][headers]         | `Headers` 或 `{ [key: string]: string }`                                               | 无             | 请求的头部。                                              |
+| [`body`][body]               | `Blob`、`BufferSource`、`FormData`、`URLSearchParams`、`USVString` 或 `ReadableStream` | 无             | 请求的正文。                                              |
+| [`cache`][cache]             | `string`                                                                               | 无             | 请求的缓存模式。                                          |
+| [`credentials`][credentials] | `string`                                                                               | `same-origin`  | 请求的凭据模式。                                          |
+| [`integrity`][integrity]     | `string`                                                                               | 无             | 请求正文的加密哈希。                                      |
+| [`mode`][mode]               | `string`                                                                               | `cors`         | 您想要使用的请求模式。                                    |
+| [`redirect`][redirect]       | `string`                                                                               | `follow`       | 处理重定向的方式。                                        |
+| [`referrer`][referrer]       | `string`                                                                               | `about:client` | 指定 `no-referrer`、`client` 或 URL 的 `USVString` 引用。 |
 
-## Properties
+## 属性
 
-| name                               | type                                       | description                                                                                                                  |
-| ---------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| [`cache`][cache]                   | `string`                                   | The cache mode indicates how the (`default`, `no-cache`, etc) request should be cached by browser.                           |
-| [`credentials`][credentials]       | `string`                                   | The credentials (`omit`, `same-origin`, etc) indicate whether user agent should send cookies in case of CORs of the request. |
-| [`destination`][destination]       | [`RequestDestination`][requestdestination] | The string indicates the type of content being requested.                                                                    |
-| [`body`][body]                     | [`ReadableStream`][readablestream]         | The getter exposes a `ReadableStream` of the body contents.                                                                  |
-| [`bodyUsed`][bodyused]             | `boolean`                                  | Indicates whether the body content is read.                                                                                  |
-| [`url`][url]                       | `USVString`                                | The URL of the request.                                                                                                      |
-| [`headers`][headers]               | [`Headers`](runtime-headers)               | The headers associated with the request.                                                                                     |
-| [`integrity`][integrity]           | `string`                                   | The crypotographic hash of the request's body.                                                                               |
-| [`method`][method]                 | `string`                                   | The request's method (`POST`, `GET`, etc).                                                                                   |
-| [`mode`][mode]                     | `string`                                   | Indicates the mode of the request (e.g. `cors` ).                                                                            |
-| [`redirect`][redirect]             | `string`                                   | The mode of how redirects are handled.                                                                                       |
-| [`referrer`][referrer]             | `string`                                   | The referrer of the request.                                                                                                 |
-| [`referrerPolicy`][referrerpolicy] | `string`                                   | The referrer policy of the request                                                                                           |
+| 名称                               | 类型                                       | 描述                                                                              |
+| ---------------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------- |
+| [`cache`][cache]                   | `string`                                   | 缓存模式指示浏览器应该如何缓存请求（`default`、`no-cache` 等）。                  |
+| [`credentials`][credentials]       | `string`                                   | 凭据（`omit`、`same-origin` 等）指示用户代理是否应在请求的跨源情况下发送 cookie。 |
+| [`destination`][destination]       | [`RequestDestination`][requestdestination] | 字符串指示请求的内容类型。                                                        |
+| [`body`][body]                     | [`ReadableStream`][readablestream]         | getter 公开正文内容的 `ReadableStream`。                                          |
+| [`bodyUsed`][bodyused]             | `boolean`                                  | 指示正文内容是否已读取。                                                          |
+| [`url`][url]                       | `USVString`                                | 请求的 URL。                                                                      |
+| [`headers`][headers]               | [`Headers`](runtime-headers)               | 与请求关联的头部。                                                                |
+| [`integrity`][integrity]           | `string`                                   | 请求正文的加密哈希。                                                              |
+| [`method`][method]                 | `string`                                   | 请求的方法（`POST`、`GET` 等）。                                                  |
+| [`mode`][mode]                     | `string`                                   | 指示请求的模式（例如 `cors`）。                                                   |
+| [`redirect`][redirect]             | `string`                                   | 处理重定向的方式。                                                                |
+| [`referrer`][referrer]             | `string`                                   | 请求的引用。                                                                      |
+| [`referrerPolicy`][referrerpolicy] | `string`                                   | 请求的引用策略。                                                                  |
 
-All the above properties are read only.
+所有上述属性都是只读的。
 
-## Methods
+## 方法
 
-| name                           | description                                                                                 |
-| ------------------------------ | ------------------------------------------------------------------------------------------- |
-| [`arrayBuffer()`][arraybuffer] | Reads the body stream to its completion and returns an `ArrayBuffer` object.                |
-| [`blob()`][blob]               | Reads the body stream to its completion and returns a `Blob` object.                        |
-| [`formData()`][formdata]       | Reads the body stream to its completion and returns a `FormData` object.                    |
-| [`json()`][json]               | Reads the body stream to its completion, parses it as JSON and returns a JavaScript object. |
-| [`text()`][text]               | Reads the body stream to its completion and returns a USVString object (text).              |
-| [`clone()`][clone]             | Clones the Request object.                                                                  |
+| 名称                           | 描述                                                             |
+| ------------------------------ | ---------------------------------------------------------------- |
+| [`arrayBuffer()`][arraybuffer] | 读取正文流直到完成并返回一个 `ArrayBuffer` 对象。                |
+| [`blob()`][blob]               | 读取正文流直到完成并返回一个 `Blob` 对象。                       |
+| [`formData()`][formdata]       | 读取正文流直到完成并返回一个 `FormData` 对象。                   |
+| [`json()`][json]               | 读取正文流直到完成，将其解析为 JSON 并返回一个 JavaScript 对象。 |
+| [`text()`][text]               | 读取正文流直到完成并返回一个 USVString 对象（文本）。            |
+| [`clone()`][clone]             | 克隆 Request 对象。                                              |
 
-## Example
+## 示例
 
 ```ts
 import { serve } from "https://deno.land/std@$STD_VERSION/http/server.ts";
 
 function handler(_req) {
-  // Create a post request
+  // 创建一个 POST 请求
   const request = new Request("https://post.deno.dev", {
     method: "POST",
     body: JSON.stringify({

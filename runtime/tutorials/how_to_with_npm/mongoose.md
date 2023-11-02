@@ -1,33 +1,31 @@
-# How to use Mongoose with Deno
+# 如何在 Deno 中使用 Mongoose
 
-[Mongoose](https://mongoosejs.com/) is a popular, schema-based library that
-models data for [MongoDB](https://www.mongodb.com/). It simplifies writing
-MongoDB validation, casting, and other relevant business logic.
+[Mongoose](https://mongoosejs.com/) 是一种流行的基于模式的库，用于模型化
+[MongoDB](https://www.mongodb.com/) 数据。它简化了编写 MongoDB
+验证、类型转换以及其他相关业务逻辑的过程。
 
-This tutorial will show you how to setup Mongoose and MongoDB with your Deno
-project.
+本教程将向您展示如何在您的 Deno 项目中设置 Mongoose 和 MongoDB。
 
-[View source](https://github.com/denoland/examples/tree/main/with-mongoose) or
-[check out the video guide](https://youtu.be/dmZ9Ih0CR9g).
+[查看源代码](https://github.com/denoland/examples/tree/main/with-mongoose) 或
+[查看视频指南](https://youtu.be/dmZ9Ih0CR9g)。
 
-## Creating a Mongoose Model
+## 创建 Mongoose 模型
 
-Let's create a simple app that connects to MongoDB, creates a `Dinosaur` model,
-and adds and updates a dinosaur to the database.
+让我们创建一个简单的应用程序，连接到 MongoDB，创建一个 `Dinosaur`
+模型，并向数据库添加和更新一个恐龙。
 
-First, we'll create the necessary files and directories:
+首先，我们将创建必要的文件和目录：
 
 ```
 $ touch main.ts && mkdir model && touch model/Dinosaur.ts
 ```
 
-In `/model/Dinosaur.ts`, we'll import `npm:mongoose`, define the [schema], and
-export it:
+在 `/model/Dinosaur.ts` 中，我们将导入 `npm:mongoose`，定义 [模式]，并导出它：
 
 ```ts, ignore
 import { model, Schema } from "npm:mongoose@^6.7";
 
-// Define schema.
+// 定义模式。
 const dinosaurSchema = new Schema({
   name: { type: String, unique: true },
   description: String,
@@ -35,21 +33,21 @@ const dinosaurSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-// Validations
+// 验证
 dinosaurSchema.path("name").required(true, "Dinosaur name cannot be blank.");
 dinosaurSchema.path("description").required(
   true,
   "Dinosaur description cannot be blank.",
 );
 
-// Export model.
+// 导出模型。
 export default model("Dinosaur", dinosaurSchema);
 ```
 
-## Connecting to MongoDB
+## 连接到 MongoDB
 
-Now, in our `main.ts` file, we'll import mongoose and the `Dinosaur` schema, and
-connect to MongoDB:
+现在，在我们的 `main.ts` 文件中，我们将导入 mongoose 和 `Dinosaur`
+模式，并连接到 MongoDB：
 
 ```ts, ignore
 import mongoose from "npm:mongoose@^6.7";
@@ -57,33 +55,32 @@ import Dinosaur from "./model/Dinosaur.ts";
 
 await mongoose.connect("mongodb://localhost:27017");
 
-// Check to see connection status.
+// 检查连接状态。
 console.log(mongoose.connection.readyState);
 ```
 
-Because Deno supports top-level `await`, we're able to simply
-`await mongoose.connect()`.
+由于 Deno 支持顶层 `await`，我们可以简单地 `await mongoose.connect()`。
 
-Running this, we should expect a log of `1`:
+运行此代码，我们应该期望得到一个日志输出为 `1`：
 
 ```shell, ignore
 $ deno run --allow-read --allow-sys --allow-env --allow-net main.ts
 1
 ```
 
-It worked!
+它有效了！
 
-## Manipulating Data
+## 操纵数据
 
-Let's add an instance [method](https://mongoosejs.com/docs/guide.html#methods)
-to our `Dinosaur` schema in `/model/Dinosaur.ts`:
+让我们在 `/model/Dinosaur.ts` 中为我们的 `Dinosaur` 模式添加一个实例
+[方法](https://mongoosejs.com/docs/guide.html#methods)：
 
 ```ts, ignore
 // ./model/Dinosaur.ts
 
-// Methods.
+// 方法。
 dinosaurSchema.methods = {
-  // Update description.
+  // 更新描述。
   updateDescription: async function (description: string) {
     this.description = description;
     return await this.save();
@@ -93,51 +90,50 @@ dinosaurSchema.methods = {
 // ...
 ```
 
-This instance method, `updateDescription`, will allow you to update a record's
-description.
+这个实例方法 `updateDescription` 允许您更新记录的描述。
 
-Back in `main.ts`, let's start adding and manipulating data in MongoDB.
+回到 `main.ts`，让我们开始在 MongoDB 中添加和操作数据。
 
 ```ts, ignore
 // main.ts
 
-// Create a new Dinosaur.
+// 创建一个新的 Dinosaur。
 const deno = new Dinosaur({
   name: "Deno",
   description: "The fastest dinosaur ever lived.",
 });
 
-// // Insert deno.
+// // 插入 deno。
 await deno.save();
 
-// Find Deno by name.
+// 通过名称查找 Deno。
 const denoFromMongoDb = await Dinosaur.findOne({ name: "Deno" });
 console.log(
-  `Finding Deno in MongoDB -- \n  ${denoFromMongoDb.name}: ${denoFromMongoDb.description}`,
+  `在 MongoDB 中查找 Deno -- \n  ${denoFromMongoDb.name}: ${denoFromMongoDb.description}`,
 );
 
-// Update description for Deno and save it.
+// 更新 Deno 的描述并保存。
 await denoFromMongoDb.updateDescription(
   "The fastest and most secure dinosaur ever lived.",
 );
 
-// Check MongoDB to see Deno's updated description.
+// 检查 MongoDB 以查看 Deno 的更新描述。
 const newDenoFromMongoDb = await Dinosaur.findOne({ name: "Deno" });
 console.log(
-  `Finding Deno (again) -- \n  ${newDenoFromMongoDb.name}: ${newDenoFromMongoDb.description}`,
+  `再次查找 Deno -- \n  ${newDenoFromMongoDb.name}: ${newDenoFromMongoDb.description}`,
 );
 ```
 
-Running the code, we get:
+运行代码，我们得到：
 
 ```
-Finding Deno in MongoDB --
+在 MongoDB 中查找 Deno --
   Deno: The fastest dinosaur ever lived.
-Finding Deno (again) --
+再次查找 Deno --
   Deno: The fastest and most secure dinosaur ever lived.
 ```
 
-Boom!
+成功！
 
-For more info on using Mongoose, please refer to
-[their documentation](https://mongoosejs.com/docs/guide.html).
+有关使用 Mongoose 的更多信息，请参考
+[它们的文档](https://mongoosejs.com/docs/guide.html)。

@@ -1,31 +1,25 @@
-# Standard Library
+# 标准库
 
-Deno provides a set of standard modules that are audited by the core team and
-are guaranteed to work with Deno.
+Deno 提供一组由核心团队审核并保证与 Deno 兼容的标准模块。
 
-Standard library is available at: https://deno.land/std
+标准库可在以下网址获取：https://deno.land/std
 
-## Versioning and stability
+## 版本和稳定性
 
-Standard library is not yet stable and therefore it is versioned differently
-than Deno. For latest release consult https://deno.land/std or
-https://deno.land/std/version.ts. The standard library is released each time
-Deno is released.
+标准库尚不稳定，因此其版本控制方式与 Deno 不同。有关最新版本，请查阅
+https://deno.land/std 或 https://deno.land/std/version.ts。标准库在每次 Deno
+发布时一同发布。
 
-We strongly suggest to always use imports with pinned version of standard
-library to avoid unintended changes. For example, rather than linking to the
-default branch of code, which may change at any time, potentially causing
-compilation errors or unexpected behavior:
+我们强烈建议始终使用固定版本的标准库进行导入，以避免意外更改。例如，不要链接到代码的默认分支，因为它可能随时更改，可能导致编译错误或意外行为：
 
 ```typescript
-// import the latest release, this should be avoided
+// 导入最新版本，应避免此做法
 import { copy } from "https://deno.land/std/fs/copy.ts";
 ```
 
-instead, use a version of the std library which is immutable and will not
-change:
+而是使用不变的 std 库版本：
 
 ```typescript
-// imports from v$STD_VERSION of std, never changes
+// 从 std 的 v$STD_VERSION 版本导入，永不更改
 import { copy } from "https://deno.land/std@$STD_VERSION/fs/copy.ts";
 ```

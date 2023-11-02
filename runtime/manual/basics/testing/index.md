@@ -2,113 +2,107 @@
 sidebar_position: 2
 ---
 
-# Testing in Deno
+# 在 Deno 中进行测试
 
-Deno has a built-in test runner that you can use for testing JavaScript or
-TypeScript code.
+Deno 内置了一个测试运行器，您可以用来测试 JavaScript 或 TypeScript 代码。
 
-## Quickstart
+## 快速入门
 
-Firstly, let's create a file `url_test.ts` and register a test case using
-`Deno.test()` function.
+首先，让我们创建一个名为 `url_test.ts` 的文件，并使用 `Deno.test()`
+函数注册一个测试用例。
 
-```ts
-// url_test.ts
-import { assertEquals } from "https://deno.land/std@$STD_VERSION/assert/mod.ts";
+---ts // url_test.ts import { assertEquals } from
+"https://deno.land/std@$STD_VERSION/assert/mod.ts";
 
-Deno.test("url test", () => {
-  const url = new URL("./foo.js", "https://deno.land/");
-  assertEquals(url.href, "https://deno.land/foo.js");
-});
-```
+Deno.test("URL测试", () => { const url = new URL("./foo.js",
+"https://deno.land/"); assertEquals(url.href, "https://deno.land/foo.js"); });
 
-Secondly, run the test using `deno test` subcommand.
+````
+其次，使用 `deno test` 子命令运行测试。
 
 ```sh
 $ deno test url_test.ts
 running 1 test from file:///dev/url_test.js
-test url test ... ok (2ms)
+test URL测试 ... 通过 (2毫秒)
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out (9ms)
-```
+测试结果: 通过. 1 通过; 0 失败; 0 忽略; 0 测量; 0 过滤 (9毫秒)
+````
 
-## Writing tests
+## 编写测试
 
-To define a test you need to register it with a call to `Deno.test` API. There
-are multiple overloads of this API to allow for greatest flexibility and easy
-switching between the forms (eg. when you need to quickly focus a single test
-for debugging, using `only: true` option):
+要定义一个测试，您需要使用 `Deno.test` API
+进行注册。此API有多种重载，以提供最大的灵活性，并轻松切换不同的形式（例如，在调试时需要快速关注单个测试时，使用
+`only: true` 选项）：
 
 ```ts
 import { assertEquals } from "https://deno.land/std@$STD_VERSION/assert/mod.ts";
 
-// Compact form: name and function
-Deno.test("hello world #1", () => {
+// 紧凑形式: 名称和函数
+Deno.test("你好，世界 #1", () => {
   const x = 1 + 2;
   assertEquals(x, 3);
 });
 
-// Compact form: named function.
-Deno.test(function helloWorld3() {
+// 紧凑形式: 命名函数
+Deno.test(function 你好世界3() {
   const x = 1 + 2;
   assertEquals(x, 3);
 });
 
-// Longer form: test definition.
+// 较长的形式: 测试定义
 Deno.test({
-  name: "hello world #2",
+  name: "你好，世界 #2",
   fn: () => {
     const x = 1 + 2;
     assertEquals(x, 3);
   },
 });
 
-// Similar to compact form, with additional configuration as a second argument.
-Deno.test("hello world #4", { permissions: { read: true } }, () => {
+// 与紧凑形式类似，作为第二个参数提供附加配置。
+Deno.test("你好，世界 #4", { permissions: { read: true } }, () => {
   const x = 1 + 2;
   assertEquals(x, 3);
 });
 
-// Similar to longer form, with test function as a second argument.
+// 与较长形式类似，测试函数作为第二个参数。
 Deno.test(
-  { name: "hello world #5", permissions: { read: true } },
+  { name: "你好，世界 #5", permissions: { read: true } },
   () => {
     const x = 1 + 2;
     assertEquals(x, 3);
   },
 );
 
-// Similar to longer form, with a named test function as a second argument.
-Deno.test({ permissions: { read: true } }, function helloWorld6() {
+// 与较长形式类似，具有命名的测试函数作为第二个参数。
+Deno.test({ permissions: { read: true } }, function 你好世界6() {
   const x = 1 + 2;
   assertEquals(x, 3);
 });
 ```
 
-### Async functions
+### 异步函数
 
-You can also test asynchronous code by passing a test function that returns a
-promise. For this you can use the `async` keyword when defining a function:
+您还可以通过传递返回Promise的测试函数来测试异步代码。为此，您可以在定义函数时使用
+`async` 关键字：
 
 ```ts
 import { delay } from "https://deno.land/std@$STD_VERSION/async/delay.ts";
 
-Deno.test("async hello world", async () => {
+Deno.test("异步你好，世界", async () => {
   const x = 1 + 2;
 
-  // await some async task
+  // 等待某些异步任务
   await delay(100);
 
   if (x !== 3) {
-    throw Error("x should be equal to 3");
+    throw Error("x 应该等于 3");
   }
 });
 ```
 
-### Test steps
+### 测试步骤
 
-The test steps API provides a way to report distinct steps within a test and do
-setup and teardown code within that test.
+测试步骤API提供了一种在测试内报告不同的步骤并在该测试内执行设置和拆卸代码的方式。
 
 ```ts
 import { assertEquals } from "https://deno.land/std@$STD_VERSION/assert/mod.ts";
@@ -124,7 +118,7 @@ interface Book {
   title: string;
 }
 
-Deno.test("database", async (t) => {
+Deno.test("数据库", async (t) => {
   const client = new Client({
     user: "user",
     database: "test",
@@ -133,8 +127,8 @@ Deno.test("database", async (t) => {
   });
   await client.connect();
 
-  // provide a step name and function
-  await t.step("insert user", async () => {
+  // 提供步骤名称和函数
+  await t.step("插入用户", async () => {
     const users = await client.queryObject<User>(
       "INSERT INTO users (name) VALUES ('Deno') RETURNING *",
     );
@@ -142,9 +136,9 @@ Deno.test("database", async (t) => {
     assertEquals(users.rows[0].name, "Deno");
   });
 
-  // or provide a test definition
+  // 或提供测试定义
   await t.step({
-    name: "insert book",
+    name: "插入图书",
     fn: async () => {
       const books = await client.queryObject<Book>(
         "INSERT INTO books (name) VALUES ('The Deno Manual') RETURNING *",
@@ -153,41 +147,41 @@ Deno.test("database", async (t) => {
       assertEquals(books.rows[0].title, "The Deno Manual");
     },
     ignore: false,
-    // these default to the parent test or step's value
+    // 这些默认值为父测试或步骤的值
     sanitizeOps: true,
     sanitizeResources: true,
     sanitizeExit: true,
   });
 
-  // nested steps are also supported
-  await t.step("update and delete", async (t) => {
-    await t.step("update", () => {
-      // even though this test throws, the outer promise does not reject
-      // and the next test step will run
-      throw new Error("Fail.");
+  // 支持嵌套步骤
+  await t.step("更新和删除", async (t) => {
+    await t.step("更新", () => {
+      // 即使此测试抛出异常，外部承诺不会拒绝，
+      // 下一个测试步骤将继续运行
+      throw new Error("失败.");
     });
 
-    await t.step("delete", () => {
-      // ...etc...
+    await t.step("删除", () => {
+      // ...等等...
     });
   });
 
-  // steps return a value saying if they ran or not
+  // 步骤返回一个值，指示它们是否运行或不运行
   const testRan = await t.step({
-    name: "copy books",
+    name: "复制图书",
     fn: () => {
-      // ...etc...
+      // ...等等...
     },
-    ignore: true, // was ignored, so will return `false`
+    ignore: true, // 已忽略，因此将返回 `false`
   });
 
-  // steps can be run concurrently if sanitizers are disabled on sibling steps
+  // 如果在兄弟步骤或父测试上禁用了消毒剂，步骤可以并行运行
   const testCases = [1, 2, 3];
   await Promise.all(testCases.map((testCase) =>
     t.step({
-      name: `case ${testCase}`,
+      name: `案例 ${testCase}`,
       fn: async () => {
-        // ...etc...
+        // ...等等...
       },
       sanitizeOps: false,
       sanitizeResources: false,
@@ -199,106 +193,98 @@ Deno.test("database", async (t) => {
 });
 ```
 
-Outputs:
+输出：
 
 ```
-test database ...
-  test insert user ... ok (2ms)
-  test insert book ... ok (14ms)
-  test update and delete ...
-    test update ... FAILED (17ms)
-      Error: Fail.
-          at <stack trace omitted>
-    test delete ... ok (19ms)
-  FAILED (46ms)
-  test copy books ... ignored (0ms)
-  test case 1 ... ok (14ms)
-  test case 2 ... ok (14ms)
-  test case 3 ... ok (14ms)
-FAILED (111ms)
+测试数据库...
+  测试插入用户... 通过 (2毫秒)
+  测试插入图书... 通过 (14毫秒)
+  测试更新和删除...
+    测试更新... 失败 (17毫秒)
+      错误: 失败.
+          在<省略堆栈跟踪>
+    测试删除... 通过 (19毫秒)
+  失败 (46毫秒)
+  测试复制图书... 已忽略 (0毫秒)
+  测试案例 1... 通过 (14毫秒)
+  测试案例 2... 通过 (14毫秒)
+  测试案例 3... 通过 (14毫秒)
+失败 (111毫秒)
 ```
 
-Notes:
+注意：
 
-1. Test steps **must be awaited** before the parent test/step function resolves
-   or you will get a runtime error.
-2. Test steps cannot be run concurrently unless sanitizers on a sibling step or
-   parent test are disabled.
-3. If nesting steps, ensure you specify a parameter for the parent step.
+1. 必须在父测试/步骤函数解决之前**等待测试步骤**，否则将会出现运行时错误。
+2. 除非在兄弟步骤或父测试上禁用了消毒剂，否则不能并行运行测试步骤。
+3. 如果嵌套步骤，请确保为父步骤指定参数。
    ```ts
-   Deno.test("my test", async (t) => {
-     await t.step("step", async (t) => {
-       // note the `t` used here is for the parent step and not the outer `Deno.test`
-       await t.step("sub-step", () => {
+   Deno.test("我的测试", async (t) => {
+     await t.step("步骤", async (t) => {
+       //请注意此处使用的 `t` 是父步骤的，而不是外部的 `Deno.test`
+       await t.step("子步骤", () => {
        });
      });
    });
    ```
 
-#### Nested test steps
+#### 嵌套测试步骤
 
-## Running tests
+## 运行测试
 
-To run the test, call `deno test` with the file that contains your test
-function. You can also omit the file name, in which case all tests in the
-current directory (recursively) that match the glob
-`{*_,*.,}test.{ts, tsx, mts, js, mjs, jsx}` will be run. If you pass a
-directory, all files in the directory that match this glob will be run.
+要运行测试，请使用包含测试功能的文件调用
+`deno test`。您还可以省略文件名，此时将运行匹配全局通配符的当前目录（递归）中的所有测试文件。如果传递一个目录，将运行该目录中匹配此通配符的所有文件。
 
-The glob expands to:
+通配符扩展为：
 
-- files named `test.{ts, tsx, mts, js, mjs, jsx}`,
-- or files ending with `.test.{ts, tsx, mts, js, mjs, jsx}`,
-- or files ending with `_test.{ts, tsx, mts, js, mjs, jsx}`
+- 文件名为 `test.{ts, tsx, mts, js, mjs, jsx}`，
+- 或以 `.test.{ts, tsx, mts, js, mjs, jsx}` 结尾的文件，
+- 或以 `_test.{ts, tsx, mts, js, mjs, jsx}` 结尾的文件。
 
 ```shell
-# Run all tests in the current directory and all sub-directories
+# 运行当前目录和所有子目录中的所有测试
 deno test
 
-# Run all tests in the util directory
+# 运行 util 目录中的所有测试
 deno test util/
 
-# Run just my_test.ts
+# 仅运行 my_test.ts
 deno test my_test.ts
 
-# Run test modules in parallel
+# 并行运行测试模块
 deno test --parallel
 ```
 
-Note that starting in Deno v1.24, some test options can be configured via
-[a configuration file](../../getting_started/configuration_file.md).
+请注意，从 Deno v1.24
+开始，一些测试选项可以通过[a configuration file](../../getting_started/configuration_file.md)进行配置。
 
-> ⚠️ If you want to pass additional CLI arguments to the test files use `--` to
-> inform Deno that remaining arguments are scripts arguments.
+> ⚠️ 如果您想传递额外的命令行参数给测试文件，请使用 `--` 来通知 Deno
+> 剩余的参数是脚本参数。
 
 ```shell
-# Pass additional arguments to the test file
+# 传递额外的参数给测试文件
 deno test my_test.ts -- -e --foo --bar
 ```
 
-`deno test` uses the same permission model as `deno run` and therefore will
-require, for example, `--allow-write` to write to the file system during
-testing.
+`deno test` 使用与 `deno run` 相同的权限模型，因此在测试过程中可能需要例如
+`--allow-write` 来写入文件系统。
 
-To see all runtime options with `deno test`, you can reference the command line
-help:
+要查看使用 `deno test` 的所有运行时选项，您可以参考命令行帮助：
 
 ```shell
 deno help test
 ```
 
-## Filtering
+## 过滤
 
-There are a number of options to filter the tests you are running.
+有许多选项可以用来过滤您要运行的测试。
 
-### Command line filtering
+### 命令行过滤
 
-Tests can be run individually or in groups using the command line `--filter`
-option.
+可以使用命令行 `--filter` 选项来独立运行或分组运行测试。
 
-The filter flags accept a string or a pattern as value.
+过滤标志接受字符串或模式作为值。
 
-Assuming the following tests:
+假设以下测试：
 
 ```ts, ignore
 Deno.test({ name: "my-test", fn: myTest });
@@ -306,30 +292,27 @@ Deno.test({ name: "test-1", fn: test1 });
 Deno.test({ name: "test-2", fn: test2 });
 ```
 
-This command will run all of these tests because they all contain the word
-"test".
+此命令将运行所有这些测试，因为它们都包含单词 "test"。
 
 ```shell
 deno test --filter "test" tests/
 ```
 
-On the flip side, the following command uses a pattern and will run the second
-and third tests.
+相反，以下命令使用模式并将运行第二和第三个测试。
 
 ```shell
 deno test --filter "/test-*\d/" tests/
 ```
 
-_To let Deno know that you want to use a pattern, wrap your filter with
-forward-slashes like the JavaScript syntactic sugar for a REGEX._
+_要让 Deno 知道您要使用模式，将您的过滤器用正斜杠包装起来，就像 JavaScript
+对正则表达式的语法糖一样。_
 
-### Including and excluding paths in the configuration file
+### 在配置文件中包括和排除路径
 
-You can also filter tests by specifying paths to include or exclude in the Deno
-configuration file.
+还可以通过在 Deno 配置文件中指定要包括或排除的路径来过滤测试。
 
-For example, if you want to only test `src/fetch_test.ts` and
-`src/signal_test.ts` and exclude everything in `out/`:
+例如，如果您只想测试 `src/fetch_test.ts` 和 `src/signal_test.ts`，并排除 `out/`
+中的所有内容：
 
 ```json
 {
@@ -342,7 +325,7 @@ For example, if you want to only test `src/fetch_test.ts` and
 }
 ```
 
-Or more likely:
+或者更可能的情况：
 
 ```json
 {
@@ -352,113 +335,108 @@ Or more likely:
 }
 ```
 
-Then running `deno test` in the same directory tree as the configuration file
-will take these options into account.
+然后在与配置文件相同的目录树中运行 `deno test` 将考虑这些选项。
 
-### Test definition filtering
+### 测试定义过滤
 
-Within the tests themselves, you have two options for filtering.
+在测试文件本身内部，有两种过滤选项可供选择。
 
-#### Filtering out (Ignoring these tests)
+#### 过滤出（忽略这些测试）
 
-Sometimes you want to ignore tests based on some sort of condition (for example
-you only want a test to run on Windows). For this you can use the `ignore`
-boolean in the test definition. If it is set to true the test will be skipped.
+有时您可能想根据某种条件（例如，只在 Windows
+上运行测试）来忽略测试。为此，可以在测试定义中使用 `ignore` 布尔值。如果设置为
+true，则会跳过该测试。
 
 ```ts
 Deno.test({
   name: "do macOS feature",
   ignore: Deno.build.os !== "darwin",
   fn() {
-    // do MacOS feature here
+    // 在这里执行 macOS 特性
   },
 });
 ```
 
-#### Filtering in (Only run these tests)
+#### 过滤 (仅运行这些测试)
 
-Sometimes you may be in the middle of a problem within a large test class and
-you would like to focus on just that test and ignore the rest for now. For this
-you can use the `only` option to tell the test framework to only run tests with
-this set to true. Multiple tests can set this option. While the test run will
-report on the success or failure of each test, the overall test run will always
-fail if any test is flagged with `only`, as this is a temporary measure only
-which disables nearly all of your tests.
+有时候你可能会发现在一个庞大的测试类中有一个问题，而你只想专注于这个测试，暂时忽略其余的。为此，你可以使用
+`only` 选项来告诉测试框架只运行设置为 `true`
+的测试。多个测试可以设置这个选项。虽然测试运行会报告每个测试的成功或失败，但如果任何测试被标记为
+`only`，则整个测试运行将失败，因为这只是一个临时措施，会禁用几乎所有的测试。
 
 ```ts
 Deno.test({
-  name: "Focus on this test only",
+  name: "仅关注此测试",
   only: true,
   fn() {
-    // test complicated stuff here
+    // 在这里测试复杂的东西
   },
 });
 ```
 
-## Failing fast
+## 快速失败
 
-If you have a long-running test suite and wish for it to stop on the first
-failure, you can specify the `--fail-fast` flag when running the suite.
+如果你有一个运行时间较长的测试套件，并希望在第一个失败时停止测试，你可以在运行测试套件时指定
+`--fail-fast` 标志。
 
 ```shell
 deno test --fail-fast
 ```
 
-## Reporters
+## 报告器
 
-Deno ships with three built-in reporters:
+Deno 预装了三种内置报告器:
 
-- `pretty` (default)
+- `pretty`（默认）
 - `dot`
 - `junit`
 
-You can specify the reporter to use with the `--reporter` flag.
+你可以使用 `--reporter` 标志指定要使用的报告器。
 
 ```shell
-# use default pretty reporter
+# 使用默认的 pretty 报告器
 $ deno test
 
-# use dot reporter with concise output
+# 使用简洁输出的 dot 报告器
 $ deno test --reporter=dot
 
-# use JUnit reporter
+# 使用 JUnit 报告器
 $ deno test --reporter=junit
 ```
 
-You can also write the output of machine-readable JUnit report to a file, while
-still enjoying human-readable output in the terminal. In such situations specify
-`--junit-path` flag:
+你还可以将机器可读的 JUnit
+报告的输出写入文件，同时在终端上享受人类可读的输出。在这种情况下，指定
+`--junit-path` 标志:
 
 ```shell
 $ deno test --junit-path=./report.xml
 ```
 
-## Integration with testing libraries
+## 与测试库的集成
 
-Deno's test runner works with popular testing libraries like
-[Chai](https://www.chaijs.com/), [Sinon.JS](https://sinonjs.org/) or
-[fast-check](https://fast-check.dev/).
+Deno 的测试运行器可以与流行的测试库一起使用，如
+[Chai](https://www.chaijs.com/)、[Sinon.JS](https://sinonjs.org/) 或
+[fast-check](https://fast-check.dev/)。
 
-For example integration see:
+例如，集成示例：
 
 - https://deno.land/std/testing/chai_example.ts
 - https://deno.land/std/testing/sinon_example.ts
 - https://deno.land/std/testing/fast_check_example.ts
 
-### Example: spying on a function with Sinon
+### 示例：使用 Sinon 对函数进行间谍操作
 
-Test spies are function stand-ins that are used to assert if a function's
-internal behavior matches expectations. Sinon is a widely used testing library
-that provides test spies and can be used in Deno by importing it from a CDN,
-such as Skypack:
+测试间谍是用于断言函数的内部行为是否符合期望的函数替代品。Sinon
+是一个广泛使用的测试库，提供了测试间谍，并可以通过从 CDN 导入它在 Deno
+中使用，例如 Skypack:
 
 ```js
 import sinon from "https://cdn.skypack.dev/sinon";
 ```
 
-Say we have two functions, `foo` and `bar` and want to assert that `bar` is
-called during execution of `foo`. There are a few ways to achieve this with
-Sinon, one is to have function `foo` take another function as a parameter:
+假设我们有两个函数，`foo` 和 `bar`，并希望在执行 `foo` 时断言 `bar`
+是否被调用。有几种使用 Sinon 实现这一目标的方法之一是让函数 `foo`
+接受另一个函数作为参数：
 
 ```js
 // my_file.js
@@ -469,19 +447,19 @@ export function foo(fn) {
 }
 ```
 
-This way, we can call `foo(bar)` in the application code or wrap a spy function
-around `bar` and call `foo(spy)` in the testing code:
+这样，我们可以在应用代码中调用 `foo(bar)`，或者在测试代码中包装一个间谍函数在
+`bar` 上并调用 `foo(spy)`：
 
 ```js, ignore
 import sinon from "https://cdn.skypack.dev/sinon";
 import { assertEquals } from "https://deno.land/std@$STD_VERSION/assert/mod.ts";
 import { bar, foo } from "./my_file.js";
 
-Deno.test("calls bar during execution of foo", () => {
-  // create a test spy that wraps 'bar'
+Deno.test("在执行 foo 时调用 bar", () => {
+  // 创建一个包装 'bar' 的测试间谍
   const spy = sinon.spy(bar);
 
-  // call function 'foo' and pass the spy as an argument
+  // 调用函数 'foo' 并将间谍作为参数传递
   foo(spy);
 
   assertEquals(spy.called, true);
@@ -489,12 +467,11 @@ Deno.test("calls bar during execution of foo", () => {
 });
 ```
 
-If you prefer not to add additional parameters for testing purposes only, you
-can also use `sinon` to wrap a method on an object instead. In other JavaScript
-environments `bar` might have been accessible via a global such as `window` and
-callable via `sinon.spy(window, "bar")`, but in Deno this will not work and
-instead you can `export` an object with the functions to be tested. This means
-rewriting `my_file.js` to something like this:
+如果您不希望仅为测试目的添加额外的参数，您还可以使用 `sinon`
+在对象上包装一个方法。在其他 JavaScript 环境中，`bar` 可能是通过全局对象（如
+`window`）访问的，并可以通过 `sinon.spy(window, "bar")` 调用，但在 Deno
+中，这种方式将不起作用，而您可以导出一个包含要测试的函数的对象。这意味着需要将
+`my_file.js` 重写为以下形式：
 
 ```js
 // my_file.js
@@ -504,24 +481,24 @@ export const funcs = {
   bar,
 };
 
-// 'foo' no longer takes a parameter, but calls 'bar' from an object
+// 'foo' 不再接受参数，而是从对象中调用 'bar'
 export function foo() {
   funcs.bar();
 }
 ```
 
-And then `import` in a test file:
+然后在测试文件中导入：
 
 ```js, ignore
 import sinon from "https://cdn.skypack.dev/sinon";
 import { assertEquals } from "https://deno.land/std@$STD_VERSION/assert/mod.ts";
 import { foo, funcs } from "./my_file.js";
 
-Deno.test("calls bar during execution of foo", () => {
-  // create a test spy that wraps 'bar' on the 'funcs' object
+Deno.test("在执行 foo 时调用 bar", () => {
+  // 创建一个包装 'funcs' 对象上的 'bar' 的测试间谍
   const spy = sinon.spy(funcs, "bar");
 
-  // call function 'foo' without an argument
+  // 调用函数 'foo'，不带参数
   foo();
 
   assertEquals(spy.called, true);

@@ -1,48 +1,45 @@
-# Fetch Data
+# 获取数据(fetch)
 
-## Concepts
+## 概念
 
-- Like browsers, Deno implements web standard APIs such as
-  [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
-- Deno is secure by default, meaning explicit permission must be granted to
-  access the network.
-- See also: Deno's [permissions](../manual/basics/permissions.md) model.
+- 与浏览器一样，Deno 实现了诸如
+  [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) 等 Web
+  标准 API。
+- Deno 默认是安全的，这意味着必须明确授予访问网络的权限。
+- 另请参阅：Deno 的 [权限](../manual/basics/permissions.md) 模型。
 
-## Overview
+## 概述
 
-When building any sort of web application developers will usually need to
-retrieve data from somewhere else on the web. This works no differently in Deno
-than in any other JavaScript application, just call the `fetch()` method. For
-more information on fetch read the
-[MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+在构建任何类型的 Web 应用程序时，开发人员通常需要从 Web 上的其他地方检索数据。在
+Deno 中，与任何其他 JavaScript 应用程序一样，只需调用 `fetch()` 方法即可。有关
+fetch 的更多信息，请阅读
+[MDN 文档](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)。
 
-The exception with Deno occurs when running a script which makes a call over the
-web. Deno is secure by default which means access to IO (Input / Output) is
-prohibited. To make a call over the web Deno must be explicitly told it is ok to
-do so. This is achieved by adding the `--allow-net` flag to the `deno run`
-command.
+Deno 的特殊之处在于运行一个通过网络进行调用的脚本时。Deno
+默认是安全的，这意味着禁止访问 IO（输入/输出）。要在网络上进行调用，必须明确告知
+Deno 可以这样做。这是通过将 `--allow-net` 标志添加到 `deno run` 命令来实现的。
 
-## Example
+## 示例
 
-**Command:** `deno run --allow-net fetch.ts`
+**命令：** `deno run --allow-net fetch.ts`
 
 ```js
 /**
- * Output: JSON Data
+ * 输出：JSON 数据
  */
 const jsonResponse = await fetch("https://api.github.com/users/denoland");
 const jsonData = await jsonResponse.json();
 console.log(jsonData);
 
 /**
- * Output: HTML Data
+ * 输出：HTML 数据
  */
 const textResponse = await fetch("https://deno.land/");
 const textData = await textResponse.text();
 console.log(textData);
 
 /**
- * Output: Error Message
+ * 输出：错误消息
  */
 try {
   await fetch("https://does.not.exist/");
@@ -51,20 +48,20 @@ try {
 }
 ```
 
-## Files and Streams
+## 文件和流
 
-Like in browsers, sending and receiving large files is possible thanks to the
-[Streams API](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API).
-[`Deno.FsFile`](https://deno.land/api?s=Deno.FsFile) API provides two
-properties: [`readable`](https://deno.land/api?s=Deno.FsFile#prop_readable) and
-[`writable`](https://deno.land/api?s=Deno.FsFile#prop_writable), which can be
-used to convert a Deno file into a writable or readable stream.
+与浏览器一样，通过
+[Streams API](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API)
+可以发送和接收大文件。[`Deno.FsFile`](https://deno.land/api?s=Deno.FsFile) API
+提供了两个属性：[`readable`](https://deno.land/api?s=Deno.FsFile#prop_readable)
+和 [`writable`](https://deno.land/api?s=Deno.FsFile#prop_writable)，可用于将
+Deno 文件转换为可写或可读流。
 
-**Command:** `deno run --allow-read --allow-write --allow-net fetch_file.ts`
+**命令：** `deno run --allow-read --allow-write --allow-net fetch_file.ts`
 
 ```ts
 /**
- * Receiving a file
+ * 接收文件
  */
 const fileResponse = await fetch("https://deno.land/logo.svg");
 
@@ -74,7 +71,7 @@ if (fileResponse.body) {
 }
 
 /**
- * Sending a file
+ * 发送文件
  */
 const file = await Deno.open("./logo.svg", { read: true });
 

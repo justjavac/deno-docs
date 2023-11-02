@@ -1,52 +1,46 @@
-# How to use React with Deno
+# 如何在 Deno 中使用 React
 
-[React](https://reactjs.org) is the most widely used JavaScript frontend
-framework. It popularized a declarative approach towards designing user
-interfaces, with a reactive data model. Due to its popularity, it's not
-surprising that it's the most requested framework when it comes to building web
-apps with Deno.
+[React](https://reactjs.org) 是最广泛使用的 JavaScript
+前端框架。它提倡了一种声明性的方法来设计用户界面，具有响应式数据模型。由于其流行，当涉及使用
+Deno 构建 Web 应用程序时，它是最受请求的框架，这一点也不奇怪。
 
-This is a tutorial that walks you through building a simple React app with Deno
-in less than five minutes. The app will display a list of dinosaurs. When you
-click on one, it'll take you to a dinosaur page with more details.
+这是一个教程，指导您在不到五分钟内使用 Deno 构建一个简单的 React
+应用程序。该应用程序将显示一个恐龙列表。当您单击其中一个时，它将带您进入一个包含更多详细信息的恐龙页面。
 
-![demo of the app](../../manual/images/how-to/react/react-dinosaur-app-demo.gif)
+![应用程序演示](../../manual/images/how-to/react/react-dinosaur-app-demo.gif)
 
-[View source](https://github.com/denoland/examples/tree/main/with-react) or
-[follow the video guide](https://www.youtube.com/watch?v=eStwt_2THd8).
+[查看源代码](https://github.com/denoland/examples/tree/main/with-react) 或
+[按照视频指南](https://www.youtube.com/watch?v=eStwt_2THd8)。
 
-## Create Vite Extra
+## 创建 Vite 扩展
 
-This tutorial will use [Vite](https://vitejs.dev/) to quickly scaffold a Deno
-and React app. Let's run:
+本教程将使用 [Vite](https://vitejs.dev/) 来快速构建一个 Deno 和 React
+应用程序。让我们运行：
 
-```shell
+```shell, ignore
 deno run --allow-env --allow-read --allow-write npm:create-vite-extra
 ```
 
-We'll name our project "dinosaur-react-app". Then, `cd` into the newly created
-project folder.
+我们将命名我们的项目为 "dinosaur-react-app"。然后，`cd` 到新创建的项目文件夹。
 
-## Add a backend
+## 添加后端
 
-The next step is to add a backend API. We'll create a very simple API that
-returns information about dinosaurs.
+下一步是添加后端 API。我们将创建一个非常简单的 API，用于返回有关恐龙的信息。
 
-In the directory, let's create an `api` folder. In that folder, we'll create a
-`main.ts` file, which will run the server, and a `data.json`, which is the hard
-coded data.
+在目录中，让我们创建一个 "api" 文件夹。在该文件夹中，我们将创建一个 "main.ts"
+文件，用于运行服务器，以及一个 "data.json" 文件，其中包含硬编码的数据。
 
-```shell
+```shell, ignore
 mkdir api && touch api/data.json && touch api/main.ts
 ```
 
-Copy and paste
-[this json file](https://github.com/denoland/deno-vue-example/blob/main/api/data.json)
-into your `api/data.json`.
+复制并粘贴
+[此 JSON 文件](https://github.com/denoland/deno-vue-example/blob/main/api/data.json)
+到您的 "api/data.json" 中。
 
-Then, let's update `api/main.ts`:
+然后，让我们更新 "api/main.ts"：
 
-```ts
+```ts, ignore
 import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 import data from "./data.json" assert { type: "json" };
@@ -54,7 +48,7 @@ import data from "./data.json" assert { type: "json" };
 const router = new Router();
 router
   .get("/", (context) => {
-    context.response.body = "Welcome to dinosaur API!";
+    context.response.body = "欢迎来到恐龙 API！";
   })
   .get("/api", (context) => {
     context.response.body = data;
@@ -67,46 +61,46 @@ router
       if (found) {
         context.response.body = found;
       } else {
-        context.response.body = "No dinosaurs found.";
+        context.response.body = "未找到恐龙。";
       }
     }
   });
 
 const app = new Application();
-app.use(oakCors()); // Enable CORS for All Routes
+app.use(oakCors()); // 为所有路由启用 CORS
 app.use(router.routes());
 app.use(router.allowedMethods());
 
 await app.listen({ port: 8000 });
 ```
 
-This is a very simple API server using [`oak`](https://deno.land/x/oak) that
-will return dinosaur information based on the route. Let's start the API server:
+这是一个使用 [`oak`](https://deno.land/x/oak) 的非常简单的 API
+服务器，根据路由返回恐龙信息。让我们启动 API 服务器：
 
-```shell
+```shell, ignore
 deno run --allow-env --allow-net api/main.ts
 ```
 
-If we go to `localhost:8000/api`, we see:
+如果我们访问 `localhost:8000/api`，将会看到：
 
-![json response of dinosaurs](../../manual/images/how-to/react/dinosaur-api.png)
+![恐龙的 JSON 响应](../../manual/images/how-to/react/dinosaur-api.png)
 
-Lookin' good so far.
+到目前为止，一切看起来都不错。
 
-## Add a router
+## 添加路由器
 
-Our app will have two routes: `/` and `/:dinosaur`.
+我们的应用程序将有两个路由：`/` 和 `/:dinosaur`。
 
-We'll use [`react-router-dom`](https://reactrouter.com/en/main) for our routing
-logic. Let's add that to our dependencies in `vite.config.mjs`:
+我们将使用 [`react-router-dom`](https://reactrouter.com/en/main)
+来处理我们的路由逻辑。让我们在 `vite.config.mjs` 中将其添加到我们的依赖项中：
 
-```js
+```mjs, ignore
 import { defineConfig } from "npm:vite@^3.1.3";
 import react from "npm:@vitejs/plugin-react@^2.1";
 
 import "npm:react@^18.2";
 import "npm:react-dom@^18.2/client";
-import "npm:react-router-dom@^6.4"; // Add this line
+import "npm:react-router-dom@^6.4"; // 添加此行
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -114,12 +108,12 @@ export default defineConfig({
 });
 ```
 
-Once we add the dependencies there, we can import them without `npm:` specifier
-throughout our React app.
+一旦我们在那里添加了依赖项，我们可以在我们的 React 应用程序中无需 `npm:`
+标识符导入它们。
 
-Next, let's go to `src/App.jsx` and add our routing logic:
+接下来，让我们转到 `src/App.jsx` 并添加我们的路由逻辑：
 
-```jsx
+```jsx, ignore
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -143,26 +137,25 @@ export default function App(props) {
 }
 ```
 
-Next, let's add the `<Index>` and `<Dinosaur>` pages.
+接下来，让我们添加 `<Index>` 和 `<Dinosaur>` 页面。
 
-## Add pages
+## 添加页面
 
-There will be two pages in this app:
+这个应用程序将有两个页面：
 
-- `src/pages/Index.jsx`: our index page, which lists all of the dinosaurs
-- `src/pages/Dinosaur.jsx`: our dinosaur page, which shows details of the
-  dinosaur
+- `src/pages/Index.jsx`：我们的索引页面，列出了所有的恐龙
+- `src/pages/Dinosaur.jsx`：我们的恐龙页面，显示了恐龙的详细信息
 
-We'll create a `src/pages` folder and create the `.jsx` files:
+我们将创建一个 `src/pages` 文件夹并创建 `.jsx` 文件：
 
-```shell
+```shell, ignore
 mkdir src/pages && touch src/pages/Index.jsx src/pages/Dinosaur.jsx
 ```
 
-Let's start with `<Index>`. This page will `fetch` at `localhost:8000/api` and
-render that through JSX.
+让我们从 `<Index>` 开始。这个页面将在 `localhost:8000/api` 上进行
+`fetch`，并通过 JSX 渲染它。
 
-```jsx
+```jsx, ignore
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -176,9 +169,9 @@ const Index = () => {
 
   return (
     <div>
-      <h1>Welcome to the Dinosaur app</h1>
+      <h1>欢迎来到恐龙应用</h1>
       <p>
-        Click on a dinosaur below to learn more.
+        单击下面的恐龙以了解更多信息。
       </p>
       <div>
         {dinos.map((dino) => {
@@ -196,10 +189,10 @@ const Index = () => {
 export default Index;
 ```
 
-Next, in `<Dinosaur>`, we'll do the same except for
-`localhost:8000/api/${dinosaur}`:
+接下来，在 `<Dinosaur>` 中，我们将做同样的事情，只不过是在
+`localhost:8000/api/${dinosaur}` 上：
 
-```jsx
+```jsx, ignore
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -218,7 +211,7 @@ const Dinosaur = () => {
       <p>
         {dino.description}
       </p>
-      <Link to="/">See all</Link>
+      <Link to="/">查看全部</Link>
     </div>
   );
 };
@@ -226,14 +219,14 @@ const Dinosaur = () => {
 export default Dinosaur;
 ```
 
-Let's start the React app:
+让我们启动 React 应用程序：
 
 ```
 deno task start
 ```
 
-And click through the app:
+然后浏览应用程序：
 
-![demo of the app](../../manual/images/how-to/react/react-dinosaur-app-demo.gif)
+![应用程序演示](../../manual/images/how-to/react/react-dinosaur-app-demo.gif)
 
-Huzzah!
+太棒了！

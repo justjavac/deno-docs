@@ -1,17 +1,16 @@
-# Using Twind with Deno
+# 使用 Twind 与 Deno
 
-[Twind](https://twind.style/) is a _tailwind-in-js_ solution for using
-[Tailwind](https://tailwindcss.com/). Twind is particularly useful in Deno's
-server context, where Tailwind and CSS can be easily server side rendered,
-generating dynamic, performant and efficient CSS while having the usability of
-styling with Tailwind.
+[Twind](https://twind.style/) 是一种在 [Tailwind](https://tailwindcss.com/)
+中使用的 _tailwind-in-js_ 解决方案。Twind 在 Deno
+的服务器环境中特别有用，可以轻松进行服务器端渲染，生成动态、高性能和高效的
+CSS，同时具有使用 Tailwind 进行样式设计的便利性。
 
-## Basic example
+## 基本示例
 
-In the following example, we will use twind to server side render an HTML page
-and log it to the console. It demonstrates using grouped tailwind classes and
-have it rendered using only the styles specified in the document and no client
-side JavaScript to accomplish the _tailwind-in-js_:
+在以下示例中，我们将使用 twind 来进行服务器端渲染一个 HTML
+页面，并将其记录到控制台。它演示了如何使用分组的 tailwind
+类，并仅使用文档中指定的样式进行渲染，无需客户端 JavaScript 来实现
+_tailwind-in-js_:
 
 ```ts
 import { extract, install } from "https://esm.sh/@twind/core@1.1.3";

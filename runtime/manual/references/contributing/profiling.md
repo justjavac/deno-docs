@@ -1,26 +1,26 @@
-# Profiling
+# 性能分析
 
-## Perf profiling:
+## perf
 
-Tools that can be used to generate/ visualise perf results:
+可以用于生成/可视化性能结果的工具：
 
 - flamegraph-rs (https://github.com/flamegraph-rs/flamegraph)
 - flamescope (https://github.com/Netflix/flamescope)
 
-Example using perf on `micro_bench_ops` and visualising using flamescope:
+使用 perf 对 `micro_bench_ops` 进行分析并使用 flamescope 进行可视化的示例：
 
 ```sh
-# build `examples/micro_bench_ops`
+# 构建 `examples/micro_bench_ops`
 cargo build --release --example micro_bench_ops
 
-# run `examples/micro_bench_ops` using perf
+# 使用 perf 运行 `examples/micro_bench_ops`
 sudo perf record -F 49 -a -g -- ./target/release/examples/micro_bench_ops
 sudo perf script --header > micro_bench_ops_perf
 
-# now open the file using flamescope
+# 现在使用 flamescope 打开文件
 ```
 
-Example running `deno_tcp.ts` in combination with flamegraph (`script.sh`):
+在组合使用 flamegraph (`script.sh`) 运行 `deno_tcp.ts` 的示例：
 
 ```sh
 sudo flamegraph -o flamegraph.svg target/debug/deno run --allow-net cli/bench/deno_tcp.ts &
@@ -30,25 +30,25 @@ sleep 1
 kill `pgrep perf`
 ```
 
-## v8 profiling:
+## V8 性能分析：
 
-Example using v8 profiling on `micro_bench_ops`:
+使用 V8 对 `micro_bench_ops` 进行性能分析的示例：
 
 ```sh
-# build `examples/micro_bench_ops`
+# 构建 `examples/micro_bench_ops`
 cargo build --release --example micro_bench_ops
 
-# run `examples/micro_bench_ops`
+# 运行 `examples/micro_bench_ops`
 ./target/release/examples/micro_bench_ops --prof
 ```
 
-Example using v8 profiling on `deno_tcp.ts`:
+使用 V8 对 `deno_tcp.ts` 进行性能分析的示例：
 
 ```sh
-# build `deno`
+# 构建 `deno`
 cargo build --release
 
-# run `deno_tcp.ts`
+# 运行 `deno_tcp.ts`
 ./target/release/deno --v8-flags=--prof --allow-net cli/bench/deno_tcp.ts &
 sleep 1
 ./third_party/prebuilt/linux64/wrk http://localhost:4500/
@@ -56,21 +56,21 @@ sleep 1
 kill `pgrep deno`
 ```
 
-V8 will write a file in the current directory that looks like this:
-`isolate-0x7fad98242400-v8.log`. To examine this file:
+V8 会在当前目录中写入一个文件，文件名类似于
+`isolate-0x7fad98242400-v8.log`。要查看这个文件：
 
 ```sh
 node --prof-process isolate-0x7fad98242400-v8.log > prof.log
 ```
 
-`prof.log` will contain information about tick distribution of different calls.
+`prof.log` 包含不同调用的滴答分布信息。
 
-To view the log with Web UI, generate JSON file of the log:
+要使用 Web UI 查看日志，请生成日志的 JSON 文件：
 
-Open `rusty_v8/v8/tools/profview/index.html` in your browser, and select
-`prof.json` to view the distribution graphically.
+在浏览器中打开 `rusty_v8/v8/tools/profview/index.html`，然后选择 `prof.json`
+以图形方式查看分布。
 
-Useful V8 flags during profiling:
+在性能分析期间使用的有用 V8 标志：
 
 - --prof
 - --log-internal-timer-events
@@ -79,20 +79,20 @@ Useful V8 flags during profiling:
 - --log-source-code
 - --track-gc-object-stats
 
-To learn more about profiling, check out the following links:
+要了解更多有关性能分析的信息，请查看以下链接：
 
 - [https://v8.dev/docs/profile](https://v8.dev/docs/profile)
 
-## Debugging with LLDB
+## 使用 LLDB 进行调试
 
-To debug the deno binary, we can use `rust-lldb`. It should come with `rustc`
-and is a wrapper around LLDB.
+要调试 deno 二进制文件，可以使用 `rust-lldb`。它应该与 `rustc` 一起提供，并且是
+LLDB 的包装器。
 
 ```shell
 $ rust-lldb -- ./target/debug/deno run --allow-net tests/http_bench.ts
-# On macOS, you might get warnings like
+# 在 macOS 上，您可能会收到警告消息，如
 # `ImportError: cannot import name _remove_dead_weakref`
-# In that case, use system python by setting PATH, e.g.
+# 在这种情况下，通过设置 PATH 使用系统 python，例如
 # PATH=/System/Library/Frameworks/Python.framework/Versions/2.7/bin:$PATH
 (lldb) command script import "/Users/kevinqian/.rustup/toolchains/1.36.0-x86_64-apple-darwin/lib/rustlib/etc/lldb_rust_formatters.py"
 (lldb) type summary add --no-value --python-function lldb_rust_formatters.print_val -x ".*" --category Rust
@@ -104,9 +104,9 @@ Current executable set to '../deno/target/debug/deno' (x86_64).
 (lldb) r
 ```
 
-## V8 flags
+## V8 标志
 
-V8 has many many internal command-line flags:
+V8 有许多内部命令行标志：
 
 ```shell
 $ deno run --v8-flags=--help _
@@ -1087,7 +1087,7 @@ Options:
         type: bool  default: false
 ```
 
-Particularly useful ones:
+特别有用的选项：
 
 ```
 --async-stack-traces

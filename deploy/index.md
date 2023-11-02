@@ -1,53 +1,43 @@
----
-sidebar_position: 1
-sidebar_label: Quick Start
-displayed_sidebar: deploy
----
+# 快速入门
 
-# Quick Start
+这个指南将带领您从设置 Deno Deploy 帐户到部署您的第一个项目。
 
-This guide will take you from setting up a Deno Deploy account to deploying your
-first project.
+## **步骤 1：** 注册 Deno Deploy 帐户
 
-## **Step 1:** Sign up for Deno Deploy
+如果您没有 Deno Deploy 帐户，[注册](https://deno.com/deploy) 后继续。
 
-If you do not have a Deno Deploy account, [sign up](https://deno.com/deploy)
-before continuing.
+## **步骤 2：** 部署项目
 
-## **Step 2:** Deploy a project
+登录到您的帐户后，您应该会看到一个列出您的项目的页面（因为这是一个新帐户，您不会有任何项目）。
 
-Upon signing in to your account, you should land on a page that lists your
-projects. (You won't have any since it's a new account).
+点击 **+新建项目** 按钮
 
-Click on the **+New Project** button
+在 Deno Deploy 中有三种部署新项目的方式：
 
-There are three ways to deploy a new project in Deno Deploy:
+- [使用 GitHub 集成部署](./manual/ci_github.md)
+- [使用 `deployctl` 部署](./manual/deployctl.md)
+- [使用 Deno Deploy Playground 部署](./manual/playgrounds.md)
 
-- [Deploy with Github integration](./manual/ci_github.md)
-- [Deploy with `deployctl`](./manual/deployctl.md)
-- [Deploy with Deno Deploy Playground](./manual/playgrounds.md)
+根据您的项目类型选择其中一种方法。
 
-Select one of these methods, depending on the kind of project you have.
+### 我们的建议
 
-### Our recommendation
+一般情况下，我们建议使用 GitHub 集成部署，因为它是最快的方式。如果您需要首先运行
+CI 构建流程（例如生成静态资源），我们建议使用 GitHub 集成部署，并选择
+[GitHub Action](./manual/ci_github.md#github-action)
 
-We generally recommend deploying with the Github integration because it is the
-fastest. If you need to run a CI build process first (for example generating
-static assets), we recommend deploying with the Github integration, and
-selecting [Github Action](./manual/ci_github.md#github-action)
+## **步骤 3：** 如有必要，调整项目设置
 
-## **Step 3:** Adjust project settings if necessary
+一旦项目创建完成，您可以在 **设置**
+选项卡上调整许多项目设置。有关更多详细信息，请参阅以下链接。
 
-Once the project has been created, you can adjust a number of project settings
-on the **Settings** tab. For more details, follow the links below.
+- [自定义域名](./manual/custom-domains.md)
+- [环境变量](./manual/environment-variables.md)
 
-- [Custom domain](./manual/custom-domains.md)
-- [Environment variables](./manual/environment-variables.md)
+## **步骤 4：** 查找项目 URL
 
-## **Step 4:** Find project URL
+生产 URL 是您的生产部署可以访问的 URL。
 
-The production URL is the URL that your production deployment can be reached at.
+项目名称将确定项目的生产 URL。
 
-The project name will determine a project's production URL.
-
-It has the form `$PROJECT_ID.deno.dev` (e.g. https://dead-clam-55.deno.dev).
+它的形式为 `$PROJECT_ID.deno.dev`（例如 https://dead-clam-55.deno.dev）。

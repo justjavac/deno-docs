@@ -1,35 +1,34 @@
 ---
 displayed_sidebar: runtimeTutorialsHome
 sidebar_position: 1
-sidebar_label: Overview
+sidebar_label: 概述
 pagination_next: tutorials/hello_world
 ---
 
-# Examples
+# 示例
 
-Here you can find some example programs that you can use to learn more about the
-runtime.
+在这里，您可以找到一些示例程序，用于了解有关运行时的更多信息。
 
-## Basic
+## 基础
 
 - [Hello World](./hello_world.md)
-- [Manage Dependencies](./manage_dependencies.md)
-- [Fetch Data](./fetch_data.md)
-- [Read and Write Files](./read_write_files.md)
+- [管理依赖项](./manage_dependencies.md)
+- [获取数据](./fetch_data.md)
+- [读写文件](./read_write_files.md)
 - [Hashbang](./hashbang.md)
 
-## Advanced
+## 高级
 
-- [Unix cat Program](./unix_cat.md)
-- [HTTP Web Server](./http_server.md)
-- [File Server](./file_server.md)
-- [TCP echo Server](./tcp_echo.md)
-- [Creating a Subprocess](./subprocess.md)
-- [OS Signals](./os_signals.md)
-- [File System Events](./file_system_events.md)
-- [Module Metadata](./module_metadata.md)
+- [Unix cat 程序](./unix_cat.md)
+- [HTTP Web 服务器](./http_server.md)
+- [文件服务器](./file_server.md)
+- [TCP 回显服务器](./tcp_echo.md)
+- [创建子进程](./subprocess.md)
+- [操作系统信号](./os_signals.md)
+- [文件系统事件](./file_system_events.md)
+- [模块元数据](./module_metadata.md)
 
-## npm module examples
+## npm 模块示例
 
 - [Apollo](./how_to_with_npm/apollo.md)
 - [Express](./how_to_with_npm/express.md)
@@ -41,5 +40,4 @@ runtime.
 - [Redis](./how_to_with_npm/redis.md)
 - [Vue](./how_to_with_npm/vue.md)
 
-Additional examples can by found at
-[Deno by Example](https://examples.deno.land/).
+更多示例可以在 [Deno 示例](https://examples.deno.land/) 找到。

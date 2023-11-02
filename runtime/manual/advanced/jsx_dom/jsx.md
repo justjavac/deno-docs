@@ -1,15 +1,12 @@
-# Configuring JSX in Deno
+# 在 Deno 中配置 JSX
 
-Deno has built-in support for JSX in both `.jsx` files and `.tsx` files. JSX in
-Deno can be handy for server-side rendering or generating code for consumption
-in a browser.
+Deno 在 `.jsx` 文件和 `.tsx` 文件中都内置了对 JSX 的支持。在 Deno 中，JSX
+可用于服务器端渲染或生成供浏览器使用的代码。
 
-## Default configuration
+## 默认配置
 
-The Deno CLI has a default configuration for JSX that is different than the
-defaults for `tsc`. Effectively Deno uses the following
-[TypeScript compiler](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
-options by default:
+Deno CLI 具有与 `tsc` 不同的默认 JSX 配置。实际上，Deno 默认使用以下
+[TypeScript 编译器选项](https://www.typescriptlang.org/docs/handbook/compiler-options.html)：
 
 ```json
 {
@@ -21,50 +18,45 @@ options by default:
 }
 ```
 
-## JSX import source
+## JSX 导入源
 
-In React 17, the React team added what they called
-[the _new_ JSX transforms](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html).
-This enhanced and modernized the API for JSX transforms as well as provided a
-mechanism to automatically import a JSX library into a module, instead of having
-to explicitly import it or make it part of the global scope. Generally this
-makes it easier to use JSX in your application.
+在 React 17 中，React 团队添加了他们所谓的
+[新 JSX 转换](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html)。这增强和现代化了
+JSX 转换的 API，并提供了一种自动导入 JSX
+库到模块中的机制，而不必显式导入它或将其作为全局范围的一部分。通常，这使得在应用程序中使用
+JSX 更容易。
 
-As of Deno 1.16, initial support for these transforms was added. Deno supports
-both the JSX import source pragma as well as configuring a JSX import source in
-a [configuration file](../../getting_started/configuration_file.md).
+截至 Deno 1.16，已经添加了对这些转换的初步支持。Deno 支持 JSX 导入源 pragma
+以及在 [配置文件](../../getting_started/configuration_file.md) 中配置 JSX
+导入源。
 
-### JSX runtime
+### JSX 运行时
 
-When using the automatic transforms, Deno will try to import a JSX runtime
-module that is expected to conform to the _new_ JSX API and is located at either
-`jsx-runtime` or `jsx-dev-runtime`. For example if a JSX import source is
-configured to `react`, then the emitted code will add this to the emitted file:
+在使用自动转换时，Deno 将尝试导入一个预期符合新 JSX API 的 JSX
+运行时模块，该模块位于 `jsx-runtime` 或 `jsx-dev-runtime`。例如，如果配置了 JSX
+导入源为 `react`，则生成的代码将在生成的文件中添加以下内容：
 
 ```jsx, ignore
 import { jsx as _jsx } from "react/jsx-runtime";
 ```
 
-Deno generally works off explicit specifiers, which means it will not try any
-other specifier at runtime than the one that is emitted. Which means to
-successfully load the JSX runtime, `"react/jsx-runtime"` would need to resolve
-to a module. Saying that, Deno supports remote modules, and most CDNs resolve
-the specifier easily.
+Deno 通常根据明确的
+specifiers（指定符号）运行，这意味着在运行时，它将不会尝试使用除已发出的指定符号之外的任何其他指定符号。这意味着要成功加载
+JSX 运行时，`"react/jsx-runtime"` 需要解析为一个模块。话虽如此，Deno
+支持远程模块，并且大多数 CDN 可以轻松解析指定符号。
 
-For example, if you wanted to use [Preact](https://preactjs.com/) from the
-[esm.sh](https://esm.sh/) CDN, you would use `https://esm.sh/preact` as the JSX
-import source, and esm.sh will resolve `https://esm.sh/preact/jsx-runtime` as a
-module, including providing a header in the response that tells Deno where to
-find the type definitions for Preact.
+例如，如果您想要从 [esm.sh](https://esm.sh/) CDN 使用
+[Preact](https://preactjs.com/)，您可以将 `https://esm.sh/preact` 用作 JSX
+导入源，esm.sh 将解析 `https://esm.sh/preact/jsx-runtime`
+为一个模块，并在响应中提供一个标题，告诉 Deno 在哪里找到 Preact 的类型定义。
 
-### Using the JSX import source pragma
+### 使用 JSX 导入源 pragma
 
-Whether you have a JSX import source configured for your project, or if you are
-using the default "legacy" configuration, you can add the JSX import source
-pragma to a `.jsx` or `.tsx` module, and Deno will respect it.
+无论您是否为项目配置了 JSX 导入源，或者是否使用默认的“legacy”配置，您都可以在
+`.jsx` 或 `.tsx` 模块中添加 JSX 导入源 pragma，Deno 将予以尊重。
 
-The `@jsxImportSource` pragma needs to be in the leading comments of the module.
-For example to use Preact from esm.sh, you would do something like this:
+`@jsxImportSource` pragma 需要位于模块的前导注释中。例如，要从 esm.sh 使用
+Preact，您可以这样做：
 
 ```jsx, ignore
 /** @jsxImportSource https://esm.sh/preact */
@@ -78,13 +70,12 @@ export function App() {
 }
 ```
 
-### Using JSX import source in a configuration file
+### 在配置文件中使用 JSX 导入源
 
-If you want to configure a JSX import source for a whole project, so you don't
-need to insert the pragma on each module, you can use the `"compilerOptions"` in
-a [configuration file](../../getting_started/configuration_file.md) to specify
-this. For example if you were using Preact as your JSX library from esm.sh, you
-would configure the following, in the configuration file:
+如果要为整个项目配置 JSX 导入源，以便无需在每个模块中插入 pragma，您可以在
+[配置文件](../../getting_started/configuration_file.md) 中使用
+`"compilerOptions"` 来指定这一点。例如，如果您将 Preact 用作 JSX 库，来自
+esm.sh，您可以在配置文件中配置如下内容：
 
 ```jsonc
 {
@@ -95,14 +86,12 @@ would configure the following, in the configuration file:
 }
 ```
 
-### Using an import map
+### 使用导入映射
 
-In situations where the import source plus `/jsx-runtime` or `/jsx-dev-runtime`
-is not resolvable to the correct module, an import map can be used to instruct
-Deno where to find the module. An import map can also be used to make the import
-source "cleaner". For example, if you wanted to use Preact from skypack.dev and
-have skypack.dev include all the type information, you could setup an import map
-like this:
+在无法将导入源加 `/jsx-runtime` 或 `/jsx-dev-runtime`
+解析为正确模块的情况下，可以使用导入映射指示 Deno
+在哪里找到模块。导入映射也可用于使导入源“更清洁”。例如，如果您想要从 skypack.dev
+使用 Preact 并且让 skypack.dev 包含所有类型信息，您可以设置一个导入映射如下：
 
 ```json
 {
@@ -113,13 +102,13 @@ like this:
 }
 ```
 
-And then you could use the following pragma:
+然后，您可以使用以下 pragma：
 
 ```jsx, ignore
 /** @jsxImportSource preact */
 ```
 
-Or you could configure it in the compiler options:
+或者您可以在编译器选项中进行配置：
 
 ```json
 {
@@ -130,23 +119,6 @@ Or you could configure it in the compiler options:
 }
 ```
 
-You would then need to pass the `--import-map` option on the command line (along
-with the `--config` option is using a config file) or set the `deno.importMap`
-option (and `deno.config` option) in your IDE.
-
-### Current limitations
-
-There are two current limitations of the support of the JSX import source:
-
-- A JSX module that does not have any imports or exports is not transpiled
-  properly when type checking (see:
-  [microsoft/TypeScript#46723](https://github.com/microsoft/TypeScript/issues/46723)).
-  Errors will be seen at runtime about `_jsx` not being defined. To work around
-  the issue, add `export {}` to the file or use the `--no-check` flag which will
-  cause the module to be emitted properly.
-- Using `"jsx-reactdev"` compiler option is not supported with
-  `--no-emit`/bundling/compiling (see:
-  [swc-project/swc#2656](https://github.com/swc-project/swc/issues/2656)).
-  Various runtime errors will occur about not being able to load `jsx-runtime`
-  modules. To work around the issue, use the `"jsx-react"` compiler option
-  instead, or don't use `--no-emit`, bundling or compiling.
+然后，您需要在命令行上传递 `--import-map` 选项（如果使用配置文件，则还需要
+`--config` 选项），或在您的 IDE 中设置 `deno.importMap` 选项（以及 `deno.config`
+选项）。
