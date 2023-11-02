@@ -1,17 +1,17 @@
-# Bundling static assets (deprecated)
+# 打包静态资源 (已弃用)
 
-:::caution
+::: 警告
 
-`deno bundle` has been deprecated and will be removed in some future release.
-Use [deno_emit](https://github.com/denoland/deno_emit),
-[esbuild](https://esbuild.github.io/) or [rollup](https://rollupjs.org) instead.
+`deno bundle` 已被弃用，并将在将来的某个版本中移除。 请改用
+[deno_emit](https://github.com/denoland/deno_emit)、
+[esbuild](https://esbuild.github.io/) 或 [rollup](https://rollupjs.org)。
 
 :::
 
-# Bundling
+# 打包
 
-`deno bundle [URL]` will output a single JavaScript file for consumption in
-Deno, which includes all dependencies of the specified input. For example:
+`deno bundle [URL]` 将输出一个用于在 Deno 中使用的单个 JavaScript
+文件，其中包括指定输入的所有依赖项。例如：
 
 ```bash
 deno bundle https://deno.land/std/examples/colors.ts colors.bundle.js
@@ -21,35 +21,33 @@ Download https://deno.land/std/fmt/colors.ts
 Emit "colors.bundle.js" (9.83KB)
 ```
 
-If you omit the out file, the bundle will be sent to `stdout`.
+如果省略输出文件，则捆绑文件将发送到 `stdout`。
 
-The bundle can just be run as any other module in Deno would:
+这个捆绑文件可以像在 Deno 中的任何其他模块一样运行：
 
 ```bash
 deno run colors.bundle.js
 ```
 
-The output is a self contained ES Module, where any exports from the main module
-supplied on the command line will be available. For example, if the main module
-looked something like this:
+输出是一个自包含的 ES
+模块，其中来自命令行指定的主模块的任何导出将可用。例如，如果主模块看起来像这样：
 
-```ts, ignore
+```ts, 忽略
 export { foo } from "./foo.js";
 
 export const bar = "bar";
 ```
 
-It could be imported like this:
+它可以像这样导入：
 
-```ts, ignore
+```ts, 忽略
 import { bar, foo } from "./lib.bundle.js";
 ```
 
-## Bundling for the Web
+## 为 Web 打包
 
-The output of `deno bundle` is intended for consumption in Deno and not for use
-in a web browser or other runtimes. That said, depending on the input it may
-work in other environments.
+`deno bundle` 的输出旨在在 Deno 中使用，而不是在 Web
+浏览器或其他运行时中使用。尽管如此，根据输入的内容，它可能在其他环境中运行。
 
-If you wish to bundle for the web, we recommend other solutions such as
-[esbuild](https://esbuild.github.io/).
+如果您希望为 Web 打包，我们建议使用其他解决方案，如
+[esbuild](https://esbuild.github.io/)。

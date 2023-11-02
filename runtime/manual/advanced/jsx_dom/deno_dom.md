@@ -1,22 +1,21 @@
-# Using deno-dom with Deno
+# 使用 deno-dom 与 Deno
 
-[deno-dom](https://deno.land/x/deno_dom) is an implementation of DOM and HTML
-parser in Deno. It is implemented in Rust (via Wasm) and TypeScript. There is
-also a "native" implementation, leveraging the FFI interface.
+[deno-dom](https://deno.land/x/deno_dom) 是 Deno 中的 DOM 和 HTML
+解析器的实现。它是使用 Rust（通过 Wasm）和 TypeScript
+实现的。还有一个“本地”实现，利用了 FFI 接口。
 
-deno-dom aims for specification compliance, like jsdom and unlike LinkeDOM.
-Currently, deno-dom is slower than LinkeDOM for things like parsing data
-structures, but faster at some manipulation operations. Both deno-dom and
-LinkeDOM are significantly faster than jsdom.
+deno-dom 的目标是规范合规性，类似于 jsdom，不同于
+LinkeDOM。目前，对于诸如解析数据结构之类的操作，deno-dom 比 LinkeDOM
+慢，但在某些操作上更快。无论是 deno-dom 还是 LinkeDOM，都比 jsdom 快得多。
 
-As of deno_dom v0.1.22-alpha supports running on Deno Deploy. So if you want
-strict standards alignment, consider using deno-dom over LinkeDOM.
+截止到 deno_dom v0.1.22-alpha，支持在 Deno Deploy
+上运行。因此，如果您想要严格的标准对齐，请考虑使用 deno-dom 而不是 LinkeDOM。
 
-## Basic example
+## 基本示例
 
-This example will take a test string and parse it as HTML and generate a DOM
-structure based on it. It will then query that DOM structure, picking out the
-first heading it encounters and print out the text content of that heading:
+这个示例将接受一个测试字符串，将其解析为 HTML 并生成基于它的 DOM
+结构。然后，它将查询该 DOM
+结构，选择出它遇到的第一个标题，并打印出该标题的文本内容：
 
 ```ts
 import { DOMParser } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
@@ -48,21 +47,18 @@ assert(h1);
 console.log(h1.textContent);
 ```
 
-> Note: the example uses an unpinned version from `deno_land/x`, which you
-> likely don't want to do, because the version can change and cause unexpected
-> outcomes. You should use the latest version of available of
-> [deno-dom](https://deno.land/x/deno_dom).
+> 注意：示例使用了 `deno_land/x`
+> 的未固定版本，这可能不是您想要的，因为版本可能会更改并引起意外的结果。您应该使用可用的
+> [deno-dom](https://deno.land/x/deno_dom) 的最新版本。
 
-## Faster startup
+## 更快的启动
 
-Just importing the `deno-dom-wasm.ts` file bootstraps the Wasm code via top
-level await. The problem is that top level await blocks the module loading
-process. Especially with big Wasm projects, it is a lot more performant to
-initialize the Wasm after module loading is complete.
+仅导入 `deno-dom-wasm.ts` 文件会通过顶级等待引导 Wasm
+代码。问题是，顶级等待会阻止模块加载过程。特别是对于大型 Wasm
+项目，更加高效的方式是在模块加载完成后初始化 Wasm。
 
-_deno-dom_ has the solution for that, they provide an alternative version of the
-library that does not automatically init the Wasm, and requires you to do it in
-the code:
+_deno-dom_ 对此有解决方案，它们提供了一个库的替代版本，不会自动初始化
+Wasm，而需要您在代码中执行：
 
 ```ts
 import {
@@ -71,7 +67,7 @@ import {
 } from "https://deno.land/x/deno_dom/deno-dom-wasm-noinit.ts";
 
 (async () => {
-  // initialize when you need it, but not at the top level
+  // 在需要时初始化，但不是在顶级
   await initParser();
 
   const doc = new DOMParser().parseFromString(
@@ -81,6 +77,5 @@ import {
 })();
 ```
 
-In addition, using the `deno-dom-native.ts` (which requires the `--allow-ffi`
-flag) will bypass the Wasm startup penalty as well as will not require the
-`init()` startup time. This would only work with the Deno CLI and not Deploy.
+此外，使用 `deno-dom-native.ts`（需要 `--allow-ffi` 标志）将绕过 Wasm
+启动的开销，也不需要 `init()` 启动时间。这只适用于 Deno CLI，不适用于 Deploy。

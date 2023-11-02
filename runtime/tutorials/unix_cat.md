@@ -1,24 +1,19 @@
-# An Implementation of the Unix "cat" Program
+# Unix "cat" 程序的实现
 
-## Concepts
+## 概念
 
-- Use the Deno runtime API to output the contents of a file to the console.
-- [Deno.args](https://deno.land/api?s=Deno.args) accesses the command line
-  arguments.
-- [Deno.open](https://deno.land/api?s=Deno.open) is used to get a handle to a
-  file.
-- [Deno.stdout.writable](https://deno.land/api?s=Deno.stdout.writable) is used
-  to get a writable stream to the console standard output.
-- [Deno.FsFile.readable](https://deno.land/api?s=Deno.FsFile#prop_readable) is
-  used to get a readable stream from the file. (This readable stream closes the
-  file when it is finished reading, so it is not necessary to close the file
-  explicitly.)
-- Modules can be run directly from remote URLs.
+- 使用 Deno 运行时 API 将文件的内容输出到控制台。
+- [Deno.args](https://deno.land/api?s=Deno.args) 用于访问命令行参数。
+- [Deno.open](https://deno.land/api?s=Deno.open) 用于获取文件的句柄。
+- [Deno.stdout.writable](https://deno.land/api?s=Deno.stdout.writable)
+  用于获取控制台标准输出的可写流。
+- [Deno.FsFile.readable](https://deno.land/api?s=Deno.FsFile#prop_readable)
+  用于从文件获取可读流。（此可读流在完成读取后会关闭文件，因此无需显式关闭文件。）
+- 模块可以直接从远程 URL 运行。
 
-## Example
+## 示例
 
-In this program each command-line argument is assumed to be a filename, the file
-is opened, and printed to stdout (e.g. the console).
+在这个程序中，每个命令行参数都被假定为文件名，文件被打开，并打印到标准输出（例如控制台）。
 
 ```ts
 /**
@@ -30,7 +25,7 @@ for (const filename of Deno.args) {
 }
 ```
 
-To run the program:
+运行程序：
 
 ```shell
 deno run --allow-read https://deno.land/std/examples/cat.ts /etc/passwd

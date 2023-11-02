@@ -1,9 +1,7 @@
-# Proxies
+# 代理
 
-Deno supports proxies for module downloads and the Web standard `fetch` API.
+Deno 支持模块下载和 Web 标准 `fetch` API 的代理。
 
-Proxy configuration is read from environmental variables: `HTTP_PROXY`,
-`HTTPS_PROXY` and `NO_PROXY`.
+代理配置从环境变量中读取：`HTTP_PROXY`、`HTTPS_PROXY` 和 `NO_PROXY`。
 
-In case of Windows, if environment variables are not found Deno falls back to
-reading proxies from registry.
+在 Windows 情况下，如果未找到环境变量，Deno 会回退到从注册表中读取代理。

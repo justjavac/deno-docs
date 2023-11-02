@@ -1,4 +1,4 @@
-# Node.js -> Deno cheatsheet
+# Node.js -> Deno 技巧清单
 
 | Node.js                                | Deno                                           |
 | -------------------------------------- | ---------------------------------------------- |
@@ -22,8 +22,6 @@
 | `nyc` / `c8` / `istanbul`              | `deno coverage`                                |
 | benchmarks                             | `deno bench`                                   |
 
-¹ See [Modules](../basics/modules/index.md), the runtime downloads and caches
-the code on first use.
+¹ 请查看 [模块](../basics/modules/index.md)，运行时在首次使用时下载并缓存代码。
 
-² Type checking happens automatically, TypeScript compiler is built into the
-`deno` binary.
+² 类型检查会自动进行，TypeScript 编译器内置于 `deno` 二进制文件中。

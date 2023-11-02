@@ -1,44 +1,42 @@
-# How to use Apollo with Deno
+# 如何在 Deno 中使用 Apollo
 
-[Apollo Server](https://www.apollographql.com/) is a GraphQL server that you can
-set up in minutes and use with your existing data source (or REST API). You can
-then connect any GraphQL client to it to receive the data and take advantage of
-GraphQL benefits, such as type-checking and efficient fetching.
+[Apollo Server](https://www.apollographql.com/) 是一个 GraphQL
+服务器，您可以在几分钟内设置并与现有数据源（或 REST
+API）一起使用。然后，您可以连接任何 GraphQL 客户端以接收数据并利用 GraphQL
+的优势，例如类型检查和高效的数据获取。
 
-We're going to get a simple Apollo server up and running that will allow us to
-query some local data. We're only going to need three files for this:
+我们将创建一个简单的 Apollo
+服务器，用于查询一些本地数据。对此，我们只需要三个文件：
 
-1. `schema.ts` to set up our data model
-2. `resolvers.ts` to set up how we're going to populate the data fields in our
-   schema
-3. Our `main.ts` where the server is going to launch
+1. `schema.ts` 用于设置我们的数据模型
+2. `resolvers.ts` 用于设置如何填充我们模式中的数据字段
+3. 我们的 `main.ts`，其中服务器将启动
 
-We'll start by creating them:
+我们将从创建它们开始：
 
 ```shell, ignore
 touch schema.ts resolvers.ts main.ts
 ```
 
-Let's go through setting up each.
+让我们来详细了解每个设置。
 
-[View source here.](https://github.com/denoland/examples/tree/main/with-apollo)
+[在此处查看源码。](https://github.com/denoland/examples/tree/main/with-apollo)
 
 ## schema.ts
 
-Our `schema.ts` file describes our data. In this case, our data is a list of
-dinosaurs. We want our users to be able to get the name and a short description
-of each dino. In GraphQL language, this means that `Dinosaur` is our **type**,
-and `name` and `description` are our **fields**. We can also define the data
-type for each field. In this case, both are strings.
+我们的 `schema.ts`
+文件描述了我们的数据。在这种情况下，我们的数据是恐龙列表。我们希望用户能够获取每只恐龙的名称和简短描述。在
+GraphQL 语言中，这意味着 `Dinosaur` 是我们的 **类型**，`name` 和 `description`
+是我们的
+**字段**。我们还可以为每个字段定义数据类型。在这种情况下，两者都是字符串。
 
-This is also where we describe the queries we allow for our data, using the
-special **Query** type in GraphQL. We have two queries:
+这也是我们描述允许数据的查询的地方，使用 GraphQL 中的特殊 **Query**
+类型。我们有两个查询：
 
-- `dinosaurs` which gets a list of all dinosaurs
-- `dinosaur` which takes in the `name` of a dinosaur as an argument and returns
-  information about that one type of dinosaur.
+- `dinosaurs` 获取所有恐龙的列表
+- `dinosaur` 以一种恐龙的名称作为参数，并返回有关该恐龙类型的信息。
 
-We're going to export all this within our `typeDefs` type definitions, variable:
+我们将在我们的 `typeDefs` 类型定义中导出所有这些，如下：
 
 ```tsx, ignore
 export const typeDefs = `
@@ -49,31 +47,29 @@ export const typeDefs = `
 
   type Query {
     dinosaurs: [Dinosaur]
-		dinosaur(name: String): Dinosaur
+    dinosaur(name: String): Dinosaur
   }
 `;
 ```
 
-If we wanted to write data, this is also where we would describe the
-**Mutation** to do so. Mutations are how you write data with GraphQL. Because we
-are using a static dataset here, we won't be writing anything.
+如果我们想要写数据，这也是我们将描述如何执行 **Mutation** 的地方。Mutation
+是您使用 GraphQL
+写数据的方式。因为我们在这里使用的是一个静态数据集，所以我们不会写任何东西。
 
 ## resolvers.ts
 
-A resolver is responsible for populating the data for each query. Here we have
-our list of dinosaurs and all the resolver is going to do is either a) pass that
-entire list to the client if the user requests the `dinosaurs` query, or pass
-just one if the user requests the `dinosaur` query.
+解析器负责为每个查询填充数据。在这里，我们有我们的恐龙列表，解析器要做的就是要么将整个列表传递给客户端，如果用户请求
+`dinosaurs` 查询，要么如果用户请求 `dinosaur` 查询，则只传递一条数据。
 
 ```tsx, ignore
 const dinosaurs = [
   {
     name: "Aardonyx",
-    description: "An early stage in the evolution of sauropods.",
+    description: "蜥脚类恐龙演化的早期阶段。",
   },
   {
     name: "Abelisaurus",
-    description: '"Abel\'s lizard" has been reconstructed from a single skull.',
+    description: "“Abel's lizard” 是根据单个头骨重建的。",
   },
 ];
 
@@ -87,13 +83,12 @@ export const resolvers = {
 };
 ```
 
-With the latter, we pass the arguments from the client into a function to match
-the name to a name in our dataset.
+在后一种情况下，我们将从客户端传递的参数传递到函数中，以将名称与我们的数据集中的名称进行匹配。
 
 ## main.ts
 
-In our `main.ts` we're going to import the `ApolloServer` as well as `graphql`
-and our `typeDefs` from the schema and our resolvers:
+在我们的 `main.ts` 中，我们将导入 `ApolloServer` 以及 `graphql` 和来自模式的
+`typeDefs` 以及我们的解析器：
 
 ```tsx, ignore
 import { ApolloServer } from "npm:@apollo/server@^4.1";
@@ -111,24 +106,23 @@ const { url } = await startStandaloneServer(server, {
   listen: { port: 8000 },
 });
 
-console.log(`Server running on: ${url}`);
+console.log(`服务器运行在: ${url}`);
 ```
 
-We pass our `typeDefs` and `resolvers` to `ApolloServer` to spool up a new
-server. Finally, `startStandaloneServer` is a helper function to get the server
-up and running quickly.
+我们将我们的 `typeDefs` 和 `resolvers` 传递给 `ApolloServer`
+以快速启动新的服务器。最后，`startStandaloneServer`
+是一个帮助函数，用于快速启动服务器。
 
-## Running the server
+## 运行服务器
 
-All that is left to do now is run the server:
+现在只剩下运行服务器了：
 
 ```shell, ignore
 deno run --allow-net --allow-read --allow-env main.ts
 ```
 
-You should see `Server running on: 127.0.0.1:8000` in your terminal. If you go
-to that address you will see the Apollo sandbox where we can enter our
-`dinosaurs` query:
+您应该在终端中看到 `服务器运行在: 127.0.0.1:8000`。如果您访问该地址，您将看到
+Apollo 沙盒，您可以在其中输入我们的 `dinosaurs` 查询：
 
 ```graphql, ignore
 query {
@@ -139,7 +133,7 @@ query {
 }
 ```
 
-This will return our dataset:
+这将返回我们的数据集：
 
 ```graphql
 {
@@ -147,18 +141,18 @@ This will return our dataset:
     "dinosaurs": [
       {
         "name": "Aardonyx",
-        "description": "An early stage in the evolution of sauropods."
+        "description": "蜥脚类恐龙演化的早期阶段。"
       },
       {
         "name": "Abelisaurus",
-        "description": "\"Abel's lizard\" has been reconstructed from a single skull."
+        "description": "“Abel's lizard” 是根据单个头骨重建的。"
       }
     ]
   }
 }
 ```
 
-Or if we want just one `dinosaur`:
+或者，如果我们只想要一个 `dinosaur`：
 
 ```graphql, ignore
 query {
@@ -169,19 +163,19 @@ query {
 }
 ```
 
-Which returns:
+它将返回：
 
 ```graphql, ignore
 {
   "data": {
     "dinosaur": {
       "name": "Aardonyx",
-      "description": "An early stage in the evolution of sauropods."
+      "description": "蜥脚类恐龙演化的早期阶段。"
     }
   }
 }
 ```
 
-Awesome!
+太棒了！
 
-[Learn more about using Apollo and GraphQL in their tutorials](https://www.apollographql.com/tutorials/).
+[在他们的教程中了解更多关于如何使用 Apollo 和 GraphQL。](https://www.apollographql.com/tutorials/)

@@ -1,145 +1,123 @@
-# Deno Privacy Policy
+# Deno 隐私政策
 
-Deno Land Inc is a corporation registered in Delaware, USA doing business as
-"Deno". This privacy policy will explain how our organization uses the personal
-data we collect from you when you use our website.
+Deno Land Inc 是一家在美国特拉华州注册的公司，以 "Deno"
+为商号经营。本隐私政策将解释我们的组织如何在您使用我们的网站时使用我们收集的个人数据。
 
-This privacy policy applies to all services provided at deno.com and deno.land.
+本隐私政策适用于 deno.com 和 deno.land 提供的所有服务。
 
-Topics:
+主题：
 
-- What data do we collect?
-- How do we collect your data?
-- How will we use your data?
-- How do we store your data?
-- Marketing
-- What are your data protection rights?
-- What are cookies?
-- How do we use cookies?
-- What types of cookies do we use?
-- How to manage your cookies
-- Privacy policies of other websites
-- Changes to our privacy policy
-- How to contact us
-- What data do we collect?
+- 我们收集哪些数据？
+- 我们如何收集您的数据？
+- 我们将如何使用您的数据？
+- 我们如何存储您的数据？
+- 营销
+- 您的数据保护权利是什么？
+- 什么是 Cookies？
+- 我们如何使用 Cookies？
+- 我们使用哪些类型的 Cookies？
+- 如何管理您的 Cookies？
+- 其他网站的隐私政策
+- 我们隐私政策的变更
+- 如何联系我们
+- 我们收集哪些数据？
 
-## What data do we collect?
+## 我们收集哪些数据？
 
-For users of Deno Deploy, we collect your email address and GitHub login. We
-also automatically collect from you your usage information, cookies, and device
-information, subject, where necessary, to your consent.
+对于 Deno Deploy 的用户，我们收集您的电子邮件地址和 GitHub
+登录信息。我们还会在您同意的情况下，自动收集您的使用信息、Cookies 和设备信息。
 
-## How do we collect your data?
+## 我们如何收集您的数据？
 
-- Your email address is collected during registration to Deno Deploy.
-- Usage information, cookies, and device information are collected automatically
-  when viewing our websites.
+- 在 Deno Deploy 注册期间收集您的电子邮件地址。
+- 在浏览我们的网站时，自动收集使用信息、Cookies 和设备信息。
 
-## How will we use your data?
+## 我们将如何使用您的数据？
 
-Deno collects your data so that we can:
+Deno 收集您的数据，以便我们可以：
 
-- Manage your account. Deno Deploy requires your email address for
-  notifications, like when being invited an organization.
-- Analyze usage patterns of our products and services.
+- 管理您的帐户。Deno Deploy
+  需要您的电子邮件地址以便发送通知，比如在被邀请加入组织时。
+- 分析我们的产品和服务的使用模式。
 
-Deno will not share your information with other parties.
+Deno 不会与其他方共享您的信息。
 
-## How do we store your data?
+## 我们如何存储您的数据？
 
-Deno takes measures reasonably necessary to protect User Personal Information
-from unauthorized access, alteration, or destruction.
+Deno 采取合理的措施来保护用户个人信息，以防止未经授权的访问、更改或销毁。
 
-Deno will keep your email address indefinitely. Contact us at privacy@deno.com
-to request your information be deleted.
+Deno
+将保留您的电子邮件地址无限期。如需删除您的信息，请联系我们：privacy@deno.com
 
-## Marketing
+## 营销
 
-Deno does not currently send out marketing information. However, Deno may in the
-future send you information about products and services of ours that we think
-you might like.
+Deno 目前不会发送营销信息。然而，将来 Deno
+可能会向您发送我们认为您可能感兴趣的产品和服务信息。
 
-You have the right at any time to stop Deno from contacting you for marketing
-purposes. Please contact us at privacy@deno.com
+您有权随时要求 Deno 停止与您联系以进行营销目的。请联系我们：privacy@deno.com
 
-## What are your data protection rights?
+## 您的数据保护权利是什么？
 
-Deno would like to make sure you are fully aware of all of your data protection
-rights. Every user is entitled to the following:
+Deno 希望确保您充分了解所有您的数据保护权利。每个用户都有以下权利：
 
-- The right to access – You have the right to request Deno for copies of your
-  personal data.
+- 访问权 - 您有权要求 Deno 提供您个人数据的副本。
 
-- The right to rectification – You have the right to request that Deno correct
-  any information you believe is inaccurate. You also have the right to request
-  Deno to complete the information you believe is incomplete.
+- 更正权 - 您有权要求 Deno 更正您认为不准确的信息。您还有权要求 Deno
+  完成您认为不完整的信息。
 
-- The right to erasure – You have the right to request that Deno erase your
-  personal data, under certain conditions.
+- 删除权 - 在特定情况下，您有权要求 Deno 删除您的个人数据。
 
-- The right to restrict processing – You have the right to request that Our
-  Company restrict the processing of your personal data, under certain
-  conditions.
+- 限制处理权 - 在特定情况下，您有权要求我们公司限制您的个人数据的处理。
 
-- The right to object to processing – You have the right to object to Our
-  Company’s processing of your personal data, under certain conditions.
+- 反对处理权 - 在特定情况下，您有权反对我们公司处理您的个人数据。
 
-- The right to data portability – You have the right to request that Deno
-  transfer the data that we have collected to another organization, or directly
-  to you, under certain conditions.
+- 数据可移植性权 - 在特定情况下，您有权要求 Deno
+  将我们收集的数据转移到另一家组织或直接转交给您。
 
-- If you make a request, we have one month to respond to you. If you would like
-  to exercise any of these rights, please contact us at our email:
-  privacy@deno.com
+- 如果您提出请求，我们将在一个月内回应您。如果您希望行使这些权利中的任何一项，请联系我们：privacy@deno.com
 
 ## Cookies
 
-Cookies are text files placed on your computer to collect standard Internet log
-information and visitor behavior information. When you visit our websites, we
-may collect information from you automatically through cookies or similar
-technology
+Cookies
+是放置在您的计算机上的文本文件，用于收集标准互联网日志信息和访客行为信息。当您访问我们的网站时，我们可能会通过
+Cookies 或类似技术自动从您那里收集信息。
 
-For further information, visit allaboutcookies.org.
+有关更多信息，请访问 allaboutcookies.org。
 
-## How do we use cookies?
+## 我们如何使用 Cookies？
 
-Deno uses cookies in a range of ways to improve your experience on our website,
-including:
+Deno 使用 Cookies 的多种方式来改善您在我们网站上的体验，包括：
 
-- Keeping you signed in
-- Understanding how you use our website
+- 保持您登录状态
+- 了解您如何使用我们的网站
 
-## What types of cookies do we use?
+## 我们使用哪些类型的 Cookies？
 
-There are a number of different types of cookies, however, our website uses:
+有多种不同类型的 Cookies，但我们的网站使用以下类型的 Cookies：
 
-- Functionality – Deno uses these cookies so that we recognize you on our
-  website and remember your previously selected preferences. These could include
-  what language you prefer and location you are in. A mix of first-party and
-  third-party cookies are used.
-- Understanding Usage – Deno uses these cookies to collect information about
-  your visit to our website, the content you viewed, the links you followed and
-  information about your browser, device, and your IP address.
+- 功能性 - Deno 使用这些 Cookies
+  以便在我们的网站上识别您并记住您之前选择的首选项。这些可能包括您喜欢的语言和所在地。我们同时使用第一方和第三方
+  Cookies。
+- 了解使用情况 - Deno 使用这些 Cookies
+  来收集关于您访问我们的网站、查看的内容、跟踪的链接以及您的浏览器、设备和 IP
+  地址的信息。
 
-## How to manage cookies
+## 如何管理 Cookies
 
-You can set your browser not to accept cookies, and the above website tells you
-how to remove cookies from your browser. However, in a few cases, some of our
-website features may not function as a result.
+您可以设置您的浏览器不接受 Cookies，并且上述网站会告诉您如何从您的浏览器中删除
+Cookies。然而，在某些情况下，我们的网站某些功能可能会因此而无法正常运作。
 
-## Privacy policies of other websites
+## 其他网站的隐私政策
 
-The Deno website contains links to other websites. Our privacy policy applies
-only to deno.land and deno.com, so if you click on a link to another website,
-you should read their privacy policy.
+Deno 网站包含指向其他网站的链接。我们的隐私政策仅适用于 deno.land 和
+deno.com，因此如果您单击链接到其他网站，您应该阅读其隐私政策。
 
-## Changes to our privacy policy
+## 我们隐私政策的变更
 
-Deno keeps its privacy policy under regular review and places any updates on
-this web page. This privacy policy was last updated on December 2 2021.
+Deno 定期审查其隐私政策，并在此网页上发布任何更新。本隐私政策最后更新于 2021 年
+12 月 2 日。
 
-## How to contact us
+## 如何联系我们
 
-If you have any questions about Deno’s privacy policy, the data we hold on you,
-or you would like to exercise one of your data protection rights, please do not
-hesitate to contact us at privacy@deno.com.
+如果您对 Deno
+的隐私政策、我们持有的您的数据或您想行使您的数据保护权利中的任何一项有任何疑问，请随时联系我们：privacy@deno.com。

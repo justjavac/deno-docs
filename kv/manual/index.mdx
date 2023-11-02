@@ -1,41 +1,36 @@
 import Admonition from "./_admonition.mdx";
 
-# Deno KV Quick Start
+# Deno KV 快速入门
 
-**Deno KV** is a
-[key-value database](https://en.wikipedia.org/wiki/Key%E2%80%93value_database)
-built directly into the Deno runtime, available in the
-[`Deno.Kv` namespace](https://deno.land/api?unstable&s=Deno.Kv). It can be used
-for many kinds of data storage use cases, but excels at storing simple data
-structures that benefit from very fast reads and writes. Deno KV is available in
-the Deno CLI and on [Deno Deploy](./on_deploy.mdx).
+**Deno KV** 是一个
+[key-value 数据库](https://en.wikipedia.org/wiki/Key%E2%80%93value_database)
+直接内置于 Deno 运行时中，可在
+[`Deno.Kv` 命名空间](https://deno.land/api?unstable&s=Deno.Kv) 中使用。它可用于
+许多种数据存储用途，但在存储简单数据结构并且需要非常快速读写的情况下表现出色。Deno
+KV 可用于 Deno CLI 和 [Deno Deploy](./on_deploy.mdx) 中。
 
 <Admonition />
 
-Let's walk through the key features of Deno KV.
+让我们来看看 Deno KV 的主要特点。
 
-## Opening a database
+## 打开数据库
 
-In your Deno program, you can get a reference to a KV database using
-[`Deno.openKv()`](https://deno.land/api?unstable=&s=Deno.openKv). You may pass
-in an optional file system path to where you'd like to store your database,
-otherwise one will be created for you based on the current working directory of
-your script.
+在你的 Deno 程序中，你可以使用
+[`Deno.openKv()`](https://deno.land/api?unstable=&s=Deno.openKv) 获取一个 KV
+数据库的引用。你可以选择传入一个可选的文件系统路径，用于存储数据库，否则将基于你的脚本的当前工作目录为你创建一个。
 
 ```ts
 const kv = await Deno.openKv();
 ```
 
-## Creating, updating, and reading a key-value pair
+## 创建、更新和读取键值对
 
-Data in Deno KV is stored as key-value pairs, much like properties of a
-JavaScript object literal or a
-[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map).
-[Keys](./key_space.mdx) are represented as an array of JavaScript types, like
-`string`, `number`, `bigint`, or `boolean`. Values can be arbitrary JavaScript
-objects. In this example, we create a key-value pair representing a user's UI
-preferences, and save it with
-[`kv.set()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.set).
+Deno KV 中的数据存储为键值对，类似于 JavaScript 对象字面量或
+[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+的属性。[键](./key_space.mdx) 表示为 JavaScript 类型的数组，如
+`string`、`number`、`bigint` 或 `boolean`。值可以是任意的 JavaScript
+对象。在此示例中，我们创建一个表示用户 UI 首选项的键值对，并使用
+[`kv.set()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.set) 保存它。
 
 ```ts
 const kv = await Deno.openKv();
@@ -49,8 +44,9 @@ const prefs = {
 const result = await kv.set(["preferences", "ada"], prefs);
 ```
 
-Once a key-value pair is set, you can read it from the database with
-[`kv.get()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.get):
+一旦设置了键值对，你可以使用
+[`kv.get()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.get)
+从数据库中读取它：
 
 ```ts
 const entry = await kv.get(["preferences", "ada"]);
@@ -59,26 +55,21 @@ console.log(entry.value);
 console.log(entry.versionstamp);
 ```
 
-Both `get` and `list` [operations](./operations.mdx) return a
-[KvEntry](https://deno.land/api?s=Deno.KvEntry&unstable=) object with the
-following properties:
+`get` 和 `list` [操作](./operations.mdx) 都返回一个
+[KvEntry](https://deno.land/api?s=Deno.KvEntry&unstable=) 对象，具有以下属性：
 
-- `key` - the array key you used to set the value
-- `value` - the JavaScript object you set for this key
-- `versionstamp` - a generated value used to determine if a key has been
-  updated.
+- `key` - 用于设置值的数组键
+- `value` - 为此键设置的 JavaScript 对象
+- `versionstamp` - 用于确定是否已更新键的生成值。
 
-The `set` operation is also used to update objects that already exist for a
-given key. When a key's value is updated, its `versionstamp` will change to a
-new generated value.
+`set` 操作还用于更新已经存在于给定键的对象。当键的值被更新时，它的
+`versionstamp` 将更改为新生成的值。
 
-## Listing several key-value pairs
+## 列出多个键值对
 
-To get values for a finite number of keys, you may use
-[`kv.getMany()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.getMany).
-Pass in several keys as arguments, and you'll receive an array of values for
-each key. Note that **values and versionstamps can be `null`** if no value
-exists for the given key(s).
+要获取有限数量的键的值，你可以使用
+[`kv.getMany()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.getMany)。将多个键作为参数传递，你将收到每个键的值数组。注意，**如果给定键的值不存在，值和版本戳可以为
+`null`**。
 
 ```ts
 const kv = await Deno.openKv();
@@ -94,11 +85,9 @@ result[1].value; // null
 result[1].versionstamp; // null
 ```
 
-Often, it is useful to retrieve a list of key-value pairs from all keys that
-share a given prefix. This type of operation is possible using
-[`kv.list()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.list). In
-this example, we get a list of key-value pairs that share the `"preferences"`
-prefix.
+通常，检索共享给定前缀的所有键值对的列表是有用的。使用
+[`kv.list()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.list)
+可以执行此类操作。在此示例中，我们获取共享 `"preferences"` 前缀的键值对列表。
 
 ```ts
 const kv = await Deno.openKv();
@@ -110,38 +99,32 @@ for await (const entry of entries) {
 }
 ```
 
-Returned keys are ordered lexicographically based on the next component of the
-key after the prefix. So KV pairs with these keys:
+返回的键是基于前缀后的键的下一个组件按字典顺序排序的。因此，具有这些键的 KV 对：
 
 - `["preferences", "ada"]`
 - `["preferences", "bob"]`
 - `["preferences", "cassie"]`
 
-Will be returned in that order by `kv.list()`.
+将按 `kv.list()` 的顺序返回。
 
-Read operations can either be performed in
-[**strong or eventual consistency mode**](./operations.mdx). Strong consistency
-mode guarantees that the read operation will return the most recently written
-value. Eventual consistency mode may return a stale value, but is faster. By
-contrast, writes are always performed in strong consistency mode.
+读操作可以在 [**强一致性或最终一致性模式**](./operations.mdx)
+中执行。强一致性模式保证读取操作将返回最近写入的值。最终一致性模式可能返回陈旧的值，但更快。相比之下，写操作始终在强一致性模式下执行。
 
-## Deleting key-value pairs
+## 删除键值对
 
-You can delete a key from the database using
-[`kv.delete()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.delete).
-No action is taken if no value is found for the given key.
+你可以使用
+[`kv.delete()`](https://deno.land/api?s=Deno.Kv&unstable=&p=prototype.delete)
+从数据库中删除键。如果给定键找不到值，将不执行任何操作。
 
 ```ts
 const kv = await Deno.openKv();
 await kv.delete(["preferences", "alan"]);
 ```
 
-## Atomic transactions
+## 原子事务
 
-Deno KV is capable of executing [atomic transactions](./transactions.mdx), which
-enables you to conditionally execute one or many data manipulation operations at
-once. In the following example, we create a new preferences object only if it
-hasn't been created already.
+Deno KV
+能够执行[原子事务](./transactions.mdx)，这使你能够有条件地执行一个或多个数据操作。在下面的示例中，仅当首选项对象尚未创建时，我们创建一个新的首选项对象。
 
 ```ts
 const kv = await Deno.openKv();
@@ -153,26 +136,24 @@ const value = {
   language: "en-GB",
 };
 
-const res = await kv.atomic()
+const res = await kv
+  .atomic()
   .check({ key, versionstamp: null }) // `null` versionstamps mean 'no value'
   .set(key, value)
   .commit();
 if (res.ok) {
-  console.log("Preferences did not yet exist. Inserted!");
+  console.log("首选项尚未存在。已插入！");
 } else {
-  console.error("Preferences already exist.");
+  console.error("首选项已经存在。");
 }
 ```
 
-Learn more about transactions in Deno KV [here](./transactions.mdx).
+在 Deno KV 中了解更多关于事务的内容 [在此处](./transactions.mdx)。
 
-## Improve querying with secondary indexes
+## 使用二级索引改进查询
 
-[Secondary indexes](./secondary_indexes.mdx) store the same data by multiple
-keys, allowing for simpler quries of the data you need. Let's say that we need
-to be able to access user preferences by both username AND email. To enable
-this, you could provide a function that wraps the logic to save the preferences
-to create two indexes.
+[二级索引](./secondary_indexes.mdx)
+使用多个键存储相同的数据，允许更简单地查询所需的数据。假设我们需要能够通过用户名和电子邮件访问用户首选项。为实现这一目标，你可以提供一个包装了保存首选项的逻辑的函数，以创建两个索引。
 
 ```ts
 const kv = await Deno.openKv();
@@ -180,44 +161,44 @@ const kv = await Deno.openKv();
 async function savePreferences(prefs) {
   const key = ["preferences", prefs.username];
 
-  // Set the primary key
+  // 设置主键
   const r = await kv.set(key, prefs);
 
-  // Set the secondary key's value to be the primary key
+  // 将辅助键的值设置为主键
   await kv.set(["preferencesByEmail", prefs.email], key);
 
   return r;
 }
 
 async function getByUsername(username) {
-  // Use as before...
+  // 如之前所述...
   const r = await kv.get(["preferences", username]);
   return r;
 }
 
 async function getByEmail(email) {
-  // Look up the key by email, then second lookup for actual data
+  // 通过电子邮件查找键，然后再次查找实际数据
   const r1 = await kv.get(["preferencesByEmail", email]);
   const r2 = await kv.get(r1.value);
   return r2;
 }
 ```
 
-Learn more about [secondary indexes in the manual here](./secondary_indexes.mdx).
+在手册中了解更多关于[二级索引](./secondary_indexes.mdx)的内容。
 
-## Production usage
+## 生产用途
 
-Deno KV is available for use in live applications on
-[Deno Deploy](./on_deploy.mdx). In production, Deno KV is backed by
-[FoundationDB](https://www.foundationdb.org/), the open source key-value store
-created by Apple.
+Deno KV 可在 [Deno Deploy](./on_deploy.mdx)
+上的实时应用程序中使用。在生产中，Deno KV 由
+[FoundationDB](https://www.foundationdb.org/) 支持，这是由 Apple
+创建的开源键值存储。
 
-**No additional configuration is necessary** to run your Deno programs that use
-KV on Deploy - a new Deploy database will be provisioned for you when required
-by your code. Learn more about Deno KV on Deno Deploy [here](./on_deploy.mdx).
+**无需额外配置**，你可以在 Deploy 上运行使用 KV 的 Deno 程序 -
+当你的代码需要时，将为你提供新的 Deploy
+数据库。在[此处](./on_deploy.mdx)了解更多关于 Deno Deploy 上的 Deno KV 的信息。
 
-## Next steps
+## 下一步
 
-At this point, you're just beginning to scratch the surface with Deno KV. Be
-sure to check out our guide on the [Deno KV key space](./key_space.mdx), and a
-collection of [tutorials and example applications](../tutorials/index.md) here.
+到目前为止，你仅仅开始了解 Deno KV
+的基础知识。请确保查看我们的[关于 Deno KV 键空间](./key_space.mdx)
+的指南，以及[这里](../tutorials/index.md)的教程和示例应用程序集合。

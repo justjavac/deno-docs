@@ -1,50 +1,39 @@
-# Publishing Modules
+# 发布模块
 
-Deno is not prescriptive about how developers make their modules
-available—modules may be imported from any source. To help publish and
-distribute modules, separate standalone solutions are provided.
+Deno 不对开发者发布模块的方式进行规定 -
+模块可以从任何来源导入。为了帮助发布和分发模块，提供了独立的解决方案。
 
-## Publishing on deno.land/x
+## 在 deno.land/x 上发布
 
-A common way to publish Deno modules is via the official
-[https://deno.land/x](https://deno.land/x) hosting service. It caches releases
-of open source modules and serves them at one easy to remember domain.
+发布 Deno 模块的一种常见方式是通过官方的
+[https://deno.land/x](https://deno.land/x)
+托管服务。它会缓存开源模块的发布，并将它们提供在一个易于记住的域名下。
 
-To use it, modules must be developed and hosted in public repositories on
-GitHub. Their source is then published to deno.land/x on tag creation. They can
-then be accessed by using a url in the following format:
+要使用它，模块必须在 GitHub
+上的公共存储库中开发和托管。它们的源代码会在创建标签时发布到
+deno.land/x。然后可以通过以下格式的 URL 进行访问：
 
 ```
 https://deno.land/x/<module_name>@<tag_name>/<file_path>
 ```
 
-Module versions are persistent and immutable. It is thus not possible to edit or
-delete a module (or version), to prevent breaking programs that rely on this
-module. Modules may be removed if there is a legal reason to do so (for example
-copyright infringement).
+模块版本是持久且不可更改的。因此，无法编辑或删除模块（或版本），以防止破坏依赖于该模块的程序。如果有法律理由，模块可能会被移除（例如侵犯版权）。
 
-For more details, see [Adding a Module](https://deno.land/add_module).
+有关更多详细信息，请参阅 [添加模块](https://deno.land/add_module)。
 
-## Auto-generating documentation for modules
+## 自动生成模块文档
 
-When a module is published, the contents of the module is analyzed. An automated
-process identifies modules that contain code that Deno understands and generates
-documentation based on the code. For each path, including the root path, it
-attempts to identify the default module. In order of preference it looks for
-`mod`, `lib`, `main`, or `index` files with an extension that Deno understands
-(ts,tsx,js,jsx,mjs, or mts). When viewing the documentation for the module for a
-path, the default module will shown.
+当模块发布时，会分析模块的内容。自动化过程会识别包含 D\eno
+理解的代码的模块，并根据代码生成文档。对于每个路径，包括根路径，它会尝试识别默认模块。按照首选项的顺序，它会查找带有
+D\eno 理解的扩展名（ts、tsx、js、jsx、mjs 或 mts）的 `mod`、`lib`、`main` 或
+`index` 文件。在查看模块的路径文档时，将显示默认模块。
 
-If a default module cannot be identified, a list of modules that can be
-documented will be provided instead. When generating the documentation, not only
-is the actual code parsed to generate it, inline documentation, in the form of
-JSDoc (/** */) is used to enrich the documentation. Many JSDoc tags are
-supported. To provide module level documentation (which also becomes the path
-level documentation when it is included in a default module), use the @module
-tag at the end of the first JSDoc block in the module.
+如果无法识别默认模块，将提供一个可以生成文档的模块列表。在生成文档时，不仅会解析实际代码以生成文档，还会使用
+JSDoc（/**/）形式的内联文档来丰富文档。支持许多 JSDoc
+标签。要提供模块级别文档（当包含在默认模块中时也会成为路径级别文档），请在模块中的第一个
+JSDoc 块末尾使用 @module 标签。
 
-## Publishing Deno modules for Node.js/npm
+## 为 Node.js/npm 发布 Deno 模块
 
-We have built a tool that assists in the process of taking Deno specific code
-and publishing it to npm to work under Node.js or other parts of the JavaScript
-ecosystem. See [dnt - Deno to Node.js Transform](./dnt.md).
+我们建立了一个工具，用于将 Deno 特定代码发布到 npm 以在 Node.js 或 JavaScript
+生态系统的其他部分下运行。请参阅 [dnt - Deno 到 Node.js 转换](./dnt.md)。

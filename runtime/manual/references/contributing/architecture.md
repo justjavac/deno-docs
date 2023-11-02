@@ -1,23 +1,21 @@
-# Internal Details
+# 内部详情
 
-## Deno and Linux analogy
+## Deno 和 Linux 的类比
 
-|                       **Linux** | **Deno**                         |
-| ------------------------------: | :------------------------------- |
-|                       Processes | Web Workers                      |
-|                        Syscalls | Ops                              |
-|           File descriptors (fd) | [Resource ids (rid)](#resources) |
-|                       Scheduler | Tokio                            |
-| Userland: libc++ / glib / boost | https://deno.land/std/           |
-|                 /proc/\$\$/stat | [Deno.metrics()](#metrics)       |
-|                       man pages | deno types                       |
+|                       **Linux** | **Deno**                |
+| ------------------------------: | :---------------------- |
+|                            进程 | Web Workers             |
+|                        系统调用 | Ops                     |
+|                 文件描述符 (fd) | [资源标识 (rid)](#资源) |
+|                          调度器 | Tokio                   |
+| 用户空间: libc++ / glib / boost | https://deno.land/std/  |
+|                 /proc/\$\$/stat | [Deno.metrics()](#指标) |
+|                          手册页 | Deno 类型               |
 
-### Resources
+### 资源
 
-Resources (AKA `rid`) are Deno's version of file descriptors. They are integer
-values used to refer to open files, sockets, and other concepts. For testing it
-would be good to be able to query the system for how many open resources there
-are.
+资源 (也称为 `rid`) 是 Deno
+的文件描述符版本。它们是用于引用打开文件、套接字和其他概念的整数值。为了进行测试，可以查询系统中有多少个打开资源。
 
 ```ts
 console.log(Deno.resources());
@@ -27,9 +25,9 @@ console.log(Deno.resources());
 // { 1: "stdout", 2: "stderr" }
 ```
 
-### Metrics
+### 指标
 
-Metrics is Deno's internal counter for various statistics.
+指标是 Deno 的各种统计数据的内部计数器。
 
 ```shell
 > console.table(Deno.metrics())
@@ -50,11 +48,11 @@ Metrics is Deno's internal counter for various statistics.
 └─────────────────────────┴───────────┘
 ```
 
-## Conference
+## 会议
 
-- Ryan Dahl. (May 27, 2020).
-  [An interesting case with Deno](https://www.youtube.com/watch?v=1b7FoBwxc7E).
-  Deno Israel.
-- Bartek Iwańczuk. (Oct 6, 2020).
-  [Deno internals - how modern JS/TS runtime is
-  built](https://www.youtube.com/watch?v=AOvg_GbnsbA&t=35m13s). Paris Deno.
+- Ryan Dahl. (2020 年 5 月 27 日).
+  [Deno 的一个有趣案例](https://www.youtube.com/watch?v=1b7FoBwxc7E). Deno
+  以色列.
+- Bartek Iwa ń czuk. (2020 年 10 月 6 日).
+  [Deno 内部 - 现代 JS/TS 运行时的构建方式](https://www.youtube.com/watch?v=AOvg_GbnsbA&t=35m13s).
+  巴黎 Deno.

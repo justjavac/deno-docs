@@ -1,19 +1,19 @@
-# Import Maps
+# 导入映射
 
-In order for Deno to resolve a _bare specifier_ like `"react"` or `"lodash"`, it
-needs to be told where to look for it. Does `"lodash"` refer to an npm module or
-does it map to an https URL?
+为了让 Deno 能够解析像 `"react"` 或 `"lodash"` 这样的
+_裸规范_，它需要知道在哪里查找它。`"lodash"` 是指一个 npm 模块，还是映射到一个
+https URL？
 
 ```ts, ignore
 import lodash from "lodash";
 ```
 
-Node and npm use `package.json` and the `node_modules` folder to do this
-resolution. Deno, on the other hand, uses the
-[import map](https://github.com/WICG/import-maps) standard.
+Node 和 npm 使用 `package.json` 和 `node_modules`
+文件夹来进行这个解析。另一方面，Deno 使用
+[导入映射](https://github.com/WICG/import-maps) 标准。
 
-To make the above `import lodash from "lodash"` work, add the following to the
-[`deno.json` configuration file](../getting_started/configuration_file.md).
+要使上面的 `import lodash from "lodash"` 工作，将以下内容添加到
+[`deno.json` 配置文件](../getting_started/configuration_file.md)。
 
 ```json
 {
@@ -23,12 +23,11 @@ To make the above `import lodash from "lodash"` work, add the following to the
 }
 ```
 
-The `deno.json` file is auto-discovered and acts (among other things) as an
-import map.
-[Read more about `deno.json` here](../getting_started/configuration_file.md).
+`deno.json` 文件会自动发现并起到（除其他功能外）导入映射的作用。
+[在这里了解更多关于 `deno.json` 的信息](../getting_started/configuration_file.md)。
 
-This also works with npm specifiers. Instead of the above, we could have also
-written something similar in our `deno.json` configuration file:
+这也适用于 npm 规范。与上面的方法不同，我们也可以在 `deno.json`
+配置文件中编写类似的内容：
 
 ```json
 {
@@ -38,7 +37,7 @@ written something similar in our `deno.json` configuration file:
 }
 ```
 
-## Example - Using deno_std's fmt module via `fmt/`
+## 示例 - 通过 `fmt/` 使用 deno_std 的 fmt 模块
 
 ```json title="deno.json"
 {
@@ -54,9 +53,9 @@ import { red } from "fmt/colors.ts";
 console.log(red("hello world"));
 ```
 
-## Example - Using project root for absolute imports
+## 示例 - 使用项目根目录进行绝对导入
 
-To use your project root for absolute imports:
+要在项目根目录中进行绝对导入：
 
 ```json title="deno.json"
 {
@@ -67,22 +66,15 @@ To use your project root for absolute imports:
 }
 ```
 
-```ts title="main.ts"
-import { MyUtil } from "/util.ts";
-```
+这将导致以 `/` 开头的导入规范相对于 导入映射的 URL 或文件路径进行解析。
 
-This causes import specifiers starting with `/` to be resolved relative to the
-import map's URL or file path.
+## 覆盖导入
 
-## Overriding imports
+导入映射非常有用的另一种情况是在特定模块中覆盖导入。
 
-The other situation where import maps can be very useful is to override imports
-in specific modules.
-
-Let's say you want to override the deno_std import from 0.177.0 to the latest in
-all of your imported modules, but for the `https://deno.land/x/example/` module
-you want to use files in a local `patched` directory. You can do this by using a
-scope in the import map that looks something like this:
+假设您希望将 deno_std 从 0.177.0 覆盖到所有导入的模块中的最新版本，但对于
+`https://deno.land/x/example/` 模块，您希望使用本地 `patched`
+目录中的文件。您可以使用导入映射中的作用域来实现这样的效果，示例如下：
 
 ```json
 {
@@ -97,15 +89,10 @@ scope in the import map that looks something like this:
 }
 ```
 
-## Import Maps are for Applications
+## 导入映射适用于应用程序
 
-It is important to note that import map configuration files are
-[only applied for Deno applications][scope], not in the various libraries that
-your application code may import. This lets you, the application author, have
-final say about what versions of libraries get included in your project.
+值得注意的是，导入映射配置文件仅适用于 Deno
+应用程序，而不适用于您的应用程序代码可能导入的各种库。这使您作为应用程序作者能够决定包含在您的项目中的库的版本。
 
-If you are developing a library, you should instead prefer to use the `deps.ts`
-pattern discussed in [Managing Dependencies].
-
-[scope]: https://github.com/WICG/import-maps#scope
-[Managing Dependencies]: ../../tutorials/manage_dependencies.md
+如果您正在开发一个库，您应该更倾向于使用
+[管理依赖](../../tutorials/manage_dependencies.md) 中讨论的 `deps.ts` 模式。

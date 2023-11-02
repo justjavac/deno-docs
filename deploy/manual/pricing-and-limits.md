@@ -1,27 +1,24 @@
-# Pricing and limitations
+# 定价和限制
 
-Please see [our pricing page](https://www.deno.com/deploy/pricing) for the
-overview of the available features in all plans. If you have a use case that
-exceeds any of these limits, [please reach out](mailto:deploy@deno.com).
+请查看 [我们的定价页面](https://www.deno.com/deploy/pricing)
+以获取所有计划中可用功能的概述。如果您的使用情况超出了这些限制，请
+[联系我们](mailto:deploy@deno.com)。
 
-No uptime guarantees are provided during the initial public beta for Deno
-Deploy. Access to the service will be controlled by
-[our fair use policy](https://www.deno.com/deploy/fair-use-policy). Any user we
-deem to be in violation of this policy, runs the risk of having their account
-terminated.
+在 Deno Deploy
+的初始公共测试版期间，我们不提供任何正常运行时间的保证。服务的访问将受到
+[我们的合理使用政策](https://www.deno.com/deploy/fair-use-policy)
+的控制。我们认为任何违反此政策的用户都有可能被终止其帐户。
 
-## TLS proxying
+## TLS 代理
 
-On the Free plan, TLS termination is required for outgoing connections to port
-443 (the port used for HTTPS). Using
-[Deno.connect](https://deno.land/api?s=Deno.connect) to connect to these ports
-is prohibited. If you need to establish a TLS connection to port 443, please use
-[Deno.connectTls](https://deno.land/api?s=Deno.connectTls) instead. `fetch` is
-not impacted by this restriction.
+在免费计划中，必须要求对于外部连接到端口 443（用于 HTTPS 的端口）进行 TLS
+终止。使用 [Deno.connect](https://deno.land/api?s=Deno.connect)
+来连接这些端口是被禁止的。如果您需要建立到端口 443 的 TLS 连接，请使用
+[Deno.connectTls](https://deno.land/api?s=Deno.connectTls)。`fetch`
+不受此限制影响。
 
-This restriction is in place because connecting to port 443 without terminating
-TLS is frequently used in TLS-over-TLS proxies, which are prohibited on the Deno
-Deploy Free plan as per our Fair Use Policy.
+这一限制是因为在 TLS-over-TLS 代理中频繁使用连接到端口 443 而不终止 TLS，而在
+Deno Deploy 的免费计划中，根据我们的合理使用政策是被禁止的。
 
-This restriction impacts Free tier customers only. Pro tier customers are able
-to connect to port 443 with both `Deno.connect` and `Deno.connectTls`.
+这一限制仅影响免费计划客户。专业计划客户可以使用 `Deno.connect` 和
+`Deno.connectTls` 连接到端口 443。

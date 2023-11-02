@@ -1,12 +1,11 @@
-# Using WebAssembly in Deno
+# 在 Deno 中使用 WebAssembly
 
-To run WebAssembly in Deno, all you need is a binary to run. WebAssembly is a
-binary data format. This means that `.wasm` files are not directly human
-readable, and not intended to be written by hand. Instead a compiler for a
-language like Rust, C++, or Go _emits_ `.wasm` files.
+要在 Deno 中运行 WebAssembly，您只需要一个二进制文件来运行。WebAssembly
+是一种二进制数据格式。这意味着 `.wasm`
+文件不是直接可读的，也不打算手工编写。相反，像 Rust、C++ 或 Go
+这样的编程语言的编译器会生成 `.wasm` 文件。
 
-The following binary exports a `main` function that just returns `42` upon
-invocation:
+以下二进制文件导出一个 `main` 函数，在调用时返回 `42`：
 
 <!-- deno-fmt-ignore -->
 ```ts
@@ -27,27 +26,23 @@ const main = wasmInstance.exports.main as CallableFunction;
 console.log(main().toString());
 ```
 
-As the code above shows, the following steps need to be performed in order to
-load WebAssembly in a JavaScript program:
+如上面的代码所示，在 JavaScript 程序中加载 WebAssembly 需要执行以下步骤：
 
-1. Fetching the binary (usually in the form of a `.wasm` file, though we are
-   using a simple byte array for now)
-2. Compiling the binary into a `WebAssembly.Module` object
-3. Instantiating the WebAssembly module
+1. 获取二进制文件（通常以 `.wasm`
+   文件的形式，尽管现在我们正在使用简单的字节数组）
+2. 将二进制文件编译为 `WebAssembly.Module` 对象
+3. 实例化 WebAssembly 模块
 
-For more complex scenarios you will probably want to write in a programming
-language that compiles down to WebAssembly instead of hand writing instructions.
-A number of languages exist that can do this, such as
-[Rust](https://www.rust-lang.org/), [Go](https://golang.org/) or
-[AssemblyScript](https://www.assemblyscript.org/). As an example, a Rust program
-that compiles to the aforementioned bytes would look something like this:
+对于更复杂的情况，您可能希望使用编译成 WebAssembly
+的编程语言，而不是手工编写指令。有许多可以实现这一点的编程语言，比如
+[Rust](https://www.rust-lang.org/)、[Go](https://golang.org/) 或
+[AssemblyScript](https://www.assemblyscript.org/)。例如，编译成上述字节的 Rust
+程序可能如下所示：
 
 ```rust
-pub fn main() -> u32 {  // u32 stands for an unsigned integer using 32 bits of memory.
+pub fn main() -> u32 {  // u32 代表使用 32 位内存的无符号整数。
   42
 }
 ```
 
-Aside from the methods shown in the preceding example, it is also possible to
-use the streaming methods of the WebAssembly API, as will be shown on the next
-page.
+除了前面示例中显示的方法，还可以使用 WebAssembly API 的流式方法，如下一页所示。

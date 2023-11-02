@@ -1,42 +1,34 @@
-# Organizations
+# 组织
 
-**Organizations** allow you to collaborate with other users. A project created
-in an organization is accessible to all members of the organization. Users
-should first signup for Deno Deploy before they can be added to an organization.
+**组织** 允许您与其他用户协作。在组织中创建的项目对组织的所有成员都可访问。用户
+应首先在加入组织之前注册 Deno Deploy。
 
-Currently, all organization members have full access to the organization. They
-can add/remove members, and create/delete/modify all projects in the
-organization.
+目前，所有组织成员都有对组织的完全访问权限。他们可以添加/移除成员，并创建/删除/修改组织中的所有项目。
 
-### Create an organization
+### 创建一个组织
 
-1. On your Deploy dashboard, click on the organization dropdown in the top left
-   of the screen, in the navigation bar.
+1. 在您的 Deploy 仪表板上，点击位于屏幕左上角的组织下拉菜单， 在导航栏中。
    ![organizations](../docs-images/organizations.png)
-2. Select **Organization +**.
-3. Enter a name for your organization and click on **Create**.
+2. 选择 **组织 +**。
+3. 输入组织的名称，然后点击 **创建**。
 
-### Add members
+### 添加成员
 
-1. Select the desired organization in the organization dropdown in the top left
-   of the screen, in the navigation bar.
-2. Click on the **Members** icon button.
-3. Under the **Members** panel, click on **+ Invite member**.
-   > **Note:** Users should first signup for Deno Deploy using
-   > [this link](https://dash.deno.com/signin) before you invite them.
-4. Enter the GitHub username of the user and click on **Invite**.
+1. 在组织下拉菜单中选择所需的组织， 在导航栏中。
+2. 点击 **成员** 图标按钮。
+3. 在 **成员** 面板下，点击 **+ 邀请成员**。
+   > **注意：** 用户应首先在 [此链接](https://dash.deno.com/signin) 上注册 Deno
+   > Deploy，然后再邀请他们。
+4. 输入用户的 GitHub 用户名，然后点击 **邀请**。
 
-Deploy will send the user an invite email. They can then can either accept or
-decline your invite. Once they accept the invite, they're added to your
-organization and shown in the members panel.
+Deploy 将向用户发送邀请邮件。然后，他们可以选择接受或
+拒绝邀请。一旦他们接受邀请，他们将被添加到您的 组织，并显示在成员面板中。
 
-Pending invites are displayed in the **Invites** panel. You can revoke pending
-invites by clicking on the delete icon next to the pending invite.
+待处理的邀请显示在 **邀请**
+面板中。您可以通过点击待处理邀请旁边的删除图标来撤销待处理邀请。
 
-### Remove members
+### 移除成员
 
-1. Select the desired organization in the organization dropdown in the top left
-   of the screen, in the navigation bar.
-2. Click on the **Members** icon button.
-3. In the **Members** panel, click on the delete button beside the user you want
-   to remove.
+1. 在组织下拉菜单中选择所需的组织， 在导航栏中。
+2. 点击 **成员** 图标按钮。
+3. 在 **成员** 面板中，点击要移除的用户旁边的删除按钮。

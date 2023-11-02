@@ -1,53 +1,51 @@
-# Permission APIs
+# 权限 API
 
-Permissions are granted from the CLI when running the `deno` command. User code
-will often assume its own set of required permissions, but there is no guarantee
-during execution that the set of _granted_ permissions will align with this.
+在运行 `deno` 命令时，权限是从 CLI
+授予的。用户代码通常会假设自己需要的权限集，但不能保证在执行期间授予的权限集与其一致。
 
-In some cases, ensuring a fault-tolerant program requires a way to interact with
-the permission system at runtime.
+在某些情况下，确保容错程序需要在运行时与权限系统交互的方式。
 
-## Permission descriptors
+## 权限描述符
 
-On the CLI, read permission for `/foo/bar` is represented as
-`--allow-read=/foo/bar`. In runtime JS, it is represented as the following:
+在 CLI 上，`/foo/bar` 的读权限表示为 `--allow-read=/foo/bar`。在运行时的 JS
+中，它表示如下：
 
 ```ts
 const desc = { name: "read", path: "/foo/bar" } as const;
 ```
 
-Other examples:
+其他示例：
 
 ```ts
-// Global write permission.
+// 全局写权限。
 const desc1 = { name: "write" } as const;
 
-// Write permission to `$PWD/foo/bar`.
+// 对 `$PWD/foo/bar` 的写权限。
 const desc2 = { name: "write", path: "foo/bar" } as const;
 
-// Global net permission.
+// 全局网络权限。
 const desc3 = { name: "net" } as const;
 
-// Net permission to 127.0.0.1:8000.
+// 对 127.0.0.1: 8000 的网络权限。
 const desc4 = { name: "net", host: "127.0.0.1:8000" } as const;
 
-// High-resolution time permission.
+// 高分辨率时间权限。
 const desc5 = { name: "hrtime" } as const;
 ```
 
-> ⚠️ See
-> [`PermissionDescriptor`](https://deno.land/api?s=Deno.PermissionDescriptor) in
-> API reference for more details.
+> ⚠️ 请参见
+> [`PermissionDescriptor`](https://deno.land/api?s=Deno.PermissionDescriptor)
+> 获取 更多详细信息的 API 参考。
 
-> ⚠️ In 1.30 and onwards, synchronous API counterparts (ex.
-> `Deno.permissions.querySync`) exist for all the APIs described below.
+> ⚠️ 在 1.30 及更高版本中，同步 API 对应项（例如
+> `Deno.permissions.querySync`）适用于下面描述的所有 API。
 
-## Query permissions
+## 查询权限
 
-Check, by descriptor, if a permission is granted or not.
+按描述符检查是否授予了权限。
 
 ```ts
-// deno run --allow-read=/foo main.ts
+// deno run --allow-read =/foo main.ts
 
 const desc1 = { name: "read", path: "/foo" } as const;
 console.log(await Deno.permissions.query(desc1));
@@ -62,12 +60,11 @@ console.log(await Deno.permissions.query(desc3));
 // PermissionStatus { state: "prompt", partial: false }
 ```
 
-If `--deny-read` flag was used to restrict some of the filepaths, the result
-will contain `partial: true` describing that not all subpaths have permissions
-granted:
+如果使用 `--deny-read` 标志限制了某些文件路径，结果将包含
+`partial: true`，说明并非所有子路径都有授予的权限：
 
 ```ts
-// deno run --allow-read=/foo --deny-read=/foo/bar main.ts
+// deno run --allow-read =/foo --deny-read =/foo/bar main.ts
 
 const desc1 = { name: "read", path: "/foo" } as const;
 console.log(await Deno.permissions.query(desc1));
@@ -82,91 +79,84 @@ console.log(await Deno.permissions.query(desc3));
 // PermissionStatus { state: "prompt", partial: false }
 ```
 
-## Permission states
+## 权限状态
 
-A permission state can be either "granted", "prompt" or "denied". Permissions
-which have been granted from the CLI will query to `{ state: "granted" }`. Those
-which have not been granted query to `{ state: "prompt" }` by default, while
-`{ state: "denied" }` reserved for those which have been explicitly refused.
-This will come up in [Request permissions](#request-permissions).
+权限状态可以是“granted”、“prompt”或“denied”。从 CLI 授予的权限将查询为
+`{ state: "granted" }`。尚未授予的权限默认查询为 `{ state: "prompt" }`，而
+`{ state: "denied" }` 则保留给明确拒绝的权限。这将在
+[请求权限](#request-permissions) 中出现。
 
-## Permission strength
+## 权限强度
 
-The intuitive understanding behind the result of the second query in
-[Query permissions](#query-permissions) is that read access was granted to
-`/foo` and `/foo/bar` is within `/foo` so `/foo/bar` is allowed to be read. This
-hold true, unless the CLI-granted permission is _partial_ to the queried
-permissions (as an effect of using a `--deny-*` flag).
+在 [查询权限](#query-permissions) 中第二个查询的结果背后的直观理解是已授予
+`/foo` 的读取权限，并且 `/foo/bar` 在 `/foo` 内，因此允许读取 `/foo/bar`。除非
+CLI 授予的权限是查询的权限的一部分（因为使用了 `--deny-*` 标志），这一点成立。
 
-We can also say that `desc1` is
-_[stronger than](https://www.w3.org/TR/permissions/#ref-for-permissiondescriptor-stronger-than)_
-`desc2`. This means that for any set of CLI-granted permissions:
+我们还可以说 `desc1` 比 `desc2`
+_[更强](https://www.w3.org/TR/permissions/#ref-for-permissiondescriptor-stronger-than)_。这意味着对于任何一组
+CLI 授予的权限：
 
-1. If `desc1` queries to `{ state: "granted", partial: false }` then so must
-   `desc2`.
-2. If `desc2` queries to `{ state: "denied", partial: false }` then so must
-   `desc1`.
+1. 如果 `desc1` 查询为 `{ state: "granted", partial: false }`，那么 `desc2`
+   也必须如此。
+2. 如果 `desc2` 查询为 `{ state: "denied", partial: false }`，那么 `desc1`
+   也必须如此。
 
-More examples:
+更多示例：
 
 ```ts
 const desc1 = { name: "write" } as const;
-// is stronger than
+// 比
 const desc2 = { name: "write", path: "/foo" } as const;
 
 const desc3 = { name: "net", host: "127.0.0.1" } as const;
-// is stronger than
+// 比
 const desc4 = { name: "net", host: "127.0.0.1:8000" } as const;
 ```
 
-## Request permissions
+## 请求权限
 
-Request an ungranted permission from the user via CLI prompt.
+通过 CLI 提示向用户请求未授予的权限。
 
 ```ts
 // deno run main.ts
 
 const desc1 = { name: "read", path: "/foo" } as const;
 const status1 = await Deno.permissions.request(desc1);
-// ⚠️ Deno requests read access to "/foo". Grant? [y/n (y = yes allow, n = no deny)] y
+// ⚠️ Deno 请求读取 "/foo" 的权限。授予？[y/n（y = 允许，n = 拒绝）] y
 console.log(status1);
 // PermissionStatus { state: "granted", partial: false }
 
 const desc2 = { name: "read", path: "/bar" } as const;
 const status2 = await Deno.permissions.request(desc2);
-// ⚠️ Deno requests read access to "/bar". Grant? [y/n (y = yes allow, n = no deny)] n
-console.log(status2);
+// ⚠️ Deno 请求读取 "/bar" 的权限。授予？[y/n（y = 允许，n = 拒绝）] n
+consolelog(status2);
 // PermissionStatus { state: "denied", partial: false }
 ```
 
-If the current permission state is "prompt", a prompt will appear on the user's
-terminal asking them if they would like to grant the request. The request for
-`desc1` was granted so its new status is returned and execution will continue as
-if `--allow-read=/foo` was specified on the CLI. The request for `desc2` was
-denied so its permission state is downgraded from "prompt" to "denied".
+如果当前的权限状态为“prompt”，则将在用户的终端上出现提示，询问他们是否要授予请求。对于
+`desc1` 的请求已经被授予，因此其新状态将被返回，执行将继续，就好像在 CLI
+上指定了 `--allow-read=/foo` 一样。对于 `desc2` 的请求被拒绝，因此其权限
 
-If the current permission state is already either "granted" or "denied", the
-request will behave like a query and just return the current status. This
-prevents prompts both for already granted permissions and previously denied
-requests.
+状态从“prompt”降级为“denied”。
 
-## Revoke permissions
+如果当前的权限状态已经是“granted”或“denied”，请求将像查询一样工作，并返回当前的状态。这可以阻止对已经授予的权限和先前拒绝的请求发出提示。
 
-Downgrade a permission from "granted" to "prompt".
+## 撤销权限
+
+将权限从“granted”降级为“prompt”。
 
 ```ts
-// deno run --allow-read=/foo main.ts
+// deno run --allow-read =/foo main.ts
 
 const desc = { name: "read", path: "/foo" } as const;
 console.log(await Deno.permissions.revoke(desc));
 // PermissionStatus { state: "prompt", partial: false }
 ```
 
-What happens when you try to revoke a permission which is _partial_ to one
-granted on the CLI?
+当尝试撤销与 CLI 授予的权限_部分_的权限时会发生什么？
 
 ```ts
-// deno run --allow-read=/foo main.ts
+// deno run --allow-read =/foo main.ts
 
 const desc = { name: "read", path: "/foo/bar" } as const;
 console.log(await Deno.permissions.revoke(desc));
@@ -176,12 +166,10 @@ console.log(await Deno.permissions.revoke(cliDesc));
 // PermissionStatus { state: "prompt", partial: false }
 ```
 
-The CLI-granted permission, which implies the revoked permission, was also
-revoked.
+意味着已经被撤销的权限是 CLI 授予的权限。
 
-To understand this behaviour, imagine that Deno stores an internal set of
-_explicitly granted permission descriptors_. Specifying `--allow-read=/foo,/bar`
-on the CLI initializes this set to:
+要理解这种行为，可以想象 Deno 存储一组_明确授予的权限描述符_的内部集合。在 CLI
+上指定 `--allow-read=/foo,/bar` 会将该集合初始化为：
 
 ```ts
 [
@@ -190,8 +178,7 @@ on the CLI initializes this set to:
 ];
 ```
 
-Granting a runtime request for `{ name: "write", path: "/foo" }` updates the set
-to:
+授予对 `{ name: "write", path: "/foo" }` 的运行时请求会更新该集合：
 
 ```ts
 [
@@ -201,11 +188,7 @@ to:
 ];
 ```
 
-Deno's permission revocation algorithm works by removing every element from this
-set which is _stronger than_ the argument permission descriptor.
+Deno 的权限撤销算法通过删除与参数权限描述符_强于_的每个元素来工作。
 
-Deno does not allow "fragmented" permission states, where some strong permission
-is granted with exclusions of weak permissions implied by it. Such a system
-would prove increasingly complex and unpredictable as you factor in a wider
-variety of use cases and the `"denied"` state. This is a calculated trade-off of
-granularity for security.
+Deno
+不允许“分割”的权限状态，其中一些强权限被授予，其中包括被它隐含的弱权限的排除。随着更多用例和“denied”状态的引入，这样的系统将变得越来越复杂和不可预测。这是安全性的粒度和可预测性的有计划的权衡。

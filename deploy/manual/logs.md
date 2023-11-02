@@ -1,12 +1,8 @@
-# Application logging
+# 应用程序日志
 
-Applications can generate logs at runtime using the console API. These logs can
-be viewed in real time by navigating to the `Logs` panel of a project or
-deployment. Logs will be streamed directly from an application to the log panel.
+应用程序可以使用控制台 API
+在运行时生成日志。这些日志可以通过导航到项目或部署的`日志`面板实时查看。日志将直接从应用程序流式传输到日志面板。
 
-These logs are **not persisted**. Only logs that are generated after the logs
-page is opened can be viewed. After closing the logs page, all streamed logs are
-discarded.
+这些日志**不会持久保存**。只有在打开日志页面后生成的日志才能查看。在关闭日志页面后，所有流式传输的日志都将被丢弃。
 
-Log messages have a maximum size of 2kb. Messages larger than this are trimmed
-to 2kb.
+日志消息的最大大小为 2KB。超过此大小的消息将被裁剪为 2KB。

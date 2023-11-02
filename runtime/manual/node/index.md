@@ -1,12 +1,11 @@
-# Node and npm modules
+# Node 和 npm 模块
 
-Many people will want to leverage code and libraries that are built for
-[Node](https://nodejs.org/), in particular the large set of packages available
-on the [npm](https://npmjs.com/) registry.
+许多人都希望利用为 [Node](https://nodejs.org/) 构建的代码和库，尤其是在
+[npm](https://npmjs.com/) 注册表上提供的大量软件包。
 
-There are currently several ways to do this:
+目前有几种方法可以实现这一点：
 
-- Using [`npm:` specifiers](./npm_specifiers.md) and
-  [`node:` specifiers](./node_specifiers.md)
-- [package.json compatibility](./package_json.md)
-- Using [CDNs](./cdns.md)
+- 使用 [`npm:` 规范](./npm_specifiers.md) 和
+  [`node:` 规范](./node_specifiers.md)
+- [package.json 兼容性](./package_json.md)
+- 使用 [CDNs](./cdns.md)

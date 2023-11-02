@@ -206,7 +206,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Visual Studio Code",
+      label: "VS Code",
       items: [
         "manual/references/vscode_deno/index",
         "manual/references/vscode_deno/testing_api",

@@ -1,15 +1,14 @@
-# Documentation Tests
+# 文档测试
 
-Deno supports type-checking your documentation examples.
+Deno 支持对您的文档示例进行类型检查。
 
-This makes sure that examples within your documentation are up to date and
-working.
+这可以确保您的文档中的示例是最新的并且能够正常工作。
 
-The basic idea is this:
+基本思想是这样的：
 
 ````ts
 /**
- * # Examples
+ * # 示例
  *
  * ```ts
  * const x = 42;
@@ -17,27 +16,23 @@ The basic idea is this:
  */
 ````
 
-The triple backticks mark the start and end of code blocks, the language is
-determined by the language identifier attribute which may be any of the
-following:
+三个反引号标记了代码块的开始和结束，语言由语言标识属性确定，可以是以下任何一种：
 
 - `js`
 - `jsx`
 - `ts`
 - `tsx`
 
-If no language identifier is specified then the language is inferred from media
-type of the source document that the code block is extracted from.
+如果未指定语言标识符，则语言将根据从源文档中提取的代码块的媒体类型进行推断。
 
-If this example was in a file named foo.ts, running `deno test --doc foo.ts`
-will extract this example, and then type-check it as a standalone module living
-in the same directory as the module being documented.
+如果此示例位于名为 foo.ts 的文件中，运行 `deno test --doc foo.ts`
+将提取此示例，然后将其类型检查为一个独立的模块，与正在记录的模块位于相同的目录中。
 
-To document your exports, import the module using a relative path specifier:
+要记录您的导出内容，请使用相对路径标识符导入模块：
 
 ````ts
 /**
- * # Examples
+ * # 示例
  *
  * ```ts
  * import { foo } from "./foo.ts";

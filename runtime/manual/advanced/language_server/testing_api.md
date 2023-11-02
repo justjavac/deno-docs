@@ -1,14 +1,11 @@
-# Testing API
+# 测试 API
 
-The Deno language server supports a custom set of APIs to enable testing. These
-are built around providing information to enable the
-[vscode's Testing API](https://code.visualstudio.com/api/extension-guides/testing)
-but can be used by other language server clients to provide a similar interface.
+Deno 语言服务器支持一组自定义 API 以启用测试。这些 API 围绕着提供信息来支持
+[vscode 的测试 API](https://code.visualstudio.com/api/extension-guides/testing)，但也可以被其他语言服务器客户端用来提供类似的接口。
 
-## Capabilities
+## 功能
 
-Both the client and the server should support the experimental `testingApi`
-capability:
+客户端和服务器都应该支持实验性的 `testingApi` 功能：
 
 ```ts
 interface ClientCapabilities {
@@ -26,219 +23,195 @@ interface ServerCapabilities {
 }
 ```
 
-When a version of Deno that supports the testing API encounters a client which
-supports the capability, it will initialize the code which handles the test
-detection and will start providing the notifications which enable it.
+当支持测试 API 的 Deno
+版本遇到支持该功能的客户端时，它将初始化处理测试检测的代码，并开始提供启用测试的通知。
 
-It should also be noted that when the testing API capabilities are enabled, the
-testing code lenses will no longer be sent to the client.
+还应该注意，当启用测试 API 功能时，测试代码镜头将不再发送给客户端。
 
-## Settings
+## 设置
 
-There are specific settings which change the behavior of the language server:
+有特定的设置可以更改语言服务器的行为：
 
-- `deno.testing.args` - An array of strings which will be provided as arguments
-  when executing tests. This works in the same fashion as the `deno test`
-  subcommand.
-- `deno.testing.enable` - A binary flag that enables or disables the testing
-  server
+- `deno.testing.args` - 一个字符串数组，用于在执行测试时提供参数，这与
+  `deno test` 子命令的方式相同。
+- `deno.testing.enable` - 一个启用或禁用测试服务器的二进制标志
 
-## Notifications
+## 通知
 
-The server will send notifications to the client under certain conditions.
+服务器将在特定条件下向客户端发送通知。
 
 ### `deno/testModule`
 
-When a module containing tests is discovered by the server, it will notify the
-client by sending a `deno/testModule` notification along with a payload of
-`TestModuleParams`.
+当服务器发现包含测试的模块时，它将通过发送 `deno/testModule` 通知以及
+`TestModuleParams` 的有效负载来通知客户端。
 
-Deno structures in this fashion:
+Deno 以以下方式组织：
 
-- A module can contain _n_ tests.
-- A test can contain _n_ steps.
-- A step can contain _n_ steps.
+- 一个模块可以包含 _n_ 个测试。
+- 一个测试可以包含 _n_ 个步骤。
+- 一个步骤可以包含 _n_ 个步骤。
 
-When Deno does static analysis of a test module, it attempts to identify any
-tests and test steps. Because of the dynamic way tests can be declared in Deno,
-they cannot always be statically identified and can only be identified when the
-module is executed. The notification is designed to handle both of these
-situations when updating the client. When tests are discovered statically, the
-notification `kind` will be `"replace"`, when tests or steps are discovered at
-execution time, the notification `kind` will be `"insert"`.
+当 Deno 对测试模块进行静态分析时，它会尝试识别任何测试和测试步骤。由于测试可以在
+Deno
+中以动态方式声明，它们不能总是被静态识别，只能在模块执行时才能被识别。通知旨在处理更新客户端时的这两种情况。当静态发现测试时，通知
+`kind` 将是 `"replace"`，当在执行时发现测试或步骤时，通知 `kind` 将是
+`"insert"`。
 
-As a test document is edited in the editor, and `textDocument/didChange`
-notifications are received from the client, the static analysis of those changes
-will be performed server side and if the tests have changed, the client will
-receive a notification.
+当客户端接收到 `"replace"` 通知时，它可以安全地 "替换"
+测试模块的表示，而当接收到 `"insert"` 时，它应该递归尝试添加到现有表示中。
 
-When a client receives a `"replace"` notification, it can safely "replace" a
-test module representation, where when an `"insert"` it received, it should
-recursively try to add to existing representations.
-
-For test modules the `textDocument.uri` should be used as the unique ID for any
-representation (as it the string URL to the unique module). `TestData` items
-contain a unique `id` string. This `id` string is a SHA-256 hash of identifying
-information that the server tracks for a test.
+对于测试模块，`textDocument.uri`
+应该用作任何表示的唯一标识符（因为它是唯一模块的字符串 URL）。`TestData`
+项目包含一个唯一的 `id` 字符串。此 `id` 字符串是服务器跟踪测试的标识信息的
+SHA-256 散列。
 
 ```ts, ignore
 interface TestData {
-  /** The unique ID for this test/step. */
+  /** 此测试/步骤的唯一 ID。 */
   id: string;
 
-  /** The display label for the test/step. */
+  /** 测试/步骤的显示标签。 */
   label: string;
 
-  /** Any test steps that are associated with this test/step */
+  /** 与此测试/步骤相关的任何测试步骤 */
   steps?: TestData[];
 
-  /** The range of the owning text document that applies to the test. */
+  /** 适用于测试的拥有文本文档的范围。 */
   range?: Range;
 }
 
 interface TestModuleParams {
-  /** The text document identifier that the tests are related to. */
+  /** 与测试相关的文本文档标识符。 */
   textDocument: TextDocumentIdentifier;
 
-  /** A indication if tests described are _newly_ discovered and should be
-   * _inserted_ or if the tests associated are a replacement for any existing
-   * tests. */
+  /** 如果所描述的测试是 _新_ 发现的并应该被 _插入_，或者相关的测试是替代现有测试的替代。 */
   kind: "insert" | "replace";
 
-  /** The text label for the test module. */
+  /** 测试模块的文本标签。 */
   label: string;
 
-  /** An array of tests that are owned by this test module. */
+  /** 由该测试模块拥有的测试的数组。 */
   tests: TestData[];
 }
 ```
 
 ### `deno/testModuleDelete`
 
-When a test module is deleted that the server is observing, the server will
-issue a `deno/testModuleDelete` notification. When receiving the notification
-the client should remove the representation of the test module and all of its
-children tests and test steps.
+当服务器正在观察的测试模块被删除时，服务器将发出 `deno/testModuleDelete`
+通知。收到通知后，客户端应删除测试模块及其所有子测试和测试步骤的表示。
 
 ```ts, ignore
 interface TestModuleDeleteParams {
-  /** The text document identifier that has been removed. */
+  /** 已删除的文本文档标识符。 */
   textDocument: TextDocumentIdentifier;
 }
 ```
 
 ### `deno/testRunProgress`
 
-When a [`deno/testRun`](#denotestrun) is requested from the client, the server
-will support progress of that test run via the `deno/testRunProgress`
-notification.
+当客户端请求 [`deno/testRun`](#denotestrun) 时，服务器将通过
+`deno/testRunProgress` 通知支持测试运行的进度。
 
-The client should process these messages and update any UI representation.
+客户端应处理这些消息并更新任何 UI 表示。
 
-The state change is represented in the `.message.kind` property of the
-`TestRunProgressParams`. The states are:
+状态变化在 `TestRunProgressParams` 的 `.message.kind` 属性中表示。状态包括：
 
-- `"enqueued"` - A test or test step has been enqueued for testing.
-- `"skipped"` - A test or test step was skipped. This occurs when the Deno test
-  has the `ignore` option set to `true`.
-- `"started"` - A test or test step has started.
-- `"passed"` - A test or test step has passed.
-- `"failed"` - A test or test step has failed. This is intended to indicate an
-  error with the test harness instead of the test itself, but Deno currently
-  does not support this distinction.
-- `"errored"` - The test or test step has errored. Additional information about
-  the error will be in the `.message.messages` property.
-- `"end"` - The test run has ended.
+- `"enqueued"` - 测试或测试步骤已经排队等待测试。
+- `"skipped"` - 测试或测试步骤已被跳过。当 Deno 测试的 `ignore` 选项设置为
+  `true` 时会发生这种情况。
+- `"started"` - 测试或测试步骤已启动。
+- `"passed"` - 测试或测试步骤已通过。
+- `"failed"` -
+  测试或测试步骤失败。这旨在指示测试工具的错误而不是测试本身的错误，但 Deno
+  目前不支持这种区分。
+- `"errored"` - 测试或测试步骤出现错误。关于错误的其他信息将在
+  `.message.messages` 属性中。
 
 ```ts, ignore
 interface TestIdentifier {
-  /** The test module the message is related to. */
+  /** 与消息相关的测试模块。 */
   textDocument: TextDocumentIdentifier;
 
-  /** The optional ID of the test. If not present, then the message applies to
-   * all tests in the test module. */
+  /** 测试的可选 ID。如果不存在，消息适用于测试模块中的所有测试。 */
   id?: string;
 
-  /** The optional ID of the step. If not present, then the message only applies
-   * to the test. */
+  /** 步骤的可选 ID。如果不存在，消息仅适用于测试。 */
   stepId?: string;
 }
 
 interface TestMessage {
-  /** The content of the message. */
+  /** 消息的内容。 */
   message: MarkupContent;
 
-  /** An optional string which represents the expected output. */
+  /** 表示预期输出的可选字符串。 */
   expectedOutput?: string;
 
-  /** An optional string which represents the actual output. */
+  /** 表示实际输出的可选字符串。 */
   actualOutput?: string;
 
-  /** An optional location related to the message. */
+  /** 与消息相关的可选位置。 */
   location?: Location;
 }
 
 interface TestEnqueuedStartedSkipped {
-  /** The state change that has occurred to a specific test or test step.
+  /** 发生在特定测试或测试步骤的状态更改。
    *
-   * - `"enqueued"` - the test is now enqueued to be tested
-   * - `"started"` - the test has started
-   * - `"skipped"` - the test was skipped
+   * - "enqueued" - 测试现在已排队等待测试
+   * - "started" - 测试已启动
+   * - "skipped" - 测试被跳过
    */
   type: "enqueued" | "started" | "skipped";
 
-  /** The test or test step relating to the state change. */
+  /** 与状态更改相关的测试或测试步骤。 */
   test: TestIdentifier;
 }
 
 interface TestFailedErrored {
-  /** The state change that has occurred to a specific test or test step.
+  /** 发生在特定测试或测试步骤的状态更改。
    *
-   * - `"failed"` - The test failed to run properly, versus the test erroring.
-   *   currently the Deno language server does not support this.
-   * - `"errored"` - The test errored.
+   * - "failed" - 测试未正确运行，与测试出错不同。
+   *   目前 Deno 语言服务器不支持此功能。
+   * - "errored" - 测试出错。
    */
   type: "failed" | "errored";
 
-  /** The test or test step relating to the state change. */
+  /** 与状态更改相关的测试或测试步骤。 */
   test: TestIdentifier;
 
-  /** Messages related to the state change. */
+  /** 与状态更改相关的消息。 */
   messages: TestMessage[];
 
-  /** An optional duration, in milliseconds from the start to the current
-   * state. */
+  /** 从开始到当前状态的可选持续时间，以毫秒为单位。 */
   duration?: number;
 }
 
 interface TestPassed {
-  /** The state change that has occurred to a specific test or test step. */
+  /** 发生在特定测试或测试步骤的状态更改。 */
   type: "passed";
 
-  /** The test or test step relating to the state change. */
+  /** 与状态更改相关的测试或测试步骤。 */
   test: TestIdentifier;
 
-  /** An optional duration, in milliseconds from the start to the current
-   * state. */
+  /** 从开始到当前状态的可选持续时间，以毫秒为单位。 */
   duration?: number;
 }
 
 interface TestOutput {
-  /** The test or test step has output information / logged information. */
+  /** 测试或测试步骤具有输出信息/记录信息。 */
   type: "output";
 
-  /** The value of the output. */
+  /** 输出的值。 */
   value: string;
 
-  /** The associated test or test step if there was one. */
+  /** 如果存在，与输出相关的测试或测试步骤。 */
   test?: TestIdentifier;
 
-  /** An optional location associated with the output. */
+  /** 与输出相关的可选位置。 */
   location?: Location;
 }
 
 interface TestEnd {
-  /** The test run has ended. */
+  /** 测试运行已结束。 */
   type: "end";
 }
 
@@ -250,78 +223,74 @@ type TestRunProgressMessage =
   | TestEnd;
 
 interface TestRunProgressParams {
-  /** The test run ID that the progress message applies to. */
+  /** 进度消息适用于的测试运行 ID。 */
   id: number;
 
-  /** The message*/
+  /** 消息 */
   message: TestRunProgressMessage;
 }
 ```
 
-## Requests
+## 请求
 
-The server handles two different requests:
+服务器处理两种不同的请求：
 
 ### `deno/testRun`
 
-To request the language server to perform a set of tests, the client sends a
-`deno/testRun` request, which includes that ID of the test run to be used in
-future responses to the client, the type of the test run, and any test modules
-or tests to include or exclude.
+要求语言服务器执行一组测试，客户端发送一个 `deno/testRun`
+请求，其中包括将来在响应给客户端时要使用的测试运行的
+ID、测试运行的类型以及要包括或排除的任何测试模块或测试。
 
-Currently Deno only supports the `"run"` kind of test run. Both `"debug"` and
-`"coverage"` are planned to be supported in the future.
+当前，Deno 仅支持 "run" 类型的测试运行。 "debug" 和 "coverage"
+两种类型计划在将来支持。
 
-When there are no test modules or tests that are included, it implies that all
-discovered tests modules and tests should be executed. When a test module is
-included, but not any test ids, it implies that all tests within that test
-module should be included. Once all the tests are identified, any excluded tests
-are removed and the resolved set of tests are returned in the response as
-`"enqueued"`.
+当没有包括任何测试模块或测试时，意味着应执行所有已发现的测试模块和测试。当包括一个测试模块但不包括任何测试
+ID
+时，意味着应包括该测试模块中的所有测试。一旦确定了所有测试，任何排除的测试将被移除，并在响应中以
+"enqueued" 形式返回已解析的测试集。
 
-It is not possible to include or exclude test steps via this API, because of the
-dynamic nature of how test steps are declared and run.
+通过此 API
+不可能包括或排除测试步骤，这是因为测试步骤的声明和运行方式具有动态性。
 
-```ts, ignore
+```ts，忽略
 interface TestRunRequestParams {
-  /** The id of the test run to be used for future messages. */
+  /** 用于将来消息的测试运行的ID。 */
   id: number;
 
-  /** The run kind. Currently Deno only supports `"run"` */
+  /** 运行类型。当前，Deno仅支持 "run" */
   kind: "run" | "coverage" | "debug";
 
-  /** Test modules or tests to exclude from the test run. */
+  /** 要从测试运行中排除的测试模块或测试。 */
   exclude?: TestIdentifier[];
 
-  /** Test modules or tests to include in the test run. */
+  /** 要在测试运行中包括的测试模块或测试。 */
   include?: TestIdentifier[];
 }
 
 interface EnqueuedTestModule {
-  /** The test module the enqueued test IDs relate to */
+  /** 与排队测试ID相关的测试模块 */
   textDocument: TextDocumentIdentifier;
 
-  /** The test IDs which are now enqueued for testing */
+  /** 现在已排队等待测试的测试ID */
   ids: string[];
 }
 
 interface TestRunResponseParams {
-  /** Test modules and test IDs that are now enqueued for testing. */
+  /** 现在已排队等待测试的测试模块和测试ID。 */
   enqueued: EnqueuedTestModule[];
 }
 ```
 
 ### `deno/testRunCancel`
 
-If a client wishes to cancel a currently running test run, it sends a
-`deno/testRunCancel` request with the test ID to cancel. The response back will
-be a boolean of `true` if the test is cancelled or `false` if it was not
-possible. Appropriate test progress notifications will still be sent as the test
-is being cancelled.
+如果客户端希望取消当前正在运行的测试运行，它将发送一个 `deno/testRunCancel`
+请求，其中包括要取消的测试 ID。响应将返回一个布尔值
+`true`，如果测试被取消，则返回
+`false`，如果不可能取消。尽管测试被取消，仍将发送适当的测试进度通知。
 
 ```ts
 interface TestRunCancelParams {
-  /** The test id to be cancelled. */
+  /** 要取消的测试 ID。 */
   id: number;
 }
 ```

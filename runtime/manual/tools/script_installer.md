@@ -1,79 +1,73 @@
-# Script Installer
+# 脚本安装程序
 
-Deno provides `deno install` to easily install and distribute executable code.
+Deno 提供 `deno install` 以轻松安装和分发可执行代码。
 
-`deno install [OPTIONS...] [URL] [SCRIPT_ARGS...]` will install the script
-available at `URL` under the name `EXE_NAME`.
+`deno install [OPTIONS...] [URL] [SCRIPT_ARGS...]` 将安装位于 `URL`
+下的脚本，命名为 `EXE_NAME`。
 
-This command creates a thin, executable shell script which invokes `deno` using
-the specified CLI flags and main module. It is placed in the installation root's
-`bin` directory.
+此命令创建一个薄的可执行 Shell 脚本，调用 `deno`，使用指定的 CLI
+标志和主模块。它放置在安装根目录的 `bin` 目录中。
 
-Example:
+示例：
 
 ```shell
 $ deno install --allow-net --allow-read https://deno.land/std/http/file_server.ts
-[1/1] Compiling https://deno.land/std/http/file_server.ts
+[1/1] 编译 https://deno.land/std/http/file_server.ts
 
-✅ Successfully installed file_server.
+✅ 成功安装文件服务器。
 /Users/deno/.deno/bin/file_server
 ```
 
-To change the executable name, use `-n`/`--name`:
+要更改可执行文件的名称，请使用 `-n`/`--name`：
 
 ```shell
 deno install --allow-net --allow-read -n serve https://deno.land/std/http/file_server.ts
 ```
 
-The executable name is inferred by default:
+默认情况下推断可执行文件的名称：
 
-- Attempt to take the file stem of the URL path. The above example would become
-  'file_server'.
-- If the file stem is something generic like 'main', 'mod', 'index' or 'cli',
-  and the path has no parent, take the file name of the parent path. Otherwise
-  settle with the generic name.
-- If the resulting name has an '@...' suffix, strip it.
+- 尝试获取 URL 路径的文件主干。上述示例将变为'file_server'。
+- 如果文件主干是一些通用的，比如'main'、'mod'、'index'或'cli'，并且路径没有父级，取父级路径的文件名。否则，使用通用名称。
+- 如果生成的名称带有'@...'后缀，请删除它。
 
-To change the installation root, use `--root`:
+要更改安装根目录，请使用 `--root`：
 
 ```shell
 deno install --allow-net --allow-read --root /usr/local https://deno.land/std/http/file_server.ts
 ```
 
-The installation root is determined, in order of precedence:
+安装根目录按以下顺序确定：
 
-- `--root` option
-- `DENO_INSTALL_ROOT` environment variable
+- `--root` 选项
+- `DENO_INSTALL_ROOT` 环境变量
 - `$HOME/.deno`
 
-These must be added to the path manually if required.
+如果需要，必须手动将这些添加到路径中。
 
 ```shell
 echo 'export PATH="$HOME/.deno/bin:$PATH"' >> ~/.bashrc
 ```
 
-You must specify permissions that will be used to run the script at installation
-time.
+必须在安装时指定将用于运行脚本的权限。
 
 ```shell
 deno install --allow-net --allow-read https://deno.land/std/http/file_server.ts -- -p 8080
 ```
 
-The above command creates an executable called `file_server` that runs with
-network and read permissions and binds to port 8080.
+上述命令创建一个名为 `file_server`
+的可执行文件，具有网络和读取权限，并绑定到端口 8080。
 
-For good practice, use the
-[`import.meta.main`](../../tutorials/module_metadata.md) idiom to specify the
-entry point in an executable script.
+为了良好的实践，请使用 [`import.meta.main`](../../tutorials/module_metadata.md)
+习惯用法在可执行脚本中指定入口点。
 
-Example:
+示例：
 
 <!-- deno-fmt-ignore -->
 
 ```ts
 // https://example.com/awesome/cli.ts
 async function myAwesomeCli(): Promise<void> {
-  // -- snip --
+  // -- 剪辑 --
 }
 
 if (import.meta.main) {
@@ -81,23 +75,22 @@ if (import.meta.main) {
 }
 ```
 
-When you create an executable script make sure to let users know by adding an
-example installation command to your repository:
+创建可执行脚本时，请确保通过将示例安装命令添加到存储库来通知用户：
 
 ```shell
-# Install using deno install
+使用 deno install 安装
 
 $ deno install -n awesome_cli https://example.com/awesome/cli.ts
 ```
 
-## Uninstall
+## 卸载
 
-You can uninstall the script with `deno uninstall` command.
+您可以使用 `deno uninstall` 命令卸载脚本。
 
 ```shell
 $ deno uninstall file_server
-deleted /Users/deno/.deno/bin/file_server
-✅ Successfully uninstalled file_server
+已删除/Users/deno/.deno/bin/file_server
+✅ 成功卸载文件服务器
 ```
 
-See `deno uninstall -h` for more details.
+有关更多详细信息，请参阅 `deno uninstall -h`。

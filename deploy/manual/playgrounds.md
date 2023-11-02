@@ -1,96 +1,76 @@
 # Playgrounds
 
-**Playgrounds** are an easy way to play around with Deno Deploy, and to create
-small projects. Using playgrounds you can write code, run it, and see the output
-fully inside the browser.
+**Playground** 是一个轻松的方式来体验 Deno Deploy，并创建小型项目。使用
+Playground，您可以编写代码、运行它，并在浏览器内完全查看输出。
 
-Playgrounds have the full power of Deno Deploy: they support all the same
-features as a normal project, including environment variables, custom domains,
-and logs.
+Playground 具有与正常项目相同的全部 Deno Deploy
+功能：它们支持环境变量、自定义域和日志等所有相同的功能。
 
-Playgrounds are also just as performant as all other projects on Deno Deploy:
-they make full use of our global network to run your code as close to users as
-possible.
+Playground 的性能也与 Deno Deploy
+上的所有其他项目一样出色：它们充分利用我们的全球网络，尽可能地运行您的代码靠近用户。
 
-- [Creating a playground](#creating-a-playground)
-- [Using the playground editor](#using-the-playground-editor)
-- [Making a playground public](#making-a-playground-public)
-- [Exporting a playground to GitHub](#exporting-a-playground-to-github)
+- [创建 Playground](#creating-a-playground)
+- [使用 Playground 编辑器](#using-the-playground-editor)
+- [使 Playground 公开](#making-a-playground-public)
+- [将 Playground 导出到 GitHub](#exporting-a-playground-to-GitHub)
 
-## Creating a playground
+## 创建 Playground
 
-To create a new playground press the **New Playground** button in the top right
-corner of the [project overview page](https://dash.deno.com/projects).
+要创建一个新的 Playground，请按照 [项目概述页面](https://dash.deno.com/projects)
+右上角的 **新建 Playground** 按钮。
 
-This will create a new playground with a randomly generated name. You can change
-this name in the project settings later.
+这将创建一个具有随机生成名称的新 Playground。您可以稍后在项目设置中更改此名称。
 
-## Using the playground editor
+## 使用 Playground 编辑器
 
-The playground editor is opened automatically when you create a new playground.
-You can also open it by navigating to your project's overview page and clicking
-the **Edit** button.
+当您创建一个新的 Playground 时，Playground
+编辑器会自动打开。您还可以通过导航到您项目的概述页面并单击 **编辑**
+按钮来打开它。
 
-The editor consists of two main areas: the editor on the left, and the preview
-panel on the right. The editor is where you write your code, and the preview
-panel is where you can see the output of your code through a browser window.
+编辑器分为两个主要区域：左侧是编辑器，右侧是预览面板。编辑器是您编写代码的地方，预览面板是您通过浏览器窗口查看代码输出的地方。
 
-There is also a logs panel underneath the editor panel on the left side. This
-panel shows the console output of your code, and is useful for debugging your
-code.
+左侧的编辑器面板下方还有一个日志面板。该面板显示您代码的控制台输出，用于调试您的代码。
 
-After editing your code, you need to save and deploy it so the preview on the
-right updates. You can do this by clicking the **Save & Deploy** button in the
-top right, by pressing <kbd>Ctrl</kbd> + <kbd>S</kbd>, or opening the command
-palette with <kbd>F1</kbd> and selecting **Deploy: Save & Deploy**.
+编辑代码后，您需要保存并部署，以便右侧的预览更新。您可以通过单击编辑器右上角的
+**保存和部署** 按钮，按 <kbd>Ctrl</kbd> + <kbd>S</kbd>，或使用 <kbd>F1</kbd>
+打开命令面板并选择 **Deploy: 保存并部署** 来执行此操作。
 
-In the tool bar in the top right of the editor you can see the current
-deployment status of your project while saving.
+在编辑器右上角的工具栏中，您可以查看项目的当前部署状态，当保存时会自动刷新右侧的预览面板。
 
-The preview panel on the right will refresh automatically every time you save
-and deploy your code.
+编辑器右上角的语言下拉菜单允许您在 JavaScript、JSX、TypeScript 和 TSX
+之间切换。默认选择的语言是 TSX，适用于大多数情况。
 
-The language dropdown in the top right of the editor allows you to switch
-between JavaScript, JSX, TypeScript, and TSX. The default selected language is
-TSX which will work for most cases.
+## 使 Playground 公开
 
-## Making a playground public
+可以通过将 Playground 设为公开与其他用户共享。这意味着任何人都可以查看
+Playground 及其预览。公共 Playground
+无法由任何人编辑，仍然只能由您编辑。日志也仅对您显示。用户可以选择复制公共
+Playground 以创建可编辑的私人副本。
 
-Playgrounds can be shared with other users by making them public. This means
-that anyone can view the playground and its preview. Public playgrounds can not
-be edited by anyone: they can still only be edited by you. Logs are also only
-shown to you. Users have the option to fork a public playground to make a
-private copy of it that they can edit.
+要使 Playground 公开，请在编辑器的顶部工具栏中单击 **分享** 按钮。Playground 的
+URL 将自动复制到剪贴板。
 
-To make a playground public, press the **Share** button in the top tool bar in
-the editor. The URL to your playground will be copied to your clipboard
-automatically.
+您还可以在 Deno Deploy 仪表板中的 Playground 设置页面上更改 Playground
+的可见性。这可用于将 Playground 的可见性从公开更改为私有。
 
-You can also change the playground visibility from the playground settings page
-in the Deno Deploy dashboard. This can be used to change the visibility of a
-playground from public to private again.
+## 将 Playground 导出到 GitHub
 
-## Exporting a playground to GitHub
+可以将 Playground 导出到 GitHub。如果您的项目开始超出 Playground
+编辑器的单个文件限制，这将非常有用。
 
-Playgrounds can be exported to GitHub. This is useful if your project is
-starting to outgrow the single file limit of the playground editor.
+这将创建一个包含 Playground 代码的新 GitHub 存储库。此项目将自动转为链接到这个新
+GitHub 存储库的 git 项目。环境变量和域将被保留。
 
-Doing this will create a new GitHub repository containing the playground code.
-This project will be automatically turned into a git project that is linked to
-this new GitHub repository. Environment variables and domains will be retained.
+新 GitHub 存储库将在您的个人帐户中创建，并将设置为私有。您可以稍后在 GitHub
+存储库设置中更改这些设置。
 
-The new GitHub repository will be created in your personal account, and will be
-set to private. You can change these settings later in the GitHub repository
-settings.
+导出 Playground 后，您将无法再使用 Deno Deploy Playground
+编辑器进行此项目。这是一项单向操作。
 
-After exporting a playground, you can no longer use the Deno Deploy playground
-editor for this project. This is a one-way operation.
+要导出 Playground，请访问 Deno Deploy 仪表板中的 Playground
+设置页面，或在编辑器中按 <kbd> F1 </kbd> 选择 **Deploy: 导出到 GitHub**。
 
-To export the playground visit the playground settings page in the Deno Deploy
-dashboard or select **Deploy: Export to GitHub** from the command palette (press
-<kbd>F1</kbd> in the editor).
+在此处，您可以为新的 GitHub 存储库输入一个名称。此名称将用于在 GitHub
+上创建存储库。存储库不得已存在。
 
-Here you can enter a name for the new GitHub repository. This name will be used
-to create the repository on GitHub. The repository must not already exist.
-
-Press **Export** to export the playground to GitHub.
+按 **导出** 以将 Playground 导出到 GitHub。

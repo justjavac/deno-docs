@@ -1,126 +1,102 @@
-# FAQs about TypeScript in Deno
+# 有关 Deno 中 TypeScript 的常见问题
 
-## Can I use TypeScript not written for Deno?
+## 我可以使用不是为 Deno 编写的 TypeScript 吗？
 
-Maybe. That is the best answer, we are afraid. For lots of reasons, Deno has
-chosen to have fully qualified module specifiers. In part this is because it
-treats TypeScript as a first class language. Also, Deno uses explicit module
-resolution, with no _magic_. This is effectively the same way browsers
-themselves work, though they don't obviously support TypeScript directly. If the
-TypeScript modules use imports that don't have these design decisions in mind,
-they may not work under Deno.
+也许。这是最好的答案，我们很抱歉。由于多种原因，Deno
+选择了具有完全合格的模块规范符。部分原因是因为它将 TypeScript
+视为一流语言。此外，Deno 使用明确的模块解析，没有
+"魔法"。实际上，这与浏览器本身的工作方式相同，尽管它们显然不直接支持
+TypeScript。如果 TypeScript 模块使用不考虑这些设计决策的导入，它们可能在 Deno
+下无法正常工作。
 
-Also, in recent versions of Deno (starting with 1.5), we have started to use a
-Rust library to do transformations of TypeScript to JavaScript in certain
-scenarios. Because of this, there are certain situations in TypeScript where
-type information is required, and therefore those are not supported under Deno.
-If you are using `tsc` as stand-alone, the setting to use is `"isolatedModules"`
-and setting it to `true` to help ensure that your code can be properly handled
-by Deno.
+此外，在 Deno 的最新版本中（从 1.5 开始），我们开始使用 Rust 库来在某些情况下将
+TypeScript 转换为 JavaScript。因此，在 TypeScript
+中存在需要类型信息的某些情况下，它们不受 Deno 支持。如果您正在独立使用
+`tsc`，则应将设置为 `"isolatedModules"`，并将其设置为
+`true`，以确保您的代码可以被 Deno 正确处理。
 
-One of the ways to deal with the extension and the lack of Node.js non-standard
-resolution logic is to use [import maps](../../basics/import_maps.md) which
-would allow you to specify "packages" of bare specifiers which then Deno could
-resolve and load.
+处理扩展名和缺乏 Node.js 非标准解析逻辑的一种方式是使用
+[导入映射](../../basics/import_maps.md)，它允许您指定 "包" 的裸规范，然后 Deno
+可以解析和加载。
 
-## What version(s) of TypeScript does Deno support?
+## Deno 支持哪个 TypeScript 版本？
 
-Deno is built with a specific version of TypeScript. To find out what this is,
-type the following on the command line:
+Deno 是使用特定版本的 TypeScript
+构建的。要找出这是什么版本，请在命令行上输入以下内容：
 
 ```shell
 > deno --version
 ```
 
-The TypeScript version (along with the version of Deno and v8) will be printed.
-Deno tries to keep up to date with general releases of TypeScript, providing
-them in the next patch or minor release of Deno.
+TypeScript 版本（以及 Deno 和 v8 的版本）将被打印出来。Deno 试图跟上 TypeScript
+的一般发布，将它们提供给 Deno 的下一个补丁或次要版本中。
 
-## There was a breaking change in the version of TypeScript that Deno uses, why did you break my program?
+## 在 Deno 使用的 TypeScript 版本中发生了重大变化，为什么要破坏我的程序？
 
-We do not consider changes in behavior or breaking changes in TypeScript
-releases as breaking changes for Deno. TypeScript is a generally mature language
-and breaking changes in TypeScript are almost always "good things" making code
-more sound, and it is best that we all keep our code sound. If there is a
-blocking change in the version of TypeScript and it isn't suitable to use an
-older release of Deno until the problem can be resolved, then you should be able
-to use `--no-check` to skip type checking all together.
+我们不认为 TypeScript 发布的行为变化或破坏性变化会对 Deno
+构成破坏性变化。TypeScript 是一种通常成熟的语言，TypeScript
+的破坏性变化几乎总是使代码更健壮，最好我们都保持我们的代码健壮。如果 TypeScript
+版本中存在阻止问题解决之前不适合使用较旧版本的 Deno 的情况，那么您应该能够使用
+`--no-check` 来完全跳过类型检查。
 
-In addition you can utilize `@ts-ignore` to _ignore_ a specific error in code
-that you control. You can also replace whole dependencies, using
-[import maps](../../basics/import_maps.md), for situations where a dependency of
-a dependency isn't being maintained or has some sort of breaking change you want
-to bypass while waiting for it to be updated.
+此外，您可以使用 `@ts-ignore` 来忽略您控制的代码中的特定错误。您还可以使用
+[导入映射](../../basics/import_maps.md)
+来替换整个依赖项，用于处理依赖项的依赖项未得到维护或出现某种破坏性变化，并希望在等待更新时绕过它。
 
-## How do I write code that works in Deno and a browser, but still type checks?
+## 如何编写在 Deno 和浏览器中都能正常运行但仍能进行类型检查的代码？
 
-You can do this by using a configuration file with the `--config` option on the
-command line and adjusting the `"lib"` option in the `"compilerOptions"` in the
-file. For more information see
-[Targeting Deno and the Browser](./configuration.md#targeting-deno-and-the-browser).
+您可以通过使用带有配置文件的 `--config` 选项在命令行上进行配置，然后在文件的
+`"compilerOptions"` 中调整 `"lib"` 选项。有关更多信息，请参阅
+[Targeting Deno and the Browser](./configuration.md#targeting-deno-and-the-browser)。
 
-## Why are you forcing me to use isolated modules, why can't I use const enums with Deno, why do I need to do export type?
+## 为什么要强制我使用隔离模块，为什么不能在 Deno 中使用 const 枚举，为什么需要导出类型？
 
-As of Deno 1.5 we defaulted to _isolatedModules_ to `true` and in Deno 1.6 we
-removed the options to set it back to `false` via a configuration file. The
-_isolatedModules_ option forces the TypeScript compiler to check and emit
-TypeScript as if each module would stand on its own. TypeScript has a few _type
-directed emits_ in the language at the moment. While not allowing type directed
-emits into the language was a design goal for TypeScript, it has happened
-anyways. This means that the TypeScript compiler needs to understand the
-erasable types in the code to determine what to emit, which when you are trying
-to make a fully erasable type system on top of JavaScript, that becomes a
-problem.
+从 Deno 1.5 开始，我们默认将 `isolatedModules` 设置为 `true`，在 Deno 1.6
+中，我们删除了通过配置文件将其设置回 `false` 的选项。`isolatedModules` 选项强制
+TypeScript 编译器检查并发出
+TypeScript，就好像每个模块都是独立的。目前，TypeScript 语言中有一些
+"类型导向的发射"。尽管不允许将类型导向的发射引入语言是 TypeScript
+的设计目标，但它仍然发生了。这意味着 TypeScript
+编译器需要了解代码中的可消除类型，以确定要发射什么，但当您试图在 JavaScript
+的基础上构建完全可消除的类型系统时，这就成为一个问题。
 
-When people started transpiling TypeScript without `tsc`, these type directed
-emits became a problem, since the likes of Babel simply try to erase the types
-without needing to understand the types to direct the emit.
+当人们开始在不使用 `tsc` 的情况下转译 TypeScript
+时，这些类型导向的发射就成了一个问题，因为 Babel
+等工具试图消除类型，而不需要了解类型来指导发射。
 
-So instead of trying to get every user to understand when and how we could
-support the type directed emits, we made the decision to disable the use of them
-by forcing the _isolatedModules_ option to `true`. This means that even when we
-are using the TypeScript compiler to emit the code, it will follow the same
-"rules" that the Rust based emitter follows.
+因此，我们决定禁用这些功能，强制将 `isolatedModules` 选项设置为
+`true`，而不是让每个用户理解何时以及如何支持类型导向的发射。这意味着即使在使用
+TypeScript 编译器发出代码时，它也将遵循 Rust 基于发射器的相同 "规则"。
 
-This means that certain language features are not supportable. Those features
-are:
+这意味着某些语言特性不受支持。这些特性包括：
 
-- Re-exporting of types is ambiguous and requires knowing if the source module
-  is exporting runtime code or just type information. Therefore, it is
-  recommended that you use `import type` and `export type` for type only imports
-  and exports. This will help ensure that when the code is emitted, that all the
-  types are erased.
-- `const enum` is not supported. `const enum`s require type information to
-  direct the emit, as `const enum`s get written out as hard coded values.
-  Especially when `const enum`s get exported, they are a type system only
-  construct.
-- `export =` and `import =` are legacy TypeScript syntax which we do not
-  support.
-- Only `declare namespace` is supported. Runtime `namespace` is legacy
-  TypeScript syntax that is not supported.
+- 类型的重新导出是模糊的，需要知道源模块是导出运行时代码还是仅是类型信息。因此，建议您使用
+  `import type` 和 `export type`
+  进行仅类型导入和导出。这将有助于确保在发出代码时，所有类型都被擦除。
+- 不支持 `const enum`。`const enum` 需要类型信息来引导发射，因为 `const enum`
+  将硬编码的值写入。特别是当 `const enum` 被导出时，它们只是类型系统构造。
+- 不支持 `export =` 和 `import =`，这是不受支持的旧 TypeScript 语法。
+- 仅支持 `declare namespace`。
 
-## Why don't you support language service plugins or transformer plugins?
+运行时 `namespace` 是不受支持的旧 TypeScript 语法。
 
-While `tsc` supports language service plugins, Deno does not. Deno does not
-always use the built-in TypeScript compiler to do what it does, and the
-complexity of adding support for a language service plugin is not feasible.
-TypeScript does not support emitter plugins, but there are a few community
-projects which _hack_ emitter plugins into TypeScript. First, we wouldn't want
-to support something that TypeScript doesn't support, plus we do not always use
-the TypeScript compiler for the emit, which would mean we would need to ensure
-we supported it in all modes, and the other emitter is written in Rust, meaning
-that any emitter plugin for TypeScript wouldn't be available for the Rust
-emitter.
+## 为什么您不支持语言服务插件或转换器插件？
 
-## How do I combine Deno code with non-Deno code in my IDE?
+虽然 `tsc` 支持语言服务插件，但 Deno 不支持。Deno 并不总是使用内置的 TypeScript
+编译器来执行它的任务，添加语言服务插件的复杂性是不可行的。TypeScript
+不支持发射器插件，但有一些社区项目将发射器插件 "黑入"
+TypeScript。首先，我们不希望支持 TypeScript 不支持的东西，此外，我们并不总是使用
+TypeScript
+编译器来执行发射，这意味着我们需要确保在所有模式中都支持它，而另一个发射器是用
+Rust 编写的，这意味着 TypeScript 的发射器插件不会对 Rust 发射器可用。
 
-The Deno language server supports the ability to have a "per-resource"
-configuration of enabling Deno or not. This also requires a client IDE to
-support this ability. For Visual Studio Code the official
-[Deno extension](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
-supports the vscode concept of
-[multi-root workspace](https://code.visualstudio.com/docs/editor/multi-root-workspaces).
-This means you just need to add folders to the workspace and set the
-`deno.enable` setting as required on each folder.
+## 如何在我的 IDE 中将 Deno 代码与非 Deno 代码组合？
 
-For other IDEs, the client extensions needs to support the similar IDE concepts.
+Deno 语言服务器支持能够对每个资源进行 "单独资源" 配置的功能。这还需要客户端 IDE
+支持此功能。对于 Visual Studio Code，官方的
+[Deno 扩展](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
+支持 vscode 概念的
+[multi-root workspace](https://code.visualstudio.com/docs/editor/multi-root-workspaces)。这意味着您只需将文件夹添加到工作区，并根据需要在每个文件夹上设置
+`deno.enable` 设置。
+
+对于其他 IDE，客户端扩展需要支持类似的 IDE 概念。

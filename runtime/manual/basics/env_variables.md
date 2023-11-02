@@ -1,13 +1,13 @@
-# Environment variables
+# 环境变量
 
-There are a few ways to use environment variables in Deno:
+在 Deno 中使用环境变量有几种方法：
 
-## Built-in `Deno.env`
+## 内置 `Deno.env`
 
-The Deno runtime offers built-in support for environment variables with
-[`Deno.env`](https://deno.land/api@v1.25.3?s=Deno.env).
+Deno 运行时提供了对环境变量的内置支持，使用
+[`Deno.env`](https://deno.land/api@v1.25.3?s=Deno.env)。
 
-`Deno.env` has getter and setter methods. Here is example usage:
+`Deno.env` 提供了获取和设置方法。以下是示例用法：
 
 ```ts
 Deno.env.set("FIREBASE_API_KEY", "examplekey123");
@@ -18,19 +18,18 @@ console.log(Deno.env.get("FIREBASE_AUTH_DOMAIN")); // firebasedomain.com
 console.log(Deno.env.has("FIREBASE_AUTH_DOMAIN")); // true
 ```
 
-## `.env` file
+## `.env` 文件
 
-You can also put environment variables in a `.env` file and retrieve them using
-`dotenv` in the standard library.
+您还可以将环境变量放在 `.env` 文件中，并使用标准库中的 `dotenv` 来检索它们。
 
-Let's say you have an `.env` file that looks like this:
+假设您有一个像这样的 `.env` 文件：
 
 ```sh
 PASSWORD=Geheimnis
 ```
 
-To access the environment variables in the `.env` file, import the `load`
-function from the standard library. Then, import the configuration using it.
+要访问 `.env` 文件中的环境变量，请从标准库中导入 `load`
+函数。然后，使用它导入配置。
 
 ```ts
 import { load } from "https://deno.land/std@$STD_VERSION/dotenv/mod.ts";
@@ -44,31 +43,30 @@ console.log(password);
 
 ## `std/flags`
 
-The Deno standard library has a
-[`std/flags` module](https://deno.land/std/flags/mod.ts) for parsing command
-line arguments.
+Deno 标准库具有用于解析命令行参数的
+[`std/flags` 模块](https://deno.land/std/flags/mod.ts)。
 
-## Special environment variables
+## 特殊环境变量
 
-The Deno runtime has these special environment variables.
+Deno 运行时具有这些特殊环境变量。
 
-| name                 | description                                                                                                                                                                       |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| DENO_AUTH_TOKENS     | A semi-colon separated list of bearer tokens and hostnames to use when fetching remote modules from private repositories<br />(e.g. `abcde12345@deno.land;54321edcba@github.com`) |
-| DENO_TLS_CA_STORE    | Comma-separated list of order dependent certificate stores.<br />Possible values: `system`, `mozilla`. Defaults to `mozilla`.                                                     |
-| DENO_CERT            | Load certificate authority from PEM encoded file                                                                                                                                  |
-| DENO_DIR             | Set the cache directory                                                                                                                                                           |
-| DENO_INSTALL_ROOT    | Set deno install's output directory (defaults to `$HOME/.deno/bin`)                                                                                                               |
-| DENO_REPL_HISTORY    | Set REPL history file path History file is disabled when the value is empty <br />(defaults to `$DENO_DIR/deno_history.txt`)                                                      |
-| DENO_NO_PACKAGE_JSON | Disables auto-resolution of `package.json`                                                                                                                                        |
-| DENO_NO_PROMPT       | Set to disable permission prompts on access<br />(alternative to passing `--no-prompt` on invocation)                                                                             |
-| DENO_NO_UPDATE_CHECK | Set to disable checking if a newer Deno version is available                                                                                                                      |
-| DENO_V8_FLAGS        | Set V8 command line options                                                                                                                                                       |
-| DENO_JOBS            | Number of parallel workers used for the `--parallel` flag with the test subcommand.<br />Defaults to number of available CPUs.                                                    |
-| HTTP_PROXY           | Proxy address for HTTP requests (module downloads, fetch)                                                                                                                         |
-| HTTPS_PROXY          | Proxy address for HTTPS requests (module downloads, fetch)                                                                                                                        |
-| NPM_CONFIG_REGISTRY  | URL to use for the npm registry.                                                                                                                                                  |
-| NO_COLOR             | Set to disable color                                                                                                                                                              |
-| NO_PROXY             | Comma-separated list of hosts which do not use a proxy (module downloads, fetch)                                                                                                  |
+| 名称                 | 描述                                                                                                                        |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| DENO_AUTH_TOKENS     | 用于从私有存储库中提取远程模块时使用的令牌和主机名的分号分隔列表 <br />(例如，`abcde12345@deno.land;54321edcba@github.com`) |
+| DENO_TLS_CA_STORE    | 逗号分隔的有序依赖证书存储列表。<br /> 可能的值：`system`，`mozilla`。默认为 `mozilla`。                                    |
+| DENO_CERT            | 从 PEM 编码文件加载证书颁发机构                                                                                             |
+| DENO_DIR             | 设置缓存目录                                                                                                                |
+| DENO_INSTALL_ROOT    | 设置 Deno 安装的输出目录（默认为 `$HOME/.deno/bin`）                                                                        |
+| DENO_REPL_HISTORY    | 设置 REPL 历史文件路径，当值为空时禁用历史文件 <br />(默认为 `$DENO_DIR/deno_history.txt`)                                  |
+| DENO_NO_PACKAGE_JSON | 禁用 `package.json` 的自动解析                                                                                              |
+| DENO_NO_PROMPT       | 设置以禁用访问权限提示 <br />(替代在调用时传递 `--no-prompt`)                                                               |
+| DENO_NO_UPDATE_CHECK | 设置以禁用检查是否有新的 Deno 版本可用                                                                                      |
+| DENO_V8_FLAGS        | 设置 V8 命令行选项                                                                                                          |
+| DENO_JOBS            | 用于测试子命令的 `--parallel` 标志的并行工作程序数量 <br /> 默认为可用 CPU 数量。                                           |
+| HTTP_PROXY           | 用于 HTTP 请求的代理地址（模块下载，获取）                                                                                  |
+| HTTPS_PROXY          | 用于 HTTPS 请求的代理地址（模块下载，获取）                                                                                 |
+| NPM_CONFIG_REGISTRY  | 用于 npm 注册表的 URL。                                                                                                     |
+| NO_COLOR             | 设置为禁用颜色                                                                                                              |
+| NO_PROXY             | 不使用代理的主机的逗号分隔列表（模块下载，获取）                                                                            |
 
-You can also view the same content with `deno --help`.
+您还可以使用 `deno --help` 查看相同内容。

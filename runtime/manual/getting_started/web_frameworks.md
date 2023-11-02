@@ -2,88 +2,74 @@
 pagination_next: manual/basics/permissions
 ---
 
-# Web Frameworks
+# Web 框架
 
-Most likely, if you're building a more complex application, you'll be
-interacting with Deno through a web framework. There are two kinds of web
-frameworks that Deno supports:
+如果您正在构建一个更复杂的应用程序，您很可能会通过一个 web 框架与 Deno
+进行交互。Deno 支持两种类型的 web 框架：
 
-- **Node.js native frameworks/tools/libraries.** Some of the most popular
-  tooling, for example esbuild, explicitly supports both Node.js and Deno. The
-  drawback here is that you might not get the best experience or performance.
-- **Deno native frameworks/tools/libraries.** We present some of these below.
+- **Node.js 本地框架/工具/库。** 例如 esbuild 等一些最流行的工具明确支持 Node.js
+  和 Deno。这里的缺点是您可能无法获得最佳体验或性能。
+- **Deno 本地框架/工具/库。** 我们将在下面介绍其中一些。
 
-## Deno-native frameworks
+## Deno 本地框架
 
 ### Fresh
 
-[Fresh](https://fresh.deno.dev/) is the most popular web framework for Deno. It
-uses a model where you send no JavaScript to clients by default. The majority of
-rendering is done on a server, and the client is only responsible for
-re-rendering small
-[islands of interactivity](https://jasonformat.com/islands-architecture/). This
-means the developer explicitly opts in to client side rendering for specific
-components.
+[Fresh](https://fresh.deno.dev/) 是 Deno 最受欢迎的 web
+框架。它使用一种模型，其中默认情况下不会将 JavaScript
+发送到客户端。大多数渲染是在服务器上完成，客户端只负责重新渲染小的[交互区域](https://jasonformat.com/islands-architecture/)。这意味着开发人员明确选择为特定组件启用客户端渲染。
 
 ### Aleph
 
-[Aleph.js](https://alephjs.org/docs/get-started) is the second most popular web
-framework for Deno. It gives you the same sort of quick-start with React as
-Create-React-App. Like Next.js, Aleph provides SSR and SSG out of the box in
-order to allow developers to create SEO-friendly apps. In addition, Aleph
-provides some other built-in features that don't come out of the box in Next.js,
-such as:
+[Aleph.js](https://alephjs.org/docs/get-started) 是 Deno 的第二受欢迎的 web
+框架。它为您提供了与 Create-React-App 一样快速启动的方式。与 Next.js 一样，Aleph
+提供了开箱即用的 SSR 和 SSG，以便开发人员创建 SEO 友好的应用程序。此外，Aleph
+提供了一些其他内置功能，这些功能在 Next.js 中并非默认提供，例如：
 
-- Hot Reloading (Using React Fast Refresh)
-- ESM Import Syntax (No need for webpack)
-- TypeScript-Readys
+- 热模块替换（使用 React Fast Refresh）
+- ESM 导入语法（无需 webpack）
+- TypeScript 准备
 
 ### Ultra
 
-[Ultra](https://ultrajs.dev/) is a modern streaming React framework for Deno
-that is another alternative to Aleph. It's a way to use React to build dynamic
-media-rich websites, similar to Next.js.
+[Ultra](https://ultrajs.dev/) 是 Deno 的现代流媒体 React 框架，是 Aleph
+的另一种选择。这是一种使用 React 构建动态媒体丰富网站的方式，类似于 Next.js。
 
-Deno itself supports JSX and TypeScript out-of-the-box (and therefore Ultra does
-as well), but they don't work in the browser. Ultra takes over the task of
-transpiling JSX and TypeScript to regular JavaScript.
+Deno 本身支持 JSX 和 TypeScript（因此 Ultra
+也支持），但它们在浏览器中不起作用。Ultra 接管了将 JSX 和 TypeScript 转译为常规
+JavaScript 的任务。
 
-Other highlights of Ultra include:
+Ultra 的其他亮点包括：
 
-- written in Deno.
-- powered by import maps.
-- 100% esm.
-- uses import maps in both development and production, which massively
-  simplifies toolchains - you don't have to deal with heaps of bundling and
-  transpilation.
-- source code is shipped in production, similar to how it's written.
-- imports, exports, work as they do in development.
+- 使用 Deno 编写。
+- 由导入映射支持。
+- 100％ 的 esm。
+- 在开发和生产中都使用导入映射，大大简化了工具链 - 您不必处理大量捆绑和转译。
+- 生产中的源代码与其编写方式相似。
+- 导入，导出在生产中与开发中的操作方式相同。
 
 ### Lume
 
-[Lume](https://lume.land/) is a static site generator for Deno that is inspired
-by other static site generators such Jekyll or Eleventy. It's simple to use and
-configure, while being super flexible. Highlights include:
+[Lume](https://lume.land/) 是 Deno
+的静态站点生成器，灵感来自其他静态站点生成器，如 Jekyll 或
+Eleventy。它简单易用，配置灵活。亮点包括：
 
-- Support for multiple file formats like Markdown, YAML, JavaScript, TypeScript,
-  JSX, Nunjucks.
-- You can hook in any processor to transform assets, for example sass or postcss
-  for CSS.
-- No need to install thousand of packages in `node_modules` or complex bundlers.
+- 支持多种文件格式，如 Markdown、YAML、JavaScript、TypeScript、JSX、Nunjucks。
+- 您可以连接任何处理器来转换资产，例如为 CSS 使用 sass 或 postcss。
+- 无需在 `node_modules` 中安装成千上万的包或复杂的捆绑器。
 
 ### Oak
 
-[Oak](https://deno.land/x/oak) is a web application framework for Deno, similar
-to Express in Node.js.
+[Oak](https://deno.land/x/oak) 是 Deno 的 web 应用程序框架，类似于 Node.js 中的
+Express。
 
-As a middleware framework, Oak is the glue between your frontend application and
-a potential database or other data sources (e.g. REST APIs, GraphQL APIs). Just
-to give you an idea, the following is a list of common tech stacks to build
-client-server architectures:
+作为中间件框架，Oak是连接前端应用程序和潜在数据库或其他数据源（例如 REST
+API、GraphQL
+API）的纽带。只是为了给您一个概念，以下是构建客户端-服务器架构的常见技术栈列表：
 
-- React.js (Frontend) + Oak (Backend) + PostgreSQL (Database)
-- Vue.js (Frontend) + Oak (Backend) + MongoDB (Database)
-- Angular.js (Frontend) + Oak (Backend) + Neo4j (Database)
+- React.js（前端）+ Oak（后端）+ PostgreSQL（数据库）
+- Vue.js（前端）+ Oak（后端）+ MongoDB（数据库）
+- Angular.js（前端）+ Oak（后端）+ Neo4j（数据库）
 
-Oak offers additional functionality over the native Deno HTTP server, including
-a basic router, JSON parser, middlewares, plugins, etc.
+Oak 提供了比原生 Deno HTTP 服务器更多的功能，包括基本路由器、JSON
+解析器、中间件、插件等。

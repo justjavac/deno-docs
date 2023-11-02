@@ -2,28 +2,26 @@
 sidebar_position: 4
 ---
 
-# Command Line Interface
+# 命令行界面
 
-Deno is a command line program. You should be familiar with some simple commands
-having followed the examples thus far and already understand the basics of shell
-usage.
+Deno 是一个命令行程序。在跟随示例并已经了解了 Shell
+的基础知识后，您应该熟悉一些简单的命令。
 
-There are multiple ways of viewing the main help text:
+查看主要帮助文本的多种方法：
 
 ```shell
-# Using the subcommand.
+# 使用子命令。
 deno help
 
-# Using the short flag -- outputs the same as above.
+# 使用短标志 -- 输出与上述相同的内容。
 deno -h
 
-# Using the long flag -- outputs more detailed help text where available.
+# 使用长标志 -- 输出更详细的帮助文本（如果可用）。
 deno --help
 ```
 
-Deno's CLI is subcommand-based. The above commands should show you a list of
-subcommands supported, such as `deno compile`. To see subcommand-specific help,
-for example for `compile`, you can similarly run one of:
+Deno 的 CLI 基于子命令。上述命令应该显示支持的子命令列表，例如
+`deno compile`。要查看特定子命令的帮助，例如 `compile`，您可以运行以下之一：
 
 ```shell
 deno help compile
@@ -31,13 +29,12 @@ deno compile -h
 deno compile --help
 ```
 
-Detailed guides for each subcommand can be found [here](../index.mdx).
+每个子命令的详细指南可以在[这里](../index.mdx)找到。
 
-## Script source
+## 脚本来源
 
-Deno can grab the scripts from multiple sources, a filename, a url, and '-' to
-read the file from stdin. The latter is useful for integration with other
-applications.
+Deno 可以从多个来源获取脚本，包括文件名、URL 和 '-'
+以从标准输入读取文件。后者对于与其他应用程序集成非常有用。
 
 ```shell
 deno run main.ts
@@ -45,10 +42,10 @@ deno run https://mydomain.com/main.ts
 cat main.ts | deno run -
 ```
 
-## Script arguments
+## 脚本参数
 
-Separately from the Deno runtime flags, you can pass user-space arguments to the
-script you are running by specifying them **after** the script name:
+除了 Deno
+运行时标志之外，您可以通过在脚本名称之后指定它们**之后**来传递用户空间参数给您正在运行的脚本：
 
 ```shell
 deno run main.ts a b -c --quiet
@@ -59,50 +56,44 @@ deno run main.ts a b -c --quiet
 console.log(Deno.args); // [ "a", "b", "-c", "--quiet" ]
 ```
 
-**Note that anything passed after the script name will be passed as a script
-argument and not consumed as a Deno runtime flag.** This leads to the following
-pitfall:
+**请注意，在脚本名称之后传递的任何内容都将作为脚本参数传递，并不会被视为 Deno
+运行时标志。** 这导致了以下陷阱：
 
 ```shell
-# Good. We grant net permission to net_client.ts.
+# 好的。我们授予 net 权限给 net_client.ts。
 deno run --allow-net net_client.ts
 
-# Bad! --allow-net was passed to Deno.args, throws a net permission error.
+# 不好！--allow-net 被传递给 Deno.args，引发了 net 权限错误。
 deno run net_client.ts --allow-net
 ```
 
-Some see it as unconventional that:
+有人认为：
 
-> a non-positional flag is parsed differently depending on its position.
+> 一个非位置标志的解析方式因其位置而异属于不规范的。
 
-However:
+然而：
 
-1. This is the most logical and ergonomic way of distinguishing between runtime
-   flags and script arguments.
-2. This is, in fact, the same behaviour as that of any other popular runtime.
-   - Try `node -c index.js` and `node index.js -c`. The first will only do a
-     syntax check on `index.js` as per Node's `-c` flag. The second will
-     _execute_ `index.js` with `-c` passed to `require("process").argv`.
+1. 这是区分运行时标志和脚本参数的最合乎逻辑和人体工程学的方式。
+2. 事实上，这与任何其他流行运行时的行为相同。
+   - 尝试 `node -c index.js` 和 `node index.js -c`。第一个只会对 `index.js` 执行
+     Node 的 `-c` 标志的语法检查。第二个将使用 `-c` 执行 `index.js` 传递给
+     `require("process").argv`。
 
 ---
 
-There exist logical groups of flags that are shared between related subcommands.
-We discuss these below.
+存在一些逻辑标志组，它们在相关子命令之间共享。我们将在下面讨论这些标志。
 
-## Watch mode
+## 观察模式
 
-You can supply the `--watch` flag to `deno run`, `deno test`, `deno compile`,
-and `deno fmt` to enable the built-in file watcher. The files that are watched
-depend on the subcommand used:
+您可以为 `deno run`、`deno test`、`deno compile` 和 `deno fmt` 提供 `--watch`
+标志，以启用内置的文件监视器。被观察的文件取决于所使用的子命令：
 
-- for `deno run`, `deno test`, and `deno compile` the entrypoint, and all local
-  files the entrypoint(s) statically import(s) will be watched.
-- for `deno fmt` all local files and directories specified as command line
-  arguments (or the working directory if no specific files/directories is
-  passed) are watched.
+- 对于 `deno run`、`deno test` 和
+  `deno compile`，入口点和入口点静态导入的所有本地文件都将被观察。
+- 对于
+  `deno fmt`，所有本地文件和目录（或者如果未传递特定文件/目录，则是工作目录）都将被观察。
 
-Whenever one of the watched files is changed on disk, the program will
-automatically be restarted / formatted / tested / bundled.
+每当磁盘上的被观察文件之一发生更改时，程序将自动重新启动/格式化/测试/捆绑。
 
 ```shell
 deno run --watch main.ts
@@ -110,95 +101,93 @@ deno test --watch
 deno fmt --watch
 ```
 
-## Integrity flags (lock files)
+## 完整性标志（锁定文件）
 
-Affect commands which can download resources to the cache: `deno cache`,
-`deno run`, `deno test`, `deno doc`, and `deno compile`.
-
-```terminal
---lock <FILE>    Check the specified lock file
---lock-write     Write lock file. Use with --lock.
-```
-
-Find out more about these [here](../basics/modules/integrity_checking.md).
-
-## Cache and compilation flags
-
-Affect commands which can populate the cache: `deno cache`, `deno run`,
-`deno test`, `deno doc`, and `deno compile`. As well as the flags above, this
-includes those which affect module resolution, compilation configuration etc.
+影响可以将资源下载到缓存的命令：`deno cache`、`deno run`、`deno test`、`deno doc`
+和 `deno compile`。
 
 ```terminal
---config <FILE>               Load configuration file
---import-map <FILE>           Load import map file
---no-remote                   Do not resolve remote modules
---reload=<CACHE_BLOCKLIST>    Reload source code cache (recompile TypeScript)
---unstable                    Enable unstable APIs
+--lock <FILE>    检查指定的锁定文件
+--lock-write     写入锁定文件。与 --lock 一起使用。
 ```
 
-## Runtime flags
+在[这里](../basics/modules/integrity_checking.md)了解更多。
 
-Affect commands which execute user code: `deno run` and `deno test`. These
-include all of the above as well as the following.
+## 缓存和编译标志
 
-### Type checking flags
+影响可以填充缓存的命令：`deno cache`、`deno run`、`deno test`、`deno doc` 和
+`deno compile`。除了上面的标志之外，还包括影响模块解析、编译配置等的标志。
 
-You can type-check your code (without executing it) using the command:
+```terminal
+--config <FILE>               加载配置文件
+--import-map <FILE>           加载导入映射文件
+--no-remote                   不解析远程模块
+--reload=<CACHE_BLOCKLIST>    重新加载源代码缓存（重新编译TypeScript）
+--unstable                    启用不稳定的API
+```
+
+## 运行时标志
+
+影响执行用户代码的命令：`deno run` 和
+`deno test`。这些包括上述所有标志以及以下标志。
+
+### 类型检查标志
+
+您可以使用以下命令对代码进行类型检查（而不执行）：
 
 ```shell
 > deno check main.ts
 ```
 
-You can also type-check your code before execution by using the `--check`
-argument to deno run:
+您还可以使用 `deno run` 的 `--check` 参数在执行之前对代码进行类型检查：
 
 ```shell
 > deno run --check main.ts
 ```
 
-This flag affects `deno run`, `deno eval`, `deno repl` and `deno cache`. The
-following table describes the type-checking behavior of various subcommands.
-Here "Local" means that only errors from local code will induce type-errors,
-modules imported from https URLs (remote) may have type errors that are not
-reported. (To turn on type-checking for all modules, use `--check=all`.)
+此标志影响 `deno run`、`deno eval`、`deno repl` 和
+`deno cache`。以下表格描述了各个子命令的类型检查行为。在这里，"本地"意味着仅来自本地代码的错误会引起类型错误，从https
+URL（远程）导入的模块可能
 
-| Subcommand     | Type checking mode |
-| -------------- | ------------------ |
-| `deno bench`   | 📁 Local           |
-| `deno cache`   | ❌ None            |
-| `deno check`   | 📁 Local           |
-| `deno compile` | 📁 Local           |
-| `deno eval`    | ❌ None            |
-| `deno repl`    | ❌ None            |
-| `deno run`     | ❌ None            |
-| `deno test`    | 📁 Local           |
+会有未报告的类型错误。 （要为所有模块启用类型检查，请使用 `--check=all`。）
 
-### Permission flags
+| 子命令         | 类型检查模式 |
+| -------------- | ------------ |
+| `deno bench`   | 📁 本地      |
+| `deno cache`   | ❌ 无        |
+| `deno check`   | 📁 本地      |
+| `deno compile` | 📁 本地      |
+| `deno eval`    | ❌ 无        |
+| `deno repl`    | ❌ 无        |
+| `deno run`     | ❌ 无        |
+| `deno test`    | 📁 本地      |
 
-These are listed [here](../basics/permissions.md#permissions-list).
+### 权限标志
 
-### Other runtime flags
+这些列在[这里](../basics/permissions.md#permissions-list)。
 
-More flags which affect the execution environment.
+### 其他运行时标志
+
+更多影响执行环境的标志。
 
 ```terminal
---cached-only                Require that remote dependencies are already cached
---inspect=<HOST:PORT>        activate inspector on host:port ...
---inspect-brk=<HOST:PORT>    activate inspector on host:port and break at ...
---inspect-wait=<HOST:PORT>   activate inspector on host:port and wait for ...
---location <HREF>            Value of 'globalThis.location' used by some web APIs
---prompt                     Fallback to prompt if required permission wasn't passed
---seed <NUMBER>              Seed Math.random()
---v8-flags=<v8-flags>        Set V8 command line options. For help: ...
+--cached-only                要求远程依赖已经被缓存
+--inspect=<HOST:PORT>        在主机:端口上激活检查器...
+--inspect-brk=<HOST:PORT>    在主机:端口上激活检查器并中断...
+--inspect-wait=<HOST:PORT>   在主机:端口上激活检查器并等待...
+--location <HREF>            由一些Web API使用的 'globalThis.location' 的值
+--prompt                     如果没有传递所需权限，回退到提示
+--seed <NUMBER>              种子 Math.random()
+--v8-flags=<v8-flags>        设置V8命令行选项。获取帮助: ...
 ```
 
-## Autocomplete
+## 自动完成
 
-You can get IDE-style autocompletions for Deno with [Fig](https://fig.io/)
-<a href="https://fig.io/" target="_blank"><img src="https://fig.io/badges/Logo.svg" width="15" height="15"/></a>.
-It works in bash, zsh, and fish.
+您可以通过 [Fig](https://fig.io/) 获取 Deno 的 IDE 风格自动完成
+<a href="https://fig.io/" target="_blank"><img src="https://fig.io/badges/Logo.svg" width="15" height="15"/></a>。它适用于
+bash、zsh 和 fish。
 
-To install, run:
+要安装，请运行：
 
 ```shell
 brew install fig

@@ -1,31 +1,29 @@
-# Documentation Generator
+# 文档生成器
 
-`deno doc` followed by a list of one or more source files will print the JSDoc
-documentation for each of the module's **exported** members.
+`deno doc` 后跟一个或多个源文件列表将打印出每个模块的 JSDoc 文档，其中包括
+**导出的** 成员。
 
-For example, given a file `add.ts` with the contents:
+例如，给定一个名为 `add.ts` 的文件，其内容如下：
 
 ```ts
 /**
- * Adds x and y.
+ * 添加 x 和 y。
  * @param {number} x
  * @param {number} y
- * @returns {number} Sum of x and y
+ * @returns {number} x 与 y 的和
  */
 export function add(x: number, y: number): number {
   return x + y;
 }
 ```
 
-Running the Deno `doc` command, prints the function's JSDoc comment to `stdout`:
+运行 Deno 的 `doc` 命令，将函数的 JSDoc 注释打印到 `stdout`：
 
 ```shell
 deno doc add.ts
 function add(x: number, y: number): number
-  Adds x and y. @param {number} x @param {number} y @returns {number} Sum of x and y
+  添加 x 和 y。 @param {number} x @param {number} y @returns {number} x 和 y 的和
 ```
 
-Use the `--json` flag to output the documentation in JSON format. This JSON
-format is consumed by the
-[deno doc website](https://github.com/denoland/docland) and is used to generate
-module documentation.
+使用 `--json` 标志以 JSON 格式输出文档。这种 JSON 格式可被
+[deno doc 网站](https://github.com/denoland/docland) 使用，并用于生成模块文档。

@@ -1,87 +1,60 @@
 import Admonition from "./_admonition.mdx";
 
-# Transactions
+# 事务
 
 <Admonition />
 
-The Deno KV store utilizes _optimistic concurrency control transactions_ rather
-than _interactive transactions_ like many SQL systems like PostgreSQL or MySQL.
-This approach employs versionstamps, which represent the current version of a
-value for a given key, to manage concurrent access to shared resources without
-using locks. When a read operation occurs, the system returns a versionstamp for
-the associated key in addition to the value.
+Deno KV 存储使用 _乐观并发控制事务_ 而不是像许多 SQL 系统（如 PostgreSQL 或 MySQL）那样使用 _交互式事务_。这种方法使用版本戳，表示给定键的当前版本，以管理共享资源的并发访问而不使用锁。当发生读取操作时，系统将返回与关联键一起的版本戳以及值。
 
-To execute a transaction, one performs an atomic operations that can consist of
-multiple mutation actions (like set or delete). Along with these actions,
-key+versionstamp pairs are provided as a condition for the transaction's
-success. The optimistic concurrency control transaction will only commit if the
-specified versionstamps match the current version for the values in the database
-for the corresponding keys. This transaction model ensures data consistency and
-integrity while allowing concurrent interactions within the Deno KV store.
+要执行事务，需要执行原子操作，可以包含多个变异操作（如设置或删除）。除了这些操作之外，还提供键+版本戳对作为事务成功的条件。只有在指定的版本戳与数据库中相应键的值的当前版本匹配时，乐观并发控制事务才会提交。这种事务模型确保了数据的一致性和完整性，同时允许在 Deno KV 存储中进行并发交互。
 
-Because OCC transactions are optimistic, they can fail on commit because the
-version constraints specified in the atomic operation were violated. This occurs
-when an agent updates a key used within the transaction between read and commit.
-When this happens, the agent performing the transaction must retry the
-transaction.
+因为 OCC 事务是乐观的，所以在提交时可能会失败，因为原子操作中指定的版本约束被违反。这发生在代理在读取和提交之间更新了事务中使用的键时。当发生这种情况时，执行事务的代理必须重试事务。
 
-To illustrate how to use OCC transactions with Deno KV, this example shows how
-to implement a `transferFunds(from: string, to: string, amount: number)`
-function for an account ledger. The account ledger stores the balance for each
-account in the key-value store. The keys are prefixed by `"account"`, followed
-by the account identifier: `["account", "alice"]`. The value stored for each key
-is a number that represents the account balance.
+为了说明如何在 Deno KV 中使用 OCC 事务，以下示例展示了如何为账户分类帐实现 `transferFunds(from: string, to: string, amount: number)` 函数。账户分类帐在键值存储中存储每个账户的余额。键以 `"account"` 为前缀，后跟账户标识符：`["account", "alice"]`。每个键存储的值是表示账户余额的数字。
 
-Here's a step-by-step example of implementing this `transferFunds` function:
+以下是实现 `transferFunds` 函数的逐步示例：
 
 <!-- deno-fmt-ignore -->
+
 ```ts
 async function transferFunds(sender: string, receiver: string, amount: number) {
   if (amount <= 0) throw new Error("Amount must be positive");
 
-  // Construct the KV keys for the sender and receiver accounts.
+  // 构造发送方和接收方帐户的 KV 键。
   const senderKey = ["account", sender];
   const receiverKey = ["account", receiver];
 
-  // Retry the transaction until it succeeds.
+  // 重试事务，直到成功。
   let res = { ok: false };
   while (!res.ok) {
-    // Read the current balance of both accounts.
+    // 读取两个帐户的当前余额。
     const [senderRes, receiverRes] = await kv.getMany([senderKey, receiverKey]);
-    if (senderRes.value === null) throw new Error(`Account ${sender} not found`);
-    if (receiverRes.value === null) throw new Error(`Account ${receiver} not found`);
+    if (senderRes.value === null) throw an Error(`未找到帐户 ${sender}`);
+    if (receiverRes.value === null) throw an Error(`未找到帐户 ${receiver}`);
 
     const senderBalance = senderRes.value;
     const receiverBalance = receiverRes.value;
 
-    // Ensure the sender has a sufficient balance to complete the transfer.
+    // 确保发送方有足够的余额来完成转账。
     if (senderBalance < amount) {
-      throw new Error(
-        `Insufficient funds to transfer ${amount} from ${sender}`,
+      throw an Error(
+        `余额不足以从 ${sender} 转账 ${amount}`,
       );
     }
 
-    // Perform the transfer.
+    // 执行转账。
     const newSenderBalance = senderBalance - amount;
     const newReceiverBalance = receiverBalance + amount;
 
-    // Attempt to commit the transaction. `res` returns an object with
-    // `ok: false` if the transaction fails to commit due to a check failure
-    // (i.e. the versionstamp for a key has changed)
+    // 尝试提交事务。如果由于检查失败（即键的版本戳已更改）而导致事务无法提交，`res` 将返回一个具有 `ok: false` 的对象。
     res = await kv.atomic()
-      .check(senderRes) // Ensure the sender's balance hasn't changed.
-      .check(receiverRes) // Ensure the receiver's balance hasn't changed.
-      .set(senderKey, newSenderBalance) // Update the sender's balance.
-      .set(receiverKey, newReceiverBalance) // Update the receiver's balance.
+      .check(senderRes) // 确保发送方的余额没有更改。
+      .check(receiverRes) // 确保接收方的余额没有更改。
+      .set(senderKey, newSenderBalance) // 更新发送方的余额。
+      .set(receiverKey, newReceiverBalance) // 更新接收方的余额。
       .commit();
   }
 }
 ```
 
-In this example, the `transferFunds` function reads the balances and
-versionstamps of both accounts, calculates the new balances after the transfer,
-and checks if there are sufficient funds in account A. It then performs an
-atomic operation, setting the new balances with the versionstamp constraints. If
-the transaction is successful, the loop exits. If the version constraints are
-violated, the transaction fails, and the loop retries the transaction until it
-succeeds.
+在此示例中，`transferFunds` 函数读取两个帐户的余额和版本戳，计算转账后的新余额，并检查帐户 A 是否有足够的资金。然后，它执行一个原子操作，使用版本戳约束设置新的余额。如果事务成功，循环退出。如果版本约束被违反，事务将失败，循环将重试事务，直到成功为止。

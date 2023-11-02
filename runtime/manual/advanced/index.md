@@ -1,10 +1,10 @@
-# Advanced Topics
+# 高级主题
 
-In this chapter, you will find advanced Deno concepts, including:
+在这一章中，您将会学习到高级的 Deno 概念，包括:
 
-- [Publishing Modules](./publishing/index.md)
-- [Embedding Deno](./embedding_deno.md)
-- [Language Server](./language_server/index.md)
-- [Continuous Integration](./continuous_integration.md)
-- [Using TypeScript](./typescript/overview.md)
-- [Details on Using JSX and the DOM](./jsx_dom/index.md)
+- [发布模块](./publishing/index.md)
+- [嵌入 Deno](./embedding_deno.md)
+- [语言服务器](./language_server/index.md)
+- [持续集成](./continuous_integration.md)
+- [使用 TypeScript](./typescript/overview.md)
+- [关于使用 JSX 和 DOM 的详细信息](./jsx_dom/index.md)

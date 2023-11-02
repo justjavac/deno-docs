@@ -1,28 +1,25 @@
 import Admonition from "./_admonition.mdx";
 
-# Key Expiration
+# 键到期
 
 <Admonition />
 
-Since version 1.36.2, Deno KV supports key expiration. This allows an expiration
-timestamp to be associated with a key, after which the key will be automatically
-deleted from the database:
+自版本 1.36.2 以来，Deno KV 支持键到期。这允许将到期时间戳与键关联，之后键将自动从数据库中删除：
 
 ```ts
 const kv = await Deno.openKv();
 
-// `expireIn` is the number of milliseconds after which the key will expire.
+// `expireIn` 是键到期的毫秒数。
 function addSession(session: Session, expireIn: number) {
   await kv.set(["sessions", session.id], session, { expireIn });
 }
 ```
 
-Key expiration is supported on both Deno CLI and Deno Deploy.
+Key 到期在 Deno CLI 和 Deno Deploy 上都受支持。
 
-## Atomic expiration of multiple keys
+## 多个键的原子到期
 
-If multiple keys are set in the same atomic operation and have the same
-`expireIn` value, the expiration of those keys will be atomic. For example:
+如果多个键在相同的原子操作中设置，并具有相同的 `expireIn` 值，则这些键的到期将是原子的。例如：
 
 ```ts
 const kv = await Deno.openKv();
@@ -30,19 +27,16 @@ const kv = await Deno.openKv();
 function addUnverifiedUser(
   user: User,
   verificationToken: string,
-  expireIn: number,
+  expireIn: number
 ) {
-  await kv.atomic()
+  await kv
+    .atomic()
     .set(["users", user.id], user, { expireIn })
     .set(["verificationTokens", verificationToken], user.id, { expireIn })
     .commit();
 }
 ```
 
-## Caveats
+## 注意事项
 
-The expire timestamp specifies the _earliest_ time after which the key can be
-deleted from the database. An implementation is allowed to expire a key at any
-time after the specified timestamp, but not before. If you need to strictly
-enforce an expiration time (e.g. for security purposes), please also add it as a
-field of your value and do a check after retrieving the value from the database.
+到期时间戳指定了键可以从数据库中删除的最早时间。实现允许在指定时间戳之后的任何时间到期 Key，但不允许在之前到期。如果您需要严格执行到期时间（例如出于安全目的），请还将其添加为从数据库检索值后的字段并进行检查。

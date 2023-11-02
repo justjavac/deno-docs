@@ -1,9 +1,8 @@
-# Deploy a static site
+# 部署静态网站
 
-This tutorial will cover how to deploy a static site (no JavaScript) on Deno
-Deploy.
+本教程将介绍如何在 Deno Deploy 上部署静态网站（无 JavaScript）。
 
-## **Step 1:** Create the static site
+## **步骤 1：** 创建静态网站
 
 ```sh
 mkdir static-site
@@ -11,7 +10,7 @@ cd static-site
 touch index.html
 ```
 
-Inside your `index.html`, paste the following html:
+在您的 `index.html` 中，粘贴以下 HTML：
 
 ```html
 <!DOCTYPE html>
@@ -26,33 +25,32 @@ Inside your `index.html`, paste the following html:
 </html>
 ```
 
-Make sure that there a `image.png` inside `static-site`.
+确保 `static-site` 文件夹内有一个名为 `image.png` 的图片。
 
-You have now a html page that says "Hello" and has a logo.
+现在您有一个显示 "Hello" 并带有标志的 HTML 页面。
 
-## **Step 2:** Create a new Deno project
+## **步骤 2：** 创建一个新的 Deno 项目
 
-1. Navigate to https://dash.deno.com/new and click the **+Empty Project** button
-   under **Deploy from command line**.
-2. On the next page, grab the project name, in this case `careful-goat-90`.
+1. 转到 https://dash.deno.com/new 并单击 **+Empty Project** 按钮，位于
+   **从命令行部署** 下方。
+2. 在下一页上，获取项目名称，本例中为 `careful-goat-90`。
 
-## **Step 3:** Deploy the static site using `deployctl`
+## **步骤 3：** 使用 `deployctl` 部署静态网站
 
-To deploy this repo on Deno Deploy, from the `static-site` repository, run:
+要在 Deno Deploy 上部署此存储库，请在 `static-site` 存储库中运行：
 
 ```
 deployctl deploy --project=careful-goat-90 https://deno.land/std@$STD_VERSION/http/file_server.ts
 ```
 
-To give a little more explanation of these commands: Because this is a static
-site, there is no JavaScript to execute. Instead of giving Deno Deploy a
-particular JavaScript or TypeScript file to run as the entrypoint file, you give
-it this external `file_server.ts` program, which simply uploads all the static
-files in the `static-site` repo, including the image and the html page, to Deno
-Deploy. These static assets are then served up.
+为了更详细地解释这些命令：因为这是一个静态网站，没有 JavaScript
+可执行。而不是提供给 Deno Deploy 一个特定的 JavaScript 或 TypeScript
+文件作为入口文件运行，您将提供外部的 `file_server.ts` 程序，该程序简单地上传
+`static-site` 存储库中的所有静态文件，包括图像和 HTML 页面，到 Deno
+Deploy。然后这些静态资源就会被提供。
 
-## **Step 4:** Voila!
+## **步骤 4：** 大功告成！
 
-If you go under the **Deployments** tab in the `careful-goat-90` project page,
-you will see the link to this dev deployment. If you click on the url, you
-should now see your html page with the "Hello" and the image.
+如果您转到 `careful-goat-90` 项目页面的 **部署**
+选项卡下，您将看到与此开发部署相关的链接。如果单击链接，您现在应该看到显示
+"Hello" 和图像的 HTML 页面。

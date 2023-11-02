@@ -1,11 +1,11 @@
-# Node API Compatibility List
+# Node API 兼容性列表
 
-Deno provides polyfills for a number of built-in Node.js modules and globals.
-Node compatibility is an ongoing project - help us identify gaps and let us know
-which modules you need by
-[opening an issue on GitHub](https://github.com/denoland/deno).
+Deno 提供了一些内置的 Node.js 模块和全局对象的 polyfills。
+节点兼容性是一个持续进行中的项目 - 帮助我们识别差距，并告诉我们
+你需要哪些模块，可以
+[在 GitHub 上提交一个问题](https://github.com/denoland/deno)。
 
-## Built-in module support
+## 内置模块支持
 
 <div style={{
   display: "flex",
@@ -14,9 +14,9 @@ which modules you need by
   flexWrap: "wrap",
   marginBottom: "10px"
 }}>
-  <div>✅ = Full support</div>
-  <div>ℹ️ = Partial support</div>
-  <div>❌ = Stubs only</div>
+  <div>✅ = 完全支持</div>
+  <div>ℹ️ = 部分支持</div>
+  <div>❌ = 仅存根</div>
 </div>
 
 <details>
@@ -705,11 +705,9 @@ which modules you need by
   </p>
 </details>
 
-## Globals
+## 全局变量
 
-This is the list of Node globals that Deno supports. These globals are only
-available in the `npm` package scope. In your own code you can use them by
-importing them from the relevant `node:` module.
+这是 Deno 支持的 Node 全局变量列表。这些全局变量仅在 `npm` 包范围内可用。在你自己的代码中，你可以通过从相关的 `node:` 模块导入它们来使用它们。
 
 | Global name                                                                                                      | Status |
 | ---------------------------------------------------------------------------------------------------------------- | ------ |

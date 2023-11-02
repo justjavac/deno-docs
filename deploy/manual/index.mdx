@@ -2,52 +2,31 @@
 displayed_sidebar: deployGuideHome
 ---
 
-# Deno Deploy Quick Start
+# Deno Deploy 快速入门
 
-Deno Deploy is a globally distributed platform for serverless JavaScript
-applications. Your JavaScript, TypeScript, and WebAssembly code runs on managed
-servers geographically close to your users, enabling low latency and faster
-response times. Deploy applications run on fast, light-weight
-[V8 isolates](https://deno.com/blog/anatomy-isolate-cloud) rather than virtual
-machines, powered by the [Deno runtime](/runtime/manual).
+Deno Deploy 是一个全球分布式的无服务器 JavaScript 应用平台。您的 JavaScript、TypeScript 和 WebAssembly 代码在靠近用户地理位置的托管服务器上运行，实现低延迟和更快的响应时间。部署的应用程序在快速轻量级的 [V8 隔离](https://deno.com/blog/anatomy-isolate-cloud)上运行，而不是虚拟机，由 [Deno 运行时](/runtime/manual)提供支持。
 
-Let's deploy your first application - it should only take a few minutes.
+让我们部署您的第一个应用程序 - 这应该只需几分钟。
 
-## Option 1: Start with a template
+## 选项 1：使用模板开始
 
-If you'd like to start out by deploying a pre-built template application, simply
-[log in to the Deno Deploy dashboard](https://dash.deno.com) and click the "New
-Project" button. You can choose to deploy a starter web application using
-[Fresh](https://fresh.deno.dev) or any of our supported web frameworks.
+如果您想首先部署一个预构建的模板应用程序，只需[登录到 Deno Deploy 仪表板](https://dash.deno.com)并单击"新项目"按钮。您可以选择使用 [Fresh](https://fresh.deno.dev)或我们支持的任何 Web 框架部署入门 Web 应用程序。
 
-## Option 2: Start with an existing app
+## 选项 2：使用现有应用程序开始
 
-If you already have a Deno project hosted on GitHub, you can immediately import
-it in Deno Deploy. [From the Deno Deploy dashboard](https://dash.deno.com),
-click the "New Project" button and choose the option to "Select a repository".
-Follow the on-screen instructions to deploy your existing application.
+如果您已经在 GitHub 上托管了一个 Deno 项目，您可以立即在 Deno Deploy 中导入它。[从 Deno Deploy 仪表板](https://dash.deno.com)中，单击"新项目"按钮，并选择"选择存储库"选项。按照屏幕上的说明来部署您的现有应用程序。
 
-## Option 3: Start with a playground
+## 选项 3：从头开始
 
-A [playground](./playgrounds.md) is a browser-based editor that enables you to
-write and run JavaScript code right away. This is a great choice for just
-kicking the tires on Deno and Deno Deploy!
-[From the Deno Deploy dashboard](https://dash.deno.com), click the "New Project"
-button and choose any of the options with a "Try with a playground" button.
+一个[playground](./playgrounds.md)是一个基于浏览器的编辑器，让您可以立即编写和运行 JavaScript 代码。这是一个很好的选择，用于测试 Deno 和 Deno Deploy！[从 Deno Deploy 仪表板](https://dash.deno.com)中，单击"新项目"按钮，选择带有"尝试使用 playground"按钮的任何选项。
 
-## Option 4: Start from scratch
+## 选项 4：从头开始
 
-If you'd like to develop and deploy a simple application locally, follow these
-instructions to get started. We'll use the [`deployctl`](./deployctl.md) command
-line utility to deploy a local Deno script from your computer.
+如果您想在本地开发和部署一个简单的应用程序，请按照以下说明开始。我们将使用[`deployctl`](./deployctl.md)命令行实用程序从计算机部署本地的 Deno 脚本。
 
-### Install Deno and `deployctl`
+### 安装 Deno 和`deployctl`
 
-If you haven't already, you can 
-[install the Deno runtime](/runtime/manual/getting_started/installation) 
-using one of the commands below:
-
-import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem';
+如果您尚未安装 Deno 运行时，可以使用以下命令之一[安装 Deno 运行时](/runtime/manual/getting_started/installation)：
 
 <Tabs groupId="operating-systems">
   <TabItem value="mac" label="macOS" default>
@@ -73,68 +52,51 @@ curl -fsSL https://deno.land/x/install/install.sh | sh
 </TabItem>
 </Tabs>
 
-After Deno is installed, install the [`deployctl`](./deployctl.md) utility:
+安装 Deno 后，安装[`deployctl`](./deployctl.md)实用程序：
 
 ```
 deno install -A --no-check -r -f https://deno.land/x/deploy/deployctl.ts
 ```
 
-You can confirm `deployctl` has been installed correctly by running:
+您可以通过运行以下命令来确认`deployctl`已正确安装：
 
 ```
 deployctl --help
 ```
 
-Now, you're ready to deploy a Deno script from the command line!
+现在，您可以准备从命令行部署 Deno 脚本！
 
-### Write and test a Deno program
+### 编写和测试 Deno 程序
 
-Create a file called `server.ts` in your terminal, and include the following
-"Hello World" web server:
+在终端中创建一个名为`server.ts`的文件，包括以下"Hello World" Web 服务器：
 
 ```ts title="server.ts"
 Deno.serve(() => new Response("Hello, world!"));
 ```
 
-You can test that it works by running it with the command below:
+您可以使用以下命令来测试它是否正常工作：
 
 ```
 deno run --allow-net server.ts
 ```
 
-Your server should be viewable at [localhost:8000](http://localhost:8000). 
-Now let's run this code on the edge with Deno Deploy!
+您的服务器应该可以在[localhost:8000](http://localhost:8000)上查看。现在让我们在 Deno Deploy 上的边缘运行此代码！
 
-### Sign up for Deno Deploy and create a blank project
+### 注册 Deno Deploy 并创建一个空白项目
 
-If you haven't already, now is the time to 
-[sign up for a Deno Deploy account](https://dash.deno.com). After signing up,
-[click the "New Project" button here](https://dash.deno.com). Near the top of
-the page, you'll see an option to "create a blank project" - choose that option
-now, as we will need one of these projects to complete our deployment process.
+如果您尚未注册 Deno Deploy 帐户，现在是时候[注册 Deno Deploy 帐户](https://dash.deno.com)了。注册后，[单击此处的"新项目"按钮](https://dash.deno.com)。在页面的顶部附近，您将看到一个"创建空白项目"的选项 - 选择这个选项，因为我们将需要一个这样的项目来完成我们的部署过程。
 
-![create a blank project](../docs-images/blank_project.png)
+在创建项目之后，记下为您生成的名称 - 您将需要这个项目名称来从命令行部署。
 
-After creating the project, make a note of the name that's generated for you - 
-you'll need this project name when deploying from the command line.
+在此示例中，项目名称是`deep-zebra-47` - 我们将在下面的命令中使用这个名称。
 
-![project name](../docs-images/project_name.png)
+### 创建并导出 Deploy 访问令牌
 
-In this example, the project name is `deep-zebra-47` - we'll use this as an
-example name in the commands below.
+为了使用`deployctl`从命令行控制您的 Deno Deploy 帐户，您将需要一个访问令牌。
 
-### Create and export a Deploy access token
+这个令牌可以在[仪表板中找到](https://dash.deno.com/account#access-tokens)。单击"新访问令牌"，为令牌命名，然后将新生成的令牌复制到计算机上的安全位置。
 
-In order to use `deployctl` to control your Deno Deploy account from the 
-command line, you'll need an access token.
-
-This token 
-[can be found in the dashboard here](https://dash.deno.com/account#access-tokens).
-Click "New Access Token", give the token a name, and copy your newly minted token
-to a secure location on your computer.
-
-In your terminal, you'll need to export this token as a system environment
-variable that can be used by `deployctl`. 
+在终端中，您需要将这个令牌导出为一个可以被`deployctl`使用的系统环境变量。
 
 <Tabs groupId="shells">
 <TabItem value="bash" label="macOS / Linux" default>
@@ -154,22 +116,18 @@ $env:DENO_DEPLOY_TOKEN = 'your_access_token_here'
 </TabItem>
 </Tabs>
 
-### Deploy!
+### 部署！
 
-Now that you have a project created and an access token created, you're ready
-to deploy your application. In the same directory as the `server.ts` file you
-created before, run this command:
+现在您已经创建了一个项目并创建了一个访问令牌，您可以准备部署您的应用程序。在您之前创建的`server.ts`文件所在的目录中，运行以下命令：
 
 ```sh
 deployctl deploy --project=deep-zebra-47 --prod server.ts
 ```
 
-In a few moments, your Hello World server will be deployed across ~30 data 
-centers around the world, ready to handle large volumes of traffic.
+几分钟后，您的 Hello World 服务器将在全球约 30 个数据中心中部署，准备处理大量流量。
 
-## Next Steps
+## 下
 
-Now that you've created your first project, you can 
-[check out the kinds of apps](./use-cases.md) you can run on Deploy. You could 
-also skip right to [setting up your own custom domain](./custom-domains.md).
-We're so excited to see what you'll ship with Deploy!
+一步
+
+现在您已经创建了第一个项目，您可以[查看可以在 Deploy 上运行的应用程序类型](./use-cases.md)。您还可以直接跳转到[设置自定义域名](./custom-domains.md)。我们非常期待看到您将使用 Deploy 发布的内容！

@@ -1,11 +1,10 @@
-# Embedding Deno
+# 嵌入 Deno
 
-Deno consists of multiple parts, one of which is `deno_core`. This is a Rust
-crate that can be used to embed a JavaScript runtime into your Rust application.
-Deno is built on top of `deno_core`.
+Deno 由多个部分组成，其中之一是 `deno_core`。这是一个 Rust crate，可以用于将
+JavaScript 运行时嵌入到您的 Rust 应用程序中。Deno 是建立在 `deno_core` 之上的。
 
-The Deno crate is hosted on [crates.io](https://crates.io/crates/deno_core).
+Deno crate 托管在 [crates.io](https://crates.io/crates/deno_core) 上。
 
-You can view the API on [docs.rs](https://docs.rs/deno_core).
+您可以在 [docs.rs](https://docs.rs/deno_core) 上查看 API。
 
-<!-- TODO(lucacasonato): better docs -->
+<!-- TODO(lucacasonato): 更好的文档 -->

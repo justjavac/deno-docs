@@ -1,80 +1,75 @@
-# Jupyter Kernel for Deno
+# Deno 的 Jupyter 内核
 
 <p>
 <span class="theme-doc-version-badge badge badge--secondary">
-Available since <b>1.37.0</b>
+自 <b> 1.37.0 </b> 版本开始提供
 </span>
 </p>
 
-Deno ships with a built-in Jupyter kernel that allows you to write JavaScript
-and TypeScript; use Web and Deno APIs and import `npm` packages straight in your
-interactive notebooks.
+Deno 自带了一个内置的 Jupyter 内核，允许您编写 JavaScript 和 TypeScript；使用
+Web 和 Deno API 并直接在互动笔记本中导入 `npm` 包。
 
-:::caution `deno jupyter` is currently unstable
+::: caution `deno jupyter` 目前不稳定
 
-`deno jupyter` is currently an unstable feature and thus requires the
-`--unstable` flag. We intend to stabilize this feature in an upcoming release.
+`deno jupyter` 目前是一个不稳定的功能，因此需要使用 `--unstable`
+标志。我们打算在即将发布的版本中稳定此功能。
 
 :::
 
-## Quickstart
+## 快速开始
 
-Run `deno jupyter --unstable` and follow the instructions.
+运行 `deno jupyter --unstable` 并按照说明进行操作。
 
-You can run `deno jupyter --unstable --install` to force installation of the
-kernel. Deno assumes that `jupyter` command is available in your `PATH`.
+您可以运行 `deno jupyter --unstable --install` 来强制安装内核。Deno 假定您的
+`PATH` 中有 `jupyter` 命令。
 
-After completing the installation process, the Deno kernel will be available in
-the notebook creation dialog in JupyterLab and the classic notebook:
+完成安装过程后，Deno 内核将在 JupyterLab 和经典笔记本的笔记本创建对话框中可用：
 
-![Jupyter notebook kernel selection](../images/jupyter_notebook.png)
+![Jupyter 笔记本内核选择](../images/jupyter_notebook.png)
 
-You can use the Deno Jupyter kernel in any editor that supports Jupyter
-notebooks.
+您可以在支持 Jupyter 笔记本的任何编辑器中使用 Deno Jupyter 内核。
 
 ### VS Code
 
-- Install the
-  [VSCode Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)
-- When on a new or existing Notebook, click creating a new Jupyter Notebook
-  select "Jupyter kernels" and then select Deno
+- 安装
+  [VSCode Jupyter 扩展](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)
+- 在新建或现有笔记本上，单击创建新的 Jupyter 笔记本，选择 "Jupyter
+  内核"，然后选择 Deno
 
-![Selecting Deno in VS Code](https://github.com/denoland/deno-docs/assets/836375/32f0ccc3-35f7-47e5-84f4-17c20a5b5732)
+![在 VS Code 中选择 Deno](https://github.com/denoland/deno-docs/assets/836375/32f0ccc3-35f7-47e5-84f4-17c20a5b5732)
 
 ### JetBrains IDEs
 
-Jupyter Notebooks are available right out of the box.
+Jupyter 笔记本已经预先安装好。
 
-## Rich content output
+## 丰富的内容输出
 
-Deno Jupyter kernel allows you to display rich content in your notebooks
-[using MIME types that Jupyter supports](https://docs.jupyter.org/en/latest/reference/mimetype.html).
+Deno Jupyter 内核允许您在笔记本中显示富内容
+[使用 Jupyter 支持的 MIME 类型](https://docs.jupyter.org/en/latest/reference/mimetype.html)。
 
-To do that, you need to return any JavaScript object that has a
-`[Symbol.for("Jupyter.display")]` method. This method should return a dictionary
-mapping a MIME type to a value that should be displayed.
+为此，您需要返回具有 `[Symbol.for("Jupyter.display")]` 方法的任何 JavaScript
+对象。此方法应返回将 MIME 类型映射到应显示的值的字典。
 
 ```ts
 {
   [Symbol.for("Jupyter.display")]() {
     return {
-      // Plain text content
-      "text/plain": "Hello world!",
+      // 纯文本内容
+      "text/plain": "你好，世界！",
 
-      // HTML output
-      "text/html": "<h1>Hello world!</h1>",
+      // HTML 输出
+      "text/html": "<h1>你好，世界！</h1>",
     }
   }
 }
 ```
 
-Since it's _just_ a function, you can use any library you want to format the
-output. This is not tied to Deno itself in any way, because we're using a
-regular JavaScript symbol index.
+由于它只是一个函数，您可以使用任何您想要的库来格式化输出。这与 Deno
+本身没有任何关系，因为我们使用了一个常规的 JavaScript 符号索引。
 
-## `jupyter console` integration
+## `jupyter console` 集成
 
-You can also use Deno Jupyter kernel in the `jupyter console` REPL. To do that,
-you should launch your console with `jupyter console --kernel deno`.
+您还可以在 `jupyter console` REPL 中使用 Deno Jupyter 内核。要做到这一点，
+您应该使用 `jupyter console --kernel deno` 启动您的控制台。
 
-![Using the Deno kernel in a CLI](../images/jupyter-cli.gif)
+![在 CLI 中使用 Deno 内核](../images/jupyter-cli.gif)

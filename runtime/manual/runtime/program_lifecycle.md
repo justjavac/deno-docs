@@ -1,28 +1,24 @@
-# Program Lifecycle
+# 程序生命周期
 
-Deno supports browser compatible lifecycle events:
+Deno 支持浏览器兼容的生命周期事件：
 
 - [`load`](https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event#:~:text=The%20load%20event%20is%20fired,for%20resources%20to%20finish%20loading.):
-  fired when the whole page has loaded, including all dependent resources such
-  as stylesheets and images.
+  在整个页面加载完成时触发，包括所有依赖资源，如样式表和图像。
 - [`beforeunload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#:~:text=The%20beforeunload%20event%20is%20fired,want%20to%20leave%20the%20page.):
-  fired when the event loop has no more work to do and is about to exit.
-  Scheduling more asynchronous work (like timers or network requests) will cause
-  the program to continue.
+  在事件循环没有更多工作要做并即将退出时触发。调度更多异步工作（如定时器或网络请求）将导致程序继续运行。
 - [`unload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unload_event):
-  fired when the document or a child resource is being unloaded.
+  当文档或子资源正在卸载时触发。
 - [`unhandledrejection`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unhandledrejection_event):
-  fired when a promise that has no rejection handler is rejected, ie. a promise
-  that has no `.catch()` handler or a second argument to `.then()`.
+  当拒绝没有拒绝处理程序的承诺时触发，即没有 `.catch()` 处理程序或 `.then()`
+  的第二个参数。
 
-You can use these events to provide setup and cleanup code in your program.
+您可以使用这些事件来在程序中提供设置和清理代码。
 
-Listeners for `load` events can be asynchronous and will be awaited, this event
-cannot be canceled. Listeners for `beforeunload` need to be synchronous and can
-be cancelled to keep the program running. Listeners for `unload` events need to
-be synchronous and cannot be cancelled.
+`load` 事件的侦听器可以是异步的，将等待执行，无法取消。`beforeunload`
+事件的侦听器需要是同步的，可以取消以保持程序运行。`unload`
+事件的侦听器需要是同步的，无法取消。
 
-## Example
+## 示例
 
 **main.ts**
 
@@ -80,13 +76,13 @@ globalThis.onunload = (e: Event): void => {
 console.log("log from imported script");
 ```
 
-A couple notes on this example:
+这个示例的一些注意事项：
 
-- `addEventListener` and `onload`/`onunload` are prefixed with `globalThis`, but
-  you could also use `self` or no prefix at all.
-  [It is not recommended to use `window` as a prefix](https://lint.deno.land/#no-window-prefix).
-- You can use `addEventListener` and/or `onload`/`onunload` to define handlers
-  for events. There is a major difference between them, let's run the example:
+- `addEventListener` 和 `onload`/`onunload` 带有 `globalThis`
+  前缀，但您也可以使用 `self` 或不带前缀的方式。
+  [不建议使用 `window` 作为前缀](https://lint.deno.land/#no-window-prefix)。
+- 您可以使用 `addEventListener` 和/或 `onload`/`onunload`
+  来定义事件处理程序。它们之间有一个重要的区别，让我们运行示例：
 
 ```shell
 $ deno run main.ts
@@ -103,16 +99,16 @@ got unload event in event handler (main)
 got unload event in onunload function (main)
 ```
 
-All listeners added using `addEventListener` were run, but `onload`,
-`onbeforeunload` and `onunload` defined in `main.ts` overrode handlers defined
-in `imported.ts`.
+使用 `addEventListener` 添加的所有侦听器都会运行，但在 `main.ts` 中定义的
+`onload`、`onbeforeunload` 和 `onunload` 事件处理程序会覆盖在 `imported.ts`
+中定义的处理程序。
 
-In other words, you can use `addEventListener` to register multiple `"load"` or
-`"unload"` event handlers, but only the last defined `onload`, `onbeforeunload`,
-`onunload` event handlers will be executed. It is preferable to use
-`addEventListener` when possible for this reason.
+换句话说，您可以使用 `addEventListener` 注册多个 `"load"` 或 `"unload"`
+事件处理程序，但只有最后定义的 `onload`、`onbeforeunload`、`onunload`
+事件处理程序将被执行。因此，出于这个原因，最好在可能的情况下使用
+`addEventListener`。
 
-## `beforeunload` Example
+## `beforeunload` 示例
 
 ```js
 // beforeunload.js
@@ -122,7 +118,7 @@ console.log(count);
 
 globalThis.addEventListener("beforeunload", (e) => {
   console.log("About to exit...");
-  if (count < 4) {
+  if count < 4 {
     e.preventDefault();
     console.log("Scheduling more work...");
     setTimeout(() => {
@@ -146,7 +142,7 @@ setTimeout(() => {
 }, 100);
 ```
 
-Running this program will print:
+运行这个程序将打印：
 
 ```sh
 $ deno run beforeunload.js
@@ -163,14 +159,13 @@ About to exit...
 Exiting
 ```
 
-This has allowed us to polyfill `process.on("beforeExit")` in the Node
-compatibility layer.
+这使我们能够在 Node 兼容性层中填充 `process.on("beforeExit")`。
 
-## `unhandledrejection` event Example:
+## `unhandledrejection` 事件示例：
 
-This release adds support for the unhandledrejection event. This event is fired
-when a promise that has no rejection handler is rejected, ie. a promise that has
-no .catch() handler or a second argument to .then().
+此版本添加了对 unhandledrejection
+事件的支持。当拒绝没有拒绝处理程序的承诺时，即没有 .catch() 处理程序或 .then()
+的第二个参数时，将触发此事件。
 
 ```js
 // unhandledrejection.js
@@ -187,11 +182,13 @@ new Foo();
 Promise.reject();
 ```
 
-Running this program will print:
+运行这个程序将打印：
 
 ```sh
 $ deno run unhandledrejection.js
-unhandled rejection at: Promise {
+un
+
+handled rejection at: Promise {
   <rejected> Error: bar not available
     at new Foo (file:///dev/unhandled_rejection.js:7:29)
     at file:///dev/unhandled_rejection.js:10:1
@@ -201,5 +198,5 @@ unhandled rejection at: Promise {
 unhandled rejection at: Promise { <rejected> undefined } reason: undefined
 ```
 
-This API will allow us to polyfill `process.on("unhandledRejection")` in the
-Node compatibility layer in future releases.
+此 API 将允许我们在将来的版本中在 Node 兼容性层中填充
+`process.on("unhandledRejection")`。

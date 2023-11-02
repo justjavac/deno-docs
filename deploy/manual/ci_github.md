@@ -1,83 +1,72 @@
-# CI and GitHub Actions
+# CI 与 GitHub Actions
 
-Deno Deploy's Git integration enables deployment of code changes that are pushed
-to a GitHub repository. Commits on the production branch will be deployed as a
-production deployment. Commits on all other branches will be deployed as a
-preview deployment.
+Deno Deploy 的 Git 集成功能可以部署推送到 GitHub
+存储库的代码更改。在生产分支上的提交将被部署为生产部署，而在其他所有分支上的提交将被部署为预览部署。
 
-There are two modes of operation for the Git integration:
+Git 集成有两种操作模式：
 
-1. Select your organization name, and repository. _If your repository or
-   organization does not show up, make sure the [Deno Deploy GitHub App][ghapp]
-   is installed on your repository._
-2. Select a production branch. Code deployed from this branch will be deployed
-   as a production deployment instead of a preview deployment.
-3. Choose either **Automatic** or **GitHub Actions** deployment mode.
-   - **Automatic**: Deno Deploy will automatically pull code and assets from
-     your repository source every time you push, and deploy it. This mode is
-     very fast, but does not allow for a build step. _This is the recommended
-     mode for most users._
-   - **GitHub Actions**: In this mode, you push your code and assets to Deno
-     Deploy from a GitHub Actions workflow. This allows you to perform a build
-     step before deploying. Below, we go into more detail about the different
-     configurations for **Automatic** and **Github Actions** mode.
+1. 选择组织名称和存储库。_如果您的存储库或组织没有显示，请确保已安装
+   [Deno Deploy GitHub 应用][ghapp]。_
+2. 选择生产分支。从此分支部署的代码将被部署为生产部署而不是预览部署。
+3. 选择 **自动** 或 **GitHub Actions** 部署模式。
+   - **自动**：Deno Deploy
+     将在每次推送时自动提取代码和资产并部署。此模式非常快，但不允许构建步骤。_这是大多数用户的推荐模式。_
+   - **GitHub Actions**：在此模式中，您可以通过 GitHub Actions 工作流从 GitHub
+     Actions 部署代码和资产。下面我们将更详细地介绍 **自动** 和**GitHub
+     Actions**模式的不同配置。
 
-## Automatic
+## 自动
 
-If you select **Automatic** mode above, you'll subsequently have to select a
-file in your Github repo as the "entrypoint" file. The entry file is simply the
-file that Deno will run.
+如果您选择上面的 **自动** 模式，随后您将需要选择 Github 存储库中的一个文件作为
+"入口" 文件。入口文件只是 Deno 将运行的文件。
 
-## GitHub Action
+## GitHub Actions
 
-**GitHub Action** mode enables you to add a build step to your deployment
-process by leveraging the `deployctl` [Github action][deploy-action]:
+**GitHub Actions** 模式允许您通过利用 `deployctl` [Github action][deploy-action]
+向您的部署流程添加构建步骤：
 
-1. Navigate to `<project-name>` project page and select your Github repo under
-   the **Git integration** card.
+1. 转到 `<project-name>` 项目页面，并在 **Git 集成** 卡下选择您的 Github
+   存储库。
 
    ![vite-project](../docs-images/vite-project.png)
 
-2. Select your branch for the production branch, and in the popup that appears,
-   select **Github Action**
+2. 为生产分支选择您的分支，在弹出的窗口中选择 **GitHub Actions**。
 
    ![vite-branch](../docs-images/vite-branch.png)
 
-3. Click **Ok**
+3. 单击 **确定**。
 
    ![vite-ok](../docs-images/vite-ok.png)
 
-4. Click **Link**
+4. 单击 **链接**。
 
    ![vite-link](../docs-images/vite-link.png)
 
-5. This should take you to a next page, where you see a preview of a
-   `deploy.yml` file that you can download. Download the file and add it to your
-   Github project under `.github/workflows/deploy.yml`
+5. 这将带您到下一页，在那里您可以看到 `deploy.yml`
+   文件的预览，您可以下载该文件并将其添加到您的 Github 项目下的
+   `.github/workflows/deploy.yml`。
 
    ![vite-deploy-yaml](../docs-images/vite-deploy-yaml.png)
 
-6. Modify the `deploy.yml` file as appropriate with your build step, Deno
-   project name, and entrypoint file:
+6. 根据您的构建步骤、Deno 项目名称和入口文件适当地修改 `deploy.yml` 文件：
 
    ```yml
    job:
    permissions:
-       id-token: write # This is required to allow the GitHub Action to authenticate with Deno Deploy.
+       id-token: write # 这是允许 GitHub Actions 与 Deno Deploy 进行身份验证所需的
        contents: read
    steps:
-       - name: Deploy to Deno Deploy
+       - name: 部署到 Deno Deploy
        uses: denoland/deployctl@v1
        with:
-           project: my-project # the name of the project on Deno Deploy
-           entrypoint: main.ts # the entrypoint to deploy
+           project: my-project # Deno Deploy 上的项目名称
+           entrypoint: main.ts # 要部署的入口点
    ```
 
-   By default the entire contents of the repository will be deployed. This can
-   be changed by specifying the `root` option.
+   默认情况下，将部署整个存储库的内容。可以通过指定 `root` 选项来更改。
 
    ```yml
-   - name: Deploy to Deno Deploy
+   - name: 部署到 Deno Deploy
    uses: denoland/deployctl@v1
    with:
        project: my-project
@@ -85,16 +74,14 @@ process by leveraging the `deployctl` [Github action][deploy-action]:
        root: dist
    ```
 
-   The `entrypoint` can either be a relative path, file name, or an absolute
-   URL. If it is a relative path, it will be resolved relative to the `root`.
-   Both absolute `file:///` and `https://` URLs are supported.
+   `entrypoint` 可以是相对路径、文件名或绝对 URL。如果它是相对路径，它将相对于
+   `root` 来解析。支持绝对的 `file:///` 和 `https://` URL。
 
-   To deploy the `./dist` directory using the
-   [std/http/file_server.ts][fileserver] module, you can use the following
-   configuration:
+   要使用 [std/http/file_server.ts][fileserver] 模块部署 `./dist`
+   目录，您可以使用以下配置：
 
    ```yml
-   - name: Deploy to Deno Deploy
+   - name: 部署到 Deno Deploy
    uses: denoland/deployctl@v1
    with:
        project: my-project
@@ -102,9 +89,8 @@ process by leveraging the `deployctl` [Github action][deploy-action]:
        root: dist
    ```
 
-   See
-   [deployctl README](https://github.com/denoland/deployctl/blob/main/action/README.md)
-   for more details.
+   有关更多详细信息，请参阅
+   [deployctl README](https://github.com/denoland/deployctl/blob/main/action/README.md)。
 
 [fileserver]: https://deno.land/std/http/file_server.ts
 [ghapp]: https://github.com/apps/deno-deploy
