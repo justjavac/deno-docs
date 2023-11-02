@@ -64,12 +64,12 @@ const sidebars = {
     {
       type: "doc",
       id: "tutorials/schedule_notification",
-      label: "Schedule future notifications",
+      label: "在未来的某个日期安排通知",
     },
     {
       type: "doc",
       id: "tutorials/webhook_processor",
-      label: "Offloading webhooks to a queue",
+      label: "将 Webhook 处理转移到队列",
     },
     {
       type: "link",
@@ -78,17 +78,17 @@ const sidebars = {
     },
     {
       type: "link",
-      label: "Multiplayer Tic-Tac-Toe",
+      label: "多人的 Tic-Tac-Toe",
       href: "https://github.com/denoland/tic-tac-toe",
     },
     {
       type: "link",
-      label: "Real-time Pixel Canvas",
+      label: "实时像素画布",
       href: "https://github.com/denoland/pixelpage",
     },
     {
       type: "link",
-      label: "KV-powered oAuth2",
+      label: "基于 KV 的 oAuth2",
       href: "https://github.com/denoland/deno_kv_oauth",
     },
     {
@@ -98,7 +98,7 @@ const sidebars = {
     },
     {
       type: "link",
-      label: "More on Deno by Example",
+      label: "更多 Deno 示例",
       href: "https://examples.deno.land",
     },
     {
