@@ -35,16 +35,16 @@ export default function Home() {
             <h1 className="text-4xl md:text-5xl">Deno 文档</h1>
           </div>
           <div className="flex flex-col items-start gap-8 md:grid md:grid-cols-3 md:grid-flow-col md:items-stretch">
-            <Card title="Deno Runtime" href="/runtime/manual">
+            <Card title="Deno Runtime" href="runtime/manual">
               用于 TypeScript 和 JavaScript
               的语言运行时，具有类似浏览器的编程环境。具备内置开发工具、强大的平台
               API 以及对 TypeScript 和 JSX 的原生支持。
             </Card>
-            <Card title="Deno Deploy" href="/deploy/manual">
+            <Card title="Deno Deploy" href="deploy/manual">
               Serverless JavaScript 平台。支持 Deno 平台 API 和 Node.js/npm
               模块。运行在快速的全球边缘网络上。
             </Card>
-            <Card title="Deno KV" href="/kv/manual">
+            <Card title="Deno KV" href="kv/manual">
               Deno 运行时内置键值数据库。具有简单的 API，在 Deno Deploy
               上无需任何配置即可使用。
             </Card>

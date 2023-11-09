@@ -7,7 +7,7 @@ const config = {
   tagline: "Deno 是 JavaScript 和 TypeScript 的下一代运行时。",
   favicon: "img/favicon.ico",
   url: "https://docs.denohub.com",
-  baseUrl: "/",
+  baseUrl: "/deno/",
   trailingSlash: false,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
