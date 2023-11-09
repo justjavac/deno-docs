@@ -30,7 +30,7 @@ export default function Home() {
             <img
               className="w-64 h-64 mb-[-40px] md:mt-[-40px]"
               alt="Deno logo"
-              src="/deno-looking-up.svg"
+              src="deno-looking-up.svg"
             />
             <h1 className="text-4xl md:text-5xl">Deno 文档</h1>
           </div>
