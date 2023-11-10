@@ -2,6 +2,7 @@ const findReplace = require("./src/remark/find_replace");
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
+/** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Deno 文档",
   tagline: "Deno 是 JavaScript 和 TypeScript 的下一代运行时。",
@@ -70,6 +71,12 @@ const config = {
         remarkPlugins: [findReplace],
       },
     ],
+    [
+      "docusaurus-plugin-baidu-tongji",
+      {
+        token: "16248dc9a2bd8b508c0a43526dd547e9",
+      },
+    ],
     // Enables our custom pages in "src" to use Tailwind classes
     // deno-lint-ignore no-unused-vars
     function tailwindPlugin(context, options) {
@@ -89,7 +96,7 @@ const config = {
     [
       "@easyops-cn/docusaurus-search-local",
       /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
-      ({
+      {
         hashed: true,
         indexBlog: false,
         language: ["en", "zh"],
@@ -99,7 +106,7 @@ const config = {
         docsPluginIdForPreferredVersion: "runtime",
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
-      }),
+      },
     ],
   ],
 

@@ -2,6 +2,7 @@
   "deno.cacheOnSave": true,
   "deno.disablePaths": ["./src"],
   "deno.enable": true,
+  "deno.enablePaths": ["./src-deno"],
   "deno.lint": true,
   "deno.unstable": true,
   "editor.formatOnSave": true,
