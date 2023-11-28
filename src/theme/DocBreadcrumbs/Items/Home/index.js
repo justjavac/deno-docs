@@ -24,7 +24,7 @@ export default function HomeBreadcrumbItem() {
     }
     return {
       href: "/",
-      name: "All docs",
+      name: "全部文档",
     };
   };
 

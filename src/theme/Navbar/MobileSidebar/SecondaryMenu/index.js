@@ -11,7 +11,7 @@ function SecondaryMenuBackButton(props) {
       {...props}
       className="secondary-menu__product__button"
     >
-      All docs
+      全部文档
     </button>
   );
 }
@@ -48,11 +48,9 @@ export default function NavbarMobileSidebarSecondaryMenu() {
     <>
       <ProductNameWithSwitcher />
       {/* edge-case: prevent returning to the primaryMenu when it's empty */}
-      {
-        /* {!isPrimaryMenuEmpty && (
+      {/* {!isPrimaryMenuEmpty && (
         <SecondaryMenuBackButton onClick={() => secondaryMenu.hide()} />
-      )} */
-      }
+      )} */}
       {secondaryMenu.content}
     </>
   );
