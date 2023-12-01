@@ -1,6 +1,6 @@
 import OpenApiEndpoint from "@site/src/components/OpenApiEndpoint";
 
-# Domains
+# 域名
 
 自定义域名可用于为您的部署提供独特的 URL。
 

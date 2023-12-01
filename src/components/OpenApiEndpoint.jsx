@@ -95,13 +95,13 @@ function Parameters({ apiDef, customDocs }) {
   });
 
   return (
-    <Details summary="Parameters">
+    <Details summary="请求参数">
       <table style={{ width: "100%" }}>
         <tbody>
           <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Description</th>
+            <th>名称</th>
+            <th>类型</th>
+            <th>描述</th>
           </tr>
           {parameterRows}
         </tbody>
@@ -146,13 +146,13 @@ function RequestBody({ apiDef, customDocs }) {
 
   return (
     <>
-      <Details summary="Request Body (JSON)">
+      <Details summary="请求体 (JSON)">
         <table style={{ width: "100%" }}>
           <tbody>
             <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Description</th>
+              <th>名称</th>
+              <th>类型</th>
+              <th>描述</th>
             </tr>
             {bodyProperties}
           </tbody>
@@ -160,7 +160,7 @@ function RequestBody({ apiDef, customDocs }) {
         {schema.example
           ? (
             <>
-              <h5>Example Body</h5>
+              <h5>示例</h5>
               <pre
                 style={{
                   maxHeight: "300px",
@@ -245,7 +245,7 @@ function Responses({ apiDef, customDocs }) {
           },
         }}
       >
-        <h5>Response Type</h5>
+        <h5>响应类型</h5>
         <p>{resp.description}</p>
 
         {responseProps.length > 0
@@ -260,16 +260,16 @@ function Responses({ apiDef, customDocs }) {
               <table>
                 <tbody>
                   <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Description</th>
+                    <th>名称</th>
+                    <th>类型</th>
+                    <th>描述</th>
                   </tr>
                   {responseProps}
                 </tbody>
               </table>
             </>
           )
-          : "Empty response body"}
+          : "空响应体"}
 
         {jsonExample
           ? (
@@ -288,7 +288,7 @@ function Responses({ apiDef, customDocs }) {
   });
 
   return (
-    <Details summary="Responses">
+    <Details summary="响应">
       <Tabs>
         {tabs}
       </Tabs>
