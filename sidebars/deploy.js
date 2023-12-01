@@ -147,7 +147,7 @@ const sidebars = {
     },
     {
       type: "doc",
-      label: "Overview",
+      label: "概述",
       id: "api/rest/index",
     },
     "api/rest/organizations",

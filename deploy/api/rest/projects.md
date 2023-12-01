@@ -1,40 +1,35 @@
 import OpenApiEndpoint from "@site/src/components/OpenApiEndpoint";
 
-# Projects
+# 项目
 
-Projects are a container for deployments, and can be associated with domains and
-KV databases in an organization.
+项目是部署的容器，可以与组织中的域和 KV 数据库关联。
 
-## Get project details
+## 获取项目详情
 
 <OpenApiEndpoint path="/projects/{projectId}" method="get">
-  Get meta information about a project by unique ID.
+  通过唯一 ID 获取项目的元信息。
 </OpenApiEndpoint>
 
-## Update project details
+## 更新项目详情
 
 <OpenApiEndpoint path="/projects/{projectId}" method="patch">
-  Update meta information about a project.
+  更新项目的元信息。
 </OpenApiEndpoint>
 
-## Delete a project
+## 删除项目
 
 <OpenApiEndpoint path="/projects/{projectId}" method="delete">
-  Delete a project by unique ID.
+  通过唯一 ID 删除项目。
 </OpenApiEndpoint>
 
-## Get project analytics
+## 获取项目分析
 
 <OpenApiEndpoint path="/projects/{projectId}/analytics" method="get">
-  Get analytics data for the specified project. The analytics are returned as
-  time series data in 15 minute intervals, with the <code>time</code> field
-  representing the start of the interval.
+  获取指定项目的分析数据。分析数据以 15 分钟的间隔返回时间序列数据，其中 <code>time</code> 字段表示间隔的开始。
 </OpenApiEndpoint>
 
-## Get project deployments
+## 获取项目部署
 
 <OpenApiEndpoint path="/projects/{projectId}/deployments" method="get">
-  Get a paginated list of deployments belonging to the specified project. The
-  URLs for the next, previous, first, and last page are returned in the
-  <code>Link</code> header of the response if needed.
+  获取属于指定项目的部署的分页列表。如果需要，响应的 <code>Link</code> 头中会返回下一页、上一页、第一页和最后一页的 URL。
 </OpenApiEndpoint>

@@ -2,59 +2,52 @@ import OpenApiEndpoint from "@site/src/components/OpenApiEndpoint";
 
 # Domains
 
-Custom domains can be used to give your deployments a unique URL.
+自定义域名可用于为您的部署提供独特的 URL。
 
-## List an organization's domains
+## 列出组织的域名
 
 <OpenApiEndpoint path="/organizations/{organizationId}/domains" method="get">
-  Get a list of domains associated with an organization. Links to the first,
-  last, next, and previous pages of results are found in the <code>Link</code>
-  &nbsp;header of the response.
+  获取与组织关联的域名列表。在响应的 <code>Link</code> 头中找到到第一页、最后一页、下一页和上一页结果的链接。
 </OpenApiEndpoint>
 
-## Add a domain to an organization
+## 向组织添加域名
 
 <OpenApiEndpoint path="/organizations/{organizationId}/domains" method="post">
-  Add a new domain to the specified organization. Before use, added domain
-  needs to be verified, and TLS certificates for the domain need to be
-  provisioned.
+  向指定组织添加新域名。在使用之前，添加的域名需要经过验证，并且需要为该域名提供 TLS 证书。
 </OpenApiEndpoint>
 
-## Get a domain by ID
+## 根据ID获取域名
 
 <OpenApiEndpoint path="/domains/{domainId}" method="get">
-  Get metadata about a domain by the given ID.
+  根据给定的ID获取有关域名的元数据。
 </OpenApiEndpoint>
 
-## Associate a domain with a deployment
+## 将域名与部署关联
 
 <OpenApiEndpoint path="/domains/{domainId}" method="patch">
-  With this API endpoint, you can associate or disassociate a domain with a
-  deployment. Domain association is required in order to serve the deployment
-  on the domain.
+  使用此 API 端点，您可以将域名与部署关联或取消关联。为了在域上提供部署，需要域名关联。
 </OpenApiEndpoint>
 
-## Delete a domain
+## 删除域名
 
 <OpenApiEndpoint path="/domains/{domainId}" method="delete">
-  Delete a domain by the given ID.
+  根据给定的ID删除域名。
 </OpenApiEndpoint>
 
-## Verify a domain
+## 验证域名
 
 <OpenApiEndpoint path="/domains/{domainId}/verify" method="post">
-  This API endpoint triggers the ownership verification of a domain. It should
-  be called after necessary DNS records are properly set up.
+  此 API 端点触发域名的所有权验证。在必要的 DNS 记录正确设置后调用此端点。
 </OpenApiEndpoint>
 
-## Upload TLS certificate for a domain
+## 为域名上传 TLS 证书
 
 <OpenApiEndpoint path="/domains/{domainId}/certificates" method="post">
-  Upload TLS certificates for your domain.
+  为您的域名上传 TLS 证书。
 </OpenApiEndpoint>
 
-## Provision TLS certificates for a domain
+## 为域名提供 TLS 证书
 
 <OpenApiEndpoint path="/domains/{domainId}/certificates/provision" method="post">
-  Provision TLS certificates for your domain.
+  为您的域名提供 TLS 证书。
 </OpenApiEndpoint>

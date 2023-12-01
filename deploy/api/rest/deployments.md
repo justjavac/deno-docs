@@ -1,74 +1,62 @@
 import OpenApiEndpoint from "@site/src/components/OpenApiEndpoint";
 
-# Deployments
+# 部署
 
-A deployment is a container for assets, environment variables, compiler options,
-and other data related to a deployed serverless application.
+部署是一个容器，用于存储与部署的无服务器应用程序相关的资产、环境变量、编译器选项等数据。
 
-## Create a deployment
+## 创建部署
 
 <!-- deno-fmt-ignore-start -->
 
 <OpenApiEndpoint path="/projects/{projectId}/deployments" method="post"
   customDocs={{ 
-    compilerOptions: "See **Compiler options** below.", 
-    assets: "See **Deployment assets** below.", 
+    compilerOptions: "查看下面的 **编译器选项**。", 
+    assets: "查看下面的 **部署资产**。", 
   }}
 >
   <p>
-    Initiate a build process for a new deployment. Note that this process is
-    asynchronous - a successful request to this endpoint API doesn't mean the
-    deployment is ready.
+    启动新部署的构建过程。请注意，此过程是异步的 - 对此端点 API 的成功请求并不表示部署已准备就绪。
   </p>
   <p>
-    For now, you can track the progress of a build by polling either the&nbsp;
-    <a href="#get-deployment-build-logs">build logs for a deployment</a> or the&nbsp;
-    <a href="#get-deployment-details">deployment details</a> API endpoints.
+    目前，您可以通过轮询部署的构建日志或部署详细信息的 API 端点来跟踪构建的进度，分别是&nbsp;
+    <a href="#get-deployment-build-logs">部署构建日志</a> 或&nbsp;
+    <a href="#get-deployment-details">部署详细信息</a>。
   </p>
 </OpenApiEndpoint>
 
 <!-- deno-fmt-ignore-end -->
 
-### Compiler options
+### 编译器选项
 
-The `compilerOptions` key of the `POST` body sent with a deployment creation
-request can override the options usually configured
-[here in deno.json](/runtime/manual/getting_started/configuration_file#compileroptions).
-Compiler options will determine how your application's TypeScript code will be
-processed.
+通过与部署创建请求一起发送的 `POST` 主体的 `compilerOptions` 键可以覆盖通常在
+[这里的 deno.json](/runtime/manual/getting_started/configuration_file#compileroptions)
+中配置的选项。 编译器选项将决定应用程序的 TypeScript 代码将如何被处理。
 
-If `null` is provided, Deploy will attempt to discover a `deno.json` or
-`deno.jsonc` within the assets of your deployment (see **Deployment assets**
-below). If an empty object `{}` is provided, Deploy will use default TypeScript
-configuration.
+如果提供了 `null`，Deploy 将尝试在部署的资产中查找 `deno.json` 或
+`deno.jsonc`。如果提供了一个空对象 `{}`，Deploy 将使用默认的 TypeScript 配置。
 
-### Deployment assets
+### 部署资产
 
-The assets associated with a deployment are the code and static files that drive
-the behavior of the deployment and handle incoming requests. In JSON body sent
-with a `POST` request to this endpoint, you will include an `assets` attribute
-that contains keys that represent the file path to a particular asset.
+与部署相关的资产是驱动部署行为并处理传入请求的代码和静态文件。在发送到此端点的
+`POST` 请求的 JSON 主体中， 您将包含一个包含表示特定资产的文件路径的键的
+`assets` 属性。
 
-So for example - a file that would live in a deployment directory under
-`server/main.ts` would use that path as the key for the asset.
+因此，例如 - 存储在部署目录下的文件 `server/main.ts` 将使用该路径作为资产的键。
 
-An asset has a `kind` attribute associated with it, which can be one of:
+资产有一个与之关联的 `kind` 属性，可以是以下之一：
 
-- `file` - an actual file associated with the deployment
-- `symlink` - a [symbolic link](https://en.wikipedia.org/wiki/Symbolic_link) to
-  another file in the deployment
+- `file` - 与部署相关的实际文件
+- `symlink` -
+  到部署中另一个文件的[符号链接](https://en.wikipedia.org/wiki/Symbolic_link)
 
-File assets also have a `content` property, which as you might imagine, is the
-actual contents of the file. These assets also have an `encoding` property,
-which indicates whether the content is encoded as `utf-8` (plain text) or
-`base64` for
-[base64 encoded content](https://developer.mozilla.org/en-US/docs/Glossary/Base64).
+文件资产还具有一个 `content` 属性，正如您可能想象的那样，这是文件的实际内容。
+这些资产还有一个 `encoding` 属性，指示内容是以 `utf-8`（纯文本）还是以
+[base64 编码内容](https://developer.mozilla.org/en-US/docs/Glossary/Base64)编码的。
 
-To prevent the need to re-upload files that very seldom change, you can also
-specify a `gitSha1` attribute, which is a `SHA-1` hash of the content that was
-previously uploaded for the specified asset.
+为了避免重新上传很少更改的文件，您还可以指定一个 `gitSha1`
+属性，它是指先前为指定资产上传的内容的 `SHA-1` 哈希。
 
-Below is an example of `assets` that could be used to set up a deployment.
+以下是可用于设置部署的 `assets` 的示例。
 
 ```json
 {
@@ -95,36 +83,28 @@ Below is an example of `assets` that could be used to set up a deployment.
 }
 ```
 
-## Get deployment details
+## 获取部署详细信息
 
 <OpenApiEndpoint path="/deployments/{deploymentId}" method="get">
-  Get details for a deployment with the given ID. This endpoint can be polled
-  to track the results of a serverless app deployment.
+  获取具有给定 ID 的部署的详细信息。可以轮询此端点以跟踪无服务器应用程序部署的结果。
 </OpenApiEndpoint>
 
-## Get deployment build logs
+## 获取部署构建日志
 
 <OpenApiEndpoint path="/deployments/{deploymentId}/build_logs" method="get">
-  Get build logs for the deployment specified by ID. You can use this
-  information to check on the current status of a build, or to figure out
-  what went wrong in the case of a failure.
+  获取由 ID 指定的部署的构建日志。您可以使用此信息来检查构建的当前状态，或在失败的情况下找出发生了什么。
   <br/><br/>
-  The response format can be controlled by the <code>Accept</code> header. If&nbsp;
-  <code>application/x-ndjson</code> is specified, the response will be a stream
-  of newline-delimited JSON objects. Otherwise it will be a JSON array of
-  objects.
+  可以通过 <code>Accept</code> 头来控制响应格式。如果指定了&nbsp;
+  <code>application/x-ndjson</code>，响应将是一个换行符分隔的 JSON 对象流。
+  否则，它将是对象的 JSON 数组。
 </OpenApiEndpoint>
 
-## Get deployment app logs
+## 获取部署应用程序日志
 
 <OpenApiEndpoint path="/deployments/{deploymentId}/app_logs" method="get">
-  Get execution logs of a deployment. This API can return either past logs or
-  real-time logs depending on the presence of the <code>since</code> and&nbsp;
-  <code>until</code> query parameters. If at least one of them is provided,
-  past logs are returned. Otherwise real-time logs are returned.
+  获取部署的执行日志。此 API 可以返回过去的日志或实时日志，具体取决于 <code>since</code> 和&nbsp;
+  <code>until</code> 查询参数的存在。如果提供了其中至少一个，将返回过去的日志。否则将返回实时日志。
   <br/><br/>
-  Also, the response format can be controlled by the <code>Accept</code>&nbsp;
-  header. If <code>application/x-ndjson</code> is specified, the response will
-  be a stream of newline-delimited JSON objects. Otherwise, it will be a JSON
-  array of objects.
+  此外，可以通过 <code>Accept</code> 头来控制响应格式。如果指定了 <code>application/x-ndjson</code>，
+  响应将是一个换行符分隔的 JSON 对象流。否则，它将是对象的 JSON 数组。
 </OpenApiEndpoint>

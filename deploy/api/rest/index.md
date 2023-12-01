@@ -1,35 +1,32 @@
 # Deno Deploy REST API
 
-Developers can provision projects, domains, KV databases, and other resources
-using the Deno Deploy REST API. This API is most often used to implement
-[Subhosting](/deploy/manual/subhosting), a use case of Deno Deploy where you can
-run untrusted code on behalf of your users in the cloud.
+开发者可以通过使用 Deno Deploy REST API
+来配置项目、域名、KV数据库等资源。该API最常用于实现
+[Subhosting](/deploy/manual/subhosting)，这是 Deno Deploy
+的一种用例，允许你在云中代表用户运行不受信任的代码。
 
-[Refer to the manual](/deploy/manual/subhosting) to learn more about Subhosting.
+[请参阅手册](/deploy/manual/subhosting) 以深入了解 Subhosting。
 
-## Endpoint and authentication
+## 终端点和身份验证
 
-The base URL for the Deno Deploy REST API v1 is below.
+Deno Deploy REST API v1 的基本URL如下。
 
 ```
 https://api.deno.com/v1/
 ```
 
-The v1 API uses
-[HTTP bearer token](https://swagger.io/docs/specification/authentication/bearer-authentication/)
-authentication. You can create an access token to use the API in the dashboard
-[here](https://dash.deno.com/account#access-tokens). Most API requests will also
-require your organization ID. You can retrieve yours from the Deno Deploy
-dashboard for your organization.
+v1 API 使用
+[HTTP Bearer Token](https://swagger.io/docs/specification/authentication/bearer-authentication/)
+身份验证。你可以在[仪表板](https://dash.deno.com/account#access-tokens)中创建访问令牌以使用API。大多数API请求还需要组织ID，你可以在
+Deno Deploy 仪表板中找到你组织的ID。
 
-![Find your org ID here](./images/org-id.png)
+![在这里找到你的组织ID](./images/org-id.png)
 
-Using both your organization ID and your access token, you can test your API
-access by listing all the projects associated with your organization. Here is an
-example Deno script you can use to access the API.
+通过组织ID和访问令牌，你可以通过列出与你的组织关联的所有项目来测试API访问。以下是一个示例
+Deno 脚本，你可以使用它来访问API。
 
 ```typescript
-// Replace these with your own!
+// 用你自己的替换这些值!
 const organizationId = "a75a9caa-b8ac-47b3-a423-3f2077c58731";
 const token = "ddo_u7mo08lBNHm8GMGLhtrEVfcgBsCuSp36dumX";
 
@@ -47,17 +44,14 @@ const response = await res.json();
 console.log(response);
 ```
 
-## OpenAPI specification and tooling
+## OpenAPI 规范和工具
 
-The [OpenAPI specification](https://www.openapis.org/) for the Deploy API can be
-found here:
+Deploy API 的 [OpenAPI 规范](https://www.openapis.org/) 可在此处找到：
 
 ```
 https://api.deno.com/v1/openapi.json
 ```
 
-This spec document can be used with a
-[large number of OpenAPI-compatible tools](https://openapi.tools/). In addition
-to the documentation for the REST API maintained here, you can find
-auto-generated API documentation (including a browser-based testing tool)
-[here](https://apidocs.deno.com/).
+该规范文档可与 [许多兼容OpenAPI的工具](https://openapi.tools/)
+一起使用。除了此处维护的 REST API
+文档外，你还可以在[此处](https://apidocs.deno.com/)找到自动生成的API文档（包括基于浏览器的测试工具）。
