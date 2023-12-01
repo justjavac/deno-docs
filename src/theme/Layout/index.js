@@ -31,7 +31,8 @@ export default function Layout(props) {
         <script
           type="module"
           src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"
-        ></script>
+        >
+        </script>
       </Head>
       <PageMetadata title={title} description={description} />
 
@@ -46,7 +47,7 @@ export default function Layout(props) {
         className={clsx(
           ThemeClassNames.wrapper.main,
           styles.mainWrapper,
-          wrapperClassName
+          wrapperClassName,
         )}
       >
         <ErrorBoundary fallback={(params) => <ErrorPageContent {...params} />}>
