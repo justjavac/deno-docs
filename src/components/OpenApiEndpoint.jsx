@@ -327,7 +327,7 @@ export default function OpenApiEndpoint(
     if (apiDef) return;
 
     try {
-      API = await OpenAPIParser.validate("/openapi.json");
+      API = await OpenAPIParser.validate("/deno/openapi.json");
       console.log("Loaded: %s, Version: %s", API.info.title, API.info.version);
       setApiDef(API);
     } catch (err) {
