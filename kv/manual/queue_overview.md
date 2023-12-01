@@ -194,8 +194,8 @@ API，专为高可用性和吞吐量而设计。您可以使用它来构建可�
   写入操作一样处理。通过排队消息消耗 KV 存储和写入单元。
 - 通过
   [`listenQueue`](https://deno.land/api?unstable=true&s=Deno.Kv&p=prototype.listenQueue)
-  传递的消息消耗请求和 KV 写入单元。
-- 有关更多信息，请参见 [定价详细信息](https://deno.com/deploy/docs/pricing)。
+  处理请求并消耗 KV 写入单元。
+- 有关更多信息，请参阅 [定价详情](https://deno.com/deploy/pricing)。
 
 ## 用例
 

@@ -7,7 +7,9 @@
   "deno.unstable": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "denoland.vscode-deno",
-  "[mdx]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.defaultFormatter": "denoland.vscode-deno"
   }
 }

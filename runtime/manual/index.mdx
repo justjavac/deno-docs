@@ -290,7 +290,7 @@ Deno.test("sayHello 函数", () => {
 
 ## Node.js API 和 npm 包
 
-Deno 提供了一个兼容层，使您的代码能够使用 [Node.js 内置模块和来自 npm 的第三方模块](./node/index.md)。在您的代码中使用 Node 和 npm 模块看起来很像使用标准的 Deno 模块，除了在导入 Node 内置模块或 npm 模块时，您将使用 `node:` 或 `npm:` 指示符。
+Deno 提供了一个兼容层，使您的代码能够使用 [Node.js 内置模块和 npm 的第三方模块](./node/index.md)。在代码中使用 Node 和 npm 模块看起来很像使用标准的 Deno 模块，唯一的区别是在导入 Node 内置模块或 npm 模块时，您将分别使用 `node:` 或 `npm:` 修饰符。
 
 为了了解它是如何工作的，创建一个名为 `server.js` 的文件，并包含以下内容 - 一个使用流行的 [Express](https://expressjs.com) 框架创建的简单HTTP服务器。
 

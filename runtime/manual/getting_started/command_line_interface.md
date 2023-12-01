@@ -101,6 +101,26 @@ deno test --watch
 deno fmt --watch
 ```
 
+## 模块热替换模式
+
+您可以使用 `deno run` 命令的 `--unstable-hmr`
+标志启用模块热替换模式。与重新启动程序不同，运行时将尝试在原地更新程序。如果原地更新失败，程序仍将重新启动。
+
+```shell
+deno run --unstable-hmr main.ts
+```
+
+当触发模块热替换时，运行时将发送一个类型为 `hmr` 的 `CustomEvent`，其中 `detail`
+对象中将包含 `path`
+属性。您可以监听此事件，并在模块更新时执行任何额外的逻辑（例如，通过 WebSocket
+连接通知浏览器）。
+
+```ts
+addEventListener("hmr", (e) => {
+  console.log("HMR triggered", e.detail.path);
+});
+```
+
 ## 完整性标志（锁定文件）
 
 影响可以将资源下载到缓存的命令：`deno cache`、`deno run`、`deno test`、`deno doc`

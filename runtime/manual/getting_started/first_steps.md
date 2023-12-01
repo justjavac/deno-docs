@@ -134,8 +134,6 @@ Deno 最常见的用途之一是构建 HTTP 服务器。
 创建一个名为 `http_server.ts` 的新文件，然后复制并粘贴下面的代码：
 
 ```ts
-import { serve } from "https://deno.land/std@$STD_VERSION/http/server.ts";
-
 const handler = async (_request: Request): Promise<Response> => {
   const resp = await fetch("https://api.github.com/users/denoland", {
     // 这里的初始化对象包含一个包含指示我们接受什么类型响应的标头对象。
@@ -153,7 +151,7 @@ const handler = async (_request: Request): Promise<Response> => {
   });
 };
 
-serve(handler);
+Deno.serve(handler);
 ```
 
 让我们看一下这个程序

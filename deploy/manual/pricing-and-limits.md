@@ -2,12 +2,12 @@
 
 请查看 [我们的定价页面](https://www.deno.com/deploy/pricing)
 以获取所有计划中可用功能的概述。如果您的使用情况超出了这些限制，请
-[联系我们](mailto:deploy@deno.com)。
+[联系我们](mailto:deploy@deno.com)。 在 Deno Deploy
+的初始公共测试版中，我们并不提供系统的持续运行时间保证。对于服务的访问将受到[我们的公平使用政策](https://docs.deno.com/deploy/manual/fair-use-policy)的控制。我们保留终止违反此政策的用户账户的权利。
 
-在 Deno Deploy
-的初始公共测试版期间，我们不提供任何正常运行时间的保证。服务的访问将受到
-[我们的合理使用政策](https://www.deno.com/deploy/fair-use-policy)
-的控制。我们认为任何违反此政策的用户都有可能被终止其帐户。
+## 部署的最大尺寸限制
+
+在上传资源到部署时，部署中所有文件（源文件和静态文件）的总大小**不应超过1千兆字节**。
 
 ## TLS 代理
 

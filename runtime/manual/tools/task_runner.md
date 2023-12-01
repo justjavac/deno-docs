@@ -290,19 +290,22 @@ echo data[0-9].csv
 - [`cp`](https://man7.org/linux/man-pages/man1/cp.1.html) - 复制文件。
 - [`mv`](https://man7.org/linux/man-pages/man1/mv.1.html) - 移动文件。
 - [`rm`](https://man7.org/linux/man-pages/man1/rm.1.html) - 删除文件或目录。
-  - 例如：`rm -rf [文件]...` - 通常用于递归删除文件或目录。
+  - 例如：`rm -rf [文件]...` - 常用于递归删除文件或目录。
 - [`mkdir`](https://man7.org/linux/man-pages/man1/mkdir.1.html) - 创建目录。
-  - 例如：`mkdir -p 目录...` -
-    通常用于创建目录及其所有父目录，如果已存在则不报错。
+  - 例如：`mkdir -p 目录...` - 常用于创建目录及其所有父目录，如果存在则不报错。
 - [`pwd`](https://man7.org/linux/man-pages/man1/pwd.1.html) -
-  显示当前工作目录的名称。
-- [`sleep`](https://man7.org/linux/man-pages/man1/sleep.1.html) - 延迟指定时间。
-  - 例如：`sleep 1` 休眠 1 秒，`sleep 0.5` 休眠半秒，或 `sleep 1m` 休眠 1 分钟。
+  打印当前工作目录的名称。
+- [`sleep`](https://man7.org/linux/man-pages/man1/sleep.1.html) -
+  延迟指定的时间。
+  - 例如：`sleep 1` 表示休眠1秒，`sleep 0.5` 表示休眠半秒，`sleep 1m`
+    表示休眠一分钟。
 - [`echo`](https://man7.org/linux/man-pages/man1/echo.1.html) - 显示一行文本。
 - [`cat`](https://man7.org/linux/man-pages/man1/cat.1.html) -
-  连接文件并将它们输出到标准输出。如果没有提供参数，它会读取并输出标准输入。
+  连接文件并将它们输出到标准输出。当没有提供参数时，读取并输出标准输入。
 - [`exit`](https://man7.org/linux/man-pages/man1/exit.1p.html) - 导致 shell
   退出。
+- [`head`](https://man7.org/linux/man-pages/man1/head.1.html) -
+  输出文件的前一部分。
 - [`unset`](https://man7.org/linux/man-pages/man1/unset.1p.html) -
   取消设置环境变量。
 - [`xargs`](https://man7.org/linux/man-pages/man1/xargs.1p.html) -

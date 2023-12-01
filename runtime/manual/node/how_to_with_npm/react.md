@@ -81,7 +81,7 @@ await app.listen({ port: 8000 });
 deno run --allow-env --allow-net api/main.ts
 ```
 
-如果我们访问 `localhost:8000/api`，将会看到：
+如果我们访问 `localhost:8000`，将会看到：
 
 ![恐龙的 JSON 响应](../../images/how-to/react/dinosaur-api.png)
 

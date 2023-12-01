@@ -426,12 +426,27 @@ Deno 的测试运行器可以与流行的测试库一起使用，如
 
 ### 示例：使用 Sinon 对函数进行间谍操作
 
-测试间谍是用于断言函数的内部行为是否符合期望的函数替代品。Sinon
-是一个广泛使用的测试库，提供了测试间谍，并可以通过从 CDN 导入它在 Deno
-中使用，例如 Skypack:
+测试间谍是用来断言函数内部行为是否符合期望的函数替身。Sinon
+是一个广泛使用的测试库，提供了测试间谍功能，并且可以在 Deno 中通过从 NPM
+导入来使用：
+
+```javascript
+import { spy } from "https://cdn.skypack.dev/sinon";
+// 在测试中使用 spy
+// Example: Using spy in a test
+const myFunction = () => {
+  // function logic
+};
+
+const spyFunction = spy(myFunction);
+
+// 断言 spyFunction 被调用
+// Assert that spyFunction was called
+sinon.assert.called(spyFunction);
+```
 
 ```js
-import sinon from "https://cdn.skypack.dev/sinon";
+import sinon from "npm:sinon";
 ```
 
 假设我们有两个函数，`foo` 和 `bar`，并希望在执行 `foo` 时断言 `bar`
@@ -451,7 +466,7 @@ export function foo(fn) {
 `bar` 上并调用 `foo(spy)`：
 
 ```js, ignore
-import sinon from "https://cdn.skypack.dev/sinon";
+import sinon from "npm:sinon";
 import { assertEquals } from "https://deno.land/std@$STD_VERSION/assert/mod.ts";
 import { bar, foo } from "./my_file.js";
 
@@ -490,7 +505,7 @@ export function foo() {
 然后在测试文件中导入：
 
 ```js, ignore
-import sinon from "https://cdn.skypack.dev/sinon";
+import sinon from "npm:sinon";
 import { assertEquals } from "https://deno.land/std@$STD_VERSION/assert/mod.ts";
 import { foo, funcs } from "./my_file.js";
 

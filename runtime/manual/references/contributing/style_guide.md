@@ -41,7 +41,7 @@ TODO 注释通常应包括问题或作者的 GitHub 用户名（括号中）。�
 ## 包容性代码
 
 请遵循在
-https://chromium.googlesource.com/chromium/src/+/master/stylemanual/inclusive_code.md
+https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/inclusive_code.md
 中概述的包容性代码准则。
 
 ## Rust

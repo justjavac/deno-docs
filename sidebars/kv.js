@@ -46,8 +46,10 @@ const sidebars = {
     "manual/secondary_indexes",
     "manual/transactions",
     "manual/queue_overview",
+    "manual/cron",
     "manual/data_modeling_typescript",
     "manual/on_deploy",
+    "manual/backup",
   ]),
 
   kvTutorialsHome: mainMenu.concat([

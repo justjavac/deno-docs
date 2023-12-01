@@ -220,6 +220,8 @@ export default function configureRedirects(app: Hono) {
     );
   });
 
+  r("/deploy/manual/using-jsx", "/runtime/manual/advanced/jsx_dom/jsx");
+
   app.get(
     "/deploy/docs/runtime-api",
     (c) => c.redirect("/deploy/api"),
@@ -246,4 +248,8 @@ export default function configureRedirects(app: Hono) {
     const unversionedPath = c.req.path.split("/").slice(3);
     return c.redirect("/deploy/manual/" + unversionedPath.join("/"));
   });
+
+  // Subhosting
+  r("/subhosting", "/deploy/manual/subhosting");
+  r("/deploy/manual/subhosting/domains", "/deploy/api/rest/domains");
 }

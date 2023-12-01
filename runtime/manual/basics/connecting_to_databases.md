@@ -38,41 +38,35 @@ const sql = postgres("postgres://username:password@host:port/database");
 
 ## MongoDB
 
-[deno_mongo](https://deno.land/x/mongo) 是为 Deno 开发的 MongoDB
-数据库驱动程序。
+我们建议使用 [npm specifiers](../node/npm_specifiers.md) 与官方的
+[MongoDB npm 驱动程序](https://www.npmjs.com/package/mongodb) 一起工作。您可以在
+[官方文档](https://www.mongodb.com/docs/drivers/node/current/)
+中详细了解如何使用该驱动程序。在 Deno 环境中使用此模块的唯一区别是使用 `npm:`
+specifier 导入模块。
 
-### 使用 deno_mongo 连接到 MongoDB
+```ts title="使用 npm specifiers 导入 MongoDB 驱动程序"
+// 导入 MongoDB 驱动程序的最新主要版本
+import { MongoClient } from "npm:mongodb@6";
 
-```ts, ignore
-import { MongoClient } from "https://deno.land/x/mongo@LATEST_VERSION/mod.ts";
+// 配置 MongoDB 客户端
+const url = "mongodb://localhost:27017";
+const client = new MongoClient(url);
+const dbName = "myProject";
 
-const client = new MongoClient();
+// 连接到 MongoDB 实例
+await client.connect();
+console.log("成功连接到服务器");
 
-// 连接到本地数据库
-await client.connect("mongodb://127.0.0.1:27017");
+// 获取对集合的引用
+const db = client.db(dbName);
+const collection = db.collection("documents");
 
-// 连接到Mongo Atlas数据库
-await client.connect({
-  db: "<db_name>",
-  tls: true,
-  servers: [
-    {
-      host: "<db_cluster_url>",
-      port: 27017,
-    },
-  ],
-  credential: {
-    username: "<username>",
-    password: "<password>",
-    db: "<db_name>",
-    mechanism: "SCRAM-SHA-1",
-  },
-});
+// 执行插入操作
+const insertResult = await collection.insertMany([{ a: 1 }, { a: 2 }]);
+console.log("插入的文档 =>", insertResult);
 
-// 使用srv url连接
-await client.connect(
-  "mongodb+srv://<username>:<password>@<db_cluster_url>/<db_name>?authMechanism=SCRAM-SHA-1",
-);
+// 关闭连接
+client.close();
 ```
 
 ## SQLite

@@ -36,7 +36,7 @@ Deno.serve((_req) => {
 // 监听端口 4242。
 Deno.serve({ port: 4242 }, handler);
 
-// 监听端口 4500 并绑定到 0.0.0.0。
+// 监听端口 4242 并绑定到 0.0.0.0。
 Deno.serve({ port: 4242, hostname: "0.0.0.0", handler });
 ```
 

@@ -258,7 +258,7 @@ Promise
 `assertThrows()`。
 
 ```js
-Deno.test("测试断言异步引发错误", () => {
+Deno.test("测试断言异步引发错误", async () => {
   await assertRejects(
     () => {
       return new Promise(() => {

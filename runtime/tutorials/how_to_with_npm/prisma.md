@@ -25,7 +25,7 @@ cd rest-api-with-prisma-oak
 然后，让我们使用 Deno 运行 `prisma init`：
 
 ```shell, ignore
-deno run --allow-read --allow-env --allow-write npm:prisma@^4.5 init
+deno run --allow-read --allow-env --allow-write npm:prisma@latest init
 ```
 
 这将生成
@@ -50,37 +50,32 @@ model Dinosaur {
 }
 ```
 
-Prisma 还应该生成一个包含 `DATABASE_URL` 的 `.env` 文件。让我们将 `DATABASE_URL`
-分配给 PostgreSQL 连接字符串。在此示例中，我们将使用来自
-[Supabase](https://supabase.com/database) 的免费 PostgreSQL 数据库。
+Prisma还会生成一个包含`DATABASE_URL`环境变量的`.env`文件。让我们将`DATABASE_URL`赋值给一个PostgreSQL连接字符串。在这个例子中，我们将使用来自[Supabase的免费PostgreSQL数据库](https://supabase.com/database)。
 
 接下来，让我们创建数据库模式：
 
 ```shell, ignore
-deno run -A npm:prisma@^4.5 db push
+deno run -A npm:prisma@latest db push
 ```
 
-完成后，我们需要生成一个用于数据代理的 Prisma 客户端：
+完成这一步后，我们需要生成 Prisma 客户端：
 
 ```shell, ignore
-deno run -A --unstable npm:prisma@^4.5 generate --data-proxy
+deno run -A --unstable npm:prisma@latest generate --no-engine
 ```
 
-## 设置 Prisma 数据平台
+## 在 Prisma 数据平台中设置 Accelerate
 
-为了使用 Prisma 数据平台，我们需要创建并连接一个 GitHub
-存储库。因此，让我们初始化存储库，创建一个新的 GitHub
-存储库，添加远程源，并推送存储库。
+要开始使用 Prisma 数据平台，请按以下步骤操作：
 
-接下来，注册一个免费的 [Prisma 数据平台帐户](https://cloud.prisma.io/)。
+1. 注册一个免费的 [Prisma 数据平台账户](https://console.prisma.io)。
+2. 创建一个项目。
+3. 转到您创建的项目。
+4. 通过提供数据库连接字符串启用 Accelerate。
+5. 生成 Accelerate 连接字符串并将其复制到剪贴板。
 
-单击 **New Project**，然后选择 **Import a Prisma Repository**。
-
-它将要求您提供 PostgreSQL 连接字符串，您可以在 `.env`
-文件中找到它。将其粘贴在这里。然后单击 **Create Project**。
-
-您将收到一个以 `prisma://` 开头的新连接字符串，让我们将其分配给 `.env` 文件中的
-`DATABASE_URL`，以替换来自 Supabase 的 PostgreSQL 字符串。
+将以 `prisma://` 开头的 Accelerate 连接字符串分配给您的 `.env` 文件中的
+`DATABASE_URL`，替换您现有的连接字符串。
 
 接下来，让我们创建一个种子脚本以向数据库添加种子数据。
 
@@ -101,11 +96,7 @@ import { load } from "https://deno.land/std@$STD_VERSION/dotenv/mod.ts";
 const envVars = await load();
 
 const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: envVars.DATABASE_URL,
-    },
-  },
+  datasourceUrl: envVars.DATABASE_URL,
 });
 
 const dinosaurData: Prisma.DinosaurCreateInput[] = [
@@ -144,7 +135,13 @@ await prisma.$disconnect();
 deno run -A prisma/seed.ts
 ```
 
-这样做后，您的 Prisma 控制面板应该显示新的恐龙：
+完成这一步之后，通过运行以下命令，你应该能够在 Prisma Studio 中看到你的数据：
+
+```bash, ignore
+deno run -A npm:prisma studio
+```
+
+你应该会看到类似以下截图的内容：
 
 ![Prisma 控制面板中的新恐龙](../../manual/images/how-to/prisma/1-dinosaurs-in-prisma.png)
 
@@ -257,7 +254,7 @@ deno run -A main.ts
 curl -X POST http://localhost:8000/dinosaur -H "Content-Type: application/json" -d '{"name": "Deno", "description":"地球上最快、最安全、最易使用的恐龙。"}'
 ```
 
-在您的 Prisma 仪表板中，您应该会看到一个新行：
+现在您应该在 Prisma Studio 中看到一行新数据：
 
 ![Prisma 中的新恐龙 Deno](../../manual/images/how-to/prisma/3-new-dinosaur-in-prisma.png)
 

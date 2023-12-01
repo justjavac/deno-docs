@@ -1,15 +1,9 @@
 # BroadcastChannel
 
 在 Deno Deploy
-中，代码在全球不同的数据中心运行，以减少延迟，通过在离客户端最近的数据中心处理请求。在浏览器中，BroadcastChannel
+中，代码在全球不同的数据中心运行，以减少延迟，通过在离客户端最近的数据中心处理请求。在浏览器中，[`BroadcastChannel`](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API)
 API 允许具有相同来源的不同标签交换消息。在 Deno Deploy 中，BroadcastChannel API
 提供了各个实例之间的通信机制；一个连接全球各地 Deploy 实例的简单消息总线。
-
-- [构造函数](#constructor)
-  - [参数](#parameters)
-- [属性](#properties)
-- [方法](#methods)
-- [示例](#example)
 
 ## 构造函数
 
@@ -47,60 +41,51 @@ let channel = new BroadcastChannel(channelName);
 `BroadcastChannel` 的实例上使用 `addEventListener` 和 `removeEventListener` 等
 `EventTarget` 的方法。
 
-## 示例
+## 示例：跨实例更新内存缓存
 
-一个小示例，其中有一个端点用于向不同地区中所有其他活动实例发送新消息，另一个用于从一个实例中获取所有消息。
+`BroadcastChannel`
+提供的消息总线是一种用于在运行在不同数据中心的孤立环境中更新内存数据缓存的实用工具之一。在下面的示例中，我们演示了如何配置一个简单的服务器，利用
+`BroadcastChannel` 实现在服务器的所有运行实例之间同步状态。
 
 ```ts
-import { serve } from "https://deno.land/std@$STD_VERSION/http/server.ts";
+import { Hono } from "https://deno.land/x/hono/mod.ts";
 
+// 创建一个消息的内存缓存
 const messages = [];
-// 创建一个名为 earth 的新广播频道。
-const channel = new BroadcastChannel("earth");
-// 设置 onmessage 事件处理程序。
+
+// 用于所有隔离体的广播通道
+const channel = new BroadcastChannel("all_messages");
+
+// 当来自其他实例的新消息到达时，将其添加到缓存中
 channel.onmessage = (event: MessageEvent) => {
-  // 当其他实例向我们发送新消息时，更新本地状态。
   messages.push(event.data);
 };
 
-function handler(req: Request): Response {
-  const { pathname, searchParams } = new URL(req.url);
+// 创建一个服务器以添加和检索消息
+const app = new Hono();
 
-  // 处理 /send?message=<message> 端点。
-  if (pathname.startsWith("/send")) {
-    const message = searchParams.get("message");
-    if (!message) {
-      return new Response("?message not provided", { status: 400 });
-    }
-
-    // 更新本地状态。
+// 添加消息到列表
+app.get("/send", (c) => {
+  // 通过包含 "message" 查询参数可以添加新消息
+  const message = c.req.query("message");
+  if (message) {
     messages.push(message);
-    // 通知部署的所有其他活动实例有新消息。
     channel.postMessage(message);
-    return new Response("message sent");
   }
+  return c.redirect("/");
+});
 
-  // 处理 /messages 请求。
-  if (pathname.startsWith("/messages")) {
-    return new Response(JSON.stringify(messages), {
-      "content-type": "application/json",
-    });
-  }
+// 获取消息列表
+app.get("/", (c) => {
+  // 返回当前的消息列表
+  return c.json(messages);
+});
 
-  return new Response("not found", { status: 404 });
-}
-
-serve(handler);
+Deno.serve(app.fetch);
 ```
 
-您可以通过向 `https://broadcast.deno.dev/send?message=Hello_from_<region>` 发出
-HTTP 请求来测试此示例，然后通过使用 VPN 或其他方式从不同地区发出另一个请求到
-`https://broadcast.deno.dev/messages`
-来检查第一个请求的消息是否存在于第二个地区。
-
-我们构建了一个小型聊天应用程序，您可以在
-https://github.com/lucacasonato/deploy_chat 上使用，网址为
-https://denochat.deno.dev/
+你可以在 Deno Deploy
+上使用[这个演示](https://dash.deno.com/playground/broadcast-channel-example)来测试这个示例。
 
 [eventtarget]: https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
 [messageevent]: https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent
