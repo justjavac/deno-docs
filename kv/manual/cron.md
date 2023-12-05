@@ -125,38 +125,38 @@ Deno.cron("Run once a minute", "* * * * *", ()
 });
 ```
 
-```ts title="Run every fifteen minutes"
-Deno.cron("每十五分钟运行一次", "*/15 * * * *", () => {
+```ts title="每十五分钟运行一次"
+Deno.cron("Run every fifteen minutes", "*/15 * * * *", () => {
   console.log("你好，cron！");
 });
 ```
 
-```ts title="Run once an hour, on the hour"
-Deno.cron("每小时整点运行一次", "0 * * * *", () => {
+```ts title="每小时整点运行一次"
+Deno.cron("Run once an hour, on the hour", "0 * * * *", () => {
   console.log("你好，cron！");
 });
 ```
 
-```ts title="Run every three hours"
-Deno.cron("每三小时运行一次", "0 */3 * * *", () => {
+```ts title="每三小时运行一次"
+Deno.cron("Run every three hours", "0 */3 * * *", () => {
   console.log("你好，cron！");
 });
 ```
 
-```ts title="Run every day at 1am"
-Deno.cron("每天凌晨 1 点运行一次", "0 1 * * *", () => {
+```ts title="每天凌晨 1 点运行一次"
+Deno.cron("Run every day at 1am", "0 1 * * *", () => {
   console.log("你好，cron！");
 });
 ```
 
-```ts title="Run every Wednesday at midnight"
-Deno.cron("每周三午夜运行一次", "0 0 * * WED", () => {
+```ts title="每周三午夜运行一次"
+Deno.cron("Run every Wednesday at midnight", "0 0 * * WED", () => {
   console.log("你好，cron！");
 });
 ```
 
-```ts title="Run on the first of the month at midnight"
-Deno.cron("每月初午夜运行一次", "0 0 1 * *", () => {
+```ts title="每月初午夜运行一次"
+Deno.cron("Run on the first of the month at midnight", "0 0 1 * *", () => {
   console.log("你好，cron！");
 });
 ```
