@@ -118,9 +118,7 @@ cron 任务的列表。
 以下是一些常见的 cron 配置，供您参考。
 
 ```ts title="每分钟运行一次"
-Deno.cron("Run once a minute", "* * * * *", ()
-
- => {
+Deno.cron("Run once a minute", "* * * * *", () => {
   console.log("你好，cron！");
 });
 ```
