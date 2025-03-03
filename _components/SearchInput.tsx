@@ -11,7 +11,7 @@ export default function SearchInput() {
           type="search"
           name="q"
           id="search-str"
-          placeholder="Search"
+          placeholder="搜索"
           className="search-input"
         />
         <input type="hidden" name="q" id="q" value="site:deno.com" />

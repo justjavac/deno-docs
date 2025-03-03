@@ -34,7 +34,7 @@ import { log } from "lume/core/utils/log.ts";
 
 const site = lume(
   {
-    location: new URL("https://docs.deno.com"),
+    location: new URL("https://docs.denohub.com"),
     caseSensitiveUrls: true,
     emptyDest: false,
     server: {

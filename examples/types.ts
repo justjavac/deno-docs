@@ -1,26 +1,26 @@
 export const TAGS = {
   cli: {
     title: "cli",
-    description: "Works in Deno CLI",
+    description: "在 Deno CLI 中工作",
   },
   deploy: {
     title: "deploy",
-    description: "Works on Deno Deploy",
+    description: "在 Deno Deploy 中工作",
   },
   web: {
     title: "web",
-    description: "Works in on the Web",
+    description: "在 Web 上工作",
   },
 };
 
 export const DIFFICULTIES = {
   beginner: {
-    title: "Beginner",
-    description: "No significant prior knowledge is required for this example.",
+    title: "初学者",
+    description: "此示例不需要任何重要的先验知识。",
   },
   intermediate: {
-    title: "Intermediate",
-    description: "Some prior knowledge is needed for this example.",
+    title: "中级",
+    description: "此示例需要一些先验知识。",
   },
 };
 

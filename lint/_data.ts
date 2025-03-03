@@ -40,13 +40,13 @@ async function generateSidebarItems() {
 
 export const lintRulePages = await generateSidebarItems();
 
-export const sectionTitle = "Lint rules";
+export const sectionTitle = "Lint 规则";
 
 export const sectionHref = "/lint/";
 
 export const sidebar = [
   {
-    title: "List of rules",
+    title: "规则列表",
     href: sectionHref,
     items: lintRulePages,
   },

@@ -41,35 +41,34 @@ type FooterItem = {
   label: string;
   href: string;
 };
-
 const data = [
   {
-    title: "Deno Docs",
+    title: "Deno 文档",
     items: [
       {
-        label: "Deno Runtime",
+        label: "Deno 运行时",
         to: "/runtime/",
       },
       {
-        label: "Deno Deploy",
+        label: "Deno 部署",
         to: "/deploy/manual/",
       },
       {
-        label: "Deno Subhosting",
+        label: "Deno 子托管",
         to: "/subhosting/manual/",
       },
       {
-        label: "Examples",
+        label: "示例",
         href: "/examples/",
       },
       {
-        label: "Standard Library",
+        label: "标准库",
         href: "https://jsr.io/@std",
       },
     ],
   },
   {
-    title: "Community",
+    title: "社区",
     items: [
       {
         label: "Discord",
@@ -88,49 +87,49 @@ const data = [
         href: "https://youtube.com/@deno_land",
       },
       {
-        label: "Newsletter",
+        label: "新闻简报",
         href: "https://deno.news/",
       },
     ],
   },
   {
-    title: "Help & Feedback",
+    title: "帮助与反馈",
     items: [
       {
-        label: "Community Support",
+        label: "社区支持",
         href: "https://discord.gg/deno",
       },
       {
-        label: "Deploy System Status",
+        label: "部署系统状态",
         href: "https://denostatus.com",
       },
       {
-        label: "Deploy Feedback",
+        label: "部署反馈",
         href: "https://github.com/denoland/deploy_feedback",
       },
       {
-        label: "Report a Problem",
+        label: "报告问题",
         href: "mailto:support@deno.com",
       },
     ],
   },
   {
-    title: "Company",
+    title: "公司",
     items: [
       {
-        label: "Blog",
+        label: "博客",
         href: "https://deno.com/blog",
       },
       {
-        label: "Careers",
+        label: "职业",
         href: "https://deno.com/jobs",
       },
       {
-        label: "Merch",
+        label: "商品",
         href: "https://merch.deno.com/",
       },
       {
-        label: "Privacy Policy",
+        label: "隐私政策",
         href: "/deploy/manual/privacy-policy",
       },
     ],

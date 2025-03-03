@@ -1,7 +1,6 @@
 import type { Page } from "@deno/doc";
 
 export const layout = "raw.tsx";
-
 export const sidebar = [
   {
     items: [

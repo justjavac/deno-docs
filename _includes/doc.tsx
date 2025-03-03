@@ -54,7 +54,7 @@ export default function Doc(data: Lume.Data, helpers: Lume.Helpers) {
             )}
             {data.available_since && (
               <div class="bg-gray-200 rounded-md text-sm py-3 px-4 mb-4 font-semibold">
-                Available since {data.available_since}
+                自 {data.available_since} 起可用
               </div>
             )}
             {renderedCommand}

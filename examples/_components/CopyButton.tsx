@@ -2,8 +2,8 @@ export function CopyButton(props: { text: string }) {
   return (
     <button
       type="button"
-      aria-label="Copy code to clipboard"
-      title="Copy"
+      aria-label="复制到剪贴板"
+      title="复制"
       class="clean-btn copy-all absolute right-2 top-2 hover:bg-gray-200 text-gray-900 p-2 rounded-md z-10"
       data-copy={props.text}
     >

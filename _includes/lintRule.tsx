@@ -38,14 +38,13 @@ function LintRuleTags(props: { tags: string[] }) {
         ? (
           <>
             <div class="mb-4">
-              <b>NOTE:</b> this rule is part of the <code>{tags[0]}</code>{" "}
-              rule set.
+              <b>注意：</b> 此规则是 <code>{tags[0]}</code> 规则集的一部分。
             </div>
             <div>
-              Enable full set in <code>deno.json</code>:
+              在 <code>deno.json</code> 中启用完整规则集：
             </div>
             <pre>{generateConfigFileForTag(tags[0])}</pre>
-            <div>Enable full set using the Deno CLI:</div>
+            <div>使用 Deno CLI 启用完整规则集：</div>
             <pre class="!mb-0">{generateCliForTag(tags[0])}</pre>
           </>
         )
@@ -53,15 +52,15 @@ function LintRuleTags(props: { tags: string[] }) {
           <>
             <div class="mb-4">
               <span class="flex flex-wrap items-center gap-2">
-                <b>NOTE:</b> this rule is included the following rule sets:
-                {tags.map((tag) => <code>{tag}</code>)}
+                <b>注意：</b> 此规则包含在以下规则集中：
+                {tags.map((tag) => <code key={tag}>{tag}</code>)}
               </span>
             </div>
             <div>
-              Enable full set in <code>deno.json</code>:
+              在 <code>deno.json</code> 中启用完整集合：
             </div>
             <pre>{generateConfigFileForTags(tags)}</pre>
-            <div>Enable full set using the Deno CLI:</div>
+            <div>使用 Deno CLI 启用完整集合：</div>
             <pre class="!mb-0">{generateCliForTags(tags)}</pre>
           </>
         )}

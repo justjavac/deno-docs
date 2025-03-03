@@ -4,11 +4,11 @@ export default function () {
   return (
     <button
       type="button"
-      aria-label="toggle theme"
+      aria-label="切换主题"
       className="theme-toggle"
       id="theme-toggle"
     >
-      Toggle Theme
+      切换主题
     </button>
   );
 }

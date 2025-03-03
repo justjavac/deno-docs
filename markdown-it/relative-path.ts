@@ -21,7 +21,7 @@ export default function relativeLinksPlugin(md: any) {
   md.core.ruler.after("inline", "relative_links", function (state: any) {
     const basePath = state.env?.filename;
     if (!basePath) return;
-    const baseURL = new URL(basePath, "https://docs.deno.com").href;
+    const baseURL = new URL(basePath, "https://docs.denohub.com").href;
 
     state.tokens.forEach(function (blockToken: any) {
       if (blockToken.type === "inline" && blockToken.children) {

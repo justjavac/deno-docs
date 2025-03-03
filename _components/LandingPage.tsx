@@ -25,27 +25,26 @@ export default function LandingPage() {
         <div className="flex flex-col md:flex-row w-full mb-8 max-w-screen-xl justify-between">
           <div className="max-w-prose mb-8">
             <h1 className="text-2xl font-semibold sm:text-3xl md:text-4xl mb-3">
-              Examples
+              示例
             </h1>
             <p>
-              A collection of walkthrough tutorials, examples, videos and guides
-              to teach you about the Deno runtime and how to use it with your
-              favorite tools.
+              一系列详细的教程、示例、视频和指南，帮助你了解 Deno
+              运行时以及如何将其与你最喜欢的工具结合使用。
             </p>
           </div>
           <img
             className="w-full max-w-32 mx-auto h-auto mb-4 hidden md:block"
-            alt="Deno Examples"
+            alt="Deno 示例"
             src="/examples.png"
           />
         </div>
         <div className="flex flex-col gap-4 w-full mb-4 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded md:flex-wrap md:justify-start md:items-center md:flex-row">
           <h2 className="font-semibold">
-            Filter by type:
+            按类型筛选：
           </h2>
           <label for="example" className="flex gap-2 items-center mr-4">
             <ExampleIcon />
-            <span>Examples:</span>
+            <span>示例:</span>
             <span className="switch">
               <input
                 type="checkbox"
@@ -60,7 +59,7 @@ export default function LandingPage() {
 
           <label for="tutorial" className="flex gap-2 items-center mr-4">
             <TutorialIcon />
-            <span>Tutorials:</span>
+            <span>教程:</span>
             <span className="switch">
               <input
                 type="checkbox"
@@ -75,7 +74,7 @@ export default function LandingPage() {
 
           <label for="video" className="flex gap-2 items-center mr-4">
             <VideoIcon />
-            <span>Videos:</span>
+            <span>视频:</span>
             <span className="switch">
               <input
                 type="checkbox"
@@ -94,37 +93,36 @@ export default function LandingPage() {
         </div>
         <div className="fully-filtered">
           <h2 class="text-2xl font-semibold sm:text-3xl md:text-4xl">
-            Oops! You've filtered everything
+            哎呀！你把所有内容都过滤掉了
           </h2>
           <p class="md:text-lg mt-4">
-            Maybe remove a filter to see some examples?
+            或许移除一个过滤器来查看一些示例？
           </p>
           <img
             src="/examples/tutorials/images/deno-educator.png"
-            alt="sad Deno with a grad cap"
+            alt="戴着毕业帽的悲伤 Deno"
           />
         </div>
       </main>
       <aside class="px-8 xl:px-0 max-w-[1200px] mx-auto mb-24 space-y-4 border-t pt-8">
         <h2 class="text-2xl md:text-3xl font-bold">
-          We welcome contributions!
+          我们欢迎贡献！
         </h2>
         <p class="text-balance pt-4 mt-3">
-          Looking for an example that isn't here? Or want to add one of your
-          own? Check out our{" "}
+          找不到你想要的示例？或者想添加一个你自己的示例？请查看我们的{" "}
           <a
             href="https://github.com/denoland/deno-docs?tab=readme-ov-file#examples"
             class="text-primary hover:underline focus:underline"
           >
-            GitHub repository
-          </a>.
+            GitHub 仓库
+          </a>。
         </p>
         <p>
           <a
             href="/runtime/contributing/examples/"
             class="text-primary hover:underline focus:underline text-center mt-4 font-bold"
           >
-            Commit an example and we'll send you stickers!
+            提交一个示例，我们会送你贴纸！
           </a>
         </p>
       </aside>

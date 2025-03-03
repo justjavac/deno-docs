@@ -12,7 +12,7 @@ export default function Feedback({ file }: { file: string | undefined }) {
       >
         <h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary
         mb-2 pb-2 font-normal">
-          Did you find what you needed?
+          你找到你需要的内容了吗？
         </h2>
         <div class="flex flex-col sm:flex-row sm:flex-wrap gap-8">
           <div class="flex-1">
@@ -33,7 +33,7 @@ export default function Feedback({ file }: { file: string | undefined }) {
                     required={true}
                   />
                   <label class="btn" for="feedback-yes">
-                    Yes
+                    是
                     <svg
                       aria-hidden="true"
                       focusable="false"
@@ -58,7 +58,7 @@ export default function Feedback({ file }: { file: string | undefined }) {
                     required={true}
                   />
                   <label class="btn" for="feedback-no">
-                    No
+                    否
                     <svg
                       aria-hidden="true"
                       focusable="false"
@@ -77,7 +77,7 @@ export default function Feedback({ file }: { file: string | undefined }) {
                     target="_blank"
                     href={githubPath}
                   >
-                    Edit this page
+                    编辑此页面
 
                     <svg
                       width="98"
@@ -103,12 +103,11 @@ export default function Feedback({ file }: { file: string | undefined }) {
                   class="hidden w-full overflow-hidden"
                 >
                   <p class="font-semibold !mt-2 !mb-4">
-                    Thank you! Feedback received.{" "}
-                    <span aria-hidden="true">✅</span>
+                    谢谢！已收到反馈。 <span aria-hidden="true">✅</span>
                   </p>
                   <div class="space-y-1">
                     <label for="feedback-comment">
-                      Any additional comments? (<i>optional</i>)
+                      还有其他意见吗？(<i>可选</i>)
                     </label>
                     <textarea
                       class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded"
@@ -119,7 +118,7 @@ export default function Feedback({ file }: { file: string | undefined }) {
                   </div>
                   <div class="space-y-1">
                     <label for="feedback-contact">
-                      Email address (<i>optional</i>)
+                      Email 地址 (<i>可选</i>)
                     </label>
                     <input
                       type="email"
@@ -134,7 +133,7 @@ export default function Feedback({ file }: { file: string | undefined }) {
                     type="submit"
                     class="btn bg-green-400 dark:bg-green-600 mt-4"
                   >
-                    Send additional feedback
+                    发送额外反馈
                   </button>
                 </div>
               </div>
@@ -144,7 +143,7 @@ export default function Feedback({ file }: { file: string | undefined }) {
                 target="_blank"
                 href="/deploy/manual/privacy-policy"
               >
-                Privacy policy
+                隐私政策
               </a>
             </form>
           </div>

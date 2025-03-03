@@ -1,23 +1,23 @@
 [
   {
     "path": "/runtime/manual/basics/testing/#test-definition-filtering",
-    "title": "Test definition filtering",
-    "content": "Within the tests themselves, you have two options for filtering.\n",
-    "section": "Testing in Deno",
-    "category": "Runtime"
+    "title": "测试定义过滤",
+    "content": "在测试内部，您有两种过滤选项。\n",
+    "section": "Deno 中的测试",
+    "category": "运行时"
   },
   {
     "path": "/runtime/reference/cli/test/",
     "title": "deno test",
-    "content": "Run tests using Deno's built-in test runner.\n",
+    "content": "使用 Deno 内置的测试运行器运行测试。\n",
     "section": "deno test",
-    "category": "Runtime"
+    "category": "运行时"
   },
   {
     "path": "/deploy/manual/pricing-and-limits/#tls-proxying",
-    "title": "TLS proxying",
-    "content": "TLS termination is required for outgoing connections to port 443 (the port used\nfor HTTPS). Using Deno.connect to\nconnect to these ports is prohibited. If you need to establish a TLS connection\nto port 443, please use\nDeno.connectTls instead. fetch is\nnot impacted by this restriction.\nThis restriction is in place because connecting to port 443 without terminating\nTLS is frequently used in TLS-over-TLS proxies, which are prohibited on Deno\nDeploy as per our acceptable use policy.\n",
-    "section": "Pricing and limitations",
-    "category": "Deploy"
+    "title": "TLS 代理",
+    "content": "对于到端口 443（用于 HTTPS 的端口）的出站连接，需要 TLS 终止。使用 Deno.connect 连接到这些端口是被禁止的。如果您需要建立到端口 443 的 TLS 连接，请改用 Deno.connectTls。fetch 不受此限制影响。\n此限制的存在是因为在未终止 TLS 的情况下连接到端口 443 通常用于 TLS-over-TLS 代理，根据我们的可接受使用政策，这在 Deno Deploy 上是禁止的。\n",
+    "section": "定价和限制",
+    "category": "部署"
   }
 ]

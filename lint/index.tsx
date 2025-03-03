@@ -1,6 +1,6 @@
 type LintIconType = "jsr" | "react" | "jsx" | "recommended" | "fresh";
 
-export const title = "List of rules";
+export const title = "规则列表";
 export const toc = [];
 export const oldUrl = "/lint/rules";
 
@@ -40,11 +40,11 @@ export default function LintRulesIndex(
     <div>
       <div class="flex flex-col gap-4 mb-8">
         <p>
-          These lint rules are provided by the{" "}
+          这些 lint 规则由{" "}
           <a href="/runtime/reference/cli/lint/">
             <code>deno lint</code>
           </a>{" "}
-          command.
+          命令提供。
         </p>
         <input
           type="text"

@@ -23,7 +23,7 @@ export default function ExamplePage({ example }: Props) {
           href={url}
           className="blocklink absolute top-[-4rem] right-0"
         >
-          Edit on Github
+          在 Github 上编辑
         </a>
         <div class="flex flex-col gap-2">
           {example.parsed.description && (
@@ -58,14 +58,13 @@ export default function ExamplePage({ example }: Props) {
         {example.parsed.run && (
           <div class="mt-8">
             <p>
-              Run{" "}
+              使用 Deno CLI 在本地运行{" "}
               <a
                 href={url}
                 class="text-primary hover:underline focus:underline"
               >
-                this example
-              </a>{" "}
-              locally using the Deno CLI:
+                此示例
+              </a>：
             </p>
             <div
               data-color-mode="light"
@@ -87,7 +86,7 @@ export default function ExamplePage({ example }: Props) {
         {example.parsed.playground && (
           <div class="col-span-3 mt-8">
             <p class="text-foreground-secondary">
-              Try this example in a Deno Deploy playground:
+              在 Deno Deploy Playground 中尝试此示例：
             </p>
             <p class="mt-3">
               <a

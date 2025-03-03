@@ -1,23 +1,23 @@
 {
   "navigation": [
     {
-      "name": "Manual",
+      "name": "手册",
       "href": "/runtime/"
     },
     {
-      "name": "API reference",
+      "name": "API 参考",
       "href": "/api/"
     },
     {
-      "name": "Examples",
+      "name": "示例",
       "href": "/examples/"
     },
     {
-      "name": "Deploy",
+      "name": "部署",
       "href": "/deploy/manual/"
     },
     {
-      "name": "Subhosting",
+      "name": "托管",
       "href": "/subhosting/manual/"
     }
   ],

@@ -3,7 +3,7 @@ import { walkSync } from "@std/fs/walk";
 import { basename } from "@std/path";
 export { sectionHref, sidebar } from "./_data.ts";
 
-export const sectionTitle = "Lint rules";
+export const sectionTitle = "Lint 规则";
 
 export const layout = "lintRule.tsx";
 

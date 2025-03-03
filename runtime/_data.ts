@@ -4,29 +4,29 @@ import { parse as yamlParse } from "jsr:@std/yaml";
 
 export const sidebar = [
   {
-    title: "Getting started",
+    title: "入门",
     href: "/runtime/",
     items: [
       {
-        title: "Installation",
+        title: "安装",
         href: "/runtime/getting_started/installation/",
       },
       {
-        title: "First project",
+        title: "第一个项目",
         href: "/runtime/getting_started/first_project/",
       },
       {
-        title: "Setup your environment",
+        title: "设置环境",
         href: "/runtime/getting_started/setup_your_environment/",
       },
       {
-        title: "Command line interface",
+        title: "命令行界面",
         href: "/runtime/getting_started/command_line_interface/",
       },
     ],
   },
   {
-    title: "Fundamentals",
+    title: "基础知识",
     href: "/runtime/fundamentals/",
     items: [
       {
@@ -38,43 +38,43 @@ export const sidebar = [
         href: "/runtime/fundamentals/node/",
       },
       {
-        title: "Security",
+        title: "安全性",
         href: "/runtime/fundamentals/security/",
       },
       {
-        title: "Modules and dependencies",
+        title: "模块和依赖",
         href: "/runtime/fundamentals/modules/",
       },
       {
-        title: "Configuration",
+        title: "配置",
         href: "/runtime/fundamentals/configuration/",
       },
       {
-        title: "Standard library",
+        title: "标准库",
         href: "/runtime/fundamentals/standard_library/",
       },
       {
-        title: "Web development",
+        title: "Web 开发",
         href: "/runtime/fundamentals/web_dev/",
       },
       {
-        title: "Testing",
+        title: "测试",
         href: "/runtime/fundamentals/testing/",
       },
       {
-        title: "Debugging",
+        title: "调试",
         href: "/runtime/fundamentals/debugging/",
       },
       {
-        title: "Workspaces",
+        title: "工作区",
         href: "/runtime/fundamentals/workspaces/",
       },
       {
-        title: "Linting and formatting",
+        title: "代码检查和格式化",
         href: "/runtime/fundamentals/linting_and_formatting/",
       },
       {
-        title: "HTTP Server",
+        title: "HTTP 服务器",
         href: "/runtime/fundamentals/http_server/",
       },
       {
@@ -82,13 +82,13 @@ export const sidebar = [
         href: "/runtime/fundamentals/open_telemetry/",
       },
       {
-        title: "Stability and releases",
+        title: "稳定性和发布",
         href: "/runtime/fundamentals/stability_and_releases/",
       },
     ],
   },
   {
-    title: "Reference guides",
+    title: "参考指南",
     href: "/runtime/reference/",
     items: [
       {
@@ -210,43 +210,43 @@ export const sidebar = [
         ],
       },
       {
-        title: "Deno APIs",
+        title: "Deno API",
         href: "/runtime/reference/deno_namespace_apis/",
       },
       {
-        title: "Web APIs",
+        title: "Web API",
         href: "/runtime/reference/web_platform_apis/",
       },
       {
-        title: "Node APIs",
+        title: "Node API",
         href: "/runtime/reference/node_apis/",
       },
       {
-        title: "TS Config Migration",
+        title: "TS 配置迁移",
         href: "/runtime/reference/ts_config_migration/",
       },
       {
-        title: "Continuous Integration",
+        title: "持续集成",
         href: "/runtime/reference/continuous_integration/",
       },
       {
-        title: "Environment variables",
+        title: "环境变量",
         href: "/runtime/reference/env_variables/",
       },
       {
-        title: "Deno & VS Code",
+        title: "Deno 和 VS Code",
         href: "/runtime/reference/vscode/",
       },
       {
-        title: "Using JSX and React",
+        title: "使用 JSX 和 React",
         href: "/runtime/reference/jsx/",
       },
       {
-        title: "Testing code in docs",
+        title: "文档中的测试代码",
         href: "/runtime/reference/documentation/",
       },
       {
-        title: "Lint Plugins",
+        title: "代码检查插件",
         href: "/runtime/reference/lint_plugins/",
       },
       {
@@ -254,11 +254,11 @@ export const sidebar = [
         href: "/runtime/reference/wasm/",
       },
       {
-        title: "Migration Guide",
+        title: "迁移指南",
         href: "/runtime/reference/migration_guide/",
       },
       {
-        title: "LSP integration",
+        title: "LSP 集成",
         href: "/runtime/reference/lsp_integration/",
       },
       {
@@ -268,55 +268,55 @@ export const sidebar = [
     ],
   },
   {
-    title: "Contributing and support",
+    title: "贡献和支持",
     href: "/runtime/contributing/",
     items: [
       {
-        title: "Contributing to Deno",
+        title: "贡献给 Deno",
         items: [
           {
-            title: "Architecture",
+            title: "架构",
             href: "/runtime/contributing/architecture/",
           },
           {
-            title: "Building from source",
+            title: "从源码构建",
             href: "/runtime/contributing/building_from_source/",
           },
           {
-            title: "Profiling",
+            title: "性能分析",
             href: "/runtime/contributing/profiling/",
           },
           {
-            title: "Release schedule",
+            title: "发布计划",
             href: "/runtime/contributing/release_schedule/",
           },
           {
-            title: "Style guide",
+            title: "风格指南",
             href: "/runtime/contributing/style_guide/",
           },
           {
-            title: "Web platform tests",
+            title: "Web 平台测试",
             href: "/runtime/contributing/web_platform_tests/",
           },
           {
-            title: "Documentation",
+            title: "文档",
             href: "/runtime/contributing/docs/",
           },
           {
-            title: "Examples",
+            title: "示例",
             href: "/runtime/contributing/examples/",
           },
         ],
       },
       {
-        title: "Help",
+        title: "帮助",
         href: "/runtime/help/",
       },
     ],
   },
 ] satisfies Sidebar;
 
-export const sectionTitle = "Runtime";
+export const sectionTitle = "运行时";
 export const sectionHref = "/runtime/";
 
 export interface Description {
@@ -353,7 +353,7 @@ export async function generateDescriptions(): Promise<Descriptions> {
     const file = await Deno.readTextFile(dirEntry.path);
     const parsed = yamlParse(file);
     if (!parsed) {
-      throw `Invalid or empty file: ${dirEntry.path}`;
+      throw `无效或空文件: ${dirEntry.path}`;
     }
     if (parsed.description) {
       parsed.description = handleDescription(parsed.description);
@@ -396,19 +396,19 @@ export async function generateNodeCompatability() {
     { label: string; icon: string; items: Array<[string, DescriptionItem]> }
   > = {
     good: {
-      label: "Fully supported modules",
+      label: "完全支持的模块",
       icon:
         '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#22c55e"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>',
       items: [],
     },
     partial: {
-      label: "Partially supported modules",
+      label: "部分支持的模块",
       icon:
         '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#6366f1"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>',
       items: [],
     },
     unsupported: {
-      label: "Unsupported modules",
+      label: "不支持的模块",
       icon:
         '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#ef4444"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>',
       items: [],

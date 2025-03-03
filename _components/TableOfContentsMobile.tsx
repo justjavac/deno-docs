@@ -11,7 +11,7 @@ export default function TableOfContents({ data, toc }: {
   return (
     <details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group">
       <summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">
-        On this page
+        在当前页面
       </summary>
 
       <ul className="toc-list">

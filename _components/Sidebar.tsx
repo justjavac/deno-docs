@@ -22,27 +22,27 @@ export default function Sidebar(
     >
       <ul className="xl:hidden border-bg-tertiary relative bg-background-secondary m-2 mt-0 mb-4 py-2 rounded-md border border-background-tertiary">
         <SidebarTopNav
-          name="Manual"
+          name="手册"
           url="/runtime/"
           currentPath={props.url}
         />
         <SidebarTopNav
-          name="API reference"
+          name="API 参考"
           url="/api/deno/"
           currentPath={props.url}
         />
         <SidebarTopNav
-          name="Examples"
+          name="示例"
           url="/examples/"
           currentPath={props.url}
         />
         <SidebarTopNav
-          name="Deploy"
+          name="部署"
           url="/deploy/"
           currentPath={props.url}
         />
         <SidebarTopNav
-          name="Subhosting"
+          name="托管"
           url="/subhosting/"
           currentPath={props.url}
         />

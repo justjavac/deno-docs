@@ -36,10 +36,10 @@ export default function Page(data: Lume.Data, _helpers: Lume.Helpers) {
           <div class="text-[400%] font-semibold text-runtime-300 opacity-50 dark:opacity-15 relative -z-10">
             404
           </div>
-          Sorry, couldn’t find that page.
+          抱歉，找不到该页面。
         </h1>
         <p class="md:text-lg mt-4">
-          Maybe one of these links has what you're looking for?
+          或许以下链接中有您正在寻找的内容？
         </p>
       </div>
 

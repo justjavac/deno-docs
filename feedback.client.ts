@@ -30,8 +30,7 @@ feedbackForm?.addEventListener("submit", (event) => {
     contact: form["feedback-contact"] as string,
   });
   if (feedbackSection) {
-    feedbackSection.innerHTML =
-      "<p>Thank you for helping make the Deno docs awesome!</p>";
+    feedbackSection.innerHTML = "<p>感谢您帮助让 Deno 文档变得更好！</p>";
   }
 });
 

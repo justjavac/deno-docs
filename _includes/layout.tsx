@@ -1,7 +1,7 @@
 export default function Layout(data: Lume.Data) {
   const section = data.url.split("/").filter(Boolean)[0];
   const description = data.description ||
-    "In-depth documentation, guides, and reference materials for building secure, high-performance JavaScript and TypeScript applications with Deno";
+    "深入文档、指南和参考资料，用于使用 Deno 构建安全、高性能的 JavaScript 和 TypeScript 应用程序";
 
   return (
     <html lang="en">
@@ -39,12 +39,12 @@ export default function Layout(data: Lume.Data) {
         <meta name="twitter:image" content="/img/og.webp" />
         <meta
           name="twitter:image:alt"
-          content="Deno docs: Deno documentation, guides, and reference materials. docs.deno.com"
+          content="Deno 文档：Deno 的文档、指南和参考资料。docs.deno.com"
         />
         <meta property="og:image" content="/img/og.webp" />
         <meta
           property="og:image:alt"
-          content="Deno docs: Deno documentation, guides, and reference materials. docs.deno.com"
+          content="Deno 文档：Deno 的文档、指南和参考资料。docs.deno.com"
         />
 
         <meta property="og:type" content="article" />
@@ -53,7 +53,7 @@ export default function Layout(data: Lume.Data) {
 
         <meta
           name="keywords"
-          content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"
+          content="Deno, JavaScript, TypeScript, 指南, 文档, 教程, 手册, 示例, 参考"
         />
 
         <script

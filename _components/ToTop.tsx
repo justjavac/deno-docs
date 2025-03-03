@@ -2,7 +2,7 @@ export default function ToTop() {
   return (
     <a href="#" className="totop">
       <span className="sr-only">
-        Back to top
+        返回顶部
       </span>
     </a>
   );

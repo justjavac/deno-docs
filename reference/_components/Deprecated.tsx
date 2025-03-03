@@ -6,7 +6,7 @@ export default function ({ markdownContent }) {
   return (
     <div class="deprecated">
       <div>
-        <span>Deprecated</span>
+        <span>已弃用</span>
       </div>
 
       {/*markdown rendering*/}

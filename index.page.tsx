@@ -12,23 +12,22 @@ export default function () {
         <div class="grid grid-cols-1 md:grid-cols-3 mb-6 gap-4">
           <div class="md:col-span-2">
             <h1 class="text-4xl md:text-5xl mb-2 md:mb-6 font-bold">
-              Deno Docs
+              Deno 文档
             </h1>
             <p class="text-md max-w-[600px] md:text-lg">
-              Deno, the open-source runtime for TypeScript and JavaScript.
-              Features built-in dev tools, powerful platform APIs, and native
-              support for TypeScript and JSX.
+              Deno，一个用于TypeScript和JavaScript的开源运行时。
+              内置开发工具、强大的平台API，并原生支持TypeScript和JSX。
             </p>
             {/* CTA Group */}
 
             <div class="flex flex-row flex-wrap gap-4 mt-8">
               <DocsCTA
-                text="Get Started"
+                text="开始使用"
                 href="/runtime/"
                 product="runtime"
               />
               <DocsCTA
-                text="Try Deno Deploy"
+                text="尝试 Deno Deploy"
                 href="/deploy/manual"
                 product="deploy"
               />
@@ -48,14 +47,14 @@ export default function () {
           {/* Temporary banner  */}
           <div class="flex flex-col gap-4 p-4 bg-runtime-background dark:bg-background-secondary border-l-4 text-runtime-foreground border-runtime-500">
             <p class="text-lg">
-              <strong>Deno 2</strong> is out now! Learn about{"  "}
+              <strong>Deno 2</strong> 现已发布！了解更多{"  "}
               <a
                 href="/runtime/reference/migration_guide"
                 class="runtime-link underline underline-offset-4"
               >
-                what's changed
+                发生了什么变化
               </a>{" "}
-              in the release.
+              在此次发布中。
             </p>
           </div>
           {/* Runtime content */}
@@ -63,36 +62,36 @@ export default function () {
             {/* Section Header */}
             <div>
               <h2 class="text-3xl md:text-4xl font-semibold underline underline-offset-8 decoration-runtime-500 mb-6">
-                Deno Runtime
+                Deno 运行时
               </h2>
               <p class="max-w-[75ch]">
-                Deno (/ˈdiːnoʊ/, pronounced dee-no) is an open source
-                JavaScript, TypeScript, and WebAssembly runtime with secure
-                defaults and a great developer experience. It's built on V8,
-                Rust, and Tokio.
+                Deno（发音为 /ˈdiːnoʊ/，读作 dee-no）是一个开源的
+                JavaScript、TypeScript 和 WebAssembly
+                运行时，具有安全默认值和卓越的开发者体验。它基于 V8、 Rust 和
+                Tokio 构建。
               </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-24">
               <ContentItem
-                title="Deno basics"
-                description="New to Deno? This is the place to start."
-                linktext="Get started"
+                title="Deno 基础"
+                description="刚接触 Deno？从这里开始。"
+                linktext="开始使用"
                 link="/runtime/"
                 product="runtime"
               />
 
               <ContentItem
-                title="Configuration"
-                description="Customizations for Deno’s built-in TypeScript compiler, formatter, and linter."
-                linktext="Deno config"
+                title="配置"
+                description="自定义 Deno 内置的 TypeScript 编译器、格式化器和 linter。"
+                linktext="Deno 配置"
                 link="/runtime/fundamentals/configuration"
                 product="runtime"
               />
 
               <ContentItem
-                title="Testing in Deno"
-                description="All about Deno’s built-in test runner for JavaScript or TypeScript code."
-                linktext="More about Testing"
+                title="Deno 中的测试"
+                description="关于 Deno 内置的 JavaScript 或 TypeScript 代码测试运行器的全部内容。"
+                linktext="了解更多关于测试"
                 link="/runtime/fundamentals/testing"
                 product="runtime"
               />
@@ -101,28 +100,27 @@ export default function () {
             <div class="flex flex-col">
               <div class="mb-8">
                 <h3 class="text-xl md:text-2xl font-semibold underline underline-offset-8 decoration-runtime-500 mb-4">
-                  Examples
+                  示例
                 </h3>
                 <p class="max-w-[75ch]">
-                  A collection of annotated Deno examples, to be used as a
-                  reference for how to build with Deno, or as a guide to learn
-                  about many of Deno's features. Find more examples in the{" "}
+                  一系列带注释的 Deno 示例，可用作使用 Deno
+                  构建的参考，或作为学习 Deno 许多功能的指南。在{" "}
                   <a
                     href="/examples/"
                     class="runtime-link underline underline-offset-4"
                   >
-                    Examples
+                    示例
                   </a>{" "}
-                  section.
+                  部分中查看更多示例。
                 </p>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-16">
                 <LinkList
-                  title="Basics"
+                  title="基础"
                   product="runtime"
                   links={[
                     {
-                      text: "Importing modules from npm",
+                      text: "从 npm 导入模块",
                       href: "/examples/npm",
                     },
                     {
@@ -130,61 +128,61 @@ export default function () {
                       href: "/examples/hello_world",
                     },
                     {
-                      text: "Using Node.js built-in modules",
+                      text: "使用 Node.js 内置模块",
                       href: "/examples/node_built_in",
                     },
                     {
-                      text: "Manipulating & Parsing URLs",
+                      text: "操作和解析 URL",
                       href: "/examples/url_parsing",
                     },
                   ]}
                 />
                 <LinkList
-                  title="Network"
+                  title="网络"
                   product="runtime"
                   links={[
                     {
-                      text: "HTTP Server: Hello World",
+                      text: "HTTP 服务器：Hello World",
                       href: "/examples/http_server",
                     },
                     {
-                      text: "HTTP Server: WebSockets",
+                      text: "HTTP 服务器：WebSockets",
                       href: "/examples/http_server_websocket",
                     },
                     {
-                      text: "HTTP Server: Streaming",
+                      text: "HTTP 服务器：流式传输",
                       href: "/examples/http_server_streaming",
                     },
                     {
-                      text: "TCP Connector: Ping",
+                      text: "TCP 连接器：Ping",
                       href: "/examples/tcp_connector",
                     },
                   ]}
                 />
                 <LinkList
-                  title="System and CLI"
+                  title="系统和 CLI"
                   product="runtime"
                   links={[
                     {
-                      text: "Command Line Arguments",
+                      text: "命令行参数",
                       href: "/examples/command_line_arguments",
                     },
                     {
-                      text: "Environment Variables",
+                      text: "环境变量",
                       href: "/examples/environment_variables",
                     },
                     {
-                      text: "Reading Files",
+                      text: "读取文件",
                       href: "/examples/reading_files",
                     },
                     {
-                      text: "Walking directories",
+                      text: "遍历目录",
                       href: "/examples/walking_directories",
                     },
                   ]}
                 />
                 <LinkList
-                  title="Deno Cloud Primitives"
+                  title="Deno 云原语"
                   product="runtime"
                   links={[
                     {
@@ -192,7 +190,7 @@ export default function () {
                       href: "/examples/kv",
                     },
                     {
-                      text: "Queues",
+                      text: "队列",
                       href: "/examples/queues",
                     },
                     {
@@ -212,28 +210,27 @@ export default function () {
             <div class="flex flex-col">
               <div class="mb-8">
                 <h3 class="text-xl md:text-2xl font-semibold underline underline-offset-8 decoration-runtime-500 mb-4">
-                  API reference
+                  API 参考
                 </h3>
                 <p class="max-w-[75ch]">
-                  Deno, Web, and Node API reference documentation, built for the
-                  Deno experience. Explore the APIs available in Deno in the
-                  {" "}
+                  Deno、Web 和 Node API 参考文档，专为 Deno 体验打造。探索 Deno
+                  中可用的 API，请访问{" "}
                   <a
                     href="/api/deno"
                     class="runtime-link underline underline-offset-4"
                   >
-                    API reference
+                    API 参考
                   </a>{" "}
-                  section.
+                  部分。
                 </p>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-16">
                 <LinkList
-                  title="Deno APIs"
+                  title="Deno API"
                   product="runtime"
                   links={[
                     {
-                      text: "Cloud",
+                      text: "云",
                       href: "/api/deno/cloud",
                     },
                     {
@@ -241,11 +238,11 @@ export default function () {
                       href: "/api/deno/ffi",
                     },
                     {
-                      text: "Network",
+                      text: "网络",
                       href: "/api/deno/network",
                     },
                     {
-                      text: "Permissions",
+                      text: "权限",
                       href: "/api/deno/permissions",
                     },
                     {
@@ -253,17 +250,17 @@ export default function () {
                       href: "/api/deno/web-sockets",
                     },
                     {
-                      text: "View all Deno APIs",
+                      text: "查看所有 Deno API",
                       href: "/api/deno",
                     },
                   ]}
                 />
                 <LinkList
-                  title="Web APIs"
+                  title="Web API"
                   product="runtime"
                   links={[
                     {
-                      text: "Cache",
+                      text: "缓存",
                       href: "/api/web/cache",
                     },
                     {
@@ -275,7 +272,7 @@ export default function () {
                       href: "/api/web/fetch",
                     },
                     {
-                      text: "Streams",
+                      text: "流",
                       href: "/api/web/streams",
                     },
                     {
@@ -283,13 +280,13 @@ export default function () {
                       href: "/api/web/url",
                     },
                     {
-                      text: "View all Web APIs",
+                      text: "查看所有 Web API",
                       href: "/api/web",
                     },
                   ]}
                 />
                 <LinkList
-                  title="Node APIs"
+                  title="Node API"
                   product="runtime"
                   links={[
                     {
@@ -313,7 +310,7 @@ export default function () {
                       href: "/api/node/process",
                     },
                     {
-                      text: "View all Node APIs",
+                      text: "查看所有 Node API",
                       href: "/api/node",
                     },
                   ]}
@@ -323,54 +320,54 @@ export default function () {
           </div>
           <div class="flex flex-col gap-4 p-4 bg-deploy-50 dark:bg-background-secondary border-l-4 text-deploy-foreground border-deploy-500">
             <p class="text-lg">
-              Run Deno Deploy on your own infrastructure with our self-hosted
-              solution running on AWS, GCP, or Azure.{"  "}
+              使用我们在 AWS、GCP 或 Azure
+              上运行的自托管解决方案，在您自己的基础设施上运行 Deno Deploy。
+              {"  "}
               <a
                 href="https://unf275cfh14.typeform.com/to/dIicJYSQ"
                 class="deploy-link underline underline-offset-4 external"
               >
-                Learn more{" "}
+                了解更多{" "}
                 <span aria-hidden="true" class="whitespace-pre">
                   -&gt;
                 </span>
               </a>
             </p>
           </div>
-          {/* Deploy content */}
+          {/* Deploy 内容 */}
           <div class="flex flex-col gap-8">
-            {/* Scection Header */}
+            {/* 部分标题 */}
             <div>
               <h2 class="text-3xl md:text-4xl font-semibold underline underline-offset-8 decoration-deploy-500 mb-8">
                 Deno Deploy
               </h2>
               <p class="max-w-[75ch]">
-                Serverless platform for deploying JavaScript code to a fast,
-                global edge network. Supports Deno APIs and Node.js / npm
-                modules
+                用于将 JavaScript 代码部署到快速全球边缘网络的无服务器平台。支持
+                Deno API 和 Node.js / npm 模块。
               </p>
             </div>
             {/* Deploy features */}
             <div class="grid grid-cols-1 mb-4 md:grid-cols-3 gap-8 md:gap-24">
               <ContentItem
                 title="KV"
-                description="Key/value database built in to the Deno runtime. Simple API, works with zero configuration on Deno Deploy."
-                linktext="KV docs"
+                description="内置于 Deno 运行时的键值数据库。简单 API，无需配置即可在 Deno Deploy 上运行。"
+                linktext="KV 文档"
                 link="/deploy/kv/manual/"
                 product="deploy"
               />
 
               <ContentItem
                 title="Cron"
-                description="Execute code on a configurable schedule at the edge in any time zone."
-                linktext="Cron docs"
+                description="可在任何时区的边缘按可配置的计划执行代码。"
+                linktext="Cron 文档"
                 link="/deploy/kv/manual/cron"
                 product="deploy"
               />
 
               <ContentItem
-                title="Queues"
-                description="Deno’s queueing API for offloading larger workloads or scheduling tasks with guaranteed delivery."
-                linktext="Queues docs"
+                title="队列"
+                description="Deno 的队列 API，用于卸载较大的工作负载或安排具有保证交付的任务。"
+                linktext="队列文档"
                 link="/deploy/kv/manual/queue_overview/"
                 product="deploy"
               />
@@ -380,34 +377,33 @@ export default function () {
             <div class="flex flex-col">
               <div class="mb-8">
                 <h3 class="text-xl md:text-2xl font-semibold underline underline-offset-8 decoration-deploy-500 mb-4">
-                  Subhosting
+                  子托管
                 </h3>
                 <p class="max-w-[66ch]">
-                  Deno Subhosting is a robust platform designed to allow
-                  Software as a Service (SaaS) providers to securely run code
-                  written by their customers.
+                  Deno
+                  子托管是一个强大的平台，旨在允许软件即服务（SaaS）提供商安全地运行其客户编写的代码。
                 </p>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-24">
                 <ContentItem
-                  title="Quick Start"
-                  description="Configure your subhosting account and you'll be hosting customer code in minutes."
-                  linktext="Quick start"
+                  title="快速开始"
+                  description="配置您的子托管账户，几分钟内即可托管客户代码。"
+                  linktext="快速开始"
                   link="/subhosting/manual/quick_start/"
                   product="deploy"
                 />
 
                 <ContentItem
-                  title="Subhosting architecture"
-                  description="Manage key resources in your systems - handle data, manage deployments and their analytics. All while ensuring stability and efficiency."
-                  linktext="Learn about subhosting"
+                  title="子托管架构"
+                  description="管理系统中的关键资源——处理数据、管理部署及其分析。同时确保稳定性和效率。"
+                  linktext="了解子托管"
                   link="/subhosting/api/"
                   product="deploy"
                 />
 
                 <ContentItem
                   title="REST API"
-                  description="Quickly provision new projects and make deployments through our REST API."
+                  description="通过我们的 REST API 快速配置新项目并进行部署。"
                   linktext="REST API"
                   link="/subhosting/manual/#rest-api-reference-and-openapi-spec"
                   product="deploy"
@@ -421,24 +417,24 @@ export default function () {
           <div class="flex flex-col gap-8">
             <div>
               <h2 class="text-3xl md:text-4xl font-semibold underline underline-offset-8 decoration-purple-600 dark:decoration-purple-300 mb-8">
-                Help
+                帮助
               </h2>
               <p class="max-w-[75ch]">
-                Get help from the Deno team or connect with our community.
+                从 Deno 团队获得帮助或与我们的社区联系。
               </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-24">
               <ContentItem
-                title="Connect with our community"
-                description="Get help from the Deno community"
-                linktext="Learn more"
+                title="与我们的社区联系"
+                description="从 Deno 社区获得帮助"
+                linktext="了解更多"
                 link="/runtime/help"
                 product="help"
               />
               <ContentItem
-                title="Enterprise support"
-                description="Explore Deno's enterprise support options"
-                linktext="Learn more"
+                title="企业支持"
+                description="探索 Deno 的企业支持选项"
+                linktext="了解更多"
                 link="https://deno.com/enterprise"
                 product="help"
               />

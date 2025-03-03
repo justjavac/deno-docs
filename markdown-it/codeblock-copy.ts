@@ -18,7 +18,7 @@ export default function codeblockCopyPlugin(md: any) {
     );
 
     const buttonHtml = `
-      <button id="${uniqueId}" class="copyButton" data-copy="${content}" title="Copy">
+      <button id="${uniqueId}" class="copyButton" data-copy="${content}" title="复制">
         <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="2" y="2" width="7" height="7" fill="none"/>
           <rect x="6" y="6" width="7" height="7" fill="none"/>
