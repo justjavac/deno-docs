@@ -2,22 +2,19 @@
 tags: []
 ---
 
-Enforces the use of camelCase in variable names.
+强制在变量名中使用 camelCase。
 
-Consistency in a code base is key for readability and maintainability. This rule
-enforces variable declarations and object property names which you create to be
-in camelCase.
+代码库中的一致性对于可读性和可维护性至关重要。此规则强制要求您创建的变量声明和对象属性名称为
+camelCase。
 
-Of note:
+注意事项：
 
-- `_` is allowed at the start or end of a variable
-- All uppercase variable names (e.g. constants) may have `_` in their name
-- If you have to use a snake_case key in an object for some reasons, wrap it in
-  quotation mark
-- This rule also applies to variables imported or exported via ES modules, but
-  not to object properties of those variables
+- `_` 允许出现在变量的开头或结尾
+- 全大写的变量名（例如常量）可以在名称中包含 `_`
+- 如果由于某些原因必须在对象中使用 snake_case 键，请将其用引号括起来
+- 此规则也适用于通过 ES 模块导入或导出的变量，但不适用于这些变量的对象属性
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 let first_name = "Ichigo";
@@ -45,19 +42,19 @@ interface snake_case_interface {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 let firstName = "Ichigo";
 const FIRST_NAME = "Ichigo";
 const __myPrivateVariable = "Hoshimiya";
 const myPrivateVariable_ = "Hoshimiya";
-const obj1 = { "last_name": "Hoshimiya" }; // if an object key is wrapped in quotation mark, then it's valid
+const obj1 = { "last_name": "Hoshimiya" }; // 如果对象键用引号括起来，则有效
 const obj2 = { "first_name": first_name };
 const { last_name: lastName } = obj;
 
-function doSomething() {} // function declarations must be camelCase but...
-do_something(); // ...snake_case function calls are allowed
+function doSomething() {} // 函数声明必须是 camelCase，但...
+do_something(); // ...允许使用 snake_case 函数调用
 function foo({ snake_case: camelCase = "default value" }) {}
 
 class PascalCaseClass {}

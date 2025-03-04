@@ -1,283 +1,255 @@
 ---
-title: "Using deployctl on the command line"
+title: "在命令行中使用 deployctl"
 ---
 
-`deployctl` is a command line tool (CLI) that lets you operate the Deno Deploy
-platform without leaving your terminal. With it you can deploy your code, create
-and manage your projects and their deployments, and monitor their usage and
-logs.
+`deployctl` 是一个命令行工具（CLI），它允许你在不离开终端的情况下操作 Deno
+Deploy
+平台。通过它，你可以部署代码、创建和管理项目及其部署，并监控它们的使用情况和日志。
 
-## Dependencies
+## 依赖项
 
-The only dependency for `deployctl` is the Deno runtime. You can install it by
-running the following command:
+`deployctl` 的唯一依赖项是 Deno 运行时。你可以通过运行以下命令来安装它：
 
 ```sh
 curl -fsSL https://deno.land/install.sh | sh
 ```
 
-You don't need to setup a Deno Deploy account beforehand. It will be created
-along the way when you deploy your first project.
+你不需要事先设置 Deno Deploy 账户。它会在你部署第一个项目时自动创建。
 
-## Install `deployctl`
+## 安装 `deployctl`
 
-With the Deno runtime installed, you can install the `deployctl` utility with
-the following command:
+安装好 Deno 运行时后，你可以通过以下命令安装 `deployctl` 工具：
 
 ```sh
 deno install -gArf jsr:@deno/deployctl
 ```
 
-The `-A` option in the deno install command grants all permissions to the
-installed script. You can opt not to use it, in which case you will be prompted
-to grant the necessary permissions when needed during the execution of the tool.
+`deno install` 命令中的 `-A`
+选项为安装的脚本授予所有权限。你可以选择不使用它，在这种情况下，工具执行时会提示你授予必要的权限。
 
-## Deploy
+## 部署
 
-To perform a new deployment of your code, navigate to the root directory of your
-project and execute:
+要执行代码的新部署，请导航到项目的根目录并执行：
 
 ```shell
 deployctl deploy
 ```
 
-### Project and Entrypoint
+### 项目和入口点
 
-If this is the first deployment of the project, `deployctl` will guess the
-project name based on the Git repo or directory it is in. Similarly, it will
-guess the entrypoint by looking for files with common entrypoint names (main.ts,
-src/main.ts, etc). After the first deployment, the settings used will be stored
-in a config file (by default deno.json).
+如果这是项目的第一次部署，`deployctl` 会根据 Git
+仓库或所在目录猜测项目名称。同样，它会通过查找具有常见入口点名称的文件（如
+main.ts、src/main.ts
+等）来猜测入口点。第一次部署后，使用的设置将存储在配置文件中（默认为
+deno.json）。
 
-You can specify the project name and/or the entrypoint using the `--project` and
-`--entrypoint` arguments respectively. If the project does not exist, it will be
-created automatically. By default it is created in the personal organization of
-the user, but it can also be created in a custom organization by specifying the
-`--org` argument. If the organization does not exist yet, it will also be
-created automatically.
+你可以分别使用 `--project` 和 `--entrypoint`
+参数指定项目名称和/或入口点。如果项目不存在，它将自动创建。默认情况下，它会在用户的个人组织中创建，但也可以通过指定
+`--org` 参数在自定义组织中创建。如果组织尚不存在，它也会自动创建。
 
 ```shell
 deployctl deploy --project=helloworld --entrypoint=src/entrypoint.ts --org=my-team
 ```
 
-### Include and Exclude Files
+### 包含和排除文件
 
-By default, deployctl deploys all the files in the current directory
-(recursively, except `node_modules` directories). You can customize this
-behavior using the `--include` and `--exclude` arguments (also supported in the
-config file). These arguments accept specific files, whole directories and
-globs. Here are some examples:
+默认情况下，`deployctl` 会部署当前目录中的所有文件（递归地，除了 `node_modules`
+目录）。你可以使用 `--include` 和 `--exclude`
+参数自定义此行为（在配置文件中也支持）。这些参数接受特定文件、整个目录和通配符。以下是一些示例：
 
-- Include only source and static files:
+- 仅包含源代码和静态文件：
 
   ```shell
   deployctl deploy --include=./src --include=./static
   ```
 
-- Include only Typescript files:
+- 仅包含 TypeScript 文件：
 
   ```shell
   deployctl deploy --include=**/*.ts
   ```
 
-- Exclude local tooling and artifacts
+- 排除本地工具和构建产物：
 
   ```shell
   deployctl deploy --exclude=./tools --exclude=./benches
   ```
 
-A common pitfall is to not include the source code modules that need to be run
-(entrypoint and dependencies). The following example will fail because `main.ts`
-is not included:
+一个常见的陷阱是没有包含需要运行的源代码模块（入口点和依赖项）。以下示例将失败，因为
+`main.ts` 未被包含：
 
 ```shell
 deployctl deploy --include=./static --entrypoint=./main.ts
 ```
 
-The entrypoint can also be a remote script. A common use case for this is to
-deploy an static site using `std/http/file_server.ts` (more details in
-[Static Site Tutorial](https://docs.deno.com/deploy/tutorials/static-site)):
+入口点也可以是远程脚本。一个常见的用例是使用 `std/http/file_server.ts`
+部署静态站点（更多细节请参见[静态站点教程](https://docs.denohub.com/deploy/tutorials/static-site)）：
 
 ```shell
 deployctl deploy --include=dist --entrypoint=jsr:@std/http/file-server
 ```
 
-### Environment variables
+### 环境变量
 
-You can set env variables using `--env` (to set individual environment
-variables) or `--env-file` (to load one or more environment files). These
-options can be combined and used multiple times:
+你可以使用 `--env` 设置环境变量（设置单个环境变量）或
+`--env-file`（加载一个或多个环境文件）。这些选项可以组合并多次使用：
 
 ```shell
 deployctl deploy --env-file --env-file=.other-env --env=DEPLOYMENT_TS=$(date +%s)
 ```
 
-The deployment will have access to these variables using `Deno.env.get()`. Be
-aware that the env variables set with `--env` and `--env-file` are specific for
-the deployment being created and are not added to the list of
-[env variables configured for the project](./environment-variables.md).
+部署将能够通过 `Deno.env.get()` 访问这些变量。请注意，使用 `--env` 和
+`--env-file`
+设置的环境变量仅适用于正在创建的部署，不会添加到项目的[环境变量配置](./environment-variables.md)中。
 
-### Production Deployments
+### 生产部署
 
-Each deployment you create have a unique URL. In addition, a project has a
-"production URL" and custom domains routing trafffic to its "production"
-deployment. Deployments can be promoted to production at any time, or created
-directly as production using the `--prod` flag:
+你创建的每个部署都有一个唯一的 URL。此外，项目有一个“生产
+URL”和自定义域名，将流量路由到其“生产”部署。部署可以随时提升为生产环境，或直接使用
+`--prod` 标志创建为生产环境：
 
 ```shell
 deployctl deploy --prod
 ```
 
-Learn more about production deployments in the [Deployments](./deployments)
-docs.
+有关生产部署的更多信息，请参阅[部署](./deployments)文档。
 
-## Deployments
+## 部署
 
-The deployments subcommand groups all the operations around deployments.
+`deployments` 子命令分组了所有与部署相关的操作。
 
-### List
+### 列出
 
-You can list the deployments of a project with:
+你可以列出项目的部署：
 
 ```shell
 deployctl deployments list
 ```
 
-Output:
+输出：
 
 ```
-✔ Page 1 of the list of deployments of the project 'my-project' is ready
+✔ 项目 'my-project' 的部署列表第 1 页已准备好
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│  Deployment  │               Date               │   Status   │  Database  │                       Domain                       │ Entrypoint │  Branch  │  Commit  │
+│  部署  │               日期               │   状态   │  数据库  │                       域名                       │ 入口点 │  分支  │  提交  │
 ├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ kcbxc4xwe4mc │ 12/3/2024 13:21:40 CET (2 days)  │ Preview    │ Preview    │ https://my-project-kcbxc4xwe4mc.deno.dev │ main.ts    │ main     │ 4b6c506  │
-│ c0ph5xa9exb3 │ 12/3/2024 13:21:25 CET (2 days)  │ Production │ Production │ https://my-project-c0ph5xa9exb3.deno.dev │ main.ts    │ main     │ 4b6c506  │
-│ kwkbev9er4h2 │ 12/3/2024 13:21:12 CET (2 days)  │ Preview    │ Preview    │ https://my-project-kwkbev9er4h2.deno.dev │ main.ts    │ main     │ 4b6c506  │
-│ dxseq0jc8402 │ 6/3/2024 23:16:51 CET (8 days)   │ Preview    │ Production │ https://my-project-dxseq0jc8402.deno.dev │ main.ts    │ main     │ 099359b  │
-│ 7xr5thz8yjbz │ 6/3/2024 22:58:32 CET (8 days)   │ Preview    │ Preview    │ https://my-project-7xr5thz8yjbz.deno.dev │ main.ts    │ another  │ a4d2953  │
-│ 4qr4h5ac3rfn │ 6/3/2024 22:57:05 CET (8 days)   │ Failed     │ Preview    │ n/a                                                │ main.ts    │ another  │ 56d2c88  │
-│ 25wryhcqmb9q │ 6/3/2024 22:56:41 CET (8 days)   │ Preview    │ Preview    │ https://my-project-25wryhcqmb9q.deno.dev │ main.ts    │ another  │ 4b6c506  │
-│ 64tbrn8jre9n │ 6/3/2024 8:21:33 CET (8 days)    │ Preview    │ Production │ https://my-project-64tbrn8jre9n.deno.dev │ main.ts    │ main     │ 4b6c506  │
-│ hgqgccnmzg04 │ 6/3/2024 8:17:40 CET (8 days)    │ Failed     │ Production │ n/a                                                │ main.ts    │ main     │ 8071902  │
-│ rxkh1w3g74e8 │ 6/3/2024 8:17:28 CET (8 days)    │ Failed     │ Production │ n/a                                                │ main.ts    │ main     │ b142a59  │
-│ wx6cw9aya64c │ 6/3/2024 8:02:29 CET (8 days)    │ Preview    │ Production │ https://my-project-wx6cw9aya64c.deno.dev │ main.ts    │ main     │ b803784  │
-│ a1qh5fmew2yf │ 5/3/2024 16:25:29 CET (9 days)   │ Preview    │ Production │ https://my-project-a1qh5fmew2yf.deno.dev │ main.ts    │ main     │ 4bb1f0f  │
-│ w6pf4r0rrdkb │ 5/3/2024 16:07:35 CET (9 days)   │ Preview    │ Production │ https://my-project-w6pf4r0rrdkb.deno.dev │ main.ts    │ main     │ 6e487fc  │
-│ nn700gexgdzq │ 5/3/2024 13:37:11 CET (9 days)   │ Preview    │ Production │ https://my-project-nn700gexgdzq.deno.dev │ main.ts    │ main     │ c5b1d1f  │
-│ 98crfqxa6vvf │ 5/3/2024 13:33:52 CET (9 days)   │ Preview    │ Production │ https://my-project-98crfqxa6vvf.deno.dev │ main.ts    │ main     │ 090146e  │
-│ xcdcs014yc5p │ 5/3/2024 13:30:58 CET (9 days)   │ Preview    │ Production │ https://my-project-xcdcs014yc5p.deno.dev │ main.ts    │ main     │ 5b78c0f  │
-│ btw43kx89ws1 │ 5/3/2024 13:27:31 CET (9 days)   │ Preview    │ Production │ https://my-project-btw43kx89ws1.deno.dev │ main.ts    │ main     │ 663452a  │
-│ 62tg1ketkjx7 │ 5/3/2024 13:27:03 CET (9 days)   │ Preview    │ Production │ https://my-project-62tg1ketkjx7.deno.dev │ main.ts    │ main     │ 24d1618  │
-│ 07ag6pt6kjex │ 5/3/2024 13:19:11 CET (9 days)   │ Preview    │ Production │ https://my-project-07ag6pt6kjex.deno.dev │ main.ts    │ main     │ 4944545  │
-│ 4msyne1rvwj1 │ 5/3/2024 13:17:16 CET (9 days)   │ Preview    │ Production │ https://my-project-4msyne1rvwj1.deno.dev │ main.ts    │ main     │ dda85e1  │
+│ kcbxc4xwe4mc │ 12/3/2024 13:21:40 CET (2 天前)  │ 预览    │ 预览    │ https://my-project-kcbxc4xwe4mc.deno.dev │ main.ts    │ main     │ 4b6c506  │
+│ c0ph5xa9exb3 │ 12/3/2024 13:21:25 CET (2 天前)  │ 生产    │ 生产    │ https://my-project-c0ph5xa9exb3.deno.dev │ main.ts    │ main     │ 4b6c506  │
+│ kwkbev9er4h2 │ 12/3/2024 13:21:12 CET (2 天前)  │ 预览    │ 预览    │ https://my-project-kwkbev9er4h2.deno.dev │ main.ts    │ main     │ 4b6c506  │
+│ dxseq0jc8402 │ 6/3/2024 23:16:51 CET (8 天前)   │ 预览    │ 生产    │ https://my-project-dxseq0jc8402.deno.dev │ main.ts    │ main     │ 099359b  │
+│ 7xr5thz8yjbz │ 6/3/2024 22:58:32 CET (8 天前)   │ 预览    │ 预览    │ https://my-project-7xr5thz8yjbz.deno.dev │ main.ts    │ another  │ a4d2953  │
+│ 4qr4h5ac3rfn │ 6/3/2024 22:57:05 CET (8 天前)   │ 失败    │ 预览    │ n/a                                                │ main.ts    │ another  │ 56d2c88  │
+│ 25wryhcqmb9q │ 6/3/2024 22:56:41 CET (8 天前)   │ 预览    │ 预览    │ https://my-project-25wryhcqmb9q.deno.dev │ main.ts    │ another  │ 4b6c506  │
+│ 64tbrn8jre9n │ 6/3/2024 8:21:33 CET (8 天前)    │ 预览    │ 生产    │ https://my-project-64tbrn8jre9n.deno.dev │ main.ts    │ main     │ 4b6c506  │
+│ hgqgccnmzg04 │ 6/3/2024 8:17:40 CET (8 天前)    │ 失败    │ 生产    │ n/a                                                │ main.ts    │ main     │ 8071902  │
+│ rxkh1w3g74e8 │ 6/3/2024 8:17:28 CET (8 天前)    │ 失败    │ 生产    │ n/a                                                │ main.ts    │ main     │ b142a59  │
+│ wx6cw9aya64c │ 6/3/2024 8:02:29 CET (8 天前)    │ 预览    │ 生产    │ https://my-project-wx6cw9aya64c.deno.dev │ main.ts    │ main     │ b803784  │
+│ a1qh5fmew2yf │ 5/3/2024 16:25:29 CET (9 天前)   │ 预览    │ 生产    │ https://my-project-a1qh5fmew2yf.deno.dev │ main.ts    │ main     │ 4bb1f0f  │
+│ w6pf4r0rrdkb │ 5/3/2024 16:07:35 CET (9 天前)   │ 预览    │ 生产    │ https://my-project-w6pf4r0rrdkb.deno.dev │ main.ts    │ main     │ 6e487fc  │
+│ nn700gexgdzq │ 5/3/2024 13:37:11 CET (9 天前)   │ 预览    │ 生产    │ https://my-project-nn700gexgdzq.deno.dev │ main.ts    │ main     │ c5b1d1f  │
+│ 98crfqxa6vvf │ 5/3/2024 13:33:52 CET (9 天前)   │ 预览    │ 生产    │ https://my-project-98crfqxa6vvf.deno.dev │ main.ts    │ main     │ 090146e  │
+│ xcdcs014yc5p │ 5/3/2024 13:30:58 CET (9 天前)   │ 预览    │ 生产    │ https://my-project-xcdcs014yc5p.deno.dev │ main.ts    │ main     │ 5b78c0f  │
+│ btw43kx89ws1 │ 5/3/2024 13:27:31 CET (9 天前)   │ 预览    │ 生产    │ https://my-project-btw43kx89ws1.deno.dev │ main.ts    │ main     │ 663452a  │
+│ 62tg1ketkjx7 │ 5/3/2024 13:27:03 CET (9 天前)   │ 预览    │ 生产    │ https://my-project-62tg1ketkjx7.deno.dev │ main.ts    │ main     │ 24d1618  │
+│ 07ag6pt6kjex │ 5/3/2024 13:19:11 CET (9 天前)   │ 预览    │ 生产    │ https://my-project-07ag6pt6kjex.deno.dev │ main.ts    │ main     │ 4944545  │
+│ 4msyne1rvwj1 │ 5/3/2024 13:17:16 CET (9 天前)   │ 预览    │ 生产    │ https://my-project-4msyne1rvwj1.deno.dev │ main.ts    │ main     │ dda85e1  │
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-Press enter to fetch the next page [Enter]
+按回车键获取下一页 [Enter]
 ```
 
-This command outputs pages of 20 deployments by default. You can iterate over
-the pages with the enter key, and use the `--page` and `--limit` options to
-query a specific page and page size.
+此命令默认输出 20 个部署的页面。你可以使用回车键翻页，并使用 `--page` 和
+`--limit` 选项查询特定页面和页面大小。
 
-Like with the rest of commands, you can use the `--project` option to specify
-the project of which to list deployments, if you are not in a project directory
-or want to list deployments from a different project.
+与其他命令一样，你可以使用 `--project`
+选项指定要列出部署的项目，如果你不在项目目录中或想列出其他项目的部署。
 
-### Show
+### 显示
 
-Get all the details of a particular deployment using:
+使用以下命令获取特定部署的所有详细信息：
 
 ```shell
 deployctl deployments show
 ```
 
-Output:
+输出：
 
 ```
-✔ The production deployment of the project 'my-project' is 'c0ph5xa9exb3'
-✔ The details of the deployment 'c0ph5xa9exb3' are ready:
+✔ 项目 'my-project' 的生产部署是 'c0ph5xa9exb3'
+✔ 部署 'c0ph5xa9exb3' 的详细信息已准备好：
 
 c0ph5xa9exb3
 ------------
-Status:       Production
-Date:         2 days, 12 hours, 29 minutes, 46 seconds ago (12/3/2024 13:21:25 CET)
-Project:      my-project (e54f23b5-828d-4b7f-af12-706d4591062b)
-Organization:	my-team (d97822ac-ee20-4ce9-b942-5389330b57ee)
-Domain(s):    https://my-project.deno.dev
+状态:       生产
+日期:        2 天 12 小时 29 分钟 46 秒前 (12/3/2024 13:21:25 CET)
+项目:       my-project (e54f23b5-828d-4b7f-af12-706d4591062b)
+组织:       my-team (d97822ac-ee20-4ce9-b942-5389330b57ee)
+域名(s):    https://my-project.deno.dev
               https://my-project-c0ph5xa9exb3.deno.dev
-Database:     Production (0efa985f-3793-48bc-8c05-f740ffab4ca0)
-Entrypoint:   main.ts
-Env Vars:     HOME
+数据库:     生产 (0efa985f-3793-48bc-8c05-f740ffab4ca0)
+入口点:     main.ts
+环境变量:   HOME
 Git
-  Ref:        main [4b6c506]
-  Message:    change name
-  Author:     John Doe @johndoe [mailto:johndoe@deno.com]
-  Url:        https://github.com/arnauorriols/my-project/commit/4b6c50629ceeeb86601347732d01dc7ed63bf34f
-Crons:        another cron [*/10 * * * *] succeeded at 15/3/2024 1:50:00 CET after 2 seconds (next at 15/3/2024 2:00:00 CET)
-              newest cron [*/10 * * * *] n/a
-              yet another cron [*/10 * * * *] failed at 15/3/2024 1:40:00 CET after 2 seconds (next at 15/3/2024 1:51:54 CET)
+  引用:       main [4b6c506]
+  消息:       更改名称
+  作者:       John Doe @johndoe [mailto:johndoe@deno.com]
+  URL:        https://github.com/arnauorriols/my-project/commit/4b6c50629ceeeb86601347732d01dc7ed63bf34f
+Crons:       另一个 cron [*/10 * * * *] 在 15/3/2024 1:50:00 CET 成功，耗时 2 秒（下次在 15/3/2024 2:00:00 CET）
+              最新的 cron [*/10 * * * *] n/a
+              又一个 cron [*/10 * * * *] 在 15/3/2024 1:40:00 CET 失败，耗时 2 秒（下次在 15/3/2024 1:51:54 CET）
 ```
 
-If no deployment is specified, the command shows the details of the current
-production deployment of the project. To see the details of the last deployment,
-use `--last`, and to see the details of a particular deployment, use `--id` (or
-positional argument). You can also use `--next` or `--prev` to navigate the
-deployments chronologically.
+如果未指定部署，该命令将显示项目当前生产部署的详细信息。要查看最后一次部署的详细信息，请使用
+`--last`，要查看特定部署的详细信息，请使用 `--id`（或位置参数）。你还可以使用
+`--next` 或 `--prev` 按时间顺序浏览部署。
 
-For example, to see the details of the second to last deployment, you can do:
+例如，要查看倒数第二次部署的详细信息，可以执行：
 
 ```shell
 deployctl deployments show --last --prev
 ```
 
-And to see the details of 2 deployments after a specific deployment:
+要查看特定部署之后的 2 个部署的详细信息：
 
 ```shell
 deployctl deployments show 64tbrn8jre9n --next=2
 ```
 
-### Redeploy
+### 重新部署
 
-The redeploy command creates a new deployment reusing the build of an existing
-deployment, for the purpose of changing the resources associated with it. This
-includes production domains, environment variables and KV databases.
+`redeploy`
+命令创建一个新的部署，重用现有部署的构建，目的是更改与其关联的资源。这包括生产域名、环境变量和
+KV 数据库。
 
 :::info
 
-The semantics of selecting the deployment to redeploy are the same as those of
-the [show subcommand](#show), including `--last`, `--id`, `--next` and `--prev`.
+选择要重新部署的部署的语义与[显示子命令](#show)相同，包括
+`--last`、`--id`、`--next` 和 `--prev`。
 
 :::
 
-#### Production Domains
+#### 生产域名
 
-If you want to change the routing of the production domains of the project to a
-particular deployment, you can redeploy it with the `--prod` option:
+如果你想将项目的生产域名路由更改为特定部署，可以使用 `--prod` 选项重新部署它：
 
 ```shell
 deployctl deployments redeploy --prod 64tbrn8jre9n
 ```
 
-This will create a new deployment with the same code and environment variables
-as the specified deployment, but with the production domains of the project
-pointing to it. For those projects with preview/prod databases (ie projects
-linked to GitHub), this will also set the production database for the new
-deployment.
+这将创建一个新的部署，其代码和环境变量与指定部署相同，但项目的生产域名将指向它。对于具有预览/生产数据库的项目（即链接到
+GitHub 的项目），这还将为新部署设置生产数据库。
 
 :::note
 
-This feature is similar to the "promote to production" button found in the Deno
-Deploy web application with the exception that the "promote to production"
-button does not create a new deployment. Instead, the "promote to production"
-button changes the domain routing in-place, however it's restricted to
-deployments already using the production database.
+此功能类似于 Deno Deploy
+网络应用程序中的“提升为生产”按钮，区别在于“提升为生产”按钮不会创建新的部署。相反，“提升为生产”按钮会就地更改域名路由，但它仅限于已经使用生产数据库的部署。
 
 :::
 
-#### KV Database
+#### KV 数据库
 
-If this is a GitHub deployment, it will have 2 databases, one for prod
-deployments and one for preview deployments. You can change the database of a
-deployment by redeploying it with the `--db` option:
+如果这是 GitHub
+部署，它将有两个数据库，一个用于生产部署，一个用于预览部署。你可以通过使用
+`--db` 选项重新部署来更改部署的数据库：
 
 ```shell
 deployctl deployments redeploy --db=prod --id=64tbrn8jre9n
@@ -285,13 +257,10 @@ deployctl deployments redeploy --db=prod --id=64tbrn8jre9n
 
 :::note
 
-When redeploying a deployment to prod, by default it will automatically
-configure it to use the prod database. You can combine both `--prod` and `--db`
-options to opt out of this behavior. For example, the following command will
-redeploy the current production deployment (given the lack of positional
-argument, `--id` or `--last`). The new deployment will become the new production
-deployment, but it will use the preview database instead of the production
-database:
+当将部署重新部署为生产环境时，默认情况下它会自动配置为使用生产数据库。你可以结合使用
+`--prod` 和 `--db`
+选项来退出此行为。例如，以下命令将重新部署当前的生产部署（由于缺少位置参数、`--id`
+或 `--last`）。新部署将成为新的生产部署，但它将使用预览数据库而不是生产数据库：
 
 ```shell
 deployctl deployments redeploy --prod --db=preview
@@ -299,25 +268,21 @@ deployctl deployments redeploy --prod --db=preview
 
 :::
 
-If your organization has custom databases, you can also set them by UUID:
+如果你的组织有自定义数据库，你也可以通过 UUID 设置它们：
 
 ```shell
 deployctl deployments redeploy --last --db=5261e096-f9aa-4b72-8440-1c2b5b553def
 ```
 
-#### Environment Variables
+#### 环境变量
 
-When a deployment is created, it inherits the environment variables of the
-project. Given that the deployments are immutable, their environment variables
-can never be changed. To set new environment variables in a deployment, you need
-to redeploy it using `--env` (to set individual variables) and `--env-file` (to
-load one or more environment files).
+创建部署时，它会继承项目的环境变量。由于部署是不可变的，它们的环境变量永远无法更改。要在部署中设置新的环境变量，你需要使用
+`--env`（设置单个变量）和 `--env-file`（加载一个或多个环境文件）重新部署它。
 
-The following command redeploys the current production deployment with the env
-variables defined in the `.env` and `.other-env` files, plus the `DEPLOYMENT_TS`
-variable set to the current timestamp. The resulting deployment will be a
-preview deployment (ie the production domains won't route traffic to it, given
-the lack of `--prod`).
+以下命令重新部署当前的生产部署，使用 `.env` 和 `.other-env`
+文件中定义的环境变量，以及设置为当前时间戳的 `DEPLOYMENT_TS`
+变量。生成的部署将是预览部署（即生产域名不会将流量路由到它，因为缺少
+`--prod`）。
 
 ```shell
 deployctl deployments redeploy --env-file --env-file=.other-env --env=DEPLOYMENT_TS=$(date +%s)
@@ -325,317 +290,51 @@ deployctl deployments redeploy --env-file --env-file=.other-env --env=DEPLOYMENT
 
 :::note
 
-Be aware that when changing env variables, only the env variables set in the
-redeploy command will be used by the new deployment. The project env variables
-and the env variables of the deployment being redeployed are ignored. If this
-does not suit your needs, please report your feedback at
-https://github.com/denoland/deploy_feedback/issues/
+请注意，更改环境变量时，只有重新部署命令中设置的环境变量才会被新部署使用。项目环境变量和正在重新部署的部署的环境变量将被忽略。如果这不符合你的需求，请在
+https://github.com/denoland/deploy_feedback/issues/ 提交反馈。
 
 :::
 
 :::note
 
-When you change the project environment variables in the Deno Deploy web
-application, the current production deployment is redeployed with the new
-environment variables, and the new deployment becomes the new production
-deployment.
+当你在 Deno Deploy
+网络应用程序中更改项目环境变量时，当前的生产部署会使用新的环境变量重新部署，新部署将成为新的生产部署。
 
 :::
 
-### Delete
+### 删除
 
-You can delete a deployment using the `delete` subcommand:
+你可以使用 `delete` 子命令删除部署：
 
 ```shell
 deployctl deployments delete 64tbrn8jre9n
 ```
 
-Like `show` and `redeploy`, `delete` can also use `--last`, `--next` and
-`--prev` to select the deployment to delete. Here's an example command that
-deletes all the deployments of a project except the last (use with caution!):
+与 `show` 和 `redeploy` 一样，`delete` 也可以使用 `--last`、`--next` 和 `--prev`
+来选择要删除的部署。以下是一个删除项目所有部署（除了最后一个）的示例命令（请谨慎使用！）：
 
 ```shell
 while deployctl deployments delete --project=my-project --last --prev; do :; done
 ```
 
-## Projects
+## 项目
 
-The `projects` subcommand groups all the operations against projects as a whole.
-this includes `list`, `show`, `rename`, `create` and `delete`.
+`projects` 子命令分组了所有针对项目的操作。这包括
+`list`、`show`、`rename`、`create` 和 `delete`。
 
-### List
+### 列出
 
-`deployctl projects list` outputs all the projects your user has access to,
-grouped by organization:
+`deployctl projects list` 输出你的用户有权访问的所有项目，按组织分组：
 
 ```
-Personal org:
+个人组织:
     blog
     url-shortener
 
-'my-team' org:
+'my-team' 组织:
     admin-site
     main-site
     analytics
 ```
 
-You can filter by organization using `--org`:
-
-```shell
-deployctl projects list --org=my-team
-```
-
-### Show
-
-To see the details of a particular project, use `projects show`. If you are
-inside a project, it will pick up the project id from the config file. You can
-also specify the project using `--project` or the positional argument:
-
-```shell
-deployctl projects show main-site
-```
-
-Output:
-
-```
-main-site
----------
-Organization:	my-team (5261e096-f9aa-4b72-8440-1c2b5b553def)
-Domain(s):  	https://my-team.com
-		          https://main-site.deno.dev
-Dash URL:	    https://dash.deno.com/projects/8422c515-f68f-49b2-89f3-157f4b144611
-Repository:	  https://github.com/my-team/main-site
-Databases:  	[main] dd28e63e-f495-416b-909a-183380e3a232
-		          [*] e061c76e-4445-409a-bc36-a1a9040c83b3
-Crons:		    another cron [*/10 * * * *] succeeded at 12/3/2024 14:40:00 CET after 2 seconds (next at 12/3/2024 14:50:00 CET)
-		          newest cron [*/10 * * * *] n/a
-		          yet another cron [*/10 * * * *] failed at 12/3/2024 14:40:00 CET after 2 seconds (next at 12/3/2024 14:50:00 CET)
-Deployments:	kcbxc4xwe4mc	c0ph5xa9exb3*	kwkbev9er4h2	dxseq0jc8402	7xr5thz8yjbz
-		          4qr4h5ac3rfn	25wryhcqmb9q	64tbrn8jre9n	hgqgccnmzg04	rxkh1w3g74e8
-		          wx6cw9aya64c	a1qh5fmew2yf	w6pf4r0rrdkb	nn700gexgdzq	98crfqxa6vvf
-		          xcdcs014yc5p	btw43kx89ws1	62tg1ketkjx7	07ag6pt6kjex	4msyne1rvwj1
-```
-
-### Rename
-
-Projects can be renamed easily with the `rename` subcommand. Similarly to the
-other commands, if you run the command from within a project's directory, you
-don't need to specify the current name of the project:
-
-```shell
-deployctl projects rename my-personal-blog
-```
-
-Output:
-
-```
-ℹ Using config file '/private/tmp/blog/deno.json'
-✔ Project 'blog' (8422c515-f68f-49b2-89f3-157f4b144611) found
-✔ Project 'blog' renamed to 'my-personal-blog'
-```
-
-:::note
-
-Keep in mind that the name of the project is part of the preview domains
-(https://my-personal-blog-kcbxc4xwe4mc.deno.dev) and the default production
-domain (https://my-personal-blog.deno.dev). Therefore, when changing the project
-name, the URLs with the previous name will no longer route to the project's
-corresponding deployments.
-
-:::
-
-### Create
-
-You can create an empty project with:
-
-```shell
-deployctl projects create my-new-project
-```
-
-### Delete
-
-You can delete a project with:
-
-```shell
-deployctl projects delete my-new-project
-```
-
-## Top
-
-The `top` subcommand is used to monitor the resource usage of a project in
-real-time:
-
-```shell
-deployctl top
-```
-
-Output:
-
-```
-┌────────┬────────────────┬────────────────────────┬─────────┬───────┬─────────┬──────────┬─────────────┬────────────┬─────────┬─────────┬───────────┬───────────┐
-│ (idx)  │ deployment     │ region                 │ Req/min │ CPU%  │ CPU/req │ RSS/5min │ Ingress/min │ Egress/min │ KVr/min │ KVw/min │ QSenq/min │ QSdeq/min │
-├────────┼────────────────┼────────────────────────┼─────────┼───────┼─────────┼──────────┼─────────────┼────────────┼─────────┼─────────┼───────────┼───────────┤
-│ 6b80e8 │ "kcbxc4xwe4mc" │ "asia-northeast1"      │      80 │ 0.61  │ 4.56    │ 165.908  │ 11.657      │ 490.847    │       0 │       0 │         0 │         0 │
-│ 08312f │ "kcbxc4xwe4mc" │ "asia-northeast1"      │      76 │ 3.49  │ 27.58   │ 186.278  │ 19.041      │ 3195.288   │       0 │       0 │         0 │         0 │
-│ 77c10b │ "kcbxc4xwe4mc" │ "asia-south1"          │      28 │ 0.13  │ 2.86    │ 166.806  │ 7.354       │ 111.478    │       0 │       0 │         0 │         0 │
-│ 15e356 │ "kcbxc4xwe4mc" │ "asia-south1"          │      66 │ 0.97  │ 8.93    │ 162.288  │ 17.56       │ 4538.371   │       0 │       0 │         0 │         0 │
-│ a06817 │ "kcbxc4xwe4mc" │ "asia-southeast1"      │     126 │ 0.44  │ 2.11    │ 140.087  │ 16.504      │ 968.794    │       0 │       0 │         0 │         0 │
-│ d012b6 │ "kcbxc4xwe4mc" │ "asia-southeast1"      │     119 │ 2.32  │ 11.72   │ 193.704  │ 23.44       │ 8359.829   │       0 │       0 │         0 │         0 │
-│ 7d9a3d │ "kcbxc4xwe4mc" │ "australia-southeast1" │       8 │ 0.97  │ 75      │ 158.872  │ 10.538      │ 3.027      │       0 │       0 │         0 │         0 │
-│ 3c21be │ "kcbxc4xwe4mc" │ "australia-southeast1" │       1 │ 0.04  │ 90      │ 105.292  │ 0.08        │ 1.642      │       0 │       0 │         0 │         0 │
-│ b75dc7 │ "kcbxc4xwe4mc" │ "europe-west2"         │     461 │ 5.43  │ 7.08    │ 200.573  │ 63.842      │ 9832.936   │       0 │       0 │         0 │         0 │
-│ 33607e │ "kcbxc4xwe4mc" │ "europe-west2"         │      35 │ 0.21  │ 3.69    │ 141.98   │ 9.438       │ 275.788    │       0 │       0 │         0 │         0 │
-│ 9be3d2 │ "kcbxc4xwe4mc" │ "europe-west2"         │     132 │ 0.92  │ 4.19    │ 180.654  │ 15.959      │ 820.513    │       0 │       0 │         0 │         0 │
-│ 33a859 │ "kcbxc4xwe4mc" │ "europe-west3"         │    1335 │ 7.57  │ 3.4     │ 172.032  │ 178.064     │ 10967.918  │       0 │       0 │         0 │         0 │
-│ 3f54ce │ "kcbxc4xwe4mc" │ "europe-west4"         │     683 │ 4.76  │ 4.19    │ 187.802  │ 74.696      │ 7565.017   │       0 │       0 │         0 │         0 │
-│ cf881c │ "kcbxc4xwe4mc" │ "europe-west4"         │     743 │ 3.95  │ 3.19    │ 177.213  │ 86.974      │ 6087.454   │       0 │       0 │         0 │         0 │
-│ b4565b │ "kcbxc4xwe4mc" │ "me-west1"             │       3 │ 0.21  │ 55      │ 155.46   │ 2.181       │ 0.622      │       0 │       0 │         0 │         0 │
-│ b97970 │ "kcbxc4xwe4mc" │ "southamerica-east1"   │       3 │ 0.08  │ 25      │ 186.049  │ 1.938       │ 0.555      │       0 │       0 │         0 │         0 │
-│ fd7a08 │ "kcbxc4xwe4mc" │ "us-east4"             │       3 │ 0.32  │ 80      │ 201.101  │ 0.975       │ 58.495     │       0 │       0 │         0 │         0 │
-│ 95d68a │ "kcbxc4xwe4mc" │ "us-east4"             │     133 │ 1.05  │ 4.77    │ 166.052  │ 28.107      │ 651.737    │       0 │       0 │         0 │         0 │
-│ c473e7 │ "kcbxc4xwe4mc" │ "us-east4"             │       0 │ 0     │ 0       │ 174.154  │ 0.021       │ 0          │       0 │       0 │         0 │         0 │
-│ ebabfb │ "kcbxc4xwe4mc" │ "us-east4"             │      19 │ 0.15  │ 4.78    │ 115.732  │ 7.764       │ 67.054     │       0 │       0 │         0 │         0 │
-│ eac700 │ "kcbxc4xwe4mc" │ "us-south1"            │     114 │ 2.37  │ 12.54   │ 183.001  │ 18.401      │ 22417.397  │       0 │       0 │         0 │         0 │
-│ cd2194 │ "kcbxc4xwe4mc" │ "us-south1"            │      35 │ 0.33  │ 5.68    │ 145.871  │ 8.142       │ 91.236     │       0 │       0 │         0 │         0 │
-│ 140fec │ "kcbxc4xwe4mc" │ "us-west2"             │     110 │ 1.43  │ 7.84    │ 115.298  │ 18.093      │ 977.993    │       0 │       0 │         0 │         0 │
-│ 51689f │ "kcbxc4xwe4mc" │ "us-west2"             │    1105 │ 7.66  │ 4.16    │ 187.277  │ 154.876     │ 14648.383  │       0 │       0 │         0 │         0 │
-│ c5806e │ "kcbxc4xwe4mc" │ "us-west2"             │     620 │ 4.38  │ 4.24    │ 192.291  │ 109.086     │ 9685.688   │       0 │       0 │         0 │         0 │
-└────────┴────────────────┴────────────────────────┴─────────┴───────┴─────────┴──────────┴─────────────┴────────────┴─────────┴─────────┴───────────┴───────────┘
-⠼ Streaming...
-```
-
-The columns are defined as follows:
-
-| Column      | Description                                                                                        |
-| ----------- | -------------------------------------------------------------------------------------------------- |
-| idx         | Instance discriminator. Opaque id to discriminate different executions running in the same region. |
-| deployment  | The id of the deployment running in the executing instance.                                        |
-| Req/min     | Requests per minute received by the project.                                                       |
-| CPU%        | Percentage of CPU used by the project.                                                             |
-| CPU/req     | CPU time per request, in milliseconds.                                                             |
-| RSS/5min    | Max RSS used by the project during the last 5 minutes, in MB.                                      |
-| Ingress/min | Data received by the project per minute, in KB.                                                    |
-| Egress/min  | Data output by the project per minute, in KB.                                                      |
-| KVr/min     | KV reads performed by the project per minute.                                                      |
-| KVw/min     | KV writes performed by the project per minute.                                                     |
-| QSenq/min   | Queues enqueues performed by the project per minute.                                               |
-| QSdeq/min   | Queues dequeues performed by the project per minute.                                               |
-
-You can filter by region using `--region`, which accepts substrings and can be
-used multiple times:
-
-```shell
-deployctl top --region=asia --region=southamerica
-```
-
-## Logs
-
-You can fetch the logs of your deployments with `deployctl logs`. It supports
-both live logs where the logs are streamed to the console as they are generated,
-and query persisted logs where the logs generated in the past are fetched.
-
-To show the live logs of the current production deployment of a project:
-
-```shell
-deployctl logs
-```
-
-:::note
-
-Unlike in the Deno Deploy web application, at the moment the logs subcommand
-does not automatically switch to the new production deployment when it changes.
-
-:::
-
-To show the live logs of a particular deployment:
-
-```shell
-deployctl logs --deployment=1234567890ab
-```
-
-Logs can be filtered by level, region and text using `--levels` `--regions` and
-`--grep` options:
-
-```shell
-deployctl logs --levels=error,info --regions=region1,region2 --grep='unexpected'
-```
-
-To show the persisted logs, use the `--since` and/or `--until` options:
-
-<deno-tabs groupId="operating-systems">
-  <deno-tab value="mac" label="macOS" default>
-
-```sh
-deployctl logs --since=$(date -Iseconds -v-2H) --until=$(date -Iseconds -v-30M)
-```
-
-</deno-tab>
-<deno-tab value="linux" label="Linux">
-
-```sh
-deployctl logs --since=$(date -Iseconds --date='2 hours ago') --until=$(date -Iseconds --date='30 minutes ago')
-```
-
-</deno-tab>
-</deno-tabs>
-
-## API
-
-If you use the [subhosting API](../../subhosting/manual/index.md),
-`deployctl api` will help you interact with the API by handling the
-authentication and headers for you:
-
-```shell
-deployctl api /projects/my-personal-blog/deployments
-```
-
-Use `--method` and `--body` to specify the HTTP method and the request body:
-
-```shell
-deployctl api --method=POST --body='{"name": "main-site"}' organizations/5261e096-f9aa-4b72-8440-1c2b5b553def/projects
-```
-
-## Local Development
-
-For local development you can use the `deno` CLI. To install `deno`, follow the
-instructions in the
-[Deno manual](https://deno.land/manual/getting_started/installation).
-
-After installation, you can run your scripts locally:
-
-```shell
-$ deno run --allow-net=:8000 ./main.ts
-Listening on http://localhost:8000
-```
-
-To watch for file changes add the `--watch` flag:
-
-```shell
-$ deno run --allow-net=:8000 --watch ./main.ts
-Listening on http://localhost:8000
-```
-
-For more information about the Deno CLI, and how to configure your development
-environment and IDE, visit the Deno Manual's [Getting Started][manual-gs]
-section.
-
-[manual-gs]: https://deno.land/manual/getting_started
-
-## JSON output
-
-All the commands that output data have a `--format=json` option that outputs the
-data in JSON objects. This output mode is the default when stdout is not a TTY,
-notably when piping to another command. Together with `jq`, this mode enables
-the programmatic use of all the data provided by `deployctl`:
-
-Get the id of the current production deployment:
-
-```shell
-deployctl deployments show | jq .build.deploymentId
-```
-
-Get a csv stream of the CPU time per request on each isolate of each region:
-
-```shell
-deployctl top | jq -r '[.id,.region,.cpuTimePerRequest] | @csv'
-```
+你可以使用 `--

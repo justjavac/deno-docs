@@ -3,7 +3,7 @@
  * @difficulty beginner
  * @tags cli
  * @run --allow-read <url>
- * @resource {https://docs.deno.com/api/deno/~/Deno.readDir} Doc: Deno.readDir
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.readDir} Doc: Deno.readDir
  * @resource {https://jsr.io/@std/fs/doc/walk/~} Doc: @std/fs/walk
  * @group File System
  *

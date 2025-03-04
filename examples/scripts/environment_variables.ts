@@ -3,8 +3,8 @@
  * @difficulty beginner
  * @tags cli, deploy
  * @run --allow-env <url>
- * @resource {https://docs.deno.com/api/deno/~/Deno.env} Doc: Deno.env
- * @resource {https://docs.deno.com/deploy/manual/environment-variables} Deploy Docs: Environment Variables
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.env} Doc: Deno.env
+ * @resource {https://docs.denohub.com/deploy/manual/environment-variables} Deploy Docs: Environment Variables
  * @group System
  *
  * Environment variables can be used to configure the behavior of a program,

@@ -1,5 +1,5 @@
 ---
-title: "Getting Started"
+title: "入门指南"
 pagination_next: /runtime/getting_started/first_project/
 oldUrl:
   - /manual/
@@ -10,19 +10,18 @@ oldUrl:
 ---
 
 [Deno](https://deno.com)
-([/ˈdiːnoʊ/](https://ipa-reader.com/?text=%CB%88di%CB%90no%CA%8A), pronounced
-`dee-no`) is an
-[open source](https://github.com/denoland/deno/blob/main/LICENSE.md) JavaScript,
-TypeScript, and WebAssembly runtime with secure defaults and a great developer
-experience. It's built on [V8](https://v8.dev/),
-[Rust](https://www.rust-lang.org/), and [Tokio](https://tokio.rs/).
+([/ˈdiːnoʊ/](https://ipa-reader.com/?text=%CB%88di%CB%90no%CA%8A), 发音为
+`dee-no`) 是一个 [开源](https://github.com/denoland/deno/blob/main/LICENSE.md)
+的 JavaScript、TypeScript 和 WebAssembly
+运行时，具有安全的默认设置和出色的开发者体验。它基于
+[V8](https://v8.dev/)、[Rust](https://www.rust-lang.org/) 和
+[Tokio](https://tokio.rs/) 构建。
 
-Let's create and run your first Deno program in under five minutes.
+让我们在五分钟内创建并运行你的第一个 Deno 程序。
 
-## Install Deno
+## 安装 Deno
 
-Install the Deno runtime on your system using one of the terminal commands
-below.
+使用以下终端命令之一在你的系统上安装 Deno 运行时。
 
 <deno-tabs group-id="operating-systems">
 <deno-tab value="mac" label="macOS" default>
@@ -48,9 +47,8 @@ curl -fsSL https://deno.land/install.sh | sh
 </deno-tab>
 </deno-tabs>
 
-[Additional installation options can be found here](/runtime/getting_started/installation/).
-After installation, you should have the `deno` executable available on your
-system path. You can verify the installation by running:
+[更多安装选项可以在这里找到](/runtime/getting_started/installation/)。安装完成后，你的系统路径中应该会有
+`deno` 可执行文件。你可以通过运行以下命令来验证安装：
 
 ```sh
 deno --version
@@ -58,12 +56,11 @@ deno --version
 
 ## Hello World
 
-Deno can run JavaScript and [TypeScript](https://www.typescriptlang.org/) with
-no additional tools or configuration required. Let's create a simple "hello
-world" program and run it with Deno.
+Deno 可以直接运行 JavaScript 和
+[TypeScript](https://www.typescriptlang.org/)，无需额外的工具或配置。让我们创建一个简单的
+"hello world" 程序并用 Deno 运行它。
 
-Create a TypeScript or JavaScript file called `main` and include the following
-code:
+创建一个名为 `main` 的 TypeScript 或 JavaScript 文件，并包含以下代码：
 
 <deno-tabs group-id="code">
 <deno-tab value="TypeScript" label="TypeScript" default>
@@ -90,7 +87,7 @@ console.log(greet("world"));
 </deno-tab>
 </deno-tabs>
 
-Save the file and run it with Deno:
+保存文件并用 Deno 运行它：
 
 <deno-tabs group-id="commands">
 <deno-tab value="ts" label="main.ts" default>
@@ -111,11 +108,11 @@ Hello, world!
 </deno-tab >
 </deno-tabs>
 
-## Next Steps
+## 下一步
 
-Congratulations! You've just run your first Deno program. Read on to learn more
-about the Deno runtime.
+恭喜！你刚刚运行了你的第一个 Deno 程序。继续阅读以了解更多关于 Deno
+运行时的内容。
 
-- [Making a Deno project](/runtime/getting_started/first_project/)
-- [Setting up your environment](/runtime/getting_started/setup_your_environment/)
-- [Using the CLI](/runtime/getting_started/command_line_interface)
+- [创建一个 Deno 项目](/runtime/getting_started/first_project/)
+- [设置你的环境](/runtime/getting_started/setup_your_environment/)
+- [使用 CLI](/runtime/getting_started/command_line_interface)

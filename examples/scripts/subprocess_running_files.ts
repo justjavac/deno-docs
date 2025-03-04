@@ -3,9 +3,9 @@
  * @difficulty intermediate
  * @tags cli
  * @run --allow-net --allow-run --allow-read <url>
- * @resource {https://docs.deno.com/api/deno/~/Deno.Command} Doc: Deno.Command
- * @resource {https://docs.deno.com/api/deno/~/Deno.FsFile} Doc: Deno.FsFile
- * @resource {https://docs.deno.com/api/deno/~/Deno.args} Doc: Deno.args
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.Command} Doc: Deno.Command
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.FsFile} Doc: Deno.FsFile
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.args} Doc: Deno.args
  * @group File System
  *
  * An example of a subprocess being spawned to run specified files using CLI flags.

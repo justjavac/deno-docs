@@ -2,19 +2,18 @@
 tags: [recommended]
 ---
 
-Disallows comparing against negative zero (`-0`).
+禁止与负零 (`-0`) 进行比较。
 
-Comparing a value directly against negative may not work as expected as it will
-also pass for non-negative zero (i.e. `0` and `+0`). Explicit comparison with
-negative zero can be performed using `Object.is`.
+直接与负零进行比较可能不会按预期工作，因为它也会通过非负零（即 `0` 和
+`+0`）的检查。可以使用 `Object.is` 来显式地与负零进行比较。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 if (x === -0) {}
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 if (x === 0) {}

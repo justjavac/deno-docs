@@ -1,5 +1,5 @@
 ---
-title: "Deno Style Guide"
+title: "Deno 风格指南"
 oldUrl:
 - /runtime/manual/contributing/style_guide/
 - /runtime/manual/references/contributing/style_guide/
@@ -7,101 +7,94 @@ oldUrl:
 
 :::note
 
-Note that this is the style guide for **internal runtime code** in the Deno
-runtime, and in the Deno Standard Library. This is not meant as a general style
-guide for users of Deno.
+请注意，这是 Deno 运行时和 Deno 标准库中**内部运行时代码**的风格指南。这并不是为
+Deno 用户提供的通用风格指南。
 
 :::
 
-### Copyright Headers
+### 版权声明
 
-Most modules in the repository should have the following copyright header:
+仓库中的大多数模块应包含以下版权声明：
 
 ```ts
 // Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
 ```
 
-If the code originates elsewhere, ensure that the file has the proper copyright
-headers. We only allow MIT, BSD, and Apache licensed code.
+如果代码源自其他地方，请确保文件包含正确的版权声明。我们只允许 MIT、BSD 和
+Apache 许可的代码。
 
-### Use underscores, not dashes in filenames
+### 文件名中使用下划线而非连字符
 
-Example: Use `file_server.ts` instead of `file-server.ts`.
+示例：使用 `file_server.ts` 而不是 `file-server.ts`。
 
-### Add tests for new features
+### 为新功能添加测试
 
-Each module should contain or be accompanied by tests for its public
-functionality.
+每个模块应包含或附带其公共功能的测试。
 
-### TODO Comments
+### TODO 注释
 
-TODO comments should usually include an issue or the author's github username in
-parentheses. Example:
+TODO 注释通常应包含问题编号或作者的 GitHub 用户名（括号内）。示例：
 
 ```ts
-// TODO(ry): Add tests.
-// TODO(#123): Support Windows.
-// FIXME(#349): Sometimes panics.
+// TODO(ry): 添加测试。
+// TODO(#123): 支持 Windows。
+// FIXME(#349): 有时会崩溃。
 ```
 
-### Meta-programming is discouraged. Including the use of Proxy
+### 不鼓励使用元编程，包括 Proxy
 
-Be explicit, even when it means more code.
+即使意味着编写更多代码，也要保持明确。
 
-There are some situations where it may make sense to use such techniques, but in
-the vast majority of cases it does not.
+在某些情况下，使用这些技术可能是有意义的，但在绝大多数情况下并不适用。
 
-### Inclusive code
+### 包容性代码
 
-Please follow the guidelines for inclusive code outlined at
-https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/inclusive_code.md.
+请遵循
+https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/inclusive_code.md
+中概述的包容性代码指南。
 
 ### Rust
 
-Follow Rust conventions and be consistent with existing code.
+遵循 Rust 的约定并与现有代码保持一致。
 
 ### TypeScript
 
-The TypeScript portion of the code base is the standard library `std`.
+代码库中的 TypeScript 部分是标准库 `std`。
 
-#### Use TypeScript instead of JavaScript
+#### 使用 TypeScript 而非 JavaScript
 
-#### Do not use the filename `index.ts`/`index.js`
+#### 不要使用文件名 `index.ts`/`index.js`
 
-Deno does not treat "index.js" or "index.ts" in a special way. By using these
-filenames, it suggests that they can be left out of the module specifier when
-they cannot. This is confusing.
+Deno 不会以特殊方式处理 "index.js" 或
+"index.ts"。使用这些文件名会暗示在模块说明符中可以省略它们，但实际上不能。这会造成混淆。
 
-If a directory of code needs a default entry point, use the filename `mod.ts`.
-The filename `mod.ts` follows Rust's convention, is shorter than `index.ts`, and
-doesn't come with any preconceived notions about how it might work.
+如果代码目录需要一个默认入口点，请使用文件名 `mod.ts`。文件名 `mod.ts` 遵循 Rust
+的约定，比 `index.ts` 更短，并且不会带来任何关于其工作方式的先入为主的观念。
 
-#### Exported functions: max 2 args, put the rest into an options object
+#### 导出函数：最多 2 个参数，其余放入 options 对象
 
-When designing function interfaces, stick to the following rules.
+在设计函数接口时，请遵循以下规则。
 
-1. A function that is part of the public API takes 0-2 required arguments, plus
-   (if necessary) an options object (so max 3 total).
+1. 作为公共 API 一部分的函数接受 0-2 个必需参数，加上（如有必要）一个 options
+   对象（因此最多 3 个）。
 
-2. Optional parameters should generally go into the options object.
+2. 可选参数通常应放入 options 对象。
 
-   An optional parameter that's not in an options object might be acceptable if
-   there is only one, and it seems inconceivable that we would add more optional
-   parameters in the future.
+   如果只有一个可选参数，并且未来不太可能添加更多可选参数，那么不在 options
+   对象中的可选参数可能是可以接受的。
 
-3. The 'options' argument is the only argument that is a regular 'Object'.
+3. 'options' 参数是唯一一个常规 'Object' 类型的参数。
 
-   Other arguments can be objects, but they must be distinguishable from a
-   'plain' Object runtime, by having either:
+   其他参数可以是对象，但它们必须与 'plain' Object
+   运行时区分开来，通过以下方式之一：
 
-   - a distinguishing prototype (e.g. `Array`, `Map`, `Date`, `class MyThing`).
-   - a well-known symbol property (e.g. an iterable with `Symbol.iterator`).
+   - 具有区分性的原型（例如 `Array`、`Map`、`Date`、`class MyThing`）。
+   - 具有众所周知的符号属性（例如带有 `Symbol.iterator` 的可迭代对象）。
 
-   This allows the API to evolve in a backwards compatible way, even when the
-   position of the options object changes.
+   这允许 API 以向后兼容的方式发展，即使 options 对象的位置发生变化。
 
 ```ts
-// BAD: optional parameters not part of options object. (#2)
+// 错误：可选参数不在 options 对象中。（#2）
 export function resolve(
   hostname: string,
   family?: "ipv4" | "ipv6",
@@ -110,7 +103,7 @@ export function resolve(
 ```
 
 ```ts
-// GOOD.
+// 正确。
 export interface ResolveOptions {
   family?: "ipv4" | "ipv6";
   timeout?: number;
@@ -126,11 +119,10 @@ export interface Environment {
   [key: string]: string;
 }
 
-// BAD: `env` could be a regular Object and is therefore indistinguishable
-// from an options object. (#3)
+// 错误：`env` 可能是一个常规 Object，因此无法与 options 对象区分开来。（#3）
 export function runShellWithEnv(cmdline: string, env: Environment): string {}
 
-// GOOD.
+// 正确。
 export interface RunShellOptions {
   env: Environment;
 }
@@ -141,7 +133,7 @@ export function runShellWithEnv(
 ```
 
 ```ts
-// BAD: more than 3 arguments (#1), multiple optional parameters (#2).
+// 错误：超过 3 个参数（#1），多个可选参数（#2）。
 export function renameSync(
   oldname: string,
   newname: string,
@@ -151,7 +143,7 @@ export function renameSync(
 ```
 
 ```ts
-// GOOD.
+// 正确。
 interface RenameOptions {
   replaceExisting?: boolean;
   followLinks?: boolean;
@@ -164,7 +156,7 @@ export function renameSync(
 ```
 
 ```ts
-// BAD: too many arguments. (#1)
+// 错误：参数过多。（#1）
 export function pwrite(
   fd: number,
   buffer: ArrayBuffer,
@@ -175,7 +167,7 @@ export function pwrite(
 ```
 
 ```ts
-// BETTER.
+// 更好。
 export interface PWrite {
   fd: number;
   buffer: ArrayBuffer;
@@ -186,19 +178,15 @@ export interface PWrite {
 export function pwrite(options: PWrite) {}
 ```
 
-Note: When one of the arguments is a function, you can adjust the order
-flexibly. See examples like
-[Deno.serve](https://docs.deno.com/api/deno/~/Deno.serve),
-[Deno.test](https://docs.deno.com/api/deno/~/Deno.test),
-[Deno.addSignalListener](https://docs.deno.com/api/deno/~/Deno.addSignalListener).
-See also
-[this post](https://twitter.com/jaffathecake/status/1646798390355697664).
+注意：当其中一个参数是函数时，可以灵活调整顺序。参见示例如
+[Deno.serve](https://docs.denohub.com/api/deno/~/Deno.serve),
+[Deno.test](https://docs.denohub.com/api/deno/~/Deno.test),
+[Deno.addSignalListener](https://docs.denohub.com/api/deno/~/Deno.addSignalListener)。
+另见 [此推文](https://twitter.com/jaffathecake/status/1646798390355697664)。
 
-#### Export all interfaces that are used as parameters to an exported member
+#### 导出所有用作导出成员参数的接口
 
-Whenever you are using interfaces that are included in the parameters or return
-type of an exported member, you should export the interface that is used. Here
-is an example:
+每当使用包含在导出成员的参数或返回类型中的接口时，应导出所使用的接口。以下是一个示例：
 
 ```ts
 // my_file.ts
@@ -216,77 +204,69 @@ export { createPerson } from "./my_file.ts";
 export type { Person } from "./my_file.ts";
 ```
 
-#### Minimize dependencies; do not make circular imports
+#### 最小化依赖；不要引入循环导入
 
-Although `std` has no external dependencies, we must still be careful to keep
-internal dependencies simple and manageable. In particular, be careful not to
-introduce circular imports.
+尽管 `std`
+没有外部依赖，但我们仍需小心保持内部依赖的简单和可管理。特别是，注意不要引入循环导入。
 
-#### If a filename starts with an underscore: `_foo.ts`, do not link to it
+#### 如果文件名以下划线开头：`_foo.ts`，不要链接到它
 
-There may be situations where an internal module is necessary but its API is not
-meant to be stable or linked to. In this case prefix it with an underscore. By
-convention, only files in its own directory should import it.
+在某些情况下，可能需要一个内部模块，但其 API
+并不稳定或不应被链接。在这种情况下，请在其前面加上下划线。按照惯例，只有其所在目录中的文件应导入它。
 
-#### Use JSDoc for exported symbols
+#### 使用 JSDoc 记录导出的符号
 
-We strive for complete documentation. Every exported symbol ideally should have
-a documentation line.
+我们力求完整的文档。每个导出的符号理想情况下都应有一行文档。
 
-If possible, use a single line for the JSDoc. Example:
+如果可能，使用单行 JSDoc。示例：
 
 ```ts
-/** foo does bar. */
+/** foo 执行 bar。 */
 export function foo() {
   // ...
 }
 ```
 
-It is important that documentation is easily human-readable, but there is also a
-need to provide additional styling information to ensure generated documentation
-is more rich text. Therefore JSDoc should generally follow markdown markup to
-enrich the text.
+重要的是文档易于人类阅读，但也需要提供额外的样式信息以确保生成的文档更丰富。因此，JSDoc
+通常应遵循 markdown 标记来丰富文本。
 
-While markdown supports HTML tags, it is forbidden in JSDoc blocks.
+虽然 markdown 支持 HTML 标签，但在 JSDoc 块中禁止使用。
 
-Code string literals should be braced with the back-tick (\`) instead of quotes.
-For example:
+代码字符串文字应用反引号 (\`) 括起来，而不是引号。例如：
 
 ```ts
-/** Import something from the `deno` module. */
+/** 从 `deno` 模块导入某些内容。 */
 ```
 
-Do not document function arguments unless they are non-obvious of their intent
-(though if they are non-obvious intent, the API should be considered anyways).
-Therefore `@param` should generally not be used. If `@param` is used, it should
-not include the `type` as TypeScript is already strongly-typed.
+除非函数参数的含义不明显，否则不要记录它们（尽管如果它们的含义不明显，则应重新考虑
+API）。因此，通常不应使用 `@param`。如果使用 `@param`，则不应包含 `type`，因为
+TypeScript 已经是强类型的。
 
 ```ts
 /**
- * Function with non-obvious param.
- * @param foo Description of non-obvious parameter.
+ * 带有不明显参数的函数。
+ * @param foo 对不明显参数的描述。
  */
 ```
 
-Vertical spacing should be minimized whenever possible. Therefore, single-line
-comments should be written as:
+应尽可能减少垂直间距。因此，单行注释应写成：
 
 ```ts
-/** This is a good single-line JSDoc. */
+/** 这是一个好的单行 JSDoc。 */
 ```
 
-And not:
+而不是：
 
 ```ts
 /**
- * This is a bad single-line JSDoc.
+ * 这是一个不好的单行 JSDoc。
  */
 ```
 
-Code examples should utilize markdown format, like so:
+代码示例应使用 markdown 格式，如下所示：
 
 ````ts
-/** A straightforward comment and an example:
+/** 一个简单的注释和一个示例：
  * ```ts
  * import { foo } from "deno";
  * foo("bar");
@@ -294,59 +274,53 @@ Code examples should utilize markdown format, like so:
  */
 ````
 
-Code examples should not contain additional comments and must not be indented.
-It is already inside a comment. If it needs further comments, it is not a good
-example.
+代码示例不应包含额外的注释，并且不能缩进。它已经在注释中。如果需要进一步注释，则这不是一个好的示例。
 
-#### Resolve linting problems using directives
+#### 使用指令解决 linting 问题
 
-Currently, the building process uses `dlint` to validate linting problems in the
-code. If the task requires code that is non-conformant to linter use
-`deno-lint-ignore <code>` directive to suppress the warning.
+目前，构建过程使用 `dlint` 来验证代码中的 linting 问题。如果任务需要不符合
+linter 的代码，请使用 `deno-lint-ignore <code>` 指令来抑制警告。
 
 ```typescript
 // deno-lint-ignore no-explicit-any
 let x: any;
 ```
 
-This ensures the continuous integration process doesn't fail due to linting
-problems, but it should be used scarcely.
+这确保持续集成过程不会因 linting 问题而失败，但应谨慎使用。
 
-#### Each module should come with a test module
+#### 每个模块应附带一个测试模块
 
-Every module with public functionality `foo.ts` should come with a test module
-`foo_test.ts`. A test for a `std` module should go in `std/tests` due to their
-different contexts; otherwise, it should just be a sibling to the tested module.
+每个具有公共功能的模块 `foo.ts` 应附带一个测试模块 `foo_test.ts`。`std`
+模块的测试应放在 `std/tests`
+中，因为它们处于不同的上下文中；否则，它应只是被测试模块的兄弟文件。
 
-#### Unit Tests should be explicit
+#### 单元测试应明确
 
-For a better understanding of the tests, function should be correctly named as
-it's prompted throughout the test command. Like:
+为了更好地理解测试，函数应正确命名，如测试命令中提示的那样。例如：
 
 ```console
-foo() returns bar object ... ok
+foo() 返回 bar 对象 ... 通过
 ```
 
-Example of test:
+测试示例：
 
 ```ts
 import { assertEquals } from "@std/assert";
 import { foo } from "./mod.ts";
 
-Deno.test("foo() returns bar object", function () {
+Deno.test("foo() 返回 bar 对象", function () {
   assertEquals(foo(), { bar: "bar" });
 });
 ```
 
-Note: See [tracking issue](https://github.com/denoland/deno_std/issues/3754) for
-more information.
+注意：有关更多信息，请参见
+[跟踪问题](https://github.com/denoland/deno_std/issues/3754)。
 
-#### Top-level functions should not use arrow syntax
+#### 顶级函数不应使用箭头语法
 
-Top-level functions should use the `function` keyword. Arrow syntax should be
-limited to closures.
+顶级函数应使用 `function` 关键字。箭头语法应仅限于闭包。
 
-Bad:
+错误：
 
 ```ts
 export const foo = (): string => {
@@ -354,7 +328,7 @@ export const foo = (): string => {
 };
 ```
 
-Good:
+正确：
 
 ```ts
 export function foo(): string {
@@ -362,111 +336,101 @@ export function foo(): string {
 }
 ```
 
-#### Error Messages
+#### 错误消息
 
-User-facing error messages raised from JavaScript / TypeScript should be clear,
-concise, and consistent. Error messages should be in sentence case but should
-not end with a period. Error messages should be free of grammatical errors and
-typos and written in American English.
+从 JavaScript / TypeScript
+引发的面向用户的错误消息应清晰、简洁且一致。错误消息应使用句子大小写，但不应以句号结尾。错误消息应避免语法错误和拼写错误，并使用美式英语。
 
 :::note
 
-Note that the error message style guide is a work in progress, and not all the
-error messages have been updated to conform to the current styles.
+请注意，错误消息风格指南仍在进行中，并非所有错误消息都已更新以符合当前风格。
 
 :::
 
-Error message styles that should be followed:
+应遵循的错误消息风格：
 
-1. Messages should start with an upper case:
+1. 消息应以大写字母开头：
 
 ```sh
-Bad: cannot parse input
-Good: Cannot parse input
+错误：无法解析输入
+正确：无法解析输入
 ```
 
-2. Messages should not end with a period:
+2. 消息不应以句号结尾：
 
 ```sh
-Bad: Cannot parse input.
-Good: Cannot parse input
+错误：无法解析输入。
+正确：无法解析输入
 ```
 
-3. Message should use quotes for values for strings:
+3. 消息应对字符串值使用引号：
 
 ```sh
-Bad: Cannot parse input hello, world
-Good: Cannot parse input "hello, world"
+错误：无法解析输入 hello, world
+正确：无法解析输入 "hello, world"
 ```
 
-4. Message should state the action that lead to the error:
+4. 消息应说明导致错误的操作：
 
 ```sh
-Bad: Invalid input x
-Good: Cannot parse input x
+错误：无效输入 x
+正确：无法解析输入 x
 ```
 
-5. Active voice should be used:
+5. 应使用主动语态：
 
 ```sh
-Bad: Input x cannot be parsed
-Good: Cannot parse input x
+错误：输入 x 无法解析
+正确：无法解析输入 x
 ```
 
-6. Messages should not use contractions:
+6. 消息不应使用缩写：
 
 ```sh
-Bad: Can't parse input x
-Good: Cannot parse input x
+错误：无法解析输入 x
+正确：无法解析输入 x
 ```
 
-7. Messages should use a colon when providing additional information. Periods
-   should never be used. Other punctuation may be used as needed:
+7. 消息在提供额外信息时应使用冒号。永远不要使用句号。其他标点符号可根据需要使用：
 
 ```sh
-Bad: Cannot parse input x. value is empty
-Good: Cannot parse input x: value is empty
+错误：无法解析输入 x。值为空
+正确：无法解析输入 x：值为空
 ```
 
-8. Additional information should describe the current state, if possible, it
-   should also describe the desired state in an affirmative voice:
+8. 额外信息应描述当前状态，如果可能，还应以肯定语态描述期望状态：
 
 ```sh
-Bad: Cannot compute the square root for x: value must not be negative
-Good: Cannot compute the square root for x: current value is ${x}
-Better: Cannot compute the square root for x as x must be >= 0: current value is ${x}
+错误：无法计算 x 的平方根：值不能为负
+正确：无法计算 x 的平方根：当前值为 ${x}
+更好：无法计算 x 的平方根，因为 x 必须 >= 0：当前值为 ${x}
 ```
 
 ### std
 
-#### Do not depend on external code.
+#### 不要依赖外部代码。
 
-`https://jsr.io/@std` is intended to be baseline functionality that all Deno
-programs can rely on. We want to guarantee to users that this code does not
-include potentially unreviewed third-party code.
+`https://jsr.io/@std` 旨在成为所有 Deno
+程序可以依赖的基础功能。我们希望向用户保证此代码不包含未经审查的第三方代码。
 
-#### Document and maintain browser compatibility.
+#### 记录并维护浏览器兼容性。
 
-If a module is browser-compatible, include the following in the JSDoc at the top
-of the module:
+如果模块与浏览器兼容，请在模块顶部的 JSDoc 中包含以下内容：
 
 ```ts
-// This module is browser-compatible.
+// 此模块与浏览器兼容。
 ```
 
-Maintain browser compatibility for such a module by either not using the global
-`Deno` namespace or feature-testing for it. Make sure any new dependencies are
-also browser compatible.
+通过不使用全局 `Deno`
+命名空间或对其进行功能测试来维护此类模块的浏览器兼容性。确保任何新依赖项也与浏览器兼容。
 
-#### Prefer # over private keyword
+#### 优先使用 # 而非 private 关键字
 
-We prefer the private fields (`#`) syntax over `private` keyword of TypeScript
-in the standard modules codebase. The private fields make the properties and
-methods private even at runtime. On the other hand, `private` keyword of
-TypeScript guarantee it private only at compile time and the fields are publicly
-accessible at runtime.
+在标准模块代码库中，我们更喜欢私有字段 (`#`) 语法，而不是 TypeScript 的
+`private` 关键字。私有字段使属性和方法在运行时也是私有的。另一方面，TypeScript
+的 `private` 关键字仅在编译时保证其私有性，字段在运行时是公开可访问的。
 
-Good:
+正确：
 
 ```ts
 class MyClass {
@@ -475,7 +439,7 @@ class MyClass {
 }
 ```
 
-Bad:
+错误：
 
 ```ts
 class MyClass {
@@ -484,14 +448,13 @@ class MyClass {
 }
 ```
 
-#### Naming convention
+#### 命名约定
 
-Use `camelCase` for functions, methods, fields, and local variables. Use
-`PascalCase` for classes, types, interfaces, and enums. Use `UPPER_SNAKE_CASE`
-for static top-level items, such as `string`, `number`, `bigint`, `boolean`,
-`RegExp`, arrays of static items, records of static keys and values, etc.
+函数、方法、字段和局部变量使用 `camelCase`。类、类型、接口和枚举使用
+`PascalCase`。静态顶级项使用 `UPPER_SNAKE_CASE`，例如
+`string`、`number`、`bigint`、`boolean`、`RegExp`、静态项数组、静态键值记录等。
 
-Good:
+正确：
 
 ```ts
 function generateKey() {}
@@ -514,7 +477,7 @@ const KEY_MAX_LENGTH = 4294967295;
 const KEY_PATTERN = /^[0-9a-f]+$/;
 ```
 
-Bad:
+错误：
 
 ```ts
 function generate_key() {}
@@ -539,27 +502,27 @@ const key_maxLength = 4294967295;
 const KeyPattern = /^[0-9a-f]+$/;
 ```
 
-When the names are in `camelCase` or `PascalCase`, always follow the rules of
-them even when the parts of them are acronyms.
+当名称使用 `camelCase` 或 `PascalCase`
+时，即使部分名称是缩写，也应始终遵循它们的规则。
 
-Note: Web APIs use uppercase acronyms (`JSON`, `URL`, `URL.createObjectURL()`
-etc.). Deno Standard Library does not follow this convention.
+注意：Web API 使用大写缩写（`JSON`、`URL`、`URL.createObjectURL()` 等）。Deno
+标准库不遵循此约定。
 
-Good:
+正确：
 
 ```ts
 class HttpObject {
 }
 ```
 
-Bad:
+错误：
 
 ```ts
 class HTTPObject {
 }
 ```
 
-Good:
+正确：
 
 ```ts
 function convertUrl(url: URL) {
@@ -567,7 +530,7 @@ function convertUrl(url: URL) {
 }
 ```
 
-Bad:
+错误：
 
 ```ts
 function convertURL(url: URL) {

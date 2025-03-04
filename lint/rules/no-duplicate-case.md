@@ -2,12 +2,12 @@
 tags: [recommended]
 ---
 
-Disallows using the same case clause in a switch statement more than once.
+禁止在 `switch` 语句中多次使用相同的 `case` 子句。
 
-When you reuse a case test expression in a `switch` statement, the duplicate
-case will never be reached meaning this is almost always a bug.
+当你在 `switch` 语句中重复使用 `case` 测试表达式时，重复的 `case`
+将永远不会被执行，这意味着这几乎总是一个错误。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 const someText = "a";
@@ -16,14 +16,14 @@ switch (someText) {
     break;
   case "b":
     break;
-  case "a": // duplicate of (1)
+  case "a": // 重复了 (1)
     break;
   default:
     break;
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 const someText = "a";

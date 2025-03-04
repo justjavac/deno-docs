@@ -1,48 +1,44 @@
 ---
-title: "Interoperability with Node.js"
+title: "与 Node.js 的互操作性"
 url: /examples/interoperability_with_nodejs/
 videoUrl: https://www.youtube.com/watch?v=mgX1ymfqPSQ&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=2
 layout: video.tsx
 ---
 
-## Description of video
+## 视频描述
 
-Deno gained lots of interpoperability capabilities at its v2.0 release. In this
-video, we'll look at how to use Node.js built-in APIs, NPM modules, and JSR
-packages.
+Deno 在其 2.0 版本中获得了许多互操作性能力。在本视频中，我们将探讨如何使用
+Node.js 内置 API、NPM 模块和 JSR 包。
 
-## Transcript and examples
+## 文字记录和示例
 
-[Deno 2.0](https://deno.com/blog/v2) is here, and it's good. One of the most
-amazing features of Deno is its interoperability with other platforms including
-Node. For example, we can use the core Node.js built in APIs. All we have to do
-is add this Node specifier here.
+[Deno 2.0](https://deno.com/blog/v2) 已经发布，它非常出色。Deno
+最令人惊叹的功能之一是其与其他平台（包括
+Node）的互操作性。例如，我们可以使用核心的 Node.js 内置
+API。我们只需在此处添加这个 Node 标识符。
 
 ```ts
 import { fs } from "node:fs/priomses";
 ```
 
-Deno also supports the use of NPM modules. All you need to do is add the NPM
-specifier with your import and you're good to go.
+Deno 还支持使用 NPM 模块。你只需在导入时添加 NPM 标识符即可。
 
 ```ts
 import { * } as Sentry from "npm:@sentry/node";
 ```
 
-We can also take advantage of [JSR](https://jsr.io), an open source package
-registry for TypeScript and JavaScript.
+我们还可以利用 [JSR](https://jsr.io)，这是一个为 TypeScript 和 JavaScript
+提供的开源包注册表。
 
 ```ts
 import OpenAI from "jsr:@openai/openai";
 ```
 
-JSR works with Deno, of course, but also with Node.js. bun, and CloudFlare
-workers. You can even install JSR packages into Vite and Next.js applications.
+JSR 当然可以与 Deno 一起使用，也可以与 Node.js、bun 和 CloudFlare workers
+一起使用。你甚至可以将 JSR 包安装到 Vite 和 Next.js 应用程序中。
 
-Deno also gives us
-[import maps](https://docs.deno.com/runtime/fundamentals/modules/#differentiating-between-imports-or-importmap-in-deno.json-and---import-map-option),
-which help us manage our dependencies. You can install a package from JSR. The
-import will be added to the `deno.json`, and you can even use a shorthand to
-describe this to clean up your code even more. Deno 2.0 is focused on a really
-solid developer experience. New projects and migrations feel a whole lot easier
-with Deno.
+Deno 还为我们提供了
+[导入映射](https://docs.denohub.com/runtime/fundamentals/modules/#differentiating-between-imports-or-importmap-in-deno.json-and---import-map-option)，帮助我们管理依赖项。你可以从
+JSR 安装一个包。导入将被添加到 `deno.json`
+中，你甚至可以使用简写来描述这一点，以进一步清理你的代码。Deno 2.0
+专注于提供非常稳定的开发者体验。使用 Deno，新项目和迁移感觉更加轻松。

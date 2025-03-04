@@ -3,7 +3,7 @@
  * @difficulty intermediate
  * @tags cli, deploy
  * @run <url>
- * @resource {https://docs.deno.com/runtime/manual/node/npm_specifiers} npm: specifiers
+ * @resource {https://docs.denohub.com/runtime/manual/node/npm_specifiers} npm: specifiers
  * @resource {https://www.npmjs.com/package/jose} jose library on npm
  * @group Authentication
  *

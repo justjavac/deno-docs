@@ -2,10 +2,9 @@
 tags: [recommended, react, jsx]
 ---
 
-Spreading the same expression twice is typically a mistake and causes
-unnecessary computations.
+重复展开相同的表达式通常是一个错误，会导致不必要的计算。
 
-**Invalid:**
+**无效示例：**
 
 ```tsx
 <div {...foo} {...foo} />
@@ -13,7 +12,7 @@ unnecessary computations.
 <Foo {...foo.bar} {...foo.bar} />
 ```
 
-**Valid:**
+**有效示例：**
 
 ```tsx
 <div {...foo} />

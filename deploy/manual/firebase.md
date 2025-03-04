@@ -1,26 +1,24 @@
 ---
-title: "Connect to Firebase"
+title: "连接到 Firebase"
 ---
 
-Firebase is a platform developed by Google for creating mobile and web
-applications. Its features include authentication primitives for log in and a
-NoSQL datastore, Firestore, that you can persist data to.
+Firebase 是由 Google 开发的平台，用于创建移动和 Web
+应用程序。其功能包括用于登录的身份验证原语和一个 NoSQL 数据存储
+Firestore，您可以将数据持久化到其中。
 
-This tutorial covers how to connect to Firebase from an application deployed on
-Deno Deploy.
+本教程介绍了如何从部署在 Deno Deploy 上的应用程序连接到 Firebase。
 
-You can find a more comprehensive tutorial that builds a sample application on
-top of Firebase [here](../tutorials/tutorial-firebase).
+您可以在此处找到更全面的教程，该教程在 Firebase 之上构建了一个示例应用程序
+[这里](../tutorials/tutorial-firebase)。
 
-## Get credentials from Firebase
+## 从 Firebase 获取凭据
 
-> This tutorial assumes that you've already created a project in Firebase and
-> added a web application to your project.
+> 本教程假设您已经在 Firebase 中创建了一个项目，并向您的项目添加了一个 Web
+> 应用程序。
 
-1. Navigate to your project in Firebase and click on **Project Settings**
-2. Scroll down until you see a card with your app name, and a code sample that
-   includes a `firebaseConfig`object. It should look something like the below.
-   Keep this handy. We will use it later:
+1. 导航到 Firebase 中的项目，然后单击 **项目设置**
+2. 向下滚动，直到看到带有您的应用程序名称的卡片，以及包含 `firebaseConfig`
+   对象的代码示例。它应该类似于以下内容。请保留此内容，我们稍后将使用它：
 
    ```js
    var firebaseConfig = {
@@ -33,25 +31,25 @@ top of Firebase [here](../tutorials/tutorial-firebase).
    };
    ```
 
-## Create a Project in Deno Deploy
+## 在 Deno Deploy 中创建项目
 
-1. Go to [https://dash.deno.com/new](https://dash.deno.com/new) (Sign in with
-   GitHub if you didn't already) and click on **+ Empty Project** under **Deploy
-   from the command line**.
-2. Now click on the **Settings** button available on the project page.
-3. Navigate to the **Environment Variables** section and add the following:
+1. 访问
+   [https://dash.deno.com/new](https://dash.deno.com/new)（如果尚未登录，请使用
+   GitHub 登录），然后单击 **从命令行部署** 下的 **+ 空项目**。
+2. 现在单击项目页面上的 **设置** 按钮。
+3. 导航到 **环境变量** 部分并添加以下内容：
 
    <dl>
     <dt><code>FIREBASE_USERNAME</code></dt>
-    <dd>The Firebase user (email address) that was added above.</dd>
+    <dd>上面添加的 Firebase 用户（电子邮件地址）。</dd>
     <dt><code>FIREBASE_PASSWORD</code></dt>
-    <dd>The Firebase user password that was added above.</dd>
+    <dd>上面添加的 Firebase 用户密码。</dd>
     <dt><code>FIREBASE_CONFIG</code></dt>
-    <dd>The configuration of the Firebase application as a JSON string.</dd>
+    <dd>Firebase 应用程序的配置，作为 JSON 字符串。</dd>
    </dl>
 
-   The configuration needs to be a valid JSON string to be readable by the
-   application. If the code snippet given when setting up looked like this:
+   配置需要是有效的 JSON
+   字符串，以便应用程序可以读取。如果设置时提供的代码片段如下所示：
 
    ```js
    var firebaseConfig = {
@@ -64,8 +62,7 @@ top of Firebase [here](../tutorials/tutorial-firebase).
    };
    ```
 
-   You would need to set the value of the string to this (noting that spacing
-   and new lines are not required):
+   您需要将字符串的值设置为以下内容（注意不需要空格和换行）：
 
    ```json
    {
@@ -78,11 +75,11 @@ top of Firebase [here](../tutorials/tutorial-firebase).
    }
    ```
 
-## Write code that connects to Firebase
+## 编写连接到 Firebase 的代码
 
-The first thing we will do is import the `XMLHttpRequest` polyfill that Firebase
-needs to work under Deploy as well as a polyfill for `localStorage` to allow the
-Firebase auth to persist logged in users:
+我们要做的第一件事是导入 Firebase 在 Deploy 下工作所需的 `XMLHttpRequest`
+polyfill，以及一个 `localStorage` polyfill，以允许 Firebase
+身份验证持久化登录用户：
 
 ```js
 import "https://deno.land/x/xhr@0.1.1/mod.ts";
@@ -90,13 +87,11 @@ import { installGlobals } from "https://deno.land/x/virtualstorage@0.1.0/mod.ts"
 installGlobals();
 ```
 
-> ℹ️ we are using the current version of packages at the time of the writing of
-> this tutorial. They may not be up-to-date and you may want to double check
-> current versions.
+> ℹ️
+> 我们使用的是本教程编写时的当前版本包。它们可能不是最新的，您可能需要再次检查当前版本。
 
-Because Deploy has a lot of the web standard APIs, it is best to use the web
-libraries for Firebase under deploy. Currently v9 is in still in beta for
-Firebase, so we will use v8:
+由于 Deploy 具有许多 Web 标准 API，因此最好在 Deploy 下使用 Firebase 的 Web
+库。目前 Firebase 的 v9 仍处于测试阶段，因此我们将使用 v8：
 
 ```js
 import firebase from "https://esm.sh/firebase@9.17.0/app";
@@ -104,9 +99,9 @@ import "https://esm.sh/firebase@9.17.0/auth";
 import "https://esm.sh/firebase@9.17.0/firestore";
 ```
 
-Now we need to setup our Firebase application. We will be getting the
-configuration from the environment variables we set up previously and get
-references to the parts of Firebase we are going to use:
+现在我们需要设置我们的 Firebase
+应用程序。我们将从之前设置的环境变量中获取配置，并获取我们将要使用的 Firebase
+部分的引用：
 
 ```js
 const firebaseConfig = JSON.parse(Deno.env.get("FIREBASE_CONFIG"));
@@ -115,18 +110,15 @@ const auth = firebase.auth(firebaseApp);
 const db = firebase.firestore(firebaseApp);
 ```
 
-Ok, we are almost done. We just need to create our middleware application and
-add the `localStorage` middleware we imported:
+好的，我们快完成了。我们只需要创建我们的中间件应用程序并添加我们导入的
+`localStorage` 中间件：
 
 ```js
 const app = new Application();
 app.use(virtualStorage());
 ```
 
-And then we need to add middleware to authenticate the user. In this tutorial we
-are simply grabbing the username and password from the environment variables we
-will be setting up, but this could easily be adapted to redirect a user to a
-sign-in page if they are not logged in:
+然后我们需要添加中间件来验证用户。在本教程中，我们只是从我们将要设置的环境变量中获取用户名和密码，但这可以很容易地适应于如果用户未登录则将其重定向到登录页面：
 
 ```js
 app.use(async (ctx, next) => {
@@ -149,24 +141,21 @@ app.use(async (ctx, next) => {
 });
 ```
 
-## Deploy the application to Deno Deploy
+## 将应用程序部署到 Deno Deploy
 
-Once you have finished writing your application, you can deploy it on Deno
-Deploy.
+完成应用程序编写后，您可以将其部署到 Deno Deploy。
 
-To do this, go back to your project page at
-`https://dash.deno.com/projects/<project-name>`.
+为此，请返回您的项目页面 `https://dash.deno.com/projects/<project-name>`。
 
-You should see a couple of options to deploy:
+您应该会看到几个部署选项：
 
-- [Github integration](ci_github)
+- [Github 集成](ci_github)
 - [`deployctl`](./deployctl.md)
   ```sh
   deployctl deploy --project=<project-name> <application-file-name>
   ```
 
-Unless you want to add a build step, we recommend that you select the Github
-integration.
+除非您想添加构建步骤，否则我们建议您选择 Github 集成。
 
-For more details on the different ways to deploy on Deno Deploy and the
-different configuration options, read [here](how-to-deploy).
+有关在 Deno Deploy 上部署的不同方式以及不同配置选项的更多详细信息，请阅读
+[这里](how-to-deploy)。

@@ -2,27 +2,26 @@
 tags: []
 ---
 
-Disallows the use of implicit exports in ["ambient" namespaces].
+禁止在 ["ambient" 命名空间] 中使用隐式导出。
 
-TypeScript implicitly export all members of an ["ambient" namespaces], except
-whether a named export is present.
+TypeScript 会隐式导出 ["ambient" 命名空间] 中的所有成员，除非存在命名导出。
 
-["ambient" namespaces]: https://www.typescriptlang.org/docs/handbook/namespaces.html#ambient-namespaces
+["ambient" 命名空间]: https://www.typescriptlang.org/docs/handbook/namespaces.html#ambient-namespaces
 
-**Invalid:**
+**无效示例:**
 
 ```ts
-// foo.ts or foo.d.ts
+// foo.ts 或 foo.d.ts
 declare namespace ns {
   interface ImplicitlyExported {}
   export type Exported = true;
 }
 ```
 
-**Valid:**
+**有效示例:**
 
 ```ts
-// foo.ts or foo.d.ts
+// foo.ts 或 foo.d.ts
 declare namespace ns {
   interface NonExported {}
   export {};

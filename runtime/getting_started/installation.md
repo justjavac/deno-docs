@@ -1,237 +1,233 @@
 ---
-title: Installation
+title: 安装
 oldUrl:
   - /runtime/manual/fundamentals/installation
   - /runtime/manual/getting_started/installation
   - /runtime/fundamentals/installation
 ---
 
-Deno works on macOS, Linux, and Windows. Deno is a single binary executable. It
-has no external dependencies. On macOS, both M1 (arm64) and Intel (x64)
-executables are provided. On Linux and Windows, only x64 is supported.
+Deno 支持 macOS、Linux 和 Windows 系统。Deno
+是一个单二进制可执行文件，没有外部依赖。在 macOS 上，提供了 M1（arm64）和
+Intel（x64）两种架构的可执行文件。在 Linux 和 Windows 上，仅支持 x64 架构。
 
-## Download and install
+## 下载与安装
 
-[deno_install](https://github.com/denoland/deno_install) provides convenience
-scripts to download and install the binary.
+[deno_install](https://github.com/denoland/deno_install)
+提供了便捷的脚本来下载和安装二进制文件。
 
 <deno-tabs group-id="operating-systems">
 <deno-tab value="mac" label="macOS" default>
 
-Using Shell:
+使用 Shell：
 
 ```shell
 curl -fsSL https://deno.land/install.sh | sh
 ```
 
-Using [npm](https://npmjs.com/package/deno):
+使用 [npm](https://npmjs.com/package/deno)：
 
 ```shell
 npm install -g deno
 ```
 
-> <small>The startup time of the Deno command gets affected if it's installed
-> via npm. We recommend the shell install script for better performance.</small>
+> <small>如果通过 npm 安装，Deno 命令的启动时间会受到影响。我们推荐使用 Shell
+> 安装脚本来获得更好的性能。</small>
 
-Using [Homebrew](https://formulae.brew.sh/formula/deno):
+使用 [Homebrew](https://formulae.brew.sh/formula/deno)：
 
 ```shell
 brew install deno
 ```
 
-Using [MacPorts](https://ports.macports.org/port/deno/):
+使用 [MacPorts](https://ports.macports.org/port/deno/)：
 
 ```shell
 sudo port install deno
 ```
 
-Using [Nix](https://nixos.org/download.html):
+使用 [Nix](https://nixos.org/download.html)：
 
 ```shell
 nix-shell -p deno
 ```
 
-Using [asdf](https://asdf-vm.com/):
+使用 [asdf](https://asdf-vm.com/)：
 
 ```shell
 asdf plugin add deno https://github.com/asdf-community/asdf-deno.git
 
-# Download and install the latest version of Deno
+# 下载并安装最新版本的 Deno
 asdf install deno latest
 
-# To set as the default version of Deno globally
+# 设置为全局默认的 Deno 版本
 asdf set -u deno latest
 
-# To set as the default version of Deno locally (current project only)
+# 设置为本地默认的 Deno 版本（仅当前项目）
 asdf set deno latest
 ```
 
-Using [vfox](https://vfox.lhan.me/):
+使用 [vfox](https://vfox.lhan.me/)：
 
 ```shell
 vfox add deno
 
-# Download and install the latest version of Deno
+# 下载并安装最新版本的 Deno
 vfox install deno@latest
 
-# To set the version of Deno globally
+# 设置全局的 Deno 版本
 vfox use --global deno
 ```
 
 </deno-tab>
 <deno-tab value="windows" label="Windows">
 
-Using PowerShell (Windows):
+使用 PowerShell（Windows）：
 
 ```powershell
 irm https://deno.land/install.ps1 | iex
 ```
 
-Using [npm](https://npmjs.com/package/deno):
+使用 [npm](https://npmjs.com/package/deno)：
 
 ```shell
 npm install -g deno
 ```
 
-> <small>The startup time of the Deno command gets affected if it's installed
-> via npm. We recommend the PowerShell install script for better
-> performance.</small>
+> <small>如果通过 npm 安装，Deno 命令的启动时间会受到影响。我们推荐使用
+> PowerShell 安装脚本来获得更好的性能。</small>
 
-Using [Scoop](https://scoop.sh/):
+使用 [Scoop](https://scoop.sh/)：
 
 ```shell
 scoop install deno
 ```
 
-Using [Chocolatey](https://chocolatey.org/packages/deno):
+使用 [Chocolatey](https://chocolatey.org/packages/deno)：
 
 ```shell
 choco install deno
 ```
 
-Using [Winget](https://github.com/microsoft/winget-cli):
+使用 [Winget](https://github.com/microsoft/winget-cli)：
 
 ```shell
 winget install DenoLand.Deno
 ```
 
-Using [vfox](https://vfox.lhan.me/):
+使用 [vfox](https://vfox.lhan.me/)：
 
 ```shell
 vfox add deno
 
-# Download and install the latest version of Deno
+# 下载并安装最新版本的 Deno
 vfox install deno@latest
 
-# To set the version of Deno globally
+# 设置全局的 Deno 版本
 vfox use --global deno
 ```
 
 </deno-tab>
 <deno-tab value="linux" label="Linux">
 
-Using Shell:
+使用 Shell：
 
 ```shell
 curl -fsSL https://deno.land/install.sh | sh
 ```
 
-Using [npm](https://npmjs.com/package/deno):
+使用 [npm](https://npmjs.com/package/deno)：
 
 ```shell
 npm install -g deno
 ```
 
-> <small>The startup time of the Deno command gets affected if it's installed
-> via npm. We recommend the shell install script for better performance.</small>
+> <small>如果通过 npm 安装，Deno 命令的启动时间会受到影响。我们推荐使用 Shell
+> 安装脚本来获得更好的性能。</small>
 
-Using [Nix](https://nixos.org/download.html):
+使用 [Nix](https://nixos.org/download.html)：
 
 ```shell
 nix-shell -p deno
 ```
 
-Using [asdf](https://asdf-vm.com/):
+使用 [asdf](https://asdf-vm.com/)：
 
 ```shell
 asdf plugin add deno https://github.com/asdf-community/asdf-deno.git
 
-# Download and install the latest version of Deno
+# 下载并安装最新版本的 Deno
 asdf install deno latest
 
-# To set as the default version of Deno globally
+# 设置为全局默认的 Deno 版本
 asdf set -u deno latest
 
-# To set as the default version of Deno locally (current project only)
+# 设置为本地默认的 Deno 版本（仅当前项目）
 asdf set deno latest
 ```
 
-Using [vfox](https://vfox.lhan.me/):
+使用 [vfox](https://vfox.lhan.me/)：
 
 ```shell
 vfox add deno
 
-# Download and install the latest version of Deno
+# 下载并安装最新版本的 Deno
 vfox install deno@latest
 
-# To set the version of Deno globally
+# 设置全局的 Deno 版本
 vfox use --global deno
 ```
 
 </deno-tab>
 </deno-tabs>
 
-You can also build and install from source using
-[Cargo](https://crates.io/crates/deno):
+你也可以使用 [Cargo](https://crates.io/crates/deno) 从源码构建并安装：
 
 ```shell
 cargo install deno --locked
 ```
 
-Deno binaries can also be installed manually, by downloading a zip file at
-[github.com/denoland/deno/releases](https://github.com/denoland/deno/releases).
-These packages contain just a single executable file. You will have to set the
-executable bit on macOS and Linux.
+Deno 的二进制文件也可以手动安装，通过从
+[github.com/denoland/deno/releases](https://github.com/denoland/deno/releases)
+下载 zip 文件。这些包只包含一个可执行文件。在 macOS 和 Linux
+上，你需要设置可执行权限。
 
 ## Docker
 
-For more information and instructions on the official Docker images:
-[https://github.com/denoland/deno_docker](https://github.com/denoland/deno_docker)
+有关官方 Docker
+镜像的更多信息和说明，请访问：[https://github.com/denoland/deno_docker](https://github.com/denoland/deno_docker)
 
-## Testing your installation
+## 测试安装
 
-To test your installation, run `deno --version`. If this prints the Deno version
-to the console the installation was successful.
+要测试安装是否成功，运行 `deno --version`。如果控制台输出了 Deno
+的版本号，则安装成功。
 
-Use `deno help` to see help text documenting Deno's flags and usage. Get a
-detailed guide on the CLI
-[here](/runtime/getting_started/command_line_interface/).
+使用 `deno help` 查看帮助文档，了解 Deno 的标志和用法。获取详细的 CLI
+指南，请访问[这里](/runtime/getting_started/command_line_interface/)。
 
-## Updating
+## 更新
 
-To update a previously installed version of Deno, you can run:
+要更新已安装的 Deno 版本，可以运行：
 
 ```shell
 deno upgrade
 ```
 
-Or using [Winget](https://github.com/microsoft/winget-cli) (Windows):
+或使用 [Winget](https://github.com/microsoft/winget-cli)（Windows）：
 
 ```shell
 winget upgrade DenoLand.Deno
 ```
 
-This will fetch the latest release from
-[github.com/denoland/deno/releases](https://github.com/denoland/deno/releases),
-unzip it, and replace your current executable with it.
+这将从
+[github.com/denoland/deno/releases](https://github.com/denoland/deno/releases)
+获取最新版本，解压并替换当前的可执行文件。
 
-You can also use this utility to install a specific version of Deno:
+你也可以使用此工具安装特定版本的 Deno：
 
 ```shell
 deno upgrade --version 1.0.1
 ```
 
-## Building from source
+## 从源码构建
 
-Information about how to build from source can be found in the
-[`Contributing`](/runtime/contributing/building_from_source/) chapter.
+有关如何从源码构建的信息，请参阅[`贡献`](/runtime/contributing/building_from_source/)章节。

@@ -1,21 +1,21 @@
 ---
-title: "Where to get help"
+title: "在哪里获取帮助"
 oldUrl: /runtime/manual/help/
 ---
 
-Stuck? Lost? Get Help from the Community.
+遇到困难？迷失方向？从社区获取帮助。
 
-## [Community Discord](https://discord.gg/deno)
+## [社区 Discord](https://discord.gg/deno)
 
-Ask questions and chat with community members in real-time.
+实时提问并与社区成员聊天。
 
 ## [Stack Overflow](https://stackoverflow.com/questions/tagged/deno)
 
-Stack Overflow is a popular forum to ask code-level questions or if you're stuck
-with a specific error.
-[Ask your own!](https://stackoverflow.com/questions/ask?tags=deno)
+Stack Overflow
+是一个流行的论坛，可以提出代码级别的问题，或者如果你遇到特定错误时寻求帮助。
+[提出你的问题！](https://stackoverflow.com/questions/ask?tags=deno)
 
-## [DEV's Deno Community](https://dev.to/t/deno)
+## [DEV 的 Deno 社区](https://dev.to/t/deno)
 
-A great place to find interesting articles about best practices, application
-architecture and new learnings. Post your articles with the tag `deno`.
+这是一个寻找关于最佳实践、应用程序架构和新知识的有趣文章的好地方。使用 `deno`
+标签发布你的文章。

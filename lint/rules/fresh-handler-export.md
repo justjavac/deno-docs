@@ -2,14 +2,12 @@
 tags: [fresh]
 ---
 
-Checks correct naming for named fresh middleware export.
+检查命名正确的 fresh middleware 导出。
 
-Files inside the `routes/` folder can export middlewares that run before any
-rendering happens. They are expected to be available as a named export called
-`handler`. This rule checks for when the export was incorrectly named `handlers`
-instead of `handler`.
+`routes/` 文件夹中的文件可以导出在渲染之前运行的中间件。它们应作为名为 `handler`
+的命名导出可用。此规则检查导出是否错误地命名为 `handlers` 而不是 `handler`。
 
-**Invalid:**
+**无效:**
 
 ```js
 export const handlers = {
@@ -20,7 +18,7 @@ export function handlers() {}
 export async function handlers() {}
 ```
 
-**Valid:**
+**有效:**
 
 ```jsx
 export const handler = {

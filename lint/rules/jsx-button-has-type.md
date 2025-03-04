@@ -2,18 +2,17 @@
 tags: [recommended, react, jsx, fresh]
 ---
 
-Enforce `<button>` elements to have a `type` attribute. If a `<button>` is
-placed inside a `<form>` element it will act as a submit button by default which
-can be unexpected.
+强制 `<button>` 元素具有 `type` 属性。如果 `<button>` 被放置在 `<form>`
+元素内，默认情况下它将作为提交按钮，这可能是意料之外的。
 
-**Invalid:**
+**无效示例：**
 
 ```tsx
 const btn = <button>click me</button>;
 const btn = <button type="2">click me</button>;
 ```
 
-**Valid:**
+**有效示例：**
 
 ```tsx
 const btn = <button type="button">click me</button>;

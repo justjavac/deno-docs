@@ -4,7 +4,7 @@
  * @tags cli, deploy, web
  * @run --allow-net <url>
  * @resource {/examples/http_server_websocket} HTTP Server: WebSockets
- * @resource {https://developer.mozilla.org/en-US/docs/Web/API/WebSocket} MDN: WebSocket
+ * @resource {https://developer.mozilla.org/zh-CN/docs/Web/API/WebSocket} MDN: WebSocket
  * @group Network
  *
  * Opening a WebSocket connection for real-time, bi-directional communication with Deno is very simple.

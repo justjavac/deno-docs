@@ -3,8 +3,8 @@
  * @difficulty intermediate
  * @tags cli, deploy
  * @run --unstable-kv <url>
- * @resource {https://docs.deno.com/deploy/kv/manual} Deno KV user guide
- * @resource {https://docs.deno.com/api/deno/~/Deno.Kv} Deno KV Runtime API docs
+ * @resource {https://docs.denohub.com/deploy/kv/manual} Deno KV user guide
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.Kv} Deno KV Runtime API docs
  * @group Unstable APIs
  *
  * <strong>Warning: This is an unstable API that is subject to change or removal at anytime.</strong><br>Deno KV is a key/value database built in to the Deno runtime, and works with

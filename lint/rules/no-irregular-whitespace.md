@@ -2,42 +2,38 @@
 tags: [recommended]
 ---
 
-Disallows the use of non-space or non-tab whitespace characters.
+禁止使用非空格或非制表符的空白字符。
 
-Non-space or non-tab whitespace characters can be very difficult to spot in your
-code as editors will often render them invisibly. These invisible characters can
-cause issues or unexpected behaviors. Sometimes these characters are added
-inadvertently through copy/paste or incorrect keyboard shortcuts.
+非空格或非制表符的空白字符在代码中很难被发现，因为编辑器通常会以不可见的方式渲染它们。这些不可见字符可能会导致问题或意外行为。有时这些字符会通过复制/粘贴或错误的键盘快捷键无意中添加。
 
-The following characters are disallowed:
+以下字符被禁止使用：
 
 ```
-\u000B - Line Tabulation (\v) - <VT>
-\u000C - Form Feed (\f) - <FF>
-\u00A0 - No-Break Space - <NBSP>
-\u0085 - Next Line
-\u1680 - Ogham Space Mark
-\u180E - Mongolian Vowel Separator - <MVS>
-\ufeff - Zero Width No-Break Space - <BOM>
-\u2000 - En Quad
-\u2001 - Em Quad
-\u2002 - En Space - <ENSP>
-\u2003 - Em Space - <EMSP>
-\u2004 - Tree-Per-Em
-\u2005 - Four-Per-Em
-\u2006 - Six-Per-Em
-\u2007 - Figure Space
-\u2008 - Punctuation Space - <PUNCSP>
-\u2009 - Thin Space
-\u200A - Hair Space
-\u200B - Zero Width Space - <ZWSP>
-\u2028 - Line Separator
-\u2029 - Paragraph Separator
-\u202F - Narrow No-Break Space
-\u205f - Medium Mathematical Space
-\u3000 - Ideographic Space
+\u000B - 行制表符 (\v) - <VT>
+\u000C - 换页符 (\f) - <FF>
+\u00A0 - 不换行空格 - <NBSP>
+\u0085 - 下一行
+\u1680 - 欧甘空格标记
+\u180E - 蒙古语元音分隔符 - <MVS>
+\ufeff - 零宽度不换行空格 - <BOM>
+\u2000 - 半角空格
+\u2001 - 全角空格
+\u2002 - 半角空格 - <ENSP>
+\u2003 - 全角空格 - <EMSP>
+\u2004 - 三分之一全角空格
+\u2005 - 四分之一全角空格
+\u2006 - 六分之一全角空格
+\u2007 - 数字空格
+\u2008 - 标点空格 - <PUNCSP>
+\u2009 - 细空格
+\u200A - 极细空格
+\u200B - 零宽度空格 - <ZWSP>
+\u2028 - 行分隔符
+\u2029 - 段落分隔符
+\u202F - 窄不换行空格
+\u205f - 中等数学空格
+\u3000 - 表意空格
 ```
 
-To fix this linting issue, replace instances of the above with regular spaces,
-tabs or new lines. If it's not obvious where the offending character(s) are try
-retyping the line from scratch.
+要修复此 linting
+问题，请将上述字符替换为常规空格、制表符或换行符。如果不清楚违规字符的位置，请尝试从头重新输入该行。

@@ -2,13 +2,11 @@
 tags: [recommended]
 ---
 
-Disallows unused labels.
+禁止未使用的标签。
 
-A label that is declared but never used is most likely developer's mistake. If
-that label is meant to be used, then write a code so that it will be used.
-Otherwise, remove the label.
+声明但从未使用的标签很可能是开发者的错误。如果该标签旨在被使用，那么编写代码以确保它被使用。否则，请移除该标签。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 LABEL1:
@@ -27,7 +25,7 @@ for (const x of xs) {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 LABEL1:

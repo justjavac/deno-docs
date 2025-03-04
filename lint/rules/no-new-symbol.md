@@ -2,25 +2,24 @@
 tags: [recommended]
 ---
 
-Disallows the use of `new` operators with built-in `Symbol`s.
+禁止使用 `new` 操作符与内置的 `Symbol` 一起使用。
 
-`Symbol`s are created by being called as a function, but we sometimes call it
-with the `new` operator by mistake. This rule detects such wrong usage of the
-`new` operator.
+`Symbol` 是通过作为函数调用来创建的，但我们有时会错误地使用 `new`
+操作符来调用它。此规则检测这种错误的 `new` 操作符用法。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const foo = new Symbol("foo");
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const foo = Symbol("foo");
 
 function func(Symbol: typeof SomeClass) {
-  // This `Symbol` is not built-in one
+  // 这里的 `Symbol` 不是内置的
   const bar = new Symbol();
 }
 ```

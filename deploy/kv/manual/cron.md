@@ -1,15 +1,15 @@
 ---
-title: "Scheduling cron tasks"
+title: "调度 cron 任务"
 oldUrl:
   - /kv/manual/cron/
 ---
 
 <deno-admonition></deno-admonition>
 
-The [`Deno.cron`](https://docs.deno.com/api/deno/~/Deno.cron) interface enables
-you to configure JavaScript or TypeScript code that executes on a configurable
-schedule using [cron syntax](https://en.wikipedia.org/wiki/Cron). In the example
-below, we configure a block of JavaScript code that will execute every minute.
+[`Deno.cron`](https://docs.denohub.com/api/deno/~/Deno.cron) 接口允许你使用
+[cron 语法](https://en.wikipedia.org/wiki/Cron) 配置 JavaScript 或 TypeScript
+代码，使其在可配置的时间表上执行。在下面的示例中，我们配置了一段 JavaScript
+代码，它将每分钟执行一次。
 
 ```ts
 Deno.cron("Log a message", "* * * * *", () => {
@@ -17,9 +17,8 @@ Deno.cron("Log a message", "* * * * *", () => {
 });
 ```
 
-It's also possible to use JavaScript objects to define the cron schedule. In the
-example below, we configure a block of JavaScript code that will execute once an
-hour.
+也可以使用 JavaScript 对象来定义 cron 时间表。在下面的示例中，我们配置了一段
+JavaScript 代码，它将每小时执行一次。
 
 ```ts
 Deno.cron("Log a message", { hour: { every: 1 } }, () => {
@@ -27,25 +26,22 @@ Deno.cron("Log a message", { hour: { every: 1 } }, () => {
 });
 ```
 
-`Deno.cron` takes three arguments:
+`Deno.cron` 接受三个参数：
 
-- A human-readable name for the cron task
-- A cron schedule string or JavaScript object that defines a schedule on which
-  the cron job will run
-- a function to be executed on the given schedule
+- 一个人类可读的 cron 任务名称
+- 一个 cron 时间表字符串或 JavaScript 对象，用于定义 cron 任务运行的时间表
+- 一个在给定时间表上执行的函数
 
-If you are new to cron syntax, there are a number of third party modules
-[like this one](https://www.npmjs.com/package/cron-time-generator) that will
-help you generate cron schedule strings.
+如果你不熟悉 cron 语法，可以使用一些第三方模块
+[比如这个](https://www.npmjs.com/package/cron-time-generator) 来帮助你生成 cron
+时间表字符串。
 
-## Retrying failed runs
+## 重试失败的运行
 
-Failed cron invocations are automatically retried with a default retry policy.
-If you would like to specify a custom retry policy, you can use the
-`backoffSchedule` property to specify an array of wait times (in milliseconds)
-to wait before retrying the function call again. In the following example, we
-will attempt to retry failed callbacks three times - after one second, five
-seconds, and then ten seconds.
+失败的 cron
+调用会自动使用默认的重试策略进行重试。如果你想指定自定义的重试策略，可以使用
+`backoffSchedule`
+属性来指定一个等待时间数组（以毫秒为单位），在重试函数调用之前等待。在下面的示例中，我们将尝试重试失败的回调三次——分别在一秒、五秒和十秒后。
 
 ```ts
 Deno.cron("Retry example", "* * * * *", () => {
@@ -55,134 +51,121 @@ Deno.cron("Retry example", "* * * * *", () => {
 });
 ```
 
-## Design and limitations
+## 设计和限制
 
-Below are some design details and limitations to be aware of when using
-`Deno.cron`.
+以下是一些在使用 `Deno.cron` 时需要注意的设计细节和限制。
 
-### Tasks must be defined at the top level module scope
+### 任务必须在模块的顶层作用域中定义
 
-The [`Deno.cron`](https://docs.deno.com/api/deno/~/Deno.cron) interface is
-designed to support static definition of cron tasks based on pre-defined
-schedules. All `Deno.cron` tasks must be defined at the top-level of a module.
-Any nested `Deno.cron` definitions (e.g. inside
-[`Deno.serve`](https://docs.deno.com/api/deno/~/Deno.serve) handler) will result
-in an error or will be ignored.
+[`Deno.cron`](https://docs.denohub.com/api/deno/~/Deno.cron)
+接口旨在支持基于预定义时间表的静态 cron 任务定义。所有 `Deno.cron`
+任务必须在模块的顶层定义。任何嵌套的 `Deno.cron` 定义（例如在
+[`Deno.serve`](https://docs.denohub.com/api/deno/~/Deno.serve)
+处理程序中）将导致错误或被忽略。
 
-If you need to schedule tasks dynamically during your Deno program execution,
-you can use the [Deno Queues](./queue_overview) APIs.
+如果你需要在 Deno 程序执行期间动态调度任务，可以使用
+[Deno Queues](./queue_overview) API。
 
-### Time zone
+### 时区
 
-`Deno.cron` schedules are specified using UTC time zone. This helps avoid issues
-with time zones which observe daylight saving time.
+`Deno.cron` 时间表使用 UTC 时区指定。这有助于避免与观察夏令时的时区相关的问题。
 
-### Overlapping executions
+### 重叠执行
 
-It's possible for the next scheduled invocation of your cron task to overlap
-with the previous invocation. If this occurs, `Deno.cron` will skip the next
-scheduled invocation in order to avoid overlapping executions.
+你的 cron
+任务的下一次计划调用可能会与上一次调用重叠。如果发生这种情况，`Deno.cron`
+将跳过下一次计划调用，以避免重叠执行。
 
-### Day-of-week numeric representation
+### 星期几的数字表示
 
-`Deno.cron` does not use 0-based day-of-week numeric representation. Instead, it
-uses 1-7 (or SUN-SAT) to represent Sunday through Saturday. This may be
-different compared to other cron engines which use 0-6 representation.
+`Deno.cron` 不使用基于 0 的星期几数字表示。相反，它使用 1-7（或
+SUN-SAT）来表示星期日到星期六。这可能与其他使用 0-6 表示的 cron 引擎不同。
 
-## Usage on Deno Deploy
+## 在 Deno Deploy 上的使用
 
-With [Deno Deploy](https://deno.com/deploy), you can run your background tasks
-on V8 isolates in the cloud. When doing so, there are a few considerations to
-keep in mind.
+通过 [Deno Deploy](https://deno.com/deploy)，你可以在云端的 V8
+隔离环境中运行后台任务。这样做时，有几个注意事项需要牢记。
 
-### Differences with Deno CLI
+### 与 Deno CLI 的区别
 
-Like other Deno runtime built-ins (like queues and Deno KV), the `Deno.cron`
-implementation works slightly differently on Deno Deploy.
+与其他 Deno 运行时内置功能（如队列和 Deno KV）一样，`Deno.cron` 在 Deno Deploy
+上的实现略有不同。
 
-#### How cron works by default
+#### 默认情况下 cron 的工作原理
 
-The implementation of `Deno.cron` in the Deno runtime keeps execution state
-in-memory. If you run multiple Deno programs that use `Deno.cron`, each program
-will have its own independent set of cron tasks.
+Deno 运行时中的 `Deno.cron` 实现将执行状态保存在内存中。如果你运行多个使用
+`Deno.cron` 的 Deno 程序，每个程序都将拥有自己独立的 cron 任务集。
 
-#### How cron works on Deno Deploy
+#### 在 Deno Deploy 上 cron 的工作原理
 
-Deno Deploy provides a serverless implementation of `Deno.cron` that is designed
-for high availability and scale. Deno Deploy automatically extracts your
-`Deno.cron` definitions at deployment time, and schedules them for execution
-using on-demand isolates. Your latest production deployment defines the set of
-active cron tasks that are scheduled for execution. To add, remove, or modify
-cron tasks, simply modify your code and create a new production deployment.
+Deno Deploy 提供了一个为高可用性和扩展性设计的 `Deno.cron` 无服务器实现。Deno
+Deploy 在部署时自动提取你的 `Deno.cron`
+定义，并使用按需隔离环境调度它们执行。你最新的生产部署定义了计划执行的活跃 cron
+任务集。要添加、删除或修改 cron 任务，只需修改你的代码并创建新的生产部署。
 
-Deno Deploy guarantees that your cron tasks are executed at least once per each
-scheduled time interval. This generally means that your cron handler will be
-invoked once per scheduled time. In some failure scenarios, the handler may be
-invoked multiple times for the same scheduled time.
+Deno Deploy 保证你的 cron 任务在每个计划时间间隔内至少执行一次。这通常意味着你的
+cron
+处理程序将在每个计划时间被调用一次。在某些故障情况下，处理程序可能会在同一计划时间被多次调用。
 
-### Cron dashboard
+### Cron 仪表板
 
-When you make a production deployment that includes a cron task, you can view a
-list of all your cron tasks in the
-[Deploy dashboard](https://dash.deno.com/projects) under the `Cron` tab for your
-project.
+当你进行包含 cron 任务的生产部署时，你可以在
+[Deploy 仪表板](https://dash.deno.com/projects) 中项目的 `Cron` 选项卡下查看所有
+cron 任务的列表。
 
-![a listing of cron tasks in the Deno dashboard](./images/cron-tasks.png)
+![Deno 仪表板中的 cron 任务列表](./images/cron-tasks.png)
 
-### Pricing
+### 定价
 
-`Deno.cron` invocations are charged at the same rate as inbound HTTP requests to
-your deployments. Learn more about pricing
-[here](https://deno.com/deploy/pricing).
+`Deno.cron` 调用的计费方式与部署的入站 HTTP 请求相同。了解更多关于定价的信息
+[这里](https://deno.com/deploy/pricing)。
 
-### Deploy-specific limitations
+### Deploy 特定的限制
 
-- `Deno.cron` is only available for production deployments (not preview
-  deployments)
-- The exact invocation time of your `Deno.cron` handler may vary by up to a
-  minute from the scheduled time
+- `Deno.cron` 仅适用于生产部署（不适用于预览部署）
+- 你的 `Deno.cron` 处理程序的确切调用时间可能与计划时间相差最多一分钟
 
-## Cron configuration examples
+## Cron 配置示例
 
-Here are a few common cron configurations, provided for your convenience.
+以下是一些常见的 cron 配置，供你参考。
 
-```ts title="Run once a minute"
+```ts title="每分钟运行一次"
 Deno.cron("Run once a minute", "* * * * *", () => {
   console.log("Hello, cron!");
 });
 ```
 
-```ts title="Run every fifteen minutes"
+```ts title="每十五分钟运行一次"
 Deno.cron("Run every fifteen minutes", "*/15 * * * *", () => {
   console.log("Hello, cron!");
 });
 ```
 
-```ts title="Run once an hour, on the hour"
+```ts title="每小时整点运行一次"
 Deno.cron("Run once an hour, on the hour", "0 * * * *", () => {
   console.log("Hello, cron!");
 });
 ```
 
-```ts title="Run every three hours"
+```ts title="每三小时运行一次"
 Deno.cron("Run every three hours", "0 */3 * * *", () => {
   console.log("Hello, cron!");
 });
 ```
 
-```ts title="Run every day at 1am"
+```ts title="每天凌晨 1 点运行一次"
 Deno.cron("Run every day at 1am", "0 1 * * *", () => {
   console.log("Hello, cron!");
 });
 ```
 
-```ts title="Run every Wednesday at midnight"
+```ts title="每周三午夜运行一次"
 Deno.cron("Run every Wednesday at midnight", "0 0 * * WED", () => {
   console.log("Hello, cron!");
 });
 ```
 
-```ts title="Run on the first of the month at midnight"
+```ts title="每月第一天午夜运行一次"
 Deno.cron("Run on the first of the month at midnight", "0 0 1 * *", () => {
   console.log("Hello, cron!");
 });

@@ -405,7 +405,7 @@ export default function () {
                   title="REST API"
                   description="通过我们的 REST API 快速配置新项目并进行部署。"
                   linktext="REST API"
-                  link="/subhosting/manual/#rest-api-reference-and-openapi-spec"
+                  link="/subhosting/manual/#rest-api-参考和-openapi-规范"
                   product="deploy"
                 />
               </div>

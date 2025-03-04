@@ -1,28 +1,27 @@
 ---
-title: "Simple API server"
+title: "简单的 API 服务器"
 oldUrl:
   - /deploy/docs/simple-api/
 ---
 
-Deno is great for creating simple, light-weight API servers. Learn how to create
-and deploy one using Deno Deploy in this tutorial.
+Deno 非常适合创建简单、轻量级的 API 服务器。在本教程中，学习如何使用 Deno Deploy
+创建和部署一个 API 服务器。
 
-## Create a local API server
+## 创建本地 API 服务器
 
-In your terminal, create a file named `server.ts`.
+在终端中，创建一个名为 `server.ts` 的文件。
 
 ```shell
 touch server.ts
 ```
 
-We'll implement a simple link shortener service using a
-[Deno KV database](/deploy/kv/manual).
+我们将使用 [Deno KV 数据库](/deploy/kv/manual) 实现一个简单的链接缩短服务。
 
 ```ts title="server.ts"
 const kv = await Deno.openKv();
 
 Deno.serve(async (request: Request) => {
-  // Create short links
+  // 创建短链接
   if (request.method == "POST") {
     const body = await request.text();
     const { slug, url } = JSON.parse(body);
@@ -30,66 +29,61 @@ Deno.serve(async (request: Request) => {
     return new Response(JSON.stringify(result));
   }
 
-  // Redirect short links
+  // 重定向短链接
   const slug = request.url.split("/").pop() || "";
   const url = (await kv.get(["links", slug])).value as string;
   if (url) {
     return Response.redirect(url, 301);
   } else {
-    const m = !slug ? "Please provide a slug." : `Slug "${slug}" not found`;
+    const m = !slug ? "请提供一个 slug。" : `Slug "${slug}" 未找到`;
     return new Response(m, { status: 404 });
   }
 });
 ```
 
-You can run this server on your machine with this command:
+你可以使用以下命令在本地运行此服务器：
 
 ```shell
 deno run -A --unstable-kv server.ts
 ```
 
-This server will respond to HTTP `GET` and `POST` requests. The `POST` handler
-expects to receive a JSON document in request the body with `slug` and `url`
-properties. The `slug` is the short URL component, and the `url` is the full URL
-you want to redirect to.
+该服务器将响应 HTTP `GET` 和 `POST` 请求。`POST` 处理器期望在请求体中接收到包含
+`slug` 和 `url` 属性的 JSON 文档。`slug` 是短链接的组成部分，`url`
+是你想要重定向到的完整 URL。
 
-Here's an example of using this API endpoint with cURL:
+以下是使用 cURL 调用此 API 端点的示例：
 
 ```shell
 curl --header "Content-Type: application/json" \
   --request POST \
-  --data '{"url":"https://docs.deno.com/runtime/manual","slug":"denodocs"}' \
+  --data '{"url":"https://docs.denohub.com/runtime/manual","slug":"denodocs"}' \
   http://localhost:8000/
 ```
 
-In response, the server should send you JSON with the KV data representing the
-result of the `set` operation:
+作为响应，服务器应发送包含 `set` 操作结果的 KV 数据的 JSON：
 
 ```json
 { "ok": true, "versionstamp": "00000000000000060000" }
 ```
 
-A `GET` request to our server will take a URL slug as a path parameter, and
-redirect to the provided URL. You can visit this URL in the browser, or make
-another cURL request to see this in action!
+向服务器发送 `GET` 请求时，将 URL slug 作为路径参数，并重定向到提供的
+URL。你可以在浏览器中访问此 URL，或使用另一个 cURL 请求查看效果！
 
 ```shell
 curl -v http://localhost:8000/denodocs
 ```
 
-Now that we have an API server, let's push it to a GitHub repository that we'll
-later link to Deno Deploy.
+现在我们有了一个 API 服务器，让我们将其推送到 GitHub 仓库，稍后将其链接到 Deno
+Deploy。
 
-## Create a GitHub repository for your app
+## 为你的应用创建 GitHub 仓库
 
-Sign in to [GitHub](https://github.com) and
-[create a new repository](https://docs.github.com/en/get-started/quickstart/create-a-repo).
-You can skip adding a README or any other files for now - a blank repo will do
-fine for our purposes.
+登录 [GitHub](https://github.com) 并
+[创建一个新仓库](https://docs.github.com/en/get-started/quickstart/create-a-repo)。你可以暂时跳过添加
+README 或其他文件——一个空白仓库就足够了。
 
-In the folder where you created your API server, initialize a local git repo
-with these commands in sequence. Be sure to swap out `your_username` and
-`your_repo_name` with the appropriate values.
+在你创建 API 服务器的文件夹中，依次运行以下命令初始化本地 git 仓库。请确保将
+`your_username` 和 `your_repo_name` 替换为适当的值。
 
 ```sh
 echo "# My Deno Link Shortener" >> README.md
@@ -101,49 +95,47 @@ git remote add origin https://github.com/your_username/your_repo_name.git
 git push -u origin main
 ```
 
-You should now have a GitHub repository with your `server.ts` file in it, as in
-[this example repository](https://github.com/kwhinnery/simple_api_server). Now
-you're ready to import and run this application on Deno Deploy.
+你现在应该拥有一个包含 `server.ts` 文件的 GitHub 仓库，如
+[此示例仓库](https://github.com/kwhinnery/simple_api_server)
+所示。现在你已准备好将此应用导入并在 Deno Deploy 上运行。
 
-## Import and deploy your project
+## 导入并部署你的项目
 
-Next, sign up for an account on [Deno Deploy](https://dash.deno.com) and
-[create a new project](https://dash.deno.com/new_project). Connect your GitHub
-account and select the repository we created a moment ago.
+接下来，在 [Deno Deploy](https://dash.deno.com) 上注册一个账户并
+[创建一个新项目](https://dash.deno.com/new_project)。连接你的 GitHub
+账户并选择我们刚刚创建的仓库。
 
-![Deno Deploy project selection](./images/simple_api_deploy.png)
+![Deno Deploy 项目选择](./images/simple_api_deploy.png)
 
-The configuration should look something like this:
+配置应如下所示：
 
-![Deno Deploy config](./images/simple_api_deploy_settings.png)
+![Deno Deploy 配置](./images/simple_api_deploy_settings.png)
 
-Click on the "Deploy Project" button. Once deployed, your link shortener service
-will be live on Deno Deploy!
+点击“部署项目”按钮。部署完成后，你的链接缩短服务将在 Deno Deploy 上上线！
 
-![Deno Deploy dashboard](./images/simple_api_dashboard.png)
+![Deno Deploy 仪表盘](./images/simple_api_dashboard.png)
 
-## Test out your new link shortener
+## 测试你的新链接缩短器
 
-Without any additional configuration (Deno KV just works on Deploy), your app
-should run the same as it did on your local machine.
+无需额外配置（Deno KV 在 Deploy
+上直接可用），你的应用应该与在本地运行时表现一致。
 
-You can add new links using the `POST` handler as you did before. Just replace
-the `localhost` URL with your live production URL on Deno Deploy:
+你可以像之前一样使用 `POST` 处理器添加新链接。只需将 `localhost` URL 替换为 Deno
+Deploy 上的生产环境 URL：
 
 ```shell
 curl --header "Content-Type: application/json" \
   --request POST \
-  --data '{"url":"https://docs.deno.com/runtime/","slug":"denodocs"}' \
+  --data '{"url":"https://docs.denohub.com/runtime/","slug":"denodocs"}' \
   https://your-deno-project-url-here.deno.dev/
 ```
 
-Similarly, you can visit your shortened URLs in the browser, or view the
-redirect coming back with a cURL command:
+同样，你可以在浏览器中访问缩短后的 URL，或使用 cURL 命令查看重定向效果：
 
 ```shell
 curl -v https://your-deno-project-url-here.deno.dev/denodocs
 ```
 
-If you enjoyed this project, next you could check out a higher-level web
-framework like [Fresh](https://fresh.deno.dev), or learn more about
-[Deno KV here](/deploy/kv/manual). Great work deploying your simple API server!
+如果你喜欢这个项目，接下来可以查看更高级的 Web 框架，如
+[Fresh](https://fresh.deno.dev)，或了解更多关于
+[Deno KV 的信息](/deploy/kv/manual)。恭喜你成功部署了简单的 API 服务器！

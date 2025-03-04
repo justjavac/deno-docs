@@ -1,67 +1,57 @@
 ---
-title: "Deployments"
+title: "部署"
 ---
 
-A deployment is a snapshot of the code and environment variables required to run
-an application. A new deployment can be created
-[via `deployctl`](./deployctl.md#deploy) or automatically via Deploy's Github
-integration if configured.
+部署是运行应用程序所需的代码和环境变量的快照。可以通过
+[`deployctl`](./deployctl.md#deploy) 创建新的部署，或者如果配置了 Deploy 的
+Github 集成，也可以自动创建。
 
-Deployments are immutable after they have been created. To deploy a new version
-of the code for an application, a new deployment must be created. Once created,
-deployments remain accessible.
+部署在创建后是不可变的。要为应用程序部署新版本的代码，必须创建新的部署。一旦创建，部署将保持可访问状态。
 
-All available deployments are listed on your project page under the
-`Deployments` tab, pictured below. Old deployments can be deleted
-[via `deployctl`](./deployctl.md#delete) and
-[via API](https://apidocs.deno.com/#delete-/deployments/-deploymentId-).
+所有可用的部署都列在项目页面的 `Deployments`
+选项卡下，如下图所示。旧的部署可以通过 [`deployctl`](./deployctl.md#delete) 和
+[API](https://apidocs.deno.com/#delete-/deployments/-deploymentId-) 删除。
 
-![showing the deployments tab in the project dashboard](./images/project_deployments.png)
+![显示项目仪表板中的部署选项卡](./images/project_deployments.png)
 
-## Custom domains
+## 自定义域名
 
-There can also be other URLs that can point to a deployment, like
-[custom domains](custom-domains).
+还可以有其他指向部署的 URL，例如 [自定义域名](custom-domains)。
 
-## Branch domains
+## 分支域名
 
-`<projectname--branchname>.deno.dev` is also supported.
+`<projectname--branchname>.deno.dev` 也受支持。
 
-## Production vs. preview deployments
+## 生产与预览部署
 
-All deployments have a preview URL that can be used to view this specific
-deployment. Preview URLs have the format
-`{project_name}-{deployment_id}.deno.dev`.
+所有部署都有一个预览 URL，可用于查看此特定部署。预览 URL 的格式为
+`{project_name}-{deployment_id}.deno.dev`。
 
-![image](../docs-images/preview_deployment.png)
+![图片](../docs-images/preview_deployment.png)
 
-A deployment can either be a production or a preview deployment. These
-deployments do not have any differences in runtime functionality. The only
-distinguishing factor is that a project's production deployment will receive
-traffic from the project URL (e.g. `myproject.deno.dev`), and from custom
-domains in addition to traffic to the deployment's preview URL.
+部署可以是生产部署或预览部署。这些部署在运行时功能上没有区别。唯一的区别是项目的生产部署将从项目
+URL（例如 `myproject.deno.dev`）和自定义域名接收流量，此外还会接收部署的预览 URL
+的流量。
 
-## Promoting preview deployments to production deployments via Deno Deploy UI
+## 通过 Deno Deploy UI 将预览部署提升为生产部署
 
-Preview deployments can be "promoted" to production via the Deno Deploy UI:
+可以通过 Deno Deploy UI 将预览部署“提升”为生产部署：
 
-1. Navigate to the project page.
-2. Click on the **Deployments** tab.
-3. Click on the three dots next to the deployment you want to promote to
-   production and select **Promote to Production**
-   ![promote_to_production](../docs-images/promote_to_production.png)
+1. 导航到项目页面。
+2. 点击 **Deployments** 选项卡。
+3. 点击要提升为生产的部署旁边的三个点，然后选择 **Promote to Production**
+   ![提升为生产](../docs-images/promote_to_production.png)
 
-Promoting deployments to production is restricted to deployments that already
-use the production KV database. This is particularly relevant for GitHub
-deployments that use a different database for preview and production
-deployments. Deployments (even those that use the preview KV database) can
-always be redeployed to production using
-[the `deployctl deployments redeploy` command](./deployctl.md#production-domains).
+将部署提升为生产仅限于已经使用生产 KV
+数据库的部署。这对于使用不同数据库进行预览和生产部署的 GitHub
+部署尤其重要。部署（即使是使用预览 KV 数据库的部署）始终可以使用
+[`deployctl deployments redeploy` 命令](./deployctl.md#production-domains)
+重新部署到生产环境。
 
-## Creating production deployments via `deployctl`
+## 通过 `deployctl` 创建生产部署
 
-If you are deploying your Deno code with `deployctl`, you can deploy directly to
-production with the `--prod` flag:
+如果你使用 `deployctl` 部署 Deno 代码，可以使用 `--prod`
+标志直接部署到生产环境：
 
 ```sh
 deployctl deploy --prod --project=helloworld main.ts

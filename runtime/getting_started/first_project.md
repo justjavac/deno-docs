@@ -1,28 +1,27 @@
 ---
-title: Making a Deno project
+title: 创建一个 Deno 项目
 oldUrl: /runtime/manual/getting_started/first_steps/
 ---
 
-Deno has many [built in tools](/runtime/reference/cli/) to make your development
-experience as smooth as possible. One of these tools is the
-[project initializer](/runtime/reference/cli/init), which creates a new Deno
-project with a basic file structure and configuration.
+Deno 提供了许多 [内置工具](/runtime/reference/cli/)
+来使你的开发体验尽可能顺畅。其中一个工具是
+[项目初始化器](/runtime/reference/cli/init)，它可以创建一个具有基本文件结构和配置的新
+Deno 项目。
 
-While you are welcome to use JavaScript, Deno has built-in support for
-[TypeScript](https://www.typescriptlang.org/) as well, so we'll be using
-TypeScript in this guide. If you'd prefer to use JavaScript, you can rename the
-files to `.js` and remove the type annotations.
+虽然你可以使用 JavaScript，但 Deno 也内置了对
+[TypeScript](https://www.typescriptlang.org/) 的支持，因此在本指南中我们将使用
+TypeScript。如果你更倾向于使用 JavaScript，可以将文件重命名为 `.js`
+并移除类型注解。
 
-## Initialize a new project
+## 初始化一个新项目
 
-To initialize a new Deno project, run the following command in your terminal:
+要初始化一个新的 Deno 项目，请在终端中运行以下命令：
 
 ```bash
 deno init my_project
 ```
 
-This will create a new directory called `my_project` with the following
-structure:
+这将创建一个名为 `my_project` 的新目录，其结构如下：
 
 ```plaintext
 my_project
@@ -31,28 +30,26 @@ my_project
 └── main.ts
 ```
 
-A `deno.json` file is created to
-[configure your project](/runtime/fundamentals/configuration/), and two
-TypeScript files are created; `main.ts` and `main_test.ts`. The `main.ts` file
-is where you'll write your application code, on initial creation it will contain
-a simple program which adds two numbers together. The `main_test.ts` file is
-where you can write tests, initially it will contain a test for your addition
-program.
+`deno.json` 文件用于
+[配置你的项目](/runtime/fundamentals/configuration/)，并创建了两个 TypeScript
+文件：`main.ts` 和 `main_test.ts`。`main.ts`
+文件是你编写应用程序代码的地方，初始创建时它将包含一个简单的程序，用于将两个数字相加。`main_test.ts`
+文件是你编写测试的地方，初始时它将包含一个针对加法程序的测试。
 
-## Run your project
+## 运行你的项目
 
-You can run this program with the following command:
+你可以使用以下命令运行这个程序：
 
 ```bash
 $ deno main.ts
 Add 2 + 3 = 5
 ```
 
-## Run your tests
+## 运行你的测试
 
-Deno has a [built in test runner](/runtime/fundamentals/testing/). You can write
-tests for your code and run them with the `deno test` command. Run the tests in
-your new project with:
+Deno 有一个
+[内置的测试运行器](/runtime/fundamentals/testing/)。你可以为你的代码编写测试并使用
+`deno test` 命令运行它们。在你的新项目中运行测试：
 
 ```bash
 $ deno test
@@ -62,9 +59,8 @@ addTest ... ok (1ms)
 ok | 1 passed | 0 failed (3ms)
 ```
 
-Now that you have a basic project set up you can start building your
-application. Check out our [examples and tutorials](/examples/) for more ideas
-on what to build with Deno.
+现在你已经设置了一个基本的项目，可以开始构建你的应用程序了。查看我们的
+[示例和教程](/examples/) 以获取更多关于使用 Deno 构建项目的想法。
 
-You can
-[learn more about using TypeScript in Deno here](/runtime/fundamentals/typescript).
+你可以
+[在这里了解更多关于在 Deno 中使用 TypeScript 的信息](/runtime/fundamentals/typescript)。

@@ -1,18 +1,18 @@
 ---
-title: "Environment variables"
+title: "环境变量"
 oldUrl:
 - /runtime/manual/basics/env_variables/
 - /runtime/reference/cli/env_variables/
 ---
 
-There are a few ways to use environment variables in Deno:
+在 Deno 中有几种使用环境变量的方法：
 
-## Built-in Deno.env
+## 内置的 Deno.env
 
-The Deno runtime offers built-in support for environment variables with
-[`Deno.env`](https://docs.deno.com/api/deno/~/Deno.env).
+Deno 运行时通过 [`Deno.env`](https://docs.denohub.com/api/deno/~/Deno.env)
+提供了对环境变量的内置支持。
 
-`Deno.env` has getter and setter methods. Here is example usage:
+`Deno.env` 具有 getter 和 setter 方法。以下是示例用法：
 
 ```ts
 Deno.env.set("FIREBASE_API_KEY", "examplekey123");
@@ -23,38 +23,34 @@ console.log(Deno.env.get("FIREBASE_AUTH_DOMAIN")); // firebasedomain.com
 console.log(Deno.env.has("FIREBASE_AUTH_DOMAIN")); // true
 ```
 
-## .env file
+## .env 文件
 
-Deno supports `.env` files. You can cause Deno to read environment variables
-from `.env` using the `--env-file` flag: `deno run --env-file <script>`. This
-will read `.env` from the current working directory or the first parent
-directory that contains one; if you want to load environment variables from a
-different file, you can specify that file as a parameter to the flag.
-Additionally, you can pass multiple `--env-file` flags (e.g.,
-`deno run --env-file=.env.one --env-file=.env.two --allow-env <script>`) to load
-variables from multiple files.
+Deno 支持 `.env` 文件。你可以使用 `--env-file` 标志让 Deno 从 `.env`
+文件中读取环境变量：`deno run --env-file <script>`。这将从当前工作目录或第一个包含
+`.env` 文件的父目录中读取 `.env`
+文件；如果你想从不同的文件中加载环境变量，可以将该文件作为标志的参数指定。此外，你可以传递多个
+`--env-file`
+标志（例如，`deno run --env-file=.env.one --env-file=.env.two --allow-env <script>`）以从多个文件中加载变量。
 
 :::note
 
-When multiple declarations for the same environment variable exist within a
-single `.env` file, the first occurrence is applied. However, if the same
-variable is defined across multiple `.env` files (using multiple `--env-file`
-arguments), the value from the last file specified takes precedence. This means
-that the first occurrence found in the last `.env` file listed will be applied.
+当单个 `.env`
+文件中存在多个相同环境变量的声明时，将应用第一个出现的值。然而，如果相同的变量在多个
+`.env` 文件中定义（使用多个 `--env-file`
+参数），则最后一个指定的文件中的值将优先。这意味着将应用列出的最后一个 `.env`
+文件中找到的第一个值。
 
 :::
 
-Alternately, the `dotenv` package in the standard library will load environment
-variables from `.env` as well.
+或者，标准库中的 `dotenv` 包也会从 `.env` 文件中加载环境变量。
 
-Let's say you have an `.env` file that looks like this:
+假设你有一个如下所示的 `.env` 文件：
 
 ```sh
 GREETING="Hello, world."
 ```
 
-Import the `load` module to auto-import from the `.env` file and into the
-process environment.
+导入 `load` 模块以自动从 `.env` 文件中导入到进程环境中。
 
 ```ts
 import "jsr:@std/dotenv/load";
@@ -62,36 +58,35 @@ import "jsr:@std/dotenv/load";
 console.log(Deno.env.get("GREETING")); // "Hello, world."
 ```
 
-Further documentation for `.env` handling can be found in the
-[@std/dotenv](https://jsr.io/@std/dotenv/doc) documentation.
+有关 `.env` 处理的更多文档可以在 [@std/dotenv](https://jsr.io/@std/dotenv/doc)
+文档中找到。
 
 ## `std/cli`
 
-The Deno Standard Library has a [`std/cli` module](https://jsr.io/@std/cli) for
-parsing command line arguments. Please refer to the module for documentation and
-examples.
+Deno 标准库有一个用于解析命令行参数的
+[`std/cli` 模块](https://jsr.io/@std/cli)。请参阅该模块以获取文档和示例。
 
-## Special environment variables
+## 特殊环境变量
 
-The Deno runtime has these special environment variables.
+Deno 运行时具有以下特殊环境变量。
 
-| name                 | description                                                                                                                                                                       |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| DENO_AUTH_TOKENS     | A semi-colon separated list of bearer tokens and hostnames to use when fetching remote modules from private repositories<br />(e.g. `abcde12345@deno.land;54321edcba@github.com`) |
-| DENO_TLS_CA_STORE    | Comma-separated list of order dependent certificate stores.<br />Possible values: `system`, `mozilla`. Defaults to `mozilla`.                                                     |
-| DENO_CERT            | Load certificate authority from PEM encoded file                                                                                                                                  |
-| DENO_DIR             | Set the cache directory                                                                                                                                                           |
-| DENO_INSTALL_ROOT    | Set deno install's output directory (defaults to `$HOME/.deno/bin`)                                                                                                               |
-| DENO_REPL_HISTORY    | Set REPL history file path History file is disabled when the value is empty <br />(defaults to `$DENO_DIR/deno_history.txt`)                                                      |
-| DENO_NO_PACKAGE_JSON | Disables auto-resolution of `package.json`                                                                                                                                        |
-| DENO_NO_PROMPT       | Set to disable permission prompts on access<br />(alternative to passing `--no-prompt` on invocation)                                                                             |
-| DENO_NO_UPDATE_CHECK | Set to disable checking if a newer Deno version is available                                                                                                                      |
-| DENO_V8_FLAGS        | Set V8 command line options                                                                                                                                                       |
-| DENO_JOBS            | Number of parallel workers used for the `--parallel` flag with the test subcommand.<br />Defaults to number of available CPUs.                                                    |
-| DENO_WEBGPU_TRACE    | Path to a directory to output a [WGPU trace](https://github.com/gfx-rs/wgpu/pull/619) to when using the WebGPU API                                                                |
-| DENO_WEBGPU_BACKEND  | Select the backend WebGPU will use, or a comma separated list of backends in order of preference. Possible values are `vulkan`, `dx12`, `metal`, or `opengl`                      |
-| HTTP_PROXY           | Proxy address for HTTP requests (module downloads, fetch)                                                                                                                         |
-| HTTPS_PROXY          | Proxy address for HTTPS requests (module downloads, fetch)                                                                                                                        |
-| NPM_CONFIG_REGISTRY  | URL to use for the npm registry.                                                                                                                                                  |
-| NO_COLOR             | Set to disable color                                                                                                                                                              |
-| NO_PROXY             | Comma-separated list of hosts which do not use a proxy (module downloads, fetch)                                                                                                  |
+| name                 | description                                                                                                           |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| DENO_AUTH_TOKENS     | 以分号分隔的承载令牌和主机名列表，用于从私有仓库获取远程模块<br />(例如 `abcde12345@deno.land;54321edcba@github.com`) |
+| DENO_TLS_CA_STORE    | 以逗号分隔的顺序依赖的证书存储列表。<br />可能的值：`system`, `mozilla`。默认为 `mozilla`。                           |
+| DENO_CERT            | 从 PEM 编码的文件加载证书颁发机构                                                                                     |
+| DENO_DIR             | 设置缓存目录                                                                                                          |
+| DENO_INSTALL_ROOT    | 设置 deno install 的输出目录（默认为 `$HOME/.deno/bin`）                                                              |
+| DENO_REPL_HISTORY    | 设置 REPL 历史文件路径。当值为空时，历史文件被禁用 <br />(默认为 `$DENO_DIR/deno_history.txt`)                        |
+| DENO_NO_PACKAGE_JSON | 禁用 `package.json` 的自动解析                                                                                        |
+| DENO_NO_PROMPT       | 设置为禁用访问时的权限提示<br />(替代在调用时传递 `--no-prompt`)                                                      |
+| DENO_NO_UPDATE_CHECK | 设置为禁用检查是否有更新的 Deno 版本可用                                                                              |
+| DENO_V8_FLAGS        | 设置 V8 命令行选项                                                                                                    |
+| DENO_JOBS            | 用于 `--parallel` 标志与 test 子命令的并行工作线程数。<br />默认为可用 CPU 的数量。                                   |
+| DENO_WEBGPU_TRACE    | 使用 WebGPU API 时输出 [WGPU 跟踪](https://github.com/gfx-rs/wgpu/pull/619) 的目录路径                                |
+| DENO_WEBGPU_BACKEND  | 选择 WebGPU 将使用的后端，或按优先顺序排列的逗号分隔的后端列表。可能的值是 `vulkan`, `dx12`, `metal`, 或 `opengl`     |
+| HTTP_PROXY           | HTTP 请求的代理地址（模块下载，fetch）                                                                                |
+| HTTPS_PROXY          | HTTPS 请求的代理地址（模块下载，fetch）                                                                               |
+| NPM_CONFIG_REGISTRY  | 用于 npm 注册表的 URL。                                                                                               |
+| NO_COLOR             | 设置为禁用颜色                                                                                                        |
+| NO_PROXY             | 不使用代理的主机的逗号分隔列表（模块下载，fetch）                                                                     |

@@ -1,20 +1,20 @@
 ---
-title: "All-in-one tooling"
+title: "一体化工具"
 url: /examples/all-in-one_tooling/
 videoUrl: https://www.youtube.com/watch?v=-4e9DkUrCr4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=5
 layout: video.tsx
 ---
 
-## Description of video
+## 视频描述
 
-In Node.js, before we can get started working on our project, we have to go
-through a configuration step for things like linting, formatting, and testing.
-Deno saves us a ton of time by including these tools natively. Let's take a look
-at what's included with these built-in CLI tools.
+在 Node.js
+中，我们开始项目之前，必须经过配置步骤，例如代码检查、格式化和测试。Deno
+通过原生集成这些工具，为我们节省了大量时间。让我们来看看这些内置的 CLI
+工具都包含哪些功能。
 
-## Transcript and code
+## 文字稿和代码
 
-Here we have a function called sing:
+这里我们有一个名为 `sing` 的函数：
 
 ```javascript
 function sing(phrase: string, times: number): string {
@@ -22,51 +22,49 @@ function sing(phrase: string, times: number): string {
 }
 ```
 
-Now let's run the formatter:
+现在让我们运行格式化工具：
 
 ```shell
 deno fmt
 ```
 
-The formatter automatically formats your code to follow Deno's rules and
-conventions. Let's run it to clean up any formatting issues.
+格式化工具会自动将你的代码格式化为符合 Deno
+的规则和约定。让我们运行它来清理任何格式化问题。
 
-Deno even formats code snippets in markdown files. So anything that is enclosed
-in triple backticks will be formatted when you run this command as well.
+Deno 甚至还会格式化 markdown
+文件中的代码片段。因此，任何用三个反引号包裹的内容在运行此命令时也会被格式化。
 
-The deno lint command is used to analyze your code for potential issues. It’s
-similar to ESLint but built into Deno.
+`deno lint` 命令用于分析你的代码，找出潜在问题。它类似于 ESLint，但内置在 Deno
+中。
 
 ```shell
 deno lint --help
 ```
 
-This will lint all of the JavaScript and TypeScript files in the current
-directory and in subdirectories.
+这将检查当前目录及子目录中的所有 JavaScript 和 TypeScript 文件。
 
-You can also lint specific files by passing their names
+你也可以通过传递文件名来检查特定文件：
 
 ```shell
-# lint specific files
+# 检查特定文件
 deno lint myfile1.ts myfile2.ts
 ```
 
-You can run it on specific directories
+你可以对特定目录运行它：
 
 ```shell
 deno lint src/
 ```
 
-And if you're feeling like you want to skip linting certain files, at the top of
-the files, you can add a comment, and deno will know to skip this one.
+如果你想要跳过某些文件的检查，可以在文件顶部添加注释，Deno 会知道跳过这个文件。
 
 ```javascript
 // deno-lint-ignore-file
-// deno-lint-ignore-file -- reason for ignoring
+// deno-lint-ignore-file -- 忽略的原因
 ```
 
-Deno also has some CLI commands for testing. In our directory here we have a
-test file. It uses the name of the function and test.
+Deno 还有一些用于测试的 CLI
+命令。在我们的目录中，我们有一个测试文件。它使用了函数名和测试。
 
 ```javascript title="sing_test.ts"
 import { sing } from "./sing.ts";
@@ -78,44 +76,37 @@ Deno.test("sing repeats a phrase", () => {
 });
 ```
 
-Now, we’ll run our tests using the deno test command. Deno automatically
-discovers and runs test files.
+现在，我们将使用 `deno test` 命令运行我们的测试。Deno 会自动发现并运行测试文件。
 
 ```shell
 deno test
 ```
 
-The way Deno decides which files should be considered test files is that it
-follows:
+Deno 决定哪些文件应被视为测试文件的方式是遵循以下命名规则：
 
 `_test.ts`, `_test.js`, `_test.tsx`, `_test.jsx`, `.test.js`, `.test.ts`,
 `.test.tsx`, `.test.jsx`
 
 `deno test encourage.test.js`
 
-Or you can pass a specific directory path and Deno will search for test files in
-there.
+或者你可以传递一个特定的目录路径，Deno 会在其中搜索测试文件。
 
 ```sh
 ./tests/
 ```
 
-You can even check code coverage. By default, when you run deno test \--coverage
-a coverage profile will be generated in the /coverage directory in the current
-working directory.
+你甚至可以检查代码覆盖率。默认情况下，当你运行 `deno test --coverage`
+时，会在当前工作目录的 `/coverage` 目录中生成一个覆盖率配置文件。
 
 ```shell
 deno test --coverage
 ```
 
-From there you can run deno coverage to print a coverage report to standard
-output
+然后你可以运行 `deno coverage` 将覆盖率报告打印到标准输出。
 
 ```shell
 deno coverage
 ```
 
-As you can see, Deno's built-in tools are pretty cool. We don't have to spend a
-whole day configuring these settings before we can start working on our project.
-And we can format, lint, and test code without the need for third-party
-dependencies.
+如你所见，Deno
+的内置工具非常酷。我们不必花一整天时间配置这些设置，就可以开始我们的项目。而且我们可以在不需要第三方依赖的情况下格式化、检查和测试代码。

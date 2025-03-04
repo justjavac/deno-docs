@@ -4,7 +4,7 @@
  * @tags cli, deploy
  * @run --allow-net <url>
  * @resource {/examples/http_server} Example: HTTP Server: Hello World
- * @resource {https://developer.mozilla.org/en-US/docs/Web/API/URL_Pattern_API} MDN: URL Pattern API
+ * @resource {https://developer.mozilla.org/zh-CN/docs/Web/API/URL_Pattern_API} MDN: URL Pattern API
  * @playground https://dash.deno.com/playground/example-routing
  * @group Network
  *

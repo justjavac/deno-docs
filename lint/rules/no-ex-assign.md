@@ -2,23 +2,22 @@
 tags: [recommended]
 ---
 
-Disallows the reassignment of exception parameters.
+禁止重新分配异常参数。
 
-There is generally no good reason to reassign an exception parameter. Once
-reassigned the code from that point on has no reference to the error anymore.
+通常没有充分的理由去重新分配异常参数。一旦重新分配，从该点开始的代码将不再引用错误。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 try {
   someFunc();
 } catch (e) {
   e = true;
-  // can no longer access the thrown error
+  // 无法再访问抛出的错误
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 try {

@@ -2,20 +2,18 @@
 tags: [recommended]
 ---
 
-Disallows calling built-in global objects like functions.
+禁止像函数一样调用内置的全局对象。
 
-The following built-in objects should not be invoked like functions, even though
-they look like constructors:
+以下内置对象不应像函数一样被调用，即使它们看起来像构造函数：
 
 - `Math`
 - `JSON`
 - `Reflect`
 - `Atomics`
 
-Calling these as functions would result in runtime errors. This rule statically
-prevents such wrong usage of them.
+像函数一样调用这些对象会导致运行时错误。此规则静态地防止了这种错误的使用方式。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const math = Math();
@@ -31,7 +29,7 @@ const atomics = Atomics();
 const newAtomics = new Atomics();
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const area = (radius: number): number => Math.PI * radius * radius;

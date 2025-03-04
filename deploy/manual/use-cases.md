@@ -1,51 +1,45 @@
 ---
-title: "Deno Deploy Use Cases"
+title: "Deno Deploy 使用案例"
 ---
 
-Some popular use-cases for Deno currently are:
+目前 Deno 的一些流行使用案例包括：
 
-- [Middleware](#middleware)
-- [API servers](#api-servers)
-- [Full websites](#full-websites)
+- [中间件](#中间件)
+- [API 服务器](#api-服务器)
+- [完整网站](#完整网站)
 
-## Middleware
+## 中间件
 
-Middleware refers to bits of code that execute before and after the request gets
-to the application server. You'll be writing middleware if you want to execute
-some JavaScript or any other code very fast, early in the request. By deploying
-your middleware code at the edge, Deno Deploy ensures the best performance for
-your app.
+中间件是指在请求到达应用服务器之前和之后执行的一些代码片段。如果你想在请求的早期快速执行一些
+JavaScript 或其他代码，你将会编写中间件。通过在边缘部署你的中间件代码，Deno
+Deploy 确保你的应用获得最佳性能。
 
-Some examples include:
+一些例子包括：
 
-- setting a cookie
-- serving different versions of a site depending on geolocation
-- path rewriting
-- redirecting requests
-- dynamically changing the HTML on its way back from the server before it gets
-  to the user.
+- 设置 cookie
+- 根据地理位置提供不同版本的网站
+- 路径重写
+- 重定向请求
+- 在服务器返回 HTML 到用户之前动态修改 HTML
 
-Deno Deploy is a good alternative to other platforms you might be using to host
-your middleware right now, for example:
+Deno Deploy 是你目前可能用于托管中间件的其他平台的一个很好的替代品，例如：
 
 - Cloudflare Workers
 - AWS Lambda@Edge
-- Traditional load balancers like nginx
-- Custom rules
+- 传统的负载均衡器如 nginx
+- 自定义规则
 
-## API servers
+## API 服务器
 
-Deno is also a great fit for API servers. By deploying these servers "at the
-edge", closer to clients who are using them, Deno Deploy is able to offer lower
-latency, improved performance, and reduced bandwidth costs compared to
-traditional hosting platforms like Heroku or even modern centralized hosting
-services like DigitalOcean.
+Deno 也非常适合用于 API
+服务器。通过在“边缘”部署这些服务器，更接近使用它们的客户端，Deno Deploy
+能够提供比传统托管平台（如 Heroku）甚至现代集中式托管服务（如
+DigitalOcean）更低的延迟、更好的性能和更低的带宽成本。
 
-## Full websites
+## 完整网站
 
-We foresee a future where you can actually write your entire website on edge
-functions. Some examples of sites that are already doing this include:
+我们预见到一个未来，你实际上可以在边缘函数上编写整个网站。一些已经在这样做的网站例子包括：
 
-- [blog](https://github.com/ry/tinyclouds)
-- [chat](https://github.com/denoland/showcase_chat)
-- [calendly clone](https://github.com/denoland/meet-me)
+- [博客](https://github.com/ry/tinyclouds)
+- [聊天](https://github.com/denoland/showcase_chat)
+- [calendly 克隆](https://github.com/denoland/meet-me)

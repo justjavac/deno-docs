@@ -6,16 +6,14 @@ oldUrl:
   - /runtime/manual/advanced/jsx/
 ---
 
-Deno has built-in support for JSX in both `.jsx` files and `.tsx` files. JSX in
-Deno can be handy for server-side rendering or generating code for browser
-consumption.
+Deno 内置支持 `.jsx` 文件和 `.tsx` 文件中的 JSX。在 Deno 中，JSX
+可以方便地用于服务器端渲染或生成供浏览器使用的代码。
 
-## Default configuration
+## 默认配置
 
-The Deno CLI has a default configuration for JSX that is different than the
-defaults for `tsc`. Effectively Deno uses the following
-[TypeScript compiler](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
-options by default:
+Deno CLI 有一个与 `tsc` 默认配置不同的 JSX 默认配置。实际上，Deno 默认使用以下
+[TypeScript 编译器](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
+选项：
 
 ```json title="deno.json"
 {
@@ -27,17 +25,17 @@ options by default:
 }
 ```
 
-Using the `"react"` option will convert JSX into the following JavaScript code:
+使用 `"react"` 选项会将 JSX 转换为以下 JavaScript 代码：
 
 ```jsx
-// input
+// 输入
 const jsx = (
   <div className="foo">
     <MyComponent value={2} />
   </div>
 );
 
-// output:
+// 输出：
 const jsx = React.createElement(
   "div",
   { className: "foo" },
@@ -45,16 +43,14 @@ const jsx = React.createElement(
 );
 ```
 
-## JSX automatic runtime (recommended)
+## JSX 自动运行时（推荐）
 
-In React 17, the React team added what they called
-[the _new_ JSX transforms](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html).
-This enhanced and modernized the API for JSX transforms as well as provided a
-mechanism to automatically add relevant JSX imports so that you don't have to do
-this yourself. This is the recommended way to use JSX.
+在 React 17 中，React 团队添加了所谓的
+[新的 JSX 转换](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html)。这增强并现代化了
+JSX 转换的 API，同时提供了一种自动添加相关 JSX
+导入的机制，这样你就不必自己手动添加。这是使用 JSX 的推荐方式。
 
-To use the newer JSX runtime transform change the compiler options in your
-`deno.json`.
+要使用较新的 JSX 运行时转换，请更改 `deno.json` 中的编译器选项。
 
 ```json title="deno.json"
 {
@@ -68,26 +64,24 @@ To use the newer JSX runtime transform change the compiler options in your
 }
 ```
 
-Behind the scenes the `jsxImportSource` setting will always append a
-`/jsx-runtime` to the import specifier.
+在幕后，`jsxImportSource` 设置将始终在导入说明符后附加 `/jsx-runtime`。
 
 ```js
-// This import will be inserted automatically
+// 此导入将自动插入
 import { jsx as _jsx } from "react/jsx-runtime";
 ```
 
-Using the `"react-jsx"` option will convert JSX into the following JavaScript
-code:
+使用 `"react-jsx"` 选项会将 JSX 转换为以下 JavaScript 代码：
 
 ```jsx
-// input
+// 输入
 const jsx = (
   <div className="foo">
     <MyComponent value={2} />
   </div>
 );
 
-// output
+// 输出
 import { jsx as _jsx } from "react/jsx-runtime";
 const jsx = _jsx(
   "div",
@@ -98,8 +92,8 @@ const jsx = _jsx(
 );
 ```
 
-If you want to use [Preact](https://preactjs.com/) instead of React you can
-update the `jsxImportSource` value accordingly.
+如果你想使用 [Preact](https://preactjs.com/) 而不是 React，可以相应地更新
+`jsxImportSource` 值。
 
 ```diff title="deno.json"
   {
@@ -115,30 +109,27 @@ update the `jsxImportSource` value accordingly.
   }
 ```
 
-### Development transform
+### 开发转换
 
-Setting the `"jsx"` option to `"react-jsxdev"` instead of `"react-jsx"` will
-pass additional debugging information to each JSX node. The additional
-information is the file path, line number and column number of the callsite of
-each JSX node.
+将 `"jsx"` 选项设置为 `"react-jsxdev"` 而不是 `"react-jsx"` 将为每个 JSX
+节点传递额外的调试信息。这些额外信息包括每个 JSX
+节点调用点的文件路径、行号和列号。
 
-This information is typically used in frameworks to enhance the debugging
-experience during development. In React this information is used to enhance
-stack traces and show where a component was instantiated in the React developer
-tools browser extension.
+这些信息通常用于框架中以增强开发期间的调试体验。在 React
+中，这些信息用于增强堆栈跟踪，并在 React
+开发者工具浏览器扩展中显示组件的实例化位置。
 
-Using the `"react-jsxdev"` option will convert JSX into the following JavaScript
-code:
+使用 `"react-jsxdev"` 选项会将 JSX 转换为以下 JavaScript 代码：
 
 ```jsx
-// input
+// 输入
 const jsx = (
   <div className="foo">
     <MyComponent value={2} />
   </div>
 );
 
-// output
+// 输出
 import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
 const _jsxFileName = "file:///input.tsx";
 const jsx = _jsxDEV(
@@ -173,19 +164,17 @@ const jsx = _jsxDEV(
 
 :::caution
 
-Only use the `"react-jsxdev"` information during development and not in
-production.
+仅在开发期间使用 `"react-jsxdev"` 信息，不要在生产环境中使用。
 
 :::
 
-### Using the JSX import source pragma
+### 使用 JSX 导入源 pragma
 
-Whether you have a JSX import source configured for your project, or if you are
-using the default "legacy" configuration, you can add the JSX import source
-pragma to a `.jsx` or `.tsx` module, and Deno will respect it.
+无论你是否为项目配置了 JSX 导入源，或者你使用的是默认的“传统”配置，你都可以在
+`.jsx` 或 `.tsx` 模块中添加 JSX 导入源 pragma，Deno 会尊重它。
 
-The `@jsxImportSource` pragma needs to be in the leading comments of the module.
-For example to use Preact from esm.sh, you would do something like this:
+`@jsxImportSource` pragma 需要放在模块的头部注释中。例如，要从 esm.sh 使用
+Preact，你可以这样做：
 
 ```jsx
 /** @jsxImportSource https://esm.sh/preact */
@@ -201,8 +190,8 @@ export function App() {
 
 ### `jsxImportSourceTypes`
 
-In certain cases, a library may not provide types. To specify the types, you can
-use the `@jsxImportSourceTypes` pragma:
+在某些情况下，库可能不提供类型。要指定类型，你可以使用 `@jsxImportSourceTypes`
+pragma：
 
 ```jsx
 /** @jsxImportSource npm:react@^18.3 */
@@ -213,7 +202,7 @@ export function Hello() {
 }
 ```
 
-Or specify via the `jsxImportSourceTypes` compiler option in a _deno.json_:
+或者通过 `deno.json` 中的 `jsxImportSourceTypes` 编译器选项指定：
 
 ```json title="deno.json"
 {
@@ -225,16 +214,15 @@ Or specify via the `jsxImportSourceTypes` compiler option in a _deno.json_:
 }
 ```
 
-## JSX precompile transform
+## JSX 预编译转换
 
-Deno ships with a
-[new JSX transform](https://deno.com/blog/v1.38#fastest-jsx-transform) that is
-optimized for server-side rendering. It can be up to **7-20x faster** than the
-other JSX transform options. The difference is that the precompile transform
-analyses your JSX statically and stores precompiled HTML strings if possible.
-That way a lot of time creating JSX objects can be avoided.
+Deno 附带了一个
+[新的 JSX 转换](https://deno.com/blog/v1.38#fastest-jsx-transform)，它针对服务器端渲染进行了优化。它比其他
+JSX 转换选项快 **7-20 倍**。不同之处在于，预编译转换会静态分析你的
+JSX，并在可能的情况下存储预编译的 HTML 字符串。这样可以避免大量创建 JSX
+对象的时间。
 
-To use the precompile transform, set the `jsx` option to `"precompile"`.
+要使用预编译转换，请将 `jsx` 选项设置为 `"precompile"`。
 
 ```diff title="deno.json"
   {
@@ -248,8 +236,8 @@ To use the precompile transform, set the `jsx` option to `"precompile"`.
   }
 ```
 
-To prevent JSX nodes representing HTML elements from being precompiled, you can
-add them to the `jsxPrecompileSkipElements` setting.
+为了防止表示 HTML 元素的 JSX 节点被预编译，你可以将它们添加到
+`jsxPrecompileSkipElements` 设置中。
 
 ```diff title="deno.json"
   {
@@ -266,23 +254,22 @@ add them to the `jsxPrecompileSkipElements` setting.
 
 :::note
 
-The `precompile` transform works best with [Preact](https://preactjs.com/) or
-[Hono](https://hono.dev/). It is not supported in React.
+`precompile` 转换最适合与 [Preact](https://preactjs.com/) 或
+[Hono](https://hono.dev/) 一起使用。它在 React 中不受支持。
 
 :::
 
-Using the `"precompile"` option will convert JSX into the following JavaScript
-code:
+使用 `"precompile"` 选项会将 JSX 转换为以下 JavaScript 代码：
 
 ```jsx
-// input
+// 输入
 const jsx = (
   <div className="foo">
     <MyComponent value={2} />
   </div>
 );
 
-// output:
+// 输出：
 import {
   jsx as _jsx,
   jsxTemplate as _jsxTemplate,

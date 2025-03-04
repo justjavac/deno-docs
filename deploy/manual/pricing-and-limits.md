@@ -1,35 +1,31 @@
 ---
-title: "Pricing and limitations"
+title: "定价与限制"
 ---
 
-Please see [our pricing page](https://deno.com/deploy/pricing) for the overview
-of the available features in all plans. If you have a use case that exceeds any
-of these limits, [please reach out](mailto:deploy@deno.com).
+请参阅 [我们的定价页面](https://deno.com/deploy/pricing)
+以了解所有计划中可用功能的概述。如果您有超出这些限制的用例，[请联系我们](mailto:deploy@deno.com)。
 
-No uptime guarantees are provided during the initial public beta for Deno
-Deploy. Access to the service will be controlled by
-[our acceptable use policy](/deploy/manual/acceptable-use-policy). Any user we
-deem to be in violation of this policy, runs the risk of having their account
-terminated.
+在 Deno Deploy 的初始公开测试期间，不提供正常运行时间保证。服务的访问将受
+[我们的可接受使用政策](/deploy/manual/acceptable-use-policy)
+控制。任何我们认为违反此政策的用户，其账户可能会被终止。
 
-## Maximum size for deployments
+## 部署的最大大小
 
-When uploading assets to a deployment, the total size of all files within the
-deployment (source files and static files) **should not exceed 1 gigabyte**.
+在上传资源到部署时，部署中所有文件（源文件和静态文件）的总大小 **不应超过
+1GB**。
 
-## Memory allocation
+## 内存分配
 
-Applications have a maximum memory allocation of 512MB
+应用程序的最大内存分配为 512MB
 
-## TLS proxying
+## TLS 代理
 
-TLS termination is required for outgoing connections to port 443 (the port used
-for HTTPS). Using [Deno.connect](https://docs.deno.com/api/deno/~/Deno.connect)
-to connect to these ports is prohibited. If you need to establish a TLS
-connection to port 443, please use
-[Deno.connectTls](https://docs.deno.com/api/deno/~/Deno.connectTls) instead.
-`fetch` is not impacted by this restriction.
+对于到端口 443（用于 HTTPS 的端口）的出站连接，需要 TLS 终止。使用
+[Deno.connect](https://docs.denohub.com/api/deno/~/Deno.connect)
+连接到这些端口是被禁止的。如果您需要建立到端口 443 的 TLS 连接，请使用
+[Deno.connectTls](https://docs.denohub.com/api/deno/~/Deno.connectTls)
+代替。`fetch` 不受此限制的影响。
 
-This restriction is in place because connecting to port 443 without terminating
-TLS is frequently used in TLS-over-TLS proxies, which are prohibited on Deno
-Deploy as per [our acceptable use policy](/deploy/manual/acceptable-use-policy).
+此限制的存在是因为在没有终止 TLS 的情况下连接到端口 443 通常用于 TLS-over-TLS
+代理，而根据 [我们的可接受使用政策](/deploy/manual/acceptable-use-policy)，这在
+Deno Deploy 上是禁止的。

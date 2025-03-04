@@ -1,35 +1,32 @@
 ---
-title: "Writing an HTTP Server"
+title: "编写 HTTP 服务器"
 oldUrl:
 - /runtime/manual/runtime/http_server_apis/
 - /runtime/manual/examples/http_server/
 - /runtime/tutorials/http_server/
 ---
 
-HTTP servers are the backbone of the web, allowing you to access websites,
-download files, and interact with web services. They listen for incoming
-requests from clients (like web browsers) and send back responses.
+HTTP 服务器是网络的支柱，允许你访问网站、下载文件并与 Web
+服务进行交互。它们监听来自客户端（如 Web 浏览器）的传入请求并发送回响应。
 
-When you build your own HTTP server, you have complete control over its behavior
-and can tailor it to your specific needs. You may be using it for local
-development, to serve your HTML, CSS, and JS files, or building a REST API -
-having your own server lets you define endpoints, handle requests and manage
-data.
+当你构建自己的 HTTP
+服务器时，你可以完全控制其行为，并根据特定需求进行定制。你可能将其用于本地开发、提供
+HTML、CSS 和 JS 文件，或构建 REST API ——
+拥有自己的服务器可以让你定义端点、处理请求并管理数据。
 
-## Deno's built-in HTTP server
+## Deno 内置的 HTTP 服务器
 
-Deno has a built in HTTP server API that allows you to write HTTP servers. The
-[`Deno.serve`](https://docs.deno.com/api/deno/~/Deno.serve) API supports
-HTTP/1.1 and HTTP/2.
+Deno 内置了一个 HTTP 服务器 API，允许你编写 HTTP
+服务器。[`Deno.serve`](https://docs.denohub.com/api/deno/~/Deno.serve) API 支持
+HTTP/1.1 和 HTTP/2。
 
-### A "Hello World" server
+### 一个 "Hello World" 服务器
 
-The `Deno.serve` function takes a handler function that will be called for each
-incoming request, and is expected to return a response (or a promise resolving
-to a response).
+`Deno.serve`
+函数接受一个处理函数，该函数将为每个传入请求调用，并期望返回一个响应（或解析为响应的
+Promise）。
 
-Here is an example of a server that returns a "Hello, World!" response for each
-request:
+以下是一个为每个请求返回 "Hello, World!" 响应的服务器示例：
 
 ```ts title="server.ts"
 Deno.serve((_req) => {
@@ -37,36 +34,33 @@ Deno.serve((_req) => {
 });
 ```
 
-The handler can also return a `Promise<Response>`, which means it can be an
-`async` function.
+处理函数也可以返回一个 `Promise<Response>`，这意味着它可以是一个 `async` 函数。
 
-To run this server, you can use the `deno run` command:
+要运行此服务器，你可以使用 `deno run` 命令：
 
 ```sh
 deno run --allow-net server.ts
 ```
 
-### Listening on a specific port
+### 监听特定端口
 
-By default `Deno.serve` will listen on port `8000`, but this can be changed by
-passing in a port number in options bag as the first or second argument:
+默认情况下，`Deno.serve` 会监听端口
+`8000`，但可以通过在选项包中传递端口号作为第一个或第二个参数来更改：
 
 ```js title="server.ts"
-// To listen on port 4242.
+// 监听端口 4242。
 Deno.serve({ port: 4242 }, handler);
 
-// To listen on port 4242 and bind to 0.0.0.0.
+// 监听端口 4242 并绑定到 0.0.0.0。
 Deno.serve({ port: 4242, hostname: "0.0.0.0" }, handler);
 ```
 
-### Inspecting the incoming request
+### 检查传入请求
 
-Most servers will not answer with the same response for every request. Instead
-they will change their answer depending on various aspects of the request: the
-HTTP method, the headers, the path, or the body contents.
+大多数服务器不会对每个请求都返回相同的响应。相反，它们会根据请求的各个方面（如
+HTTP 方法、标头、路径或正文内容）来更改其响应。
 
-The request is passed in as the first argument to the handler function. Here is
-an example showing how to extract various parts of the request:
+请求作为第一个参数传递给处理函数。以下是一个展示如何提取请求各个部分的示例：
 
 ```ts
 Deno.serve(async (req) => {
@@ -89,22 +83,19 @@ Deno.serve(async (req) => {
 
 :::caution
 
-Be aware that the `req.text()` call can fail if the user hangs up the connection
-before the body is fully received. Make sure to handle this case. Do note this
-can happen in all methods that read from the request body, such as `req.json()`,
-`req.formData()`, `req.arrayBuffer()`, `req.body.getReader().read()`,
-`req.body.pipeTo()`, etc.
+请注意，如果用户在正文完全接收之前挂断连接，`req.text()`
+调用可能会失败。请确保处理这种情况。请注意，这种情况可能发生在所有从请求正文读取的方法中，例如
+`req.json()`、`req.formData()`、`req.arrayBuffer()`、`req.body.getReader().read()`、`req.body.pipeTo()`
+等。
 
 :::
 
-### Responding with real data
+### 使用真实数据响应
 
-Most servers do not respond with "Hello, World!" to every request. Instead they
-might respond with different headers, status codes, and body contents (even body
-streams).
+大多数服务器不会对每个请求都返回 "Hello,
+World!"。相反，它们可能会返回不同的标头、状态码和正文内容（甚至是正文流）。
 
-Here is an example of returning a response with a 404 status code, a JSON body,
-and a custom header:
+以下是一个返回 404 状态码、JSON 正文和自定义标头的响应示例：
 
 ```ts title="server.ts"
 Deno.serve((req) => {
@@ -118,10 +109,9 @@ Deno.serve((req) => {
 });
 ```
 
-### Responding with a stream
+### 使用流响应
 
-Response bodies can also be streams. Here is an example of a response that
-returns a stream of "Hello, World!" repeated every second:
+响应正文也可以是流。以下是一个返回每秒重复一次的 "Hello, World!" 流的响应示例：
 
 ```ts title="server.ts"
 Deno.serve((req) => {
@@ -146,22 +136,19 @@ Deno.serve((req) => {
 
 :::note
 
-Note the `cancel` function above. This is called when the client hangs up the
-connection. It is important to make sure that you handle this case, otherwise
-the server will keep queuing up messages forever, and eventually run out of
-memory.
+请注意上面的 `cancel`
+函数。当客户端挂断连接时，会调用此函数。确保处理这种情况非常重要，否则服务器将永远排队消息，最终耗尽内存。
 
 :::
 
-Be aware that the response body stream is "cancelled" when the client hangs up
-the connection. Make sure to handle this case. This can surface itself as an
-error in a `write()` call on a `WritableStream` object that is attached to the
-response body `ReadableStream` object (for example through a `TransformStream`).
+请注意，当客户端挂断连接时，响应正文流会被 "取消"。确保处理这种情况。这可能会在
+`WritableStream` 对象的 `write()` 调用中表现为错误，该对象附加到响应正文
+`ReadableStream` 对象（例如通过 `TransformStream`）。
 
-### HTTPS support
+### HTTPS 支持
 
-To use HTTPS, pass two extra arguments in the options: `cert` and `key`. These
-are contents of the certificate and key files, respectively.
+要使用 HTTPS，请在选项中传递两个额外参数：`cert` 和
+`key`。它们分别是证书和密钥文件的内容。
 
 ```js
 Deno.serve({
@@ -173,78 +160,63 @@ Deno.serve({
 
 :::note
 
-To use HTTPS, you will need a valid TLS certificate and a private key for your
-server.
+要使用 HTTPS，你需要为服务器提供有效的 TLS 证书和私钥。
 
 :::
 
-### HTTP/2 support
+### HTTP/2 支持
 
-HTTP/2 support is "automatic" when using the HTTP server APIs with Deno. You
-just need to create your server, and it will handle HTTP/1 or HTTP/2 requests
-seamlessly.
+使用 Deno 的 HTTP 服务器 API 时，HTTP/2 支持是 "自动"
+的。你只需创建服务器，它将无缝处理 HTTP/1 或 HTTP/2 请求。
 
-HTTP/2 is also supported over cleartext with prior knowledge.
+HTTP/2 也支持通过明文进行预先知识传输。
 
-### Automatic body compression
+### 自动正文压缩
 
-The HTTP server has built in automatic compression of response bodies. When a
-response is sent to a client, Deno determines if the response body can be safely
-compressed. This compression happens within the internals of Deno, so it is fast
-and efficient.
+HTTP 服务器内置了响应正文的自动压缩功能。当响应发送到客户端时，Deno
+会确定响应正文是否可以安全压缩。这种压缩发生在 Deno 内部，因此速度快且高效。
 
-Currently Deno supports gzip and brotli compression. A body is automatically
-compressed if the following conditions are true:
+目前 Deno 支持 gzip 和 brotli 压缩。如果满足以下条件，正文将自动压缩：
 
-- The request has an
-  [`Accept-Encoding`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding)
-  header which indicates the requester supports `br` for Brotli or `gzip`. Deno
-  will respect the preference of the
-  [quality value](https://developer.mozilla.org/en-US/docs/Glossary/Quality_values)
-  in the header.
-- The response includes a
-  [`Content-Type`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type)
-  which is considered compressible. (The list is derived from
-  [`jshttp/mime-db`](https://github.com/jshttp/mime-db/blob/master/db.json) with
-  the actual list
-  [in the code](https://github.com/denoland/deno/blob/v1.21.0/ext/http/compressible.rs).)
-- The response body is greater than 64 bytes.
+- 请求具有
+  [`Accept-Encoding`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Encoding)
+  标头，指示请求者支持 `br`（Brotli）或 `gzip`。Deno 将尊重标头中的
+  [质量值](https://developer.mozilla.org/zh-CN/docs/Glossary/Quality_values)
+  偏好。
+- 响应包括一个被认为是可压缩的
+  [`Content-Type`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Type)。（该列表源自
+  [`jshttp/mime-db`](https://github.com/jshttp/mime-db/blob/master/db.json)，实际列表在
+  [代码中](https://github.com/denoland/deno/blob/v1.21.0/ext/http/compressible.rs)。）
+- 响应正文大于 64 字节。
 
-When the response body is compressed, Deno will set the `Content-Encoding`
-header to reflect the encoding, as well as ensure the `Vary` header is adjusted
-or added to indicate which request headers affected the response.
+当响应正文被压缩时，Deno 会将 `Content-Encoding`
+标头设置为反映编码，并确保调整或添加 `Vary` 标头以指示哪些请求标头影响了响应。
 
-In addition to the logic above, there are a few reasons why a response **won’t**
-be compressed automatically:
+除了上述逻辑外，还有一些原因会导致响应 **不会** 自动压缩：
 
-- The response contains a `Content-Encoding` header. This indicates your server
-  has done some form of encoding already.
-- The response contains a
-  [`Content-Range`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range)
-  header. This indicates that your server is responding to a range request,
-  where the bytes and ranges are negotiated outside of the control of the
-  internals to Deno.
-- The response has a
-  [`Cache-Control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
-  header which contains a
-  [`no-transform`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#other)
-  value. This indicates that your server doesn’t want Deno or any downstream
-  proxies to modify the response.
+- 响应包含 `Content-Encoding` 标头。这表明你的服务器已经进行了某种形式的编码。
+- 响应包含
+  [`Content-Range`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Range)
+  标头。这表明你的服务器正在响应范围请求，其中字节和范围在 Deno
+  内部控制之外进行协商。
+- 响应具有
+  [`Cache-Control`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Cache-Control)
+  标头，其中包含
+  [`no-transform`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Cache-Control#other)
+  值。这表明你的服务器不希望 Deno 或任何下游代理修改响应。
 
-### Serving WebSockets
+### 提供 WebSocket 服务
 
-Deno can upgrade incoming HTTP requests to a WebSocket. This allows you to
-handle WebSocket endpoints on your HTTP servers.
+Deno 可以将传入的 HTTP 请求升级为 WebSocket。这允许你在 HTTP 服务器上处理
+WebSocket 端点。
 
-To upgrade an incoming `Request` to a WebSocket you use the
-`Deno.upgradeWebSocket` function. This returns an object consisting of a
-`Response` and a web standard `WebSocket` object. The returned response should
-be used to respond to the incoming request.
+要将传入的 `Request` 升级为 WebSocket，你可以使用 `Deno.upgradeWebSocket`
+函数。这将返回一个由 `Response` 和 Web 标准 `WebSocket`
+对象组成的对象。返回的响应应用于响应传入请求。
 
-Because the WebSocket protocol is symmetrical, the `WebSocket` object is
-identical to the one that can be used for client side communication.
-Documentation for it can be found
-[on MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket).
+由于 WebSocket 协议是对称的，`WebSocket`
+对象与可用于客户端通信的对象相同。其文档可以在
+[MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/WebSocket) 上找到。
 
 ```ts title="server.ts"
 Deno.serve((req) => {
@@ -267,20 +239,19 @@ Deno.serve((req) => {
 });
 ```
 
-The connection the WebSocket was created on can not be used for HTTP traffic
-after a WebSocket upgrade has been performed.
+执行 WebSocket 升级后，WebSocket 创建的连接不能用于 HTTP 流量。
 
 :::note
 
-Note that WebSockets are only supported on HTTP/1.1 for now.
+请注意，目前 WebSocket 仅在 HTTP/1.1 上受支持。
 
 :::
 
-## Default fetch export
+## 默认 fetch 导出
 
-Another way to create an HTTP server in Deno is by exporting a default `fetch`
-function. [The fetch API](/api/web/~/fetch) initiates an HTTP request to
-retrieve data from across a network and is built into the Deno runtime.
+在 Deno 中创建 HTTP 服务器的另一种方法是导出一个默认的 `fetch`
+函数。[fetch API](/api/web/~/fetch) 发起 HTTP 请求以从网络检索数据，并内置在
+Deno 运行时中。
 
 ```ts title="server.ts"
 export default {
@@ -291,21 +262,19 @@ export default {
 } satisfies Deno.ServeDefaultExport;
 ```
 
-You can run this file with the `deno serve` command:
+你可以使用 `deno serve` 命令运行此文件：
 
 ```sh
 deno serve server.ts
 ```
 
-The server will start and display a message in the console. Open your browser
-and navigate to [http://localhost:8000/](http://localhost:8000/) to see the
-user-agent information.
+服务器将启动并在控制台中显示消息。打开浏览器并导航到
+[http://localhost:8000/](http://localhost:8000/) 以查看 user-agent 信息。
 
-## Building on these examples
+## 基于这些示例进行构建
 
-You will likely want to expand on these examples to create more complex servers.
-Deno recommends using [Oak](https://jsr.io/@oak/oak) for building web servers.
-Oak is a middleware framework for Deno's HTTP server, designed to be expressive
-and easy to use. It provides a simple way to create web servers with middleware
-support. Check out the [Oak documentation](https://oakserver.github.io/oak/) for
-examples of how to define routes.
+你可能会希望扩展这些示例以创建更复杂的服务器。Deno 推荐使用
+[Oak](https://jsr.io/@oak/oak) 来构建 Web 服务器。Oak 是 Deno HTTP
+服务器的中间件框架，旨在表达性强且易于使用。它提供了一种简单的方法来创建具有中间件支持的
+Web 服务器。查看 [Oak 文档](https://oakserver.github.io/oak/)
+以了解如何定义路由的示例。

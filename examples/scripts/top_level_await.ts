@@ -2,7 +2,7 @@
  * @title Await: CommonJS
  * @difficulty beginner
  * @tags cli
- * @resource {https://docs.deno.com/api/deno/~/Deno.readTextFile} Doc: Deno.readTextFile
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.readTextFile} Doc: Deno.readTextFile
  * @run <url>
  * @group Basics
  *

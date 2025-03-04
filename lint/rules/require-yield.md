@@ -2,15 +2,14 @@
 tags: [recommended]
 ---
 
-Disallows generator functions that have no `yield`.
+禁止使用没有 `yield` 的生成器函数。
 
-JavaScript provides generator functions expressed as `function*`, where we can
-pause and later resume the function execution at the middle points. At these
-points we use the `yield` keyword. In other words, it makes no sense at all to
-create generator functions that contain no `yield` keyword, since such functions
-could be written as normal functions.
+JavaScript 提供了通过 `function*`
+表示的生成器函数，我们可以在其中暂停并在稍后恢复函数的执行。在这些暂停点，我们使用
+`yield` 关键字。换句话说，创建不包含 `yield`
+关键字的生成器函数毫无意义，因为这样的函数可以写成普通函数。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 function* f1() {
@@ -18,14 +17,14 @@ function* f1() {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 function* f1() {
   yield "f1";
 }
 
-// generator function with empty body is allowed
+// 允许空的生成器函数
 function* f2() {}
 
 function f3() {

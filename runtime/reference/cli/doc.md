@@ -1,59 +1,56 @@
 ---
-title: "`deno doc`, documentation generator"
+title: "`deno doc`，文档生成器"
 oldUrl:
  - /runtime/manual/tools/documentation_generator/
  - /runtime/reference/cli/documentation_generator/
 command: doc
 ---
 
-## Examples
+## 示例
 
-`deno doc` followed by a list of one or more source files will print the JSDoc
-documentation for each of the module's **exported** members.
+`deno doc` 后跟一个或多个源文件列表，将打印每个模块的 **导出** 成员的 JSDoc
+文档。
 
-For example, given a file `add.ts` with the contents:
+例如，给定一个文件 `add.ts`，内容如下：
 
 ```ts
 /**
- * Adds x and y.
+ * 将 x 和 y 相加。
  * @param {number} x
  * @param {number} y
- * @returns {number} Sum of x and y
+ * @returns {number} x 和 y 的和
  */
 export function add(x: number, y: number): number {
   return x + y;
 }
 ```
 
-Running the Deno `doc` command, prints the function's JSDoc comment to `stdout`:
+运行 Deno `doc` 命令，将函数的 JSDoc 注释打印到 `stdout`：
 
 ```shell
 deno doc add.ts
 function add(x: number, y: number): number
-  Adds x and y. @param {number} x @param {number} y @returns {number} Sum of x and y
+  将 x 和 y 相加。 @param {number} x @param {number} y @returns {number} x 和 y 的和
 ```
 
-## Linting
+## 代码检查
 
-You can use `--lint` flag to check for problems in your documentation while it's
-being generated. `deno doc` will point out three kinds of problems:
+你可以使用 `--lint` 标志在生成文档时检查文档中的问题。`deno doc`
+会指出三种问题：
 
-1. Error for an exported type from the root module referencing a non-exported
-   type.
-   - Ensures API consumers have access to all the types the API uses. This can
-     be suppressed by exporting the type from a root module (one of the files
-     specified to `deno doc` on the command line) or by marking the type with an
-     `@internal` jsdoc tag.
-1. Error for missing return type or property type on a **public** type.
-   - Ensures `deno doc` displays the return/property type and helps improve type
-     checking performance.
-1. Error for missing JS doc comment on a **public** type.
-   - Ensures the code is documented. Can be suppressed by adding a jsdoc
-     comment, or via an `@ignore` jsdoc tag to exclude it from the
-     documentation. Alternatively, add an `@internal` tag to keep it in the
-     docs, but signify it's internal.
+1. 错误：根模块中导出的类型引用了未导出的类型。
+   - 确保 API 使用者可以访问 API
+     使用的所有类型。可以通过从根模块（命令行中指定给 `deno doc`
+     的文件之一）导出该类型，或使用 `@internal` jsdoc
+     标签标记该类型来抑制此错误。
+1. 错误：**公共** 类型缺少返回类型或属性类型。
+   - 确保 `deno doc` 显示返回/属性类型，并有助于提高类型检查性能。
+1. 错误：**公共** 类型缺少 JS doc 注释。
+   - 确保代码有文档记录。可以通过添加 jsdoc 注释，或使用 `@ignore` jsdoc
+     标签将其从文档中排除来抑制此错误。或者，添加 `@internal`
+     标签以将其保留在文档中，但表示它是内部的。
 
-For example:
+例如：
 
 ```ts title="/mod.ts"
 interface Person {
@@ -68,133 +65,99 @@ export function getName(person: Person) {
 
 ```shell
 $ deno doc --lint mod.ts
-Type 'getName' references type 'Person' which is not exported from a root module.
-Missing JS documentation comment.
-Missing return type.
+类型 'getName' 引用了类型 'Person'，该类型未从根模块导出。
+缺少 JS 文档注释。
+缺少返回类型。
     at file:///mod.ts:6:1
 ```
 
-These lints are meant to help you write better documentation and speed up
-type-checking in your projects. If any problems are found, the program exits
-with non-zero exit code and the output is reported to standard error.
+这些检查旨在帮助你编写更好的文档并加快项目中的类型检查。如果发现任何问题，程序将以非零退出代码退出，并将输出报告到标准错误。
 
-## Supported JSDoc features and tags
+## 支持的 JSDoc 功能和标签
 
-Deno implements a large set of JSDoc tags, but does not strictly adhere to the
-JSDoc standard, but rather align with sensible standards and features provided
-by widely used tools and ecosystems in the same feature-space, like
-[TSDoc](https://tsdoc.org/) and [TypeDoc](https://typedoc.org/).
+Deno 实现了大量的 JSDoc 标签，但并不严格遵循 JSDoc
+标准，而是与广泛使用的工具和生态系统（如 [TSDoc](https://tsdoc.org/) 和
+[TypeDoc](https://typedoc.org/)）提供的合理标准和功能保持一致。
 
-For any free-form text places, ie the main description of a JSDoc comment, the
-description of a parameter, etc. accept markdown.
+对于任何自由格式的文本位置，即 JSDoc 注释的主要描述、参数的描述等，接受
+markdown。
 
-### Supported Tags
+### 支持的标签
 
-The following tags are supported, being a selection of tags used and specified
-by JSDoc, TSDoc and TypeDoc:
+以下是支持的标签，这些标签是 JSDoc、TSDoc 和 TypeDoc 使用和指定的标签的一部分：
 
-- [`constructor`/`class`](https://jsdoc.app/tags-class): mark a function to be a
-  constructor.
-- [`ignore`](https://jsdoc.app/tags-ignore): ignore a symbol to be included in
-  the output.
-- internal: mark a symbol to be used only for internal. In the HTML generator,
-  the symbol will not get a listed entry, however it will still be generated and
-  can be reached if a non-internal symbol links to it.
-- [`public`](https://jsdoc.app/tags-public): treat a symbol as public API.
-  Equivalent of TypeScript `public` keyword.
-- [`private`](https://jsdoc.app/tags-private): treat a symbol as private API.
-  Equivalent of TypeScript `private` keyword.
-- [`protected`](https://jsdoc.app/tags-protected): treat a property or method as
-  protected API. Equivalent of TypeScript `protected` keyword.
-- [`readonly`](https://jsdoc.app/tags-readonly): mark a symbol to be readonly,
-  meaning that it cannot be overwritten.
-- [`experimental`](https://tsdoc.org/pages/tags/experimental): mark a symbol as
-  experimental, meaning that the API might change or be removed, or behaviour is
-  not well-defined.
-- [`deprecated`](https://jsdoc.app/tags-deprecated): mark a symbol as
-  deprecated, meaning that it is not supported anymore and might be removed in a
-  future version.
-- [`module`](https://jsdoc.app/tags-module): this tag can be defined on a
-  top-level JSDoc comment, which will treat that comment to be for the file
-  instead of the subsequent symbol. A value can be specified, which will use the
-  value as an identifier for the module (ie for default exports).
-- `category`/`group`: mark a symbol to be of a specific category/group. This is
-  useful for grouping together various symbols together.
-- [`see`](https://jsdoc.app/tags-see): define an external reference related to
-  the symbol.
-- [`example`](https://jsdoc.app/tags-example): define an example for the symbol.
-  Unlike JSDoc, code examples need to be wrapped in triple backtick
-  (markdown-style codeblocks), which aligns more with TSDoc than JSDoc.
-- `tags`: define additional custom labels for a symbol, via a comma separated
-  list.
-- [`since`](https://jsdoc.app/tags-since): define since when the symbol has been
-  available.
-- [`callback`](https://jsdoc.app/tags-callback): define a callback.
-- [`template`/`typeparam`/`typeParam`](https://tsdoc.org/pages/tags/typeparam):
-  define a callback.
-- [`prop`/`property`](https://jsdoc.app/tags-property): define a property on a
-  symbol.
-- [`typedef`](https://jsdoc.app/tags-typedef): define a type.
-- [`param`/`arg`/`argument`](https://jsdoc.app/tags-param): define a parameter
-  on a function.
-- [`return`/`returns`](https://jsdoc.app/tags-returns): define the return type
-  and/or comment of a function.
-- [`throws`/`exception`](https://jsdoc.app/tags-throws): define what a function
-  throws when called.
-- [`enum`](https://jsdoc.app/tags-enum): define an object to be an enum.
-- [`extends`/`augments`](https://jsdoc.app/tags-augments): define a type that a
-  function extends on.
-- [`this`](https://jsdoc.app/tags-this): define what the `this` keyword refers
-  to in a function.
-- [`type`](https://jsdoc.app/tags-type): define the type of a symbol.
-- [`default`](https://jsdoc.app/tags-default): define the default value for a
-  variable, property or field.
+- [`constructor`/`class`](https://jsdoc.app/tags-class)：将函数标记为构造函数。
+- [`ignore`](https://jsdoc.app/tags-ignore)：忽略符号以包含在输出中。
+- internal：将符号标记为仅供内部使用。在 HTML
+  生成器中，符号不会获得列出的条目，但如果非内部符号链接到它，它仍然会被生成并可以访问。
+- [`public`](https://jsdoc.app/tags-public)：将符号视为公共 API。相当于
+  TypeScript 的 `public` 关键字。
+- [`private`](https://jsdoc.app/tags-private)：将符号视为私有 API。相当于
+  TypeScript 的 `private` 关键字。
+- [`protected`](https://jsdoc.app/tags-protected)：将属性或方法视为受保护的
+  API。相当于 TypeScript 的 `protected` 关键字。
+- [`readonly`](https://jsdoc.app/tags-readonly)：将符号标记为只读，意味着它不能被覆盖。
+- [`experimental`](https://tsdoc.org/pages/tags/experimental)：将符号标记为实验性的，意味着
+  API 可能会更改或删除，或者行为未明确定义。
+- [`deprecated`](https://jsdoc.app/tags-deprecated)：将符号标记为已弃用，意味着它不再受支持，并可能在未来的版本中删除。
+- [`module`](https://jsdoc.app/tags-module)：此标签可以在顶级 JSDoc
+  注释中定义，该注释将视为文件的注释，而不是后续符号的注释。可以指定一个值，该值将用作模块的标识符（即用于默认导出）。
+- `category`/`group`：将符号标记为特定类别/组。这对于将各种符号组合在一起很有用。
+- [`see`](https://jsdoc.app/tags-see)：定义与符号相关的外部引用。
+- [`example`](https://jsdoc.app/tags-example)：定义符号的示例。与 JSDoc
+  不同，代码示例需要用三重反引号（markdown 风格的代码块）包裹，这更符合 TSDoc
+  而不是 JSDoc。
+- `tags`：通过逗号分隔的列表为符号定义额外的自定义标签。
+- [`since`](https://jsdoc.app/tags-since)：定义符号自何时起可用。
+- [`callback`](https://jsdoc.app/tags-callback)：定义回调。
+- [`template`/`typeparam`/`typeParam`](https://tsdoc.org/pages/tags/typeparam)：定义回调。
+- [`prop`/`property`](https://jsdoc.app/tags-property)：定义符号的属性。
+- [`typedef`](https://jsdoc.app/tags-typedef)：定义类型。
+- [`param`/`arg`/`argument`](https://jsdoc.app/tags-param)：定义函数的参数。
+- [`return`/`returns`](https://jsdoc.app/tags-returns)：定义函数的返回类型和/或注释。
+- [`throws`/`exception`](https://jsdoc.app/tags-throws)：定义函数调用时抛出什么。
+- [`enum`](https://jsdoc.app/tags-enum)：将对象定义为枚举。
+- [`extends`/`augments`](https://jsdoc.app/tags-augments)：定义函数扩展的类型。
+- [`this`](https://jsdoc.app/tags-this)：定义函数中 `this` 关键字所指的内容。
+- [`type`](https://jsdoc.app/tags-type)：定义符号的类型。
+- [`default`](https://jsdoc.app/tags-default)：定义变量、属性或字段的默认值。
 
-### Inline Linking
+### 内联链接
 
-Inline links let you specify links to other parts of the page, other symbols, or
-modules. Besides just supporting markdown-style links,
-[JSDoc style inline-links](https://jsdoc.app/tags-inline-link) are also
-supported.
+内联链接允许你指定指向页面其他部分、其他符号或模块的链接。除了支持 markdown
+风格的链接外，还支持
+[JSDoc 风格的内联链接](https://jsdoc.app/tags-inline-link)。
 
-For example, you can do`{@link https://docs.deno.com}`, which will be rendered
-as the following 'https://docs.deno.com'. `{@linkcode https://docs.deno.com}`
-can also be used, to make it in a monospace font, and will be rendered roughly
-like this: '`https://docs.deno.com`'.
+例如，你可以使用 `{@link https://docs.deno.com}`，它将呈现为以下内容
+'https://docs.deno.com'。`{@linkcode https://docs.deno.com}`
+也可以使用，以使其以等宽字体显示，并将呈现为 '`https://docs.deno.com`'。
 
-You can also specify a replacement label, via
-`{@link https://docs.deno.com | Deno Docs}`, which will use the text after `|`
-as the text to display instead of the link. The previous example would render as
-'[Deno Docs](https://docs.deno.com)'.
+你还可以通过 `{@link https://docs.deno.com | Deno Docs}` 指定替换标签，它将使用
+`|` 后的文本作为显示的文本，而不是链接。前面的示例将呈现为
+'[Deno Docs](https://docs.deno.com)'。
 
-You can add inline links in your descriptions to other symbols via
-`{@link MySymbol}`.
+你可以通过 `{@link MySymbol}` 在描述中添加指向其他符号的内联链接。
 
-For module linking, the same applies, but you use the `{@link [myModule]}`
-syntax. You can also link to symbols in a different module via
-`{@link [myModule].mysymbol}`.
+对于模块链接，同样适用，但你使用 `{@link [myModule]}` 语法。你还可以通过
+`{@link [myModule].mysymbol}` 链接到不同模块中的符号。
 
-## HTML output
+## HTML 输出
 
-Use the `--html` flag to generate a static site with documentation.
+使用 `--html` 标志生成带有文档的静态站点。
 
 ```console
-$ deno doc --html --name="My library" ./mod.ts
+$ deno doc --html --name="我的库" ./mod.ts
 
-$ deno doc --html --name="My library" --output=./documentation/ ./mod.ts
+$ deno doc --html --name="我的库" --output=./documentation/ ./mod.ts
 
-$ deno doc --html --name="My library" ./sub1/mod.ts ./sub2/mod.ts
+$ deno doc --html --name="我的库" ./sub1/mod.ts ./sub2/mod.ts
 ```
 
-The generated documentation is a static site with multiple pages that can be
-deployed to any static site hosting service.
+生成的文档是一个包含多个页面的静态站点，可以部署到任何静态站点托管服务。
 
-A client-side search is included in the generated site, but is not available if
-user's browser has JavaScript disabled.
+生成的站点中包含客户端搜索，但如果用户的浏览器禁用了 JavaScript，则不可用。
 
-## JSON output
+## JSON 输出
 
-Use the `--json` flag to output the documentation in JSON format. This JSON
-format is consumed by the
-[deno doc website](https://github.com/denoland/docland) and is used to generate
-module documentation.
+使用 `--json` 标志以 JSON 格式输出文档。此 JSON 格式由
+[deno doc 网站](https://github.com/denoland/docland) 使用，用于生成模块文档。

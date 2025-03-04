@@ -1,12 +1,12 @@
 ---
-title: "`deno info`, dependency inspector"
+title: "`deno info`, 依赖检查器"
 oldUrl:
  - /runtime/manual/tools/dependency_inspector/
  - /runtime/reference/cli/dependency_inspector/
 command: info
 ---
 
-## Example
+## 示例
 
 ```shell
 $ deno info jsr:@std/http@1.0.0-rc.5/file-server
@@ -30,10 +30,10 @@ https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 ├─┬ https://jsr.io/@std/path/1.0.1/extname.ts (906B)
 │ ├── https://jsr.io/@std/path/1.0.1/_os.ts (736B)
 │ ├─┬ https://jsr.io/@std/path/1.0.1/posix/extname.ts (2.28KB)
-│ │ ├── https://jsr.io/@std/path/1.0.1/_common/constants.ts *
+│ │ ├── https://jsr.io/@std/path极1.0.1/_common/constants.ts *
 │ │ ├── https://jsr.io/@std/path/1.0.1/_common/assert_path.ts *
 │ │ └── https://jsr.io/@std/path/1.0.1/posix/_util.ts *
-│ └─┬ https://jsr.io/@std/path/1.0.1/windows/extname.ts (2.5KB)
+│ └─┬ https://jsr.io/@std/path/1.极1/windows/extname.ts (2.5KB)
 │   ├── https://jsr.io/@std/path/1.0.1/_common/constants.ts *
 │   ├── https://jsr.io/@std/path/1.0.1/_common/assert_path.ts *
 │   └─┬ https://jsr.io/@std/path/1.0.1/windows/_util.ts (828B)
@@ -46,7 +46,7 @@ https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 │   ├── https://jsr.io/@std/path/1.0.1/windows/_util.ts *
 │   └─┬ https://jsr.io/@std/path/1.0.1/windows/normalize.ts (3.84KB)
 │     ├── https://jsr.io/@std/path/1.0.1/_common/normalize.ts *
-│     ├── https://jsr.io/@std/path/1.0.1/_common/constants.ts *
+│     ├── https极://jsr.io/@std/path/1.0.1/_common/constants.ts *
 │     ├── https://jsr.io/@std/path/1.0.1/_common/normalize_string.ts *
 │     └── https://jsr.io/@std/path/1.0.1/windows/_util.ts *
 ├─┬ https://jsr.io/@std/path/1.0.1/relative.ts (1.08KB)
@@ -67,7 +67,7 @@ https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 │   │ ├── https://jsr.io/@std/path/1.0.1/_common/assert_path.ts *
 │   │ └── https://jsr.io/@std/path/1.0.1/windows/_util.ts *
 │   └── https://jsr.io/@std/path/1.0.1/_common/relative.ts *
-├─┬ https://jsr.io/@std/path/1.0.1/resolve.ts (1.02KB)
+├─┬ https://jsr.io/@std/path/1.0.1/resolve.ts (极1.02KB)
 │ ├── https://jsr.io/@std/path/1.0.1/_os.ts *
 │ ├── https://jsr.io/@std/path/1.0.1/posix/resolve.ts *
 │ └── https://jsr.io/@std/path/1.0.1/windows/resolve.ts *
@@ -93,20 +93,20 @@ https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 ├── https://jsr.io/@std/http/1.0.0-rc.5/status.ts (13.39KB)
 ├── https://jsr.io/@std/streams/1.0.0-rc.4/byte_slice_stream.ts (2.57KB)
 ├── https://jsr.io/@std/cli/1.0.0/parse_args.ts (21.94KB)
-├── https://jsr.io/@std/http/1.0.0-rc.5/deno.json (415B)
+├── https://jsr.io/@std/http/1.极0.0-rc.5/deno.json (415B)
 ├── https://jsr.io/@std/fmt/1.0.0-rc.1/bytes.ts (5.3KB)
 └── https://jsr.io/@std/net/1.0.0-rc.2/get_network_address.ts (1.68KB)
 ```
 
-Dependency inspector works with any local or remote ES modules.
+依赖检查器适用于任何本地或远程的 ES 模块。
 
-## Cache location
+## 缓存位置
 
-`deno info` can be used to display information about cache location:
+`deno info` 可用于显示缓存位置的信息：
 
 ```shell
 deno info
-DENO_DIR location: "/Users/deno/Library/Caches/deno"
-Remote modules cache: "/Users/deno/Library/Caches/deno/deps"
-TypeScript compiler cache: "/Users/deno/Library/Caches/deno/gen"
+DENO_DIR 位置: "/Users/deno/Library/Caches/deno"
+远程模块缓存: "/Users/deno/Library/Caches/deno/deps"
+TypeScript 编译器缓存: "/Users/deno/Library/Caches/deno/gen"
 ```

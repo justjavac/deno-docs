@@ -2,29 +2,26 @@
 tags: [recommended]
 ---
 
-Enforce conventional usage of array construction.
+强制使用数组构造的常规用法。
 
-Array construction is conventionally done via literal notation such as `[]` or
-`[1, 2, 3]`. Using the `new Array()` is discouraged as is `new Array(1, 2, 3)`.
-There are two reasons for this. The first is that a single supplied argument
-defines the array length, while multiple arguments instead populate the array of
-no fixed size. This confusion is avoided when pre-populated arrays are only
-created using literal notation. The second argument to avoiding the `Array`
-constructor is that the `Array` global may be redefined.
+数组构造通常通过字面量表示法完成，例如 `[]` 或 `[1, 2, 3]`。不鼓励使用
+`new Array()`，也不鼓励使用
+`new Array(1, 2, 3)`。这有两个原因。第一个原因是，单个提供的参数定义了数组的长度，而多个参数则填充了不固定大小的数组。当仅使用字面量表示法创建预填充数组时，可以避免这种混淆。第二个避免使用
+`Array` 构造函数的理由是，`Array` 全局变量可能会被重新定义。
 
-The one exception to this rule is when creating a new array of fixed size, e.g.
-`new Array(6)`. This is the conventional way to create arrays of fixed length.
+此规则的一个例外是创建固定大小的新数组时，例如
+`new Array(6)`。这是创建固定长度数组的常规方式。
 
-**Invalid:**
+**无效：**
 
 ```typescript
-// This is 4 elements, not a size 100 array of 3 elements
+// 这是 4 个元素，而不是大小为 100 的 3 个元素的数组
 const a = new Array(100, 1, 2, 3);
 
-const b = new Array(); // use [] instead
+const b = new Array(); // 应使用 [] 代替
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const a = new Array(100);

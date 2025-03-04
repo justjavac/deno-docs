@@ -2,14 +2,12 @@
 tags: [recommended]
 ---
 
-Disallows unnecessary boolean casts.
+禁止不必要的布尔类型转换。
 
-In certain contexts, such as `if`, `while` or `for` statements, expressions are
-automatically coerced into a boolean. Therefore, techniques such as double
-negation (`!!foo`) or casting (`Boolean(foo)`) are unnecessary and produce the
-same result as without the negation or casting.
+在某些上下文中，例如 `if`、`while` 或 `for`
+语句，表达式会自动转换为布尔值。因此，诸如双重否定（`!!foo`）或类型转换（`Boolean(foo)`）等技术是不必要的，并且与不使用否定或转换时产生的结果相同。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 if (!!foo) {}
@@ -18,7 +16,7 @@ while (!!foo) {}
 for (; Boolean(foo);) {}
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 if (foo) {}

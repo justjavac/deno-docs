@@ -2,26 +2,25 @@
 tags: [recommended]
 ---
 
-Disallows the use ASCII control characters in regular expressions.
+禁止在正则表达式中使用 ASCII 控制字符。
 
-Control characters are invisible characters in the ASCII range of 0-31. It is
-uncommon to use these in a regular expression and more often it is a mistake in
-the regular expression.
+控制字符是 ASCII 范围 0-31
+中的不可见字符。在正则表达式中使用这些字符并不常见，更多时候是正则表达式中的错误。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
-// Examples using ASCII (31) Carriage Return (hex x0d)
+// 使用 ASCII (31) 回车符 (十六进制 x0d) 的示例
 const pattern1 = /\x0d/;
 const pattern2 = /\u000d/;
 const pattern3 = new RegExp("\\x0d");
 const pattern4 = new RegExp("\\u000d");
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
-// Examples using ASCII (32) Space (hex x20)
+// 使用 ASCII (32) 空格符 (十六进制 x20) 的示例
 const pattern1 = /\x20/;
 const pattern2 = /\u0020/;
 const pattern3 = new RegExp("\\x20");

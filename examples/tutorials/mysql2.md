@@ -1,30 +1,29 @@
 ---
-title: "How to use MySQL2 with Deno"
+title: "如何在 Deno 中使用 MySQL2"
 url: /examples/mysql2_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/mysql2/
   - /runtime/tutorials/how_to_with_npm/mysql2/
 ---
 
-[MySQL](https://www.mysql.com/) is the most popular database in the
-[2022 Stack Overflow Developer Survey](https://survey.stackoverflow.co/2022/#most-popular-technologies-database)
-and counts Facebook, Twitter, YouTube, and Netflix among its users.
+[MySQL](https://www.mysql.com/) 是
+[2022 年 Stack Overflow 开发者调查](https://survey.stackoverflow.co/2022/#most-popular-technologies-database)
+中最受欢迎的数据库，Facebook、Twitter、YouTube 和 Netflix 等公司都在使用它。
 
-[View source here.](https://github.com/denoland/examples/tree/main/with-mysql2)
+[查看源码。](https://github.com/denoland/examples/tree/main/with-mysql2)
 
-You can manipulate and query a MySQL database with Deno using the `mysql2` node
-package and importing via `npm:mysql2`. This allows us to use its Promise
-wrapper and take advantage of top-level await.
+你可以使用 `mysql2` node 包并通过 `npm:mysql2` 导入来在 Deno 中操作和查询 MySQL
+数据库。这使我们能够使用其 Promise 包装器并利用顶级 await。
 
 ```tsx
 import mysql from "npm:mysql2@^2.3.3/promise";
 ```
 
-## Connecting to MySQL
+## 连接到 MySQL
 
-We can connect to our MySQL server using the `createConnection()` method. You
-need the host (`localhost` if you are testing, or more likely a cloud database
-endpoint in production) and the user and password:
+我们可以使用 `createConnection()` 方法连接到 MySQL
+服务器。你需要主机（如果是测试环境则为
+`localhost`，生产环境中更可能是云数据库端点）以及用户名和密码：
 
 ```tsx
 const connection = await mysql.createConnection({
@@ -34,22 +33,22 @@ const connection = await mysql.createConnection({
 });
 ```
 
-You can also optionally specify a database during the connection creation. Here
-we are going to use `mysql2` to create the database on the fly.
+你也可以在创建连接时选择性地指定一个数据库。这里我们将使用 `mysql2`
+动态创建数据库。
 
-## Creating and populating the database
+## 创建并填充数据库
 
-Now that you have the connection running, you can use `connection.query()` with
-SQL commands to create databases and tables as well as insert the initial data.
+现在你已经建立了连接，可以使用 `connection.query()` 和 SQL
+命令来创建数据库和表，并插入初始数据。
 
-First we want to generate and select the database to use:
+首先我们生成并选择要使用的数据库：
 
 ```tsx
 await connection.query("CREATE DATABASE denos");
 await connection.query("use denos");
 ```
 
-Then we want to create the table:
+然后我们创建表：
 
 ```tsx
 await connection.query(
@@ -57,7 +56,7 @@ await connection.query(
 );
 ```
 
-After the table is created we can populate the data:
+表创建完成后，我们可以填充数据：
 
 ```tsx
 await connection.query(
@@ -65,19 +64,19 @@ await connection.query(
 );
 ```
 
-We now have all the data ready to start querying.
+现在我们已经准备好所有数据，可以开始查询了。
 
-## Querying MySQL
+## 查询 MySQL
 
-We can use the same connection.query() method to write our queries. First we try
-and get all the data in our `dinosaurs` table:
+我们可以使用相同的 `connection.query()` 方法来编写查询。首先我们尝试获取
+`dinosaurs` 表中的所有数据：
 
 ```tsx
 const results = await connection.query("SELECT * FROM `dinosaurs`");
 console.log(results);
 ```
 
-The result from this query is all the data in our database:
+此查询的结果是数据库中的所有数据：
 
 ```tsx
 [
@@ -96,8 +95,7 @@ The result from this query is all the data in our database:
   ],
 ```
 
-If we want to just get a single element from the database, we can change our
-query:
+如果我们只想从数据库中获取单个元素，可以更改查询：
 
 ```tsx
 const [results, fields] = await connection.query(
@@ -106,17 +104,17 @@ const [results, fields] = await connection.query(
 console.log(results);
 ```
 
-Which gives us a single row result:
+这将返回单行结果：
 
 ```tsx
 [{ id: 3, name: "Deno", description: "The fastest dinosaur that ever lived." }];
 ```
 
-Finally, we can close the connection:
+最后，我们可以关闭连接：
 
 ```tsx
 await connection.end();
 ```
 
-For more on `mysql2`, check out their documentation
-[here](https://github.com/sidorares/node-mysql2).
+有关 `mysql2`
+的更多信息，请查看其[文档](https://github.com/sidorares/node-mysql2)。

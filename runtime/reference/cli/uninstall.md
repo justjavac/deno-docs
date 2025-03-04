@@ -6,7 +6,7 @@ command: uninstall
 
 ## `deno uninstall [PACKAGES]`
 
-Remove dependencies specified in `deno.json` or `package.json`:
+移除 `deno.json` 或 `package.json` 中指定的依赖项：
 
 ```shell
 $ deno add npm:express
@@ -32,11 +32,11 @@ $ cat deno.json
 
 :::tip
 
-You can also use `deno remove` which is an alias to `deno uninstall [PACKAGES]`
+你也可以使用 `deno remove`，它是 `deno uninstall [PACKAGES]` 的别名。
 
 :::
 
-You can remove multiple dependencies at once:
+你可以一次性移除多个依赖项：
 
 ```shell
 $ deno add npm:express jsr:@std/http
@@ -65,12 +65,12 @@ $ cat deno.json
 
 :::info
 
-While dependencies are removed from the `deno.json` and `package.json` they
-still persist in the global cache for future use.
+虽然依赖项已从 `deno.json` 和 `package.json`
+中移除，但它们仍然会保留在全局缓存中以供将来使用。
 
 :::
 
-If your project contains `package.json`, `deno uninstall` can work with it too:
+如果你的项目包含 `package.json`，`deno uninstall` 也可以处理它：
 
 ```shell
 $ cat package.json
@@ -91,13 +91,13 @@ $ cat package.json
 
 ## `deno uninstall --global [SCRIPT_NAME]`
 
-Uninstall `serve`
+卸载 `serve`
 
 ```bash
 deno uninstall --global serve
 ```
 
-Uninstall `serve` from a specific installation root
+从指定的安装根目录卸载 `serve`
 
 ```bash
 deno uninstall -g --root /usr/local/bin serve

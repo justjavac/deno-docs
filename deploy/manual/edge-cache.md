@@ -2,10 +2,9 @@
 title: "Edge Cache"
 ---
 
-The [Web Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache) is
-supported on Deno Deploy. The cache is designed to provide microsecond-level
-read latency, multi-GB/s write throughput and unbounded storage, with the
-tradeoff of best-effort consistency and durability.
+[Web Cache API](https://developer.mozilla.org/zh-CN/docs/Web/API/Cache) 在 Deno
+Deploy 上得到支持。该缓存旨在提供微秒级的读取延迟、多 GB/s
+的写入吞吐量和无限制的存储空间，但代价是尽力而为的一致性和持久性。
 
 ```ts
 const cache = await caches.open("my-cache");
@@ -22,33 +21,29 @@ Deno.serve(async (req) => {
 });
 ```
 
-Cached data is stored in the same Deno Deploy region that runs your code.
-Usually your isolate observes read-after-write (RAW) and write-after-write (WAW)
-consistency within the same region; however, in rare cases recent writes can be
-lost, out-of-order or temporarily invisible.
+缓存数据存储在运行您代码的同一 Deno Deploy 区域中。通常，您的 isolate
+在同一区域内会观察到读后写（RAW）和写后写（WAW）一致性；然而，在极少数情况下，最近的写入可能会丢失、乱序或暂时不可见。
 
-## Expiration
+## 过期
 
-By default, cached data is persisted for an indefinite period of time. While we
-periodically scan and delete inactive objects, an object is usually kept in
-cache for at least 30 days.
+默认情况下，缓存数据会无限期保存。虽然我们会定期扫描并删除不活跃的对象，但对象通常会在缓存中保留至少
+30 天。
 
-Edge Cache understands standard HTTP response headers `Expires` and
-`Cache-Control`. You can use them to specify an expiration time for every cached
-object, for example:
+Edge Cache 理解标准的 HTTP 响应头 `Expires` 和
+`Cache-Control`。您可以使用它们为每个缓存对象指定过期时间，例如：
 
 ```
 Expires: Thu, 22 Aug 2024 01:22:31 GMT
 ```
 
-or:
+或：
 
 ```
 Cache-Control: max-age=86400
 ```
 
-## Limitations
+## 限制
 
-- If a response is not constructed from a `Uint8Array` or `string` body, the
-  `Content-Length` header needs to be manually set.
-- Deletion is not yet supported.
+- 如果响应不是从 `Uint8Array` 或 `string` 主体构建的，则需要手动设置
+  `Content-Length` 头。
+- 目前不支持删除。

@@ -3,7 +3,7 @@
  * @difficulty beginner
  * @tags cli
  * @run <url> Deno Sushi --help --version=1.0.0 --no-color
- * @resource {https://docs.deno.com/api/deno/~/Deno.args} Doc: Deno.args
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.args} Doc: Deno.args
  * @resource {https://jsr.io/@std/cli/doc/parse-args/~} Doc: @std/cli
  * @group CLI
  *

@@ -1,7 +1,7 @@
 ---
-title: "Build a blog with Fresh"
+title: "使用 Fresh 构建博客"
 oldUrl:
   - /deploy/docs/tutorial-blog-fresh/
 ---
 
-Tutorial [here](https://deno.com/blog/build-a-blog-with-fresh).
+教程 [在此](https://deno.com/blog/build-a-blog-with-fresh)。

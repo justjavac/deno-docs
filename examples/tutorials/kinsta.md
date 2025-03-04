@@ -1,22 +1,20 @@
 ---
-title: "How to deploy Deno on Kinsta"
+title: "如何在 Kinsta 上部署 Deno"
 url: /examples/kinsta_tutorial/
 oldUrl:
 - /runtime/manual/advanced/deploying_deno/kinsta/
 - runtime/tutorials/kinsta
 ---
 
-[Kinsta Application Hosting](https://kinsta.com/application-hosting) is a
-service that lets you build and deploy your web apps directly from your Git
-repository.
+[Kinsta 应用托管](https://kinsta.com/application-hosting)
+是一项服务，允许你直接从 Git 仓库构建和部署你的 Web 应用。
 
-## Preparing your application
+## 准备你的应用
 
-At **Kinsta**, we recommend using the
-[`deno-bin`](https://www.npmjs.com/package/deno-bin) package to run Deno
-applications.
+在 **Kinsta**，我们推荐使用 [`deno-bin`](https://www.npmjs.com/package/deno-bin)
+包来运行 Deno 应用。
 
-To do so, your `package.json` should look like this:
+为此，你的 `package.json` 应该如下所示：
 
 ```json title="package.json"
 {
@@ -30,7 +28,7 @@ To do so, your `package.json` should look like this:
 }
 ```
 
-## Example application
+## 示例应用
 
 ```js
 import { parseArgs } from "jsr:@std/cli";
@@ -41,18 +39,16 @@ const port = parseArgs(args).port ? Number(parseArgs(args).port) : 8000;
 Deno.serve({ port }, (_req) => new Response("Hello, world"));
 ```
 
-The application itself is self-explanatory. It's crucial not to hardcode the
-`PORT` but use the environmental variable **Kinsta** provides.
+应用本身是自解释的。关键点在于不要硬编码 `PORT`，而是使用 **Kinsta**
+提供的环境变量。
 
-There is also a [repository](https://github.com/kinsta/hello-world-deno) that
-should help you to get started.
+还有一个 [仓库](https://github.com/kinsta/hello-world-deno) 可以帮助你快速上手。
 
-## Deployment
+## 部署步骤
 
-1. Register on
-   [Kinsta Application Hosting](https://kinsta.com/signup/?product_type=app-db)
-   or login directly to [My Kinsta](https://my.kinsta.com/) admin panel.
-2. Go to the Applications tab.
-3. Connect your GitHub repository.
-4. Press the **Add service > Application button**.
-5. Follow the wizard steps.
+1. 在 [Kinsta 应用托管](https://kinsta.com/signup/?product_type=app-db)
+   注册，或直接登录 [My Kinsta](https://my.kinsta.com/) 管理面板。
+2. 进入 Applications 标签页。
+3. 连接你的 GitHub 仓库。
+4. 点击 **Add service > Application 按钮**。
+5. 按照向导步骤操作。

@@ -2,13 +2,11 @@
 tags: [recommended]
 ---
 
-Disallows using an argument name more than once in a function signature.
+禁止在函数签名中多次使用相同的参数名称。
 
-If you supply multiple arguments of the same name to a function, the last
-instance will shadow the preceding one(s). This is most likely an unintentional
-typo.
+如果你在函数中提供了多个相同名称的参数，最后一个实例将会覆盖前面的实例。这很可能是一个无意的拼写错误。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 function withDupes(a, b, a) {
@@ -16,7 +14,7 @@ function withDupes(a, b, a) {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 function withoutDupes(a, b, c) {

@@ -3,7 +3,7 @@
  * @difficulty beginner
  * @tags cli
  * @run deno test --allow-read --allow-write <url>
- * @resource {https://docs.deno.com/api/deno/~/Deno.test} Doc: Deno.test
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.test} Doc: Deno.test
  * @resource {https://jsr.io/@std/assert/doc} Doc: @std/assert
  * @group CLI
  *

@@ -1,5 +1,5 @@
 ---
-title: "Key Space"
+title: "键空间"
 oldUrl:
   - /runtime/manual/runtime/kv/key_space/
   - /kv/manual/key_space/
@@ -7,43 +7,33 @@ oldUrl:
 
 <deno-admonition></deno-admonition>
 
-Deno KV is a key value store. The key space is a flat namespace of
-key+value+versionstamp pairs. Keys are sequences of key parts, which allow
-modeling of hierarchical data. Values are arbitrary JavaScript objects.
-Versionstamps represent when a value was inserted / modified.
+Deno KV 是一个键值存储。键空间是一个扁平的命名空间，包含键 + 值 +
+版本戳对。键是键部分的序列，允许对分层数据进行建模。值是任意的 JavaScript
+对象。版本戳表示值插入或修改的时间。
 
-## Keys
+## 键
 
-Keys in Deno KV are sequences of key parts, which can be `string`s, `number`s,
-`boolean`s, `Uint8Array`s, or `bigint`s.
+Deno KV 中的键是键部分的序列，可以是 `string`、`number`、`boolean`、`Uint8Array`
+或 `bigint`。
 
-Using a sequence of parts, rather than a single string eliminates the
-possibility of delimiter injection attacks, because there is no visible
-delimiter.
+使用部分序列而不是单个字符串可以消除分隔符注入攻击的可能性，因为没有可见的分隔符。
 
-> A key injection attack occurs when an attacker manipulates the structure of a
-> key-value store by injecting delimiters used in the key encoding scheme into a
-> user controlled variable, leading to unintended behavior or unauthorized
-> access. For example, consider a key-value store using a slash (/) as a
-> delimiter, with keys like "users/alice/settings" and "users/bob/settings". An
-> attacker could create a new user with the name "alice/settings/hacked" to form
-> the key "users/alice/settings/hacked/settings", injecting the delimiter and
-> manipulating the key structure. In Deno KV, the injection would result in the
-> key `["users", "alice/settings/hacked", "settings"]`, which is not harmful.
+> 当攻击者通过将键编码方案中使用的分隔符注入到用户控制的变量中来操纵键值存储的结构时，就会发生键注入攻击，导致意外行为或未经授权的访问。例如，考虑一个使用斜杠
+> (/) 作为分隔符的键值存储，键如 "users/alice/settings" 和
+> "users/bob/settings"。攻击者可以创建一个名为 "alice/settings/hacked"
+> 的新用户，形成键
+> "users/alice/settings/hacked/settings"，注入分隔符并操纵键结构。在 Deno KV
+> 中，注入将导致键
+> `["users", "alice/settings/hacked", "settings"]`，这是无害的。
 
-Between key parts, invisible delimiters are used to separate the parts. These
-delimiters are never visible, but ensure that one part can not be confused with
-another part. For example, the key parts `["abc", "def"]`, `["ab", "cdef"]`,
-`["abc", "", "def"]` are all different keys.
+在键部分之间，使用不可见的分隔符来分隔部分。这些分隔符从不可见，但确保一个部分不会与另一个部分混淆。例如，键部分
+`["abc", "def"]`、`["ab", "cdef"]`、`["abc", "", "def"]` 都是不同的键。
 
-Keys are case sensitive and are ordered lexicographically by their parts. The
-first part is the most significant, and the last part is the least significant.
-The order of the parts is determined by both the type and the value of the part.
+键区分大小写，并且按其部分按字典顺序排序。第一个部分是最重要的，最后一个部分是最不重要的。部分的顺序由部分的类型和值决定。
 
-### Key Part Ordering
+### 键部分排序
 
-Key parts are ordered lexicographically by their type, and within a given type,
-they are ordered by their value. The ordering of types is as follows:
+键部分按其类型按字典顺序排序，在给定类型内，它们按值排序。类型的排序顺序如下：
 
 1. `Uint8Array`
 1. `string`
@@ -51,41 +41,39 @@ they are ordered by their value. The ordering of types is as follows:
 1. `bigint`
 1. `boolean`
 
-Within a given type, the ordering is:
+在给定类型内，排序顺序为：
 
-- `Uint8Array`: byte ordering of the array
-- `string`: byte ordering of the UTF-8 encoding of the string
-- `number`: -Infinity < -1.0 < -0.5 < -0.0 < 0.0 < 0.5 < 1.0 < Infinity < NaN
-- `bigint`: mathematical ordering, largest negative number first, largest
-  positive number last
-- `boolean`: false < true
+- `Uint8Array`：数组的字节顺序
+- `string`：字符串的 UTF-8 编码的字节顺序
+- `number`：-Infinity < -1.0 < -0.5 < -0.0 < 0.0 < 0.5 < 1.0 < Infinity < NaN
+- `bigint`：数学顺序，最大的负数在前，最大的正数在后
+- `boolean`：false < true
 
-This means that the part `1.0` (a number) is ordered before the part `2.0` (also
-a number), but is greater than the part `0n` (a bigint), because `1.0` is a
-number and `0n` is a bigint, and type ordering has precedence over the ordering
-of values within a type.
+这意味着部分 `1.0`（一个数字）在部分 `2.0`（也是一个数字）之前排序，但大于部分
+`0n`（一个 bigint），因为 `1.0` 是一个数字，`0n` 是一个
+bigint，类型排序优先于类型内值的排序。
 
-### Key Examples
+### 键示例
 
 ```js
-["users", 42, "profile"]; // User with ID 42's profile
-["posts", "2023-04-23", "comments"]; // Comments for all posts on 2023-04-23
-["products", "electronics", "smartphones", "apple"]; // Apple smartphones in the electronics category
-["orders", 1001, "shipping", "tracking"]; // Tracking information for order ID 1001
-["files", new Uint8Array([1, 2, 3]), "metadata"]; // Metadata for a file with Uint8Array identifier
-["projects", "openai", "tasks", 5]; // Task with ID 5 in the OpenAI project
-["events", "2023-03-31", "location", "san_francisco"]; // Events in San Francisco on 2023-03-31
-["invoices", 2023, "Q1", "summary"]; // Summary of Q1 invoices for 2023
-["teams", "engineering", "members", 1n]; // Member with ID 1n in the engineering team
+["users", 42, "profile"]; // ID 为 42 的用户的个人资料
+["posts", "2023-04-23", "comments"]; // 2023-04-23 所有帖子的评论
+["products", "electronics", "smartphones", "apple"]; // 电子产品类别中的苹果智能手机
+["orders", 1001, "shipping", "tracking"]; // 订单 ID 1001 的跟踪信息
+["files", new Uint8Array([1, 2, 3]), "metadata"]; // 具有 Uint8Array 标识符的文件的元数据
+["projects", "openai", "tasks", 5]; // OpenAI 项目中 ID 为 5 的任务
+["events", "2023-03-31", "location", "san_francisco"]; // 2023-03-31 在旧金山的事件
+["invoices", 2023, "Q1", "summary"]; // 2023 年第一季度发票的摘要
+["teams", "engineering", "members", 1n]; // 工程团队中 ID 为 1n 的成员
 ```
 
-### Universally Unique Lexicographically Sortable Identifiers (ULIDs)
+### 通用唯一字典可排序标识符 (ULIDs)
 
-Key part ordering allows keys consisting of timestamps and ID parts to be listed
-chronologically. Typically, you can generate a key using the following:
-[`Date.now()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now)
-and
-[`crypto.randomUUID()`](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID):
+键部分排序允许由时间戳和 ID
+部分组成的键按时间顺序列出。通常，您可以使用以下方式生成键：
+[`Date.now()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date/now)
+和
+[`crypto.randomUUID()`](https://developer.mozilla.org/zh-CN/docs/Web/API/Crypto/randomUUID):
 
 ```js
 async function setUser(user) {
@@ -93,19 +81,18 @@ async function setUser(user) {
 }
 ```
 
-Run multiple times sequentially, this produces the following keys:
+多次顺序运行，这将生成以下键：
 
 ```js
-["users", 1691377037923, "8c72fa25-40ad-42ce-80b0-44f79bc7a09e"]; // First user
-["users", 1691377037924, "8063f20c-8c2e-425e-a5ab-d61e7a717765"]; // Second user
-["users", 1691377037925, "35310cea-58ba-4101-b09a-86232bf230b2"]; // Third user
+["users", 1691377037923, "8c72fa25-40ad-42ce-80b0-44f79bc7a09e"]; // 第一个用户
+["users", 1691377037924, "8063f20c-8c2e-425e-a5ab-d61e7a717765"]; // 第二个用户
+["users", 1691377037925, "35310cea-58ba-4101-b09a-86232bf230b2"]; // 第三个用户
 ```
 
-However, having the timestamp and ID represented within a single key part may be
-more straightforward in some cases. You can use a
-[Universally Unique Lexicographically Sortable Identifier (ULID)](https://github.com/ulid/spec)
-to do this. This type of identifier encodes a UTC timestamp, is
-lexicographically sortable and is cryptographically random by default:
+然而，在某些情况下，将时间戳和 ID 表示在单个键部分中可能更直接。您可以使用
+[通用唯一字典可排序标识符 (ULID)](https://github.com/ulid/spec)
+来实现这一点。这种类型的标识符编码了 UTC
+时间戳，默认情况下是字典可排序且加密随机的：
 
 ```js
 import { ulid } from "jsr:@std/ulid";
@@ -118,13 +105,12 @@ async function setUser(user) {
 ```
 
 ```js
-["users", "01H76YTWK3YBV020S6MP69TBEQ"]; // First user
-["users", "01H76YTWK4V82VFET9YTYDQ0NY"]; // Second user
-["users", "01H76YTWK5DM1G9TFR0Y5SCZQV"]; // Third user
+["users", "01H76YTWK3YBV020S6MP69TBEQ"]; // 第一个用户
+["users", "01H76YTWK4V82VFET9YTYDQ0NY"]; // 第二个用户
+["users", "01H76YTWK5DM1G9TFR0Y5SCZQV"]; // 第三个用户
 ```
 
-Furthermore, you can generate ULIDs monotonically increasingly using
-`monotonicUlid` function:
+此外，您可以使用 `monotonicUlid` 函数生成单调递增的 ULID：
 
 ```js
 import { monotonicUlid } from "jsr:@std/ulid";
@@ -135,16 +121,16 @@ async function setUser(user) {
 ```
 
 ```js
-// Strict ordering for the same timestamp by incrementing the least-significant random bit by 1
-["users", "01H76YTWK3YBV020S6MP69TBEQ"]; // First user
-["users", "01H76YTWK3YBV020S6MP69TBER"]; // Second user
-["users", "01H76YTWK3YBV020S6MP69TBES"]; // Third user
+// 通过将最低有效随机位递增 1 来严格排序相同时间戳
+["users", "01H76YTWK3YBV020S6MP69TBEQ"]; // 第一个用户
+["users", "01H76YTWK3YBV020S6MP69TBER"]; // 第二个用户
+["users", "01H76YTWK3YBV020S6MP69TBES"]; // 第三个用户
 ```
 
-## Values
+## 值
 
-Values in Deno KV can be arbitrary JavaScript values that are compatible with
-the [structured clone algorithm][structured clone algorithm]. This includes:
+Deno KV 中的值可以是与 [结构化克隆算法][structured clone algorithm] 兼容的任意
+JavaScript 值。这包括：
 
 - `undefined`
 - `null`
@@ -160,30 +146,27 @@ the [structured clone algorithm][structured clone algorithm]. This includes:
 - `Date`
 - `RegExp`
 
-Objects and arrays can contain any of the above types, including other objects
-and arrays. `Map`s and `Set`s can contain any of the above types, including
-other `Map`s and `Set`s.
+对象和数组可以包含上述任何类型，包括其他对象和数组。`Map` 和 `Set`
+可以包含上述任何类型，包括其他 `Map` 和 `Set`。
 
-Circular references within values are supported.
+支持值内的循环引用。
 
-Objects with a non-primitive prototype are not supported (such as class
-instances or Web API objects). Functions and symbols can also not be serialized.
+不支持具有非原始原型的对象（例如类实例或 Web API
+对象）。函数和符号也无法序列化。
 
-### `Deno.KvU64` type
+### `Deno.KvU64` 类型
 
-In addition to structured serializable values, the special value `Deno.KvU64` is
-also supported as a value. This object represents a 64-bit unsigned integer,
-represented as a bigint. It can be used with the `sum`, `min`, and `max` KV
-operations. It can not be stored within an object or array. It must be stored as
-a top-level value.
+除了结构化可序列化的值外，还支持特殊值 `Deno.KvU64`。此对象表示一个 64
+位无符号整数，表示为 bigint。它可以与 `sum`、`min` 和 `max` KV
+操作一起使用。它不能存储在对象或数组中。它必须作为顶级值存储。
 
-It can be created with the `Deno.KvU64` constructor:
+可以使用 `Deno.KvU64` 构造函数创建它：
 
 ```js
 const u64 = new Deno.KvU64(42n);
 ```
 
-### Value Examples
+### 值示例
 
 ```js,ignore
 undefined;
@@ -202,42 +185,32 @@ new Set([1, 2, 3]);
 new Date("2023-04-23");
 /abc/;
 
-// Circular references are supported
+// 支持循环引用
 const a = {};
 const b = { a };
 a.b = b;
 
-// Deno.KvU64 is supported
+// 支持 Deno.KvU64
 new Deno.KvU64(42n);
 ```
 
-## Versionstamp
+## 版本戳
 
-All data in the Deno KV key-space is versioned. Every time a value is inserted
-or modified, a versionstamp is assigned to it. Versionstamps are monotonically
-increasing, non-sequential, 12 byte values that represent the time that the
-value was modified. Versionstamps do not represent real time, but rather the
-order in which the values were modified.
+Deno KV
+键空间中的所有数据都是版本化的。每次插入或修改值时，都会为其分配一个版本戳。版本戳是单调递增的、非顺序的
+12 字节值，表示值被修改的时间。版本戳不代表实际时间，而是代表值被修改的顺序。
 
-Because versionstamps are monotonically increasing, they can be used to
-determine whether a given value is newer or older than another value. This can
-be done by comparing the versionstamps of the two values. If versionstamp A is
-greater than versionstamp B, then value A was modified more recently than value
-B.
+由于版本戳是单调递增的，因此它们可以用于确定给定值是否比另一个值更新或更旧。这可以通过比较两个值的版本戳来完成。如果版本戳
+A 大于版本戳 B，则值 A 比值 B 更近被修改。
 
 ```js
 versionstampA > versionstampB;
 "000002fa526aaccb0000" > "000002fa526aacc90000"; // true
 ```
 
-All data modified by a single transaction are assigned the same versionstamp.
-This means that if two `set` operations are performed in the same atomic
-operation, then the versionstamp of the new values will be the same.
+由单个事务修改的所有数据都被分配相同的版本戳。这意味着如果在同一个原子操作中执行两个
+`set` 操作，则新值的版本戳将相同。
 
-Versionstamps are used to implement optimistic concurrency control. Atomic
-operations can contain checks that ensure that the versionstamp of the data they
-are operating on matches a versionstamp passed to the operation. If the
-versionstamp of the data is not the same as the versionstamp passed to the
-operation, then the transaction will fail and the operation will not be applied.
+版本戳用于实现乐观并发控制。原子操作可以包含检查，以确保它们操作的数据的版本戳与传递给操作的版本戳匹配。如果数据的版本戳与传递给操作的版本戳不同，则事务将失败，操作将不会应用。
 
-[structured clone algorithm]: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
+[structured clone algorithm]: https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Structured_clone_algorithm

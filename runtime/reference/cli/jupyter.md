@@ -3,87 +3,80 @@ title: "Jupyter Kernel for Deno"
 oldUrl: /runtime/manual/tools/jupyter/
 ---
 
-Deno ships with a built-in Jupyter kernel that allows you to write JavaScript
-and TypeScript; use Web and Deno APIs and import `npm` packages straight in your
-interactive notebooks.
+Deno 内置了一个 Jupyter 内核，允许你编写 JavaScript 和 TypeScript；使用 Web 和
+Deno API，并直接在交互式笔记本中导入 `npm` 包。
 
-:::caution `deno jupyter` always runs with `--allow-all`
+:::caution `deno jupyter` 始终以 `--allow-all` 运行
 
-Currently all code executed in the Jupyter kernel runs with `--allow-all` flag.
-This is a temporary limitation and will be addressed in the future.
+目前，所有在 Jupyter 内核中执行的代码都以 `--allow-all`
+标志运行。这是一个临时限制，未来将会解决。
 
 :::
 
-## Quickstart
+## 快速开始
 
-Run `deno jupyter --unstable` and follow the instructions.
+运行 `deno jupyter --unstable` 并按照说明操作。
 
-You can run `deno jupyter --unstable --install` to force installation of the
-kernel. Deno assumes that `jupyter` command is available in your `PATH`.
+你可以运行 `deno jupyter --unstable --install` 来强制安装内核。Deno 假设
+`jupyter` 命令在你的 `PATH` 中可用。
 
-After completing the installation process, the Deno kernel will be available in
-the notebook creation dialog in JupyterLab and the classic notebook:
+完成安装过程后，Deno 内核将在 JupyterLab 和经典笔记本的笔记本创建对话框中可用：
 
-![Jupyter notebook kernel selection](../images/jupyter_notebook.png)
+![Jupyter 笔记本内核选择](../images/jupyter_notebook.png)
 
-You can use the Deno Jupyter kernel in any editor that supports Jupyter
-notebooks.
+你可以在任何支持 Jupyter 笔记本的编辑器中使用 Deno Jupyter 内核。
 
 ### VS Code
 
-- Install the
-  [VSCode Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)
-- Open or create a notebook file by opening the Command Palette (Ctrl+Shift+P)
-  and selecting "Create: New Jupyter Notebook". This can be done manually by
-  creating a file with the ".ipynb" file extension.
-- When on a new or existing Notebook, click creating a new Jupyter Notebook
-  select "Jupyter kernels" and then select Deno
+- 安装
+  [VSCode Jupyter 扩展](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)
+- 通过打开命令面板（Ctrl+Shift+P）并选择“创建：新建 Jupyter
+  笔记本”来打开或创建一个笔记本文件。也可以通过手动创建一个带有“.ipynb”文件扩展名的文件来完成。
+- 在新建或现有的笔记本上，点击创建新的 Jupyter 笔记本，选择“Jupyter
+  内核”，然后选择 Deno
 
-![Selecting Deno in VS Code](https://github.com/denoland/deno-docs/assets/836375/32f0ccc3-35f7-47e5-84f4-17c20a5b5732)
+![在 VS Code 中选择 Deno](https://github.com/denoland/deno-docs/assets/836375/32f0ccc3-35f7-47e5-84f4-17c20a5b5732)
 
 ### JetBrains IDEs
 
-Jupyter Notebooks are available right out of the box.
+Jupyter Notebooks 开箱即用。
 
-## Rich content output
+## 富内容输出
 
-`Deno.jupyter` namespaces provides helper function for displaying rich content
-in your notebooks
-[using MIME types that Jupyter supports](https://docs.jupyter.org/en/latest/reference/mimetype.html).
+`Deno.jupyter` 命名空间提供了辅助函数，用于在笔记本中显示富内容
+[使用 Jupyter 支持的 MIME 类型](https://docs.jupyter.org/en/latest/reference/mimetype.html)。
 
 ---
 
-The easiest way to provide a rich output is to return an object that that has a
-`[Symbol.for("Jupyter.display")]` method.
+提供富内容输出的最简单方法是返回一个具有 `[Symbol.for("Jupyter.display")]`
+方法的对象。
 
-This method should return a dictionary mapping a MIME type to a value that
-should be displayed.
+该方法应返回一个映射 MIME 类型到要显示的值的字典。
 
 ```ts
 {
   [Symbol.for("Jupyter.display")]() {
     return {
-      // Plain text content
+      // 纯文本内容
       "text/plain": "Hello world!",
 
-      // HTML output
+      // HTML 输出
       "text/html": "<h1>Hello world!</h1>",
     }
   }
 }
 ```
 
-_Example of an object that returns plain text and HTML output._
+_返回纯文本和 HTML 输出的对象示例。_
 
 :::info
 
-You can also use `Deno.jupyter.$display` instead of typing
-`Symbol.for("Jupyter.display")`
+你也可以使用 `Deno.jupyter.$display` 来代替 `Symbol.for("Jupyter.display")`
 
 :::
 
-This is a regular function, so you you can use any library you want to format
-the output - eg. use `@std/fmt/colors` to provide a colorful output:
+这是一个常规函数，因此你可以使用任何你想要的库来格式化输出 - 例如，使用
+`@std/fmt/colors` 来提供彩色输出：
 
 ```ts
 import * as colors from "jsr:@std/fmt/colors";
@@ -97,8 +90,7 @@ import * as colors from "jsr:@std/fmt/colors";
 }
 ```
 
-You can also use `Deno.jupyter.display` function to directly display the MIME
-bundle:
+你也可以使用 `Deno.jupyter.display` 函数直接显示 MIME 包：
 
 ```js
 await Deno.jupyter.display({
@@ -108,18 +100,15 @@ await Deno.jupyter.display({
 }, { raw: true });
 ```
 
-![`Deno.jupyter.display` API example](../images/jupyter-display.png)
+![`Deno.jupyter.display` API 示例](../images/jupyter-display.png)
 
-Your notebook frontend will automatically select the "richest" MIME type to
-display based on its capabilities.
+你的笔记本前端将根据其功能自动选择“最丰富”的 MIME 类型来显示。
 
 ---
 
-`Deno.jupyter` provides several helper methods for rich output of common media
-types.
+`Deno.jupyter` 提供了几种用于常见媒体类型富内容输出的辅助方法。
 
-`Deno.jupyter.html` is a tagged template that will render the provided string as
-an HTML in the notebook.
+`Deno.jupyter.html` 是一个标记模板，它将在笔记本中将提供的字符串渲染为 HTML。
 
 ```js
 Deno.jupyter.html`<h1>Hello, world!</h1>
@@ -127,10 +116,10 @@ Deno.jupyter.html`<h1>Hello, world!</h1>
 <p>Lorem ipsum <i>dolor</i> <b>sit</b> <u>amet</u></p>`;
 ```
 
-![`Deno.jupyter.html` API example](../images/jupyter-html.png)
+![`Deno.jupyter.html` API 示例](../images/jupyter-html.png)
 
-`Deno.jupyter.md` is a tagged template that will render provided string as a
-Markdown document in the notebook.
+`Deno.jupyter.md` 是一个标记模板，它将在笔记本中将提供的字符串渲染为 Markdown
+文档。
 
 ```js
 Deno.jupyter
@@ -139,10 +128,9 @@ Deno.jupyter
 **Interactive compute with Jupyter _built into Deno_!**`;
 ```
 
-![`Deno.jupyter.md` API example](../images/jupyter-md.png)
+![`Deno.jupyter.md` API 示例](../images/jupyter-md.png)
 
-`Deno.jupyter.svg` is a tagged template that will render provided string as an
-SVG figure in the notebook.
+`Deno.jupyter.svg` 是一个标记模板，它将在笔记本中将提供的字符串渲染为 SVG 图形。
 
 ```js
 Deno.jupyter.svg`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -150,10 +138,10 @@ Deno.jupyter.svg`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
     </svg>`;
 ```
 
-![`Deno.jupyter.svg` API example](../images/jupyter-svg.png)
+![`Deno.jupyter.svg` API 示例](../images/jupyter-svg.png)
 
-`Deno.jupyter.image` is function that will render a JPG or PNG image. You can
-pass a filepath, or already read bytes:
+`Deno.jupyter.image` 是一个函数，它将渲染 JPG 或 PNG
+图像。你可以传递文件路径，或已经读取的字节：
 
 ```js
 Deno.jupyter.image("./cat.jpg");
@@ -162,26 +150,24 @@ const data = Deno.readFileSync("./dog.png");
 Deno.jupyter.image(data);
 ```
 
-## prompt and confirm APIs
+## prompt 和 confirm API
 
-You can use `prompt` and `confirm` Web APIs to wait for user input in your
-notebook.
+你可以使用 `prompt` 和 `confirm` Web API 在笔记本中等待用户输入。
 
 <figure>
 
-<video class="w-full" alt="`confirm` and `prompt` APIs example" autoplay muted loop playsinline controls src="../images/jupyter-confirm-prompt.mp4"></video>
+<video class="w-full" alt="`confirm` 和 `prompt` API 示例" autoplay muted loop playsinline controls src="../images/jupyter-confirm-prompt.mp4"></video>
 
-<figcaption><span style="font-family: monospace;">confirm</span> and <span style="font-family: monospace;">prompt</span> APIs example</figcaption>
+<figcaption><span style="font-family: monospace;">confirm</span> 和 <span style="font-family: monospace;">prompt</span> API 示例</figcaption>
 
 </figure>
 
-## IO pub channel broadcasting
+## IO pub 通道广播
 
-`Deno.jupyter.broadcast` allows to publish messages to the IO pub channel
-allowing to provide live updates as the cell is evaluated.
+`Deno.jupyter.broadcast` 允许向 IO pub
+通道发布消息，以便在单元格评估时提供实时更新。
 
-Consider this example that prints a message before we start a computation and
-another when the computation is finished:
+考虑这个示例，它在开始计算之前打印一条消息，并在计算完成后打印另一条消息：
 
 ```js
 await Deno.jupyter.broadcast("display_data", {
@@ -190,7 +176,7 @@ await Deno.jupyter.broadcast("display_data", {
   transient: { display_id: "progress" },
 });
 
-// Pretend we're doing an expensive compute
+// 假装我们正在进行昂贵的计算
 await new Promise((resolve) => setTimeout(resolve, 1500));
 
 await Deno.jupyter.broadcast("update_display_data", {
@@ -202,15 +188,15 @@ await Deno.jupyter.broadcast("update_display_data", {
 
 <figure>
 
-<video class="w-full" alt="`Deno.jupyter.broadcast` API example" autoplay muted loop playsinline controls src="../images/jupyter-broadcast.mp4"></video>
+<video class="w-full" alt="`Deno.jupyter.broadcast` API 示例" autoplay muted loop playsinline controls src="../images/jupyter-broadcast.mp4"></video>
 
-<figcaption><span style="font-family: monospace;">Deno.jupyter.broadcast</span> API example</figcaption>
+<figcaption><span style="font-family: monospace;">Deno.jupyter.broadcast</span> API 示例</figcaption>
 
 </figure>
 
-## Examples
+## 示例
 
-Here's an example of using `@observablehq/plot` to generate a chart:
+这里有一个使用 `@observablehq/plot` 生成图表的示例：
 
 ```ts
 import { document, penguins } from "jsr:@ry/jupyter-helper";
@@ -230,14 +216,14 @@ Plot.plot({
 });
 ```
 
-![Example plot generated using `@observablehq/plot` library](../images/jupyter-plot.png)
+![使用 `@observablehq/plot` 库生成的示例图表](../images/jupyter-plot.png)
 
-See https://github.com/rgbkrk/denotebooks for more advanced examples leveraging
-data analysis and visualisation libraries like Polars, Observable and d3.
+有关更多高级示例，请参阅 https://github.com/rgbkrk/denotebooks，这些示例利用了
+Polars、Observable 和 d3 等数据分析和可视化库。
 
-## `jupyter console` integration
+## `jupyter console` 集成
 
-You can also use Deno Jupyter kernel in the `jupyter console` REPL. To do that,
-you should launch your console with `jupyter console --kernel deno`.
+你也可以在 `jupyter console` REPL 中使用 Deno Jupyter 内核。为此，你应该使用
+`jupyter console --kernel deno` 启动你的控制台。
 
-![Using the Deno kernel in a CLI](../images/jupyter-cli.gif)
+![在 CLI 中使用 Deno 内核](../images/jupyter-cli.gif)

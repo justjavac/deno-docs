@@ -4,7 +4,7 @@
  * @tags cli, deploy
  * @run --allow-net <url>
  * @resource {/examples/http_server} Example: HTTP Server: Hello World
- * @resource {https://developer.mozilla.org/en-US/docs/Web/API/WebSocket} MDN: WebSocket
+ * @resource {https://developer.mozilla.org/zh-CN/docs/Web/API/WebSocket} MDN: WebSocket
  * @group Network
  *
  * An example of a HTTP server that handles websocket requests.

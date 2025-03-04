@@ -1,31 +1,31 @@
 ---
-title: "Basic Fresh site"
+title: "基础 Fresh 站点"
 oldUrl:
   - /deploy/docs/fresh/
 ---
 
-This tutorial will cover how to deploy a Fresh application on Deno Deploy.
+本教程将介绍如何在 Deno Deploy 上部署一个 Fresh 应用程序。
 
-Fresh is a web framework built for Deno, akin to Express for Node.
+Fresh 是一个为 Deno 构建的 Web 框架，类似于 Node 的 Express。
 
-## **Step 1:** Create Fresh application
+## **步骤 1:** 创建 Fresh 应用程序
 
 ```sh
 deno run -A -r https://fresh.deno.dev fresh-site
 ```
 
-To run this application locally:
+要在本地运行此应用程序：
 
 ```sh
 deno task start
 ```
 
-You can edit `routes/index.js` to modify the application.
+你可以编辑 `routes/index.js` 来修改应用程序。
 
-## **Step 2:** Create a new Github repo and link your local Fresh application.
+## **步骤 2:** 创建一个新的 Github 仓库并链接你的本地 Fresh 应用程序。
 
-1. Create a new Github repo and record the git repo remote URL
-2. From your local `fresh-site`, initialize git and push to the new remote repo:
+1. 创建一个新的 Github 仓库并记录 git 仓库的远程 URL。
+2. 从本地的 `fresh-site` 目录中，初始化 git 并推送到新的远程仓库：
 
    ```sh
    git init
@@ -35,16 +35,15 @@ You can edit `routes/index.js` to modify the application.
    git push origin main
    ```
 
-## **Step 3:** Deploy to Deno Deploy
+## **步骤 3:** 部署到 Deno Deploy
 
-1. Navigate to
-   [https://dash.deno.com/new_project](https://dash.deno.com/new_project).
-2. Connect to your GitHub account and select your repository.
-3. Fill in the values on the form:
-   - Give your project a name
-   - Select `Fresh` from the "Framework Preset" options
-   - Set production branch to `main`
-   - Select `main.ts` as the entrypoint file
-4. Click "Deploy Project" to kick off Deno Deploy.
-5. Once deployed, you can view your new project at url provided in your project
-   dashboard.
+1. 导航到
+   [https://dash.deno.com/new_project](https://dash.deno.com/new_project)。
+2. 连接到你的 GitHub 账户并选择你的仓库。
+3. 填写表单中的值：
+   - 为你的项目命名
+   - 从 "Framework Preset" 选项中选择 `Fresh`
+   - 将生产分支设置为 `main`
+   - 选择 `main.ts` 作为入口文件
+4. 点击 "Deploy Project" 以启动 Deno Deploy。
+5. 部署完成后，你可以在项目仪表板中提供的 URL 查看你的新项目。

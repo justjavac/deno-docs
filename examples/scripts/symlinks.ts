@@ -3,8 +3,8 @@
  * @difficulty beginner
  * @tags cli
  * @run --allow-write --allow-read <url>
- * @resource {https://docs.deno.com/api/deno/~/Deno.writeTextFile} Doc: Deno.writeTextFile
- * @resource {https://docs.deno.com/api/deno/~/Deno.symlink} Doc: Deno.symlink
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.writeTextFile} Doc: Deno.writeTextFile
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.symlink} Doc: Deno.symlink
  * @group File System
  *
  * Creating and resolving symlink is a common task. Deno has a number of

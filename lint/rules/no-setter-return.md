@@ -2,18 +2,16 @@
 tags: [recommended]
 ---
 
-Disallows returning values from setters.
+禁止从 setter 中返回值。
 
-Setters are supposed to be used for setting some value to the property, which
-means that returning a value from a setter makes no sense. In fact, returned
-values are ignored and cannot ever be used at all although returning a value
-from a setter produces no error. This is why static check for this mistake by
-the linter is quite beneficial.
+Setter 应该用于为属性设置某个值，这意味着从 setter
+中返回值是没有意义的。事实上，尽管从 setter
+中返回值不会产生错误，但返回值会被忽略且无法使用。这就是为什么通过 linter
+进行静态检查来发现这种错误是非常有益的。
 
-Note that returning without a value is allowed; this is a useful technique to do
-early-return from a function.
+请注意，允许不带值的返回；这是一种从函数中提前返回的有用技术。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 const a = {
@@ -37,10 +35,10 @@ const c = {
 };
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
-// return without a value is allowed since it is used to do early-return
+// 允许不带值的返回，因为它用于提前返回
 const a = {
   set foo(x: number) {
     if (x % 2 == 0) {
@@ -49,14 +47,14 @@ const a = {
   },
 };
 
-// not a setter, but a getter
+// 不是 setter，而是 getter
 class B {
   get foo() {
     return 42;
   }
 }
 
-// not a setter
+// 不是 setter
 const c = {
   set(x: number) {
     return "something";

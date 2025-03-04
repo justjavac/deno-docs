@@ -1,37 +1,33 @@
 ---
-title: "Deploy Deno to AWS Lambda"
+title: "将 Deno 部署到 AWS Lambda"
 url: /examples/deploy_deno_to_aws_lambda/
 videoUrl: https://www.youtube.com/watch?v=_xLOrT3cWK4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=17
 layout: video.tsx
 ---
 
-## Description of video
+## 视频描述
 
-Show how to deploy Deno applications to AWS Lambda (using a community runtime
-for Lambda).
+展示如何将 Deno 应用程序部署到 AWS Lambda（使用 Lambda 的社区运行时）。
 
-## Transcript and code
+## 文字稿和代码
 
-### Run Deno on AWS Lambda
+### 在 AWS Lambda 上运行 Deno
 
-Running Deno on AWS Lambda? Sure, you can do that. With AWS lambda the
-serverless pricing can be cheaper than a VPS and can be easier to maintain
-because it can auto scale behind the scenes.
+在 AWS Lambda 上运行 Deno？当然可以。使用 AWS Lambda，无服务器定价可能比 VPS
+更便宜，并且由于它可以自动扩展，因此更容易维护。
 
-<!-- We have our tree app here, and we want to host it on AWS.  -->
+<!-- 我们这里有一个树形应用，我们想把它托管在 AWS 上。 -->
 
-To make that work, we’re going to use the aws-lambda-adapter project to make
-sure that our `Deno.serve` function runs as we expect it to. This is a popular
-approach to deploying to AWS lambda due to control, flexibility, and
-consistency.
+为了实现这一点，我们将使用 aws-lambda-adapter 项目来确保我们的 `Deno.serve`
+函数按预期运行。这是部署到 AWS Lambda
+的流行方法，因为它提供了控制、灵活性和一致性。
 
-There’s a nice article on this on the blog if you want to learn more about these
-considerations.
+如果你想了解更多关于这些考虑因素的内容，博客上有一篇不错的文章。
 
-Let’s take a look at the Dockerfile that we can use to make this work:
+让我们看一下可以用来实现这一点的 Dockerfile：
 
 ```dockerfile
-# Set up the base image
+# 设置基础镜像
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4 AS aws-lambda-adapter
 FROM denoland/deno:bin-2.0.2 AS deno_bin
 FROM debian:bookworm-20230703-slim AS deno_runtime
@@ -42,90 +38,83 @@ EXPOSE 8000
 RUN mkdir /var/deno_dir
 ENV DENO_DIR=/var/deno_dir
 
-# Copy the function code
+# 复制函数代码
 WORKDIR "/var/task"
 COPY . /var/task
 
-# Warmup caches
+# 预热缓存
 RUN timeout 10s deno -A main.ts || [ $? -eq 124 ] || exit 1
 
 CMD ["deno", "-A", "main.ts"]
 ```
 
-Then we’ll build the Docker image.
+然后我们将构建 Docker 镜像。
 
 ```shell
 docker build -t my-deno-project .
 ```
 
-Now we need to start interfacing with AWS. If this is your first time working
-with AWS, you can create an account:
+现在我们需要开始与 AWS 交互。如果这是你第一次使用 AWS，你可以创建一个账户：
 [https://aws.amazon.com](https://aws.amazon.com)
 
-And if you haven’t installed the AWS CLI, you can do that too. You know if it’s
-installed by typing `aws` into your Terminal or Command Prompt. If that returns
-an error you can install with homebrew or follow the instructions through the
-website:
+如果你还没有安装 AWS CLI，你也可以安装它。你可以通过在终端或命令提示符中输入
+`aws` 来检查是否已安装。如果返回错误，你可以使用 homebrew
+安装或按照网站上的说明进行操作：
 [https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 ```
 brew install awscli
 ```
 
-Then you’ll want to make sure that you’re set up with `aws configure`.
-Everything that it is looking for is in the
-[Security Credentials section of the
-AWS Console](https://us-east-1.console.aws.amazon.com/ecr/private-registry/repositories).
+然后你需要确保使用 `aws configure` 进行设置。它所需的所有内容都在
+[AWS 控制台的安全凭证部分](https://us-east-1.console.aws.amazon.com/ecr/private-registry/repositories)。
 
-### Use the CLI to create an ECR
+### 使用 CLI 创建 ECR
 
-The ECR is a registry service where we can push our docker container
+ECR 是一个我们可以推送 Docker 容器的注册表服务
 
 ```
 aws ecr create-repository --repository-name my-deno-project --region us-east-1 | grep repositoryUri
 ```
 
-This outputs a URI for the repo: \`"repositoryUri":
+这将输出仓库的 URI：\`"repositoryUri":
 "\<\<myuserid\>\>[.dkr.ecr.us-west-1.amazonaws.com/my-deno-project](http://.dkr.ecr.us-west-1.amazonaws.com/my-deno-project)",\`
 
-Then log in using the URI that comes back
+然后使用返回的 URI 登录
 
 ```shell
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <username>.dkr.ecr.us-east-1.amazonaws.com/my-deno-project
 ```
 
-Tag the image
+标记镜像
 
 ```shell
 docker tag my-deno-project:latest <myProject>.dkr.ecr.us-east-1.amazonaws.com/my-deno-project:latest
 ```
 
-Then Push the image to ECR
+然后将镜像推送到 ECR
 
 ```shell
 docker push <myproject>.dkr.ecr.us-west-1.amazonaws.com/my-deno-project:latest
 ```
 
-Now we need to create a function that will host our app:
+现在我们需要创建一个函数来托管我们的应用：
 
 - [https://us-east-1.console.aws.amazon.com/lambda/home?region=us-east-1\#/begin](https://us-east-1.console.aws.amazon.com/lambda/home?region=us-east-1#/begin)
-- Think of a function as being a place where the app is going to run
-- Select Create a Function
-- Select Container Image Radio Button
-- Call the function `tree-app`
-- Select the app from the Browse Containers button
-- Halfway down the page select “Configuration”
-- Select `Function URL`
-- Create a URL
-- Select None so the endpoint is public
-- Select Save
-- Check the app in the browser
+- 将函数视为应用运行的地方
+- 选择创建函数
+- 选择容器镜像单选按钮
+- 将函数命名为 `tree-app`
+- 从浏览容器按钮中选择应用
+- 在页面中间选择“配置”
+- 选择 `Function URL`
+- 创建一个 URL
+- 选择 None 以使端点公开
+- 选择保存
+- 在浏览器中检查应用
 
-One thing to keep in mind with Lambda functions is cold start performance. Cold
-starts happen when AWS needs to initialize your function, and it can cause
-slight delays. There’s a pretty cool
-[blog here that goes through Deno vs. other
-tools](https://deno.com/blog/aws-lambda-coldstart-benchmarks).
+使用 Lambda 函数时需要注意的一点是冷启动性能。当 AWS
+需要初始化你的函数时，会发生冷启动，这可能会导致轻微的延迟。这里有一篇很酷的
+[博客文章，比较了 Deno 与其他工具](https://deno.com/blog/aws-lambda-coldstart-benchmarks)。
 
-Using Deno with AWS Lambda functions is a great way to stand up your app quickly
-in a familiar environment.
+将 Deno 与 AWS Lambda 函数结合使用是在熟悉的环境中快速启动应用的好方法。

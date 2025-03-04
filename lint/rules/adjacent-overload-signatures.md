@@ -2,14 +2,13 @@
 tags: [recommended]
 ---
 
-Requires overload signatures to be adjacent to each other.
+要求重载签名彼此相邻。
 
-Overloaded signatures which are not next to each other can lead to code which is
-hard to read and maintain.
+没有彼此相邻的重载签名会导致代码难以阅读和维护。
 
-**Invalid:**
+**无效：**
 
-(`bar` is declared in-between `foo` overloads)
+（`bar` 在 `foo` 重载之间声明）
 
 ```typescript
 type FooType = {
@@ -45,9 +44,9 @@ export function bar(): void {}
 export function foo(sn: string | number): void {}
 ```
 
-**Valid:**
+**有效：**
 
-(`bar` is declared after `foo`)
+（`bar` 在 `foo` 之后声明）
 
 ```typescript
 type FooType = {

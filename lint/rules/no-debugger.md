@@ -2,14 +2,12 @@
 tags: [recommended]
 ---
 
-Disallows the use of the `debugger` statement.
+禁止使用 `debugger` 语句。
 
-`debugger` is a statement which is meant for stopping the javascript execution
-environment and start the debugger at the statement. Modern debuggers and
-tooling no longer need this statement and leaving it in can cause the execution
-of your code to stop in production.
+`debugger` 是一种用于停止 JavaScript
+执行环境并在该语句处启动调试器的语句。现代调试器和工具不再需要此语句，保留它可能会导致代码在生产环境中停止执行。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 function isLongString(x: string) {
@@ -18,10 +16,10 @@ function isLongString(x: string) {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 function isLongString(x: string) {
-  return x.length > 100; // set breakpoint here instead
+  return x.length > 100; // 在此处设置断点代替
 }
 ```

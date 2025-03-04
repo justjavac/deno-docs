@@ -1,18 +1,18 @@
 ---
-tags: [recommended, react, jsx, fresh]
+tags: [推荐, react, jsx, 新鲜]
 ---
 
-Leaving the `>` or `}` character in JSX is often undesired and difficult to
-spot. Enforce that these characters must be passed as strings.
+在 JSX 中留下 `>` 或 `}`
+字符通常是不希望的，并且难以发现。强制要求这些字符必须作为字符串传递。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 <div>></div>
 <div>}</div>
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 <div>&gt;</div>,

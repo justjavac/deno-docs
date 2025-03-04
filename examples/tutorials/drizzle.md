@@ -1,46 +1,43 @@
 ---
-title: "Build a Database App with Drizzle ORM and Deno"
+title: "使用 Drizzle ORM 和 Deno 构建数据库应用"
 url: /examples/drizzle_tutorial/
 oldUrl:
   - /runtime/tutorials/drizzle
 ---
 
-[Drizzle ORM](https://orm.drizzle.team/) is a TypeScript ORM that provides a
-type-safe way to interact with your database. In this tutorial, we'll set up
-Drizzle ORM with Deno and PostgreSQL to create, read, update, and delete
-dinosaur data:
+[Drizzle ORM](https://orm.drizzle.team/) 是一个 TypeScript
+ORM，它提供了一种类型安全的方式来与数据库交互。在本教程中，我们将使用 Drizzle
+ORM 和 Deno 以及 PostgreSQL 来创建、读取、更新和删除恐龙数据：
 
-- [Install Drizzle](#install-drizzle)
-- [Configure Drizzle](#configure-drizzle)
-- [Define schemas](#define-schemas)
-- [Interact with the database](#interact-with-the-database)
-- [What's next?](#whats-next)
+- [安装 Drizzle](#install-drizzle)
+- [配置 Drizzle](#configure-drizzle)
+- [定义模式](#define-schemas)
+- [与数据库交互](#interact-with-the-database)
+- [下一步是什么？](#whats-next)
 
-You can find all the code for this tutorial in
-[this GitHub repo](https://github.com/denoland/examples/tree/main/with-drizzle).
+你可以在
+[这个 GitHub 仓库](https://github.com/denoland/examples/tree/main/with-drizzle)
+中找到本教程的所有代码。
 
-## Install Drizzle
+## 安装 Drizzle
 
-First, we'll install the required dependencies using Deno's npm compatibility.
-We'll be using Drizzle with
-[Postgres](https://orm.drizzle.team/docs/get-started-postgresql), but you can
-also use [MySQL](https://orm.drizzle.team/docs/get-started-mysql) or
-[SQLite](https://orm.drizzle.team/docs/get-started-sqlite). (If you don't have
-Postgres, you can [install it here](https://www.postgresql.org/download/).)
+首先，我们将使用 Deno 的 npm 兼容性安装所需的依赖项。我们将使用 Drizzle 与
+[Postgres](https://orm.drizzle.team/docs/get-started-postgresql)，但你也可以使用
+[MySQL](https://orm.drizzle.team/docs/get-started-mysql) 或
+[SQLite](https://orm.drizzle.team/docs/get-started-sqlite)。（如果你没有安装
+Postgres，可以 [在这里安装](https://www.postgresql.org/download/)。）
 
 ```bash
 deno install npm:drizzle-orm npm:drizzle-kit npm:pg npm:@types/pg
 ```
 
-This installs Drizzle ORM and its associated tools —
-[drizzle-kit](https://orm.drizzle.team/docs/kit-overview) for schema migrations,
-[pg](https://www.npmjs.com/package/pg) for PostgreSQL connectivity, and
-[the TypeScript types for PostgreSQL](https://www.npmjs.com/package/@types/pg).
-These packages will allow us to interact with our database in a type-safe way
-while maintaining compatibility with Deno's runtime environment.
+这将安装 Drizzle ORM 及其相关工具 ——
+[drizzle-kit](https://orm.drizzle.team/docs/kit-overview)
+用于模式迁移，[pg](https://www.npmjs.com/package/pg) 用于 PostgreSQL 连接，以及
+[PostgreSQL 的 TypeScript 类型](https://www.npmjs.com/package/@types/pg)。这些包将使我们能够以类型安全的方式与数据库交互，同时保持与
+Deno 运行时环境的兼容性。
 
-It will also create a `deno.json` file in your project root to manage the npm
-dependencies:
+它还将在你的项目根目录中创建一个 `deno.json` 文件来管理 npm 依赖项：
 
 ```json
 {
@@ -53,10 +50,10 @@ dependencies:
 }
 ```
 
-## Configure Drizzle
+## 配置 Drizzle
 
-Next, let's create a `drizzle.config.ts` file in your project root. This file
-will configure Drizzle to work with your PostgreSQL database:
+接下来，让我们在项目根目录中创建一个 `drizzle.config.ts` 文件。该文件将配置
+Drizzle 以与你的 PostgreSQL 数据库一起工作：
 
 ```tsx
 import { defineConfig } from "drizzle-kit";
@@ -71,50 +68,43 @@ export default defineConfig({
 });
 ```
 
-These config settings determine:
+这些配置设置决定了：
 
-- where to output migration files (`./drizzle`)
-- where to find your schema definition (`./src/db/schema.ts`)
-- that PostgreSQL as your database dialect, and
-- how to connect to your database using the URL stored in your environment
-  variables
+- 迁移文件的输出位置（`./drizzle`）
+- 模式定义的位置（`./src/db/schema.ts`）
+- PostgreSQL 作为你的数据库方言，以及
+- 如何使用存储在环境变量中的 URL 连接到你的数据库
 
-The `drizzle-kit` will use this configuration to manage your database schema and
-generate SQL migrations automatically.
+`drizzle-kit` 将使用此配置来管理你的数据库模式并自动生成 SQL 迁移。
 
-We’ll also need a `.env` file in the project root containing the `DATABASE_URL`
-connection string:
+我们还需要在项目根目录中创建一个包含 `DATABASE_URL` 连接字符串的 `.env` 文件：
 
 ```bash
 DATABASE_URL=postgresql://[user[:password]@][host][:port]/[dbname]
 ```
 
-Be sure to replace the login credentials with yours.
+请确保将登录凭据替换为你的。
 
-Next, let's connect to the database and use Drizzle to populate our tables.
+接下来，让我们连接到数据库并使用 Drizzle 填充我们的表。
 
-## Define schemas
+## 定义模式
 
-There are two ways that you can define your table schema with Drizzle. If you
-already have Postgres tables defined, you can infer them with `pull`; otherwise,
-you can define them in code, then use Drizzle to create a new table. We'll
-explore both approaches below.
+有两种方法可以使用 Drizzle 定义你的表模式。如果你已经定义了 Postgres
+表，可以使用 `pull` 推断它们；否则，你可以在代码中定义它们，然后使用 Drizzle
+创建一个新表。我们将在下面探讨这两种方法。
 
-### Infer schema with `pull`
+### 使用 `pull` 推断模式
 
-If you already have Postgres tables before adding Drizzle, then you can
-introspect your database schema to automatically generate TypeScript types and
-table definitions with the command
-[`npm:drizzle-kit pull`](https://orm.drizzle.team/docs/drizzle-kit-pull). This
-is particularly useful when working with an existing database or when you want
-to ensure your code stays in sync with your database structure.
+如果你在添加 Drizzle 之前已经定义了 Postgres 表，那么你可以使用
+[`npm:drizzle-kit pull`](https://orm.drizzle.team/docs/drizzle-kit-pull)
+命令自动生成 TypeScript
+类型和表定义。这在处理现有数据库或希望确保代码与数据库结构保持同步时特别有用。
 
-Let's say our current database already has the following table schemas:
+假设我们当前的数据库已经具有以下表模式：
 
-![Diagram of table schema in postgres](./images/how-to/drizzle/table-diagram.png)
+![Postgres 中的表模式图](./images/how-to/drizzle/table-diagram.png)
 
-We'll run the following command to instrospect the database and populate several
-files under a `./drizzle` directory:
+我们将运行以下命令来推断数据库并填充 `./drizzle` 目录下的多个文件：
 
 <figure>
 
@@ -142,39 +132,32 @@ Using 'pg' driver for database querying
 ```
 
 <figcaption>
-We use the <code>--env</code> flag to read the <code>.env</code> file with our database url and the
-<code>--node-modules-dir</code> flag to create a <code>node_modules</code> folder that will allow us
-to use <code>drizzle-kit</code> correctly.
+我们使用 <code>--env</code> 标志来读取包含数据库 URL 的 <code>.env</code> 文件，并使用 <code>--node-modules-dir</code> 标志创建一个 <code>node_modules</code> 文件夹，以便正确使用 <code>drizzle-kit</code>。
 </figcaption>
 </figure>
 </br>
 
-The above command will create a number of files within a `./drizzle` directory
-that define the schema, track changes, and provide the necessary information for
-database migrations:
+上述命令将在 `./drizzle`
+目录中创建多个文件，这些文件定义了模式、跟踪更改并提供数据库迁移所需的信息：
 
-- `drizzle/schema.ts`: This file defines the database schema using Drizzle ORM's
-  schema definition syntax.
-- `drizzle/relations.ts`: This file is intended to define relationships between
-  tables using Drizzle ORM's relations API.
-- `drizzle/0000_long_veda.sql`: A SQL migration file that contains the SQL
-  code to create the database table(s). The code is commented out — you can
-  uncomment this code if you want to run this migration to create the table(s)
-  in a new environment.
-- `drizzle/meta/0000_snapshot.json`: A snapshot file that represents the current
-  state of your database schema.
-- `drizzle/meta/_journal.json`: This file keeps track of the migrations that
-  have been applied to your database. It helps Drizzle ORM know which migrations
-  have been run and which ones still need to be applied.
+- `drizzle/schema.ts`：该文件使用 Drizzle ORM 的模式定义语法定义数据库模式。
+- `drizzle/relations.ts`：该文件旨在使用 Drizzle ORM 的关系 API
+  定义表之间的关系。
+- `drizzle/0000_long_veda.sql`：一个 SQL 迁移文件，包含创建数据库表的 SQL
+  代码。代码被注释掉了 ——
+  如果你希望在新的环境中运行此迁移以创建表，可以取消注释此代码。
+- `drizzle/meta/0000_snapshot.json`：一个快照文件，表示当前数据库模式的状态。
+- `drizzle/meta/_journal.json`：该文件跟踪已应用于数据库的迁移。它帮助 Drizzle
+  ORM 知道哪些迁移已经运行，哪些迁移仍需应用。
 
-### Define schema in Drizzle first
+### 首先在 Drizzle 中定义模式
 
-If you don't already have an existing table defined in Postgres (e.g. you're
-starting a completely new project), you can define the tables and types in code
-and have Drizzle create them.
+如果你还没有在 Postgres
+中定义现有表（例如，你正在启动一个全新的项目），你可以在代码中定义表和类型，并让
+Drizzle 创建它们。
 
-Let's create a new directory `./src/db/` and in it, a `schema.ts` file, which
-we'll populate with the below:
+让我们创建一个新目录 `./src/db/`，并在其中创建一个 `schema.ts`
+文件，我们将用以下内容填充它：
 
 <figure>
 
@@ -214,13 +197,13 @@ export const tasks = pgTable("tasks", {
 ```
 
 <figcaption>
-The above represents in code the two tables, <code>dinosaurs</code> and <code>tasks</code> and their relation. <a href="https://orm.drizzle.team/docs/schemas">Learn more about using Drizzle to define schemas and their relations</a>.
+上述代码表示两个表 <code>dinosaurs</code> 和 <code>tasks</code> 及其关系。<a href="https://orm.drizzle.team/docs/schemas">了解更多关于使用 Drizzle 定义模式及其关系的信息</a>。
 </figcaption>
 </figure>
 </br>
 
-Once we have defined `./src/db/schema.ts`, we can create the tables and their
-specified relationship by creating a migration:
+一旦我们定义了
+`./src/db/schema.ts`，我们就可以通过创建迁移来创建表及其指定的关系：
 
 ```bash
 deno -A --node-modules-dir npm:drizzle-kit generate
@@ -233,18 +216,15 @@ dinosaurs 3 columns 0 indexes 0 fks
 tasks 5 columns 0 indexes 1 fks
 ```
 
-The above command will create a `./drizzle/` folder that contains migration
-scripts and logs.
+上述命令将创建一个包含迁移脚本和日志的 `./drizzle/` 文件夹。
 
-## Interact with the database
+## 与数据库交互
 
-Now that we have setup Drizzle ORM, we can use it to simplify managing data in
-our Postgres database. First, Drizzle suggests taking the `schema.ts` and
-`relations.ts` and copying them to the `./src/db` directory to use within an
-application.
+现在我们已经设置了 Drizzle ORM，我们可以使用它来简化 Postgres
+数据库中的数据管理。首先，Drizzle 建议将 `schema.ts` 和 `relations.ts` 复制到
+`./src/db` 目录中，以便在应用程序中使用。
 
-Let's create a `./src/db/db.ts` which exports a few helper functions that'll
-make it easier for us to interact with the database:
+让我们创建一个 `./src/db/db.ts`，它导出一些辅助函数，使我们更容易与数据库交互：
 
 ```ts
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -254,10 +234,10 @@ import pg from "pg";
 import { integer } from "drizzle-orm/sqlite-core";
 import { eq } from "drizzle-orm/expressions";
 
-// Use pg driver.
+// 使用 pg 驱动。
 const { Pool } = pg;
 
-// Instantiate Drizzle client with pg driver and schema.
+// 使用 pg 驱动和模式实例化 Drizzle 客户端。
 export const db = drizzle({
   client: new Pool({
     connectionString: Deno.env.get("DATABASE_URL"),
@@ -265,31 +245,31 @@ export const db = drizzle({
   schema: { dinosaurSchema, taskSchema, dinosaursRelations, tasksRelations },
 });
 
-// Insert dinosaur.
+// 插入恐龙。
 export async function insertDinosaur(dinosaurObj: typeof dinosaurSchema) {
   return await db.insert(dinosaurSchema).values(dinosaurObj);
 }
 
-// Insert task.
+// 插入任务。
 export async function insertTask(taskObj: typeof taskSchema) {
   return await db.insert(taskSchema).values(taskObj);
 }
 
-// Find dinosaur by id.
+// 按 id 查找恐龙。
 export async function findDinosaurById(dinosaurId: typeof integer) {
   return await db.select().from(dinosaurSchema).where(
     eq(dinosaurSchema.id, dinosaurId),
   );
 }
 
-// Find dinosaur by name.
+// 按名称查找恐龙。
 export async function findDinosaurByName(name: string) {
   return await db.select().from(dinosaurSchema).where(
     eq(dinosaurSchema.name, name),
   );
 }
 
-// Find tasks based on dinosaur id.
+// 根据恐龙 id 查找任务。
 export async function findDinosaurTasksByDinosaurId(
   dinosaurId: typeof integer,
 ) {
@@ -298,36 +278,35 @@ export async function findDinosaurTasksByDinosaurId(
   );
 }
 
-// Update dinosaur.
+// 更新恐龙。
 export async function updateDinosaur(dinosaurObj: typeof dinosaurSchema) {
   return await db.update(dinosaurSchema).set(dinosaurObj).where(
     eq(dinosaurSchema.id, dinosaurObj.id),
   );
 }
 
-// Update task.
+// 更新任务。
 export async function updateTask(taskObj: typeof taskSchema) {
   return await db.update(taskSchema).set(taskObj).where(
     eq(taskSchema.id, taskObj.id),
   );
 }
 
-// Delete dinosaur by id.
+// 按 id 删除恐龙。
 export async function deleteDinosaurById(id: typeof integer) {
   return await db.delete(dinosaurSchema).where(
     eq(dinosaurSchema.id, id),
   );
 }
 
-// Delete task by id.
+// 按 id 删除任务。
 export async function deleteTask(id: typeof integer) {
   return await db.delete(taskSchema).where(eq(taskSchema.id, id));
 }
 ```
 
-Now we can import some of these helper functions to a script where we can
-perform some simple CRUD operations on our database. Let's create a new file
-`./src/script.ts`:
+现在我们可以将这些辅助函数导入到一个脚本中，在该脚本中我们可以对数据库执行一些简单的
+CRUD 操作。让我们创建一个新文件 `./src/script.ts`：
 
 ```ts
 import {
@@ -338,23 +317,23 @@ import {
   updateDinosaur,
 } from "./db/db.ts";
 
-// Create a new dinosaur.
+// 创建一个新的恐龙。
 await insertDinosaur({
   name: "Denosaur",
   description: "Dinosaurs should be simple.",
 });
 
-// Find that dinosaur by name.
+// 按名称查找该恐龙。
 const res = await findDinosaurByName("Denosaur");
 
-// Create a task with that dinosaur by its id.
+// 使用该恐龙的 id 创建一个任务。
 await insertTask({
   dinosaurId: res.id,
   description: "Remove unnecessary config.",
   isComplete: false,
 });
 
-// Update a dinosaur with a new description.
+// 使用新的描述更新恐龙。
 const newDeno = {
   id: res.id,
   name: "Denosaur",
@@ -362,31 +341,31 @@ const newDeno = {
 };
 await updateDinosaur(newDeno);
 
-// Delete the dinosaur (and any tasks it has).
+// 删除恐龙（及其所有任务）。
 await deleteDinosaurById(res.id);
 ```
 
-We can run it and it will perform all of the actions on the database:
+我们可以运行它，它将对数据库执行所有操作：
 
 ```ts
 deno -A --env ./src/script.ts
 ```
 
-## What's next?
+## 下一步是什么？
 
-Drizzle ORM is a popular data mapping tool to simplify managing and maintaining
-data models and working with your database. Hopefully, this tutorial gives you a
-start on how to use Drizzle in your Deno projects.
+Drizzle ORM
+是一个流行的数据映射工具，用于简化和维护数据模型以及与数据库的交互。希望本教程能让你了解如何在
+Deno 项目中使用 Drizzle。
 
-Now that you have a basic understanding of how to use Drizzle ORM with Deno, you
-could:
+现在你已经基本了解了如何在 Deno 中使用 Drizzle ORM，你可以：
 
-1. Add more complex database relationships
-2. [Implement a REST API](https://docs.deno.com/examples/) using
-   [Hono](https://jsr.io/@hono/hono) to serve your dinosaur data
-3. Add validation and error handling to your database operations
-4. Write tests for your database interactions
-5. [Deploy your application to the cloud](https://docs.deno.com/runtime/tutorials/#deploying-deno-projects)
+1. 添加更复杂的数据库关系
+2. 使用 [Hono](https://jsr.io/@hono/hono)
+   [实现 REST API](https://docs.denohub.com/examples/) 来提供恐龙数据
+3. 为数据库操作添加验证和错误处理
+4. 为数据库交互编写测试
+5. [将你的应用程序部署到云端](https://docs.denohub.com/runtime/tutorials/#deploying-deno-projects)
 
-🦕 Happy coding with Deno and Drizzle ORM! The type-safety and simplicity of
-this stack make it a great choice for building modern web applications.
+🦕 祝你在使用 Deno 和 Drizzle ORM
+时编码愉快！这种堆栈的类型安全性和简单性使其成为构建现代 Web
+应用程序的绝佳选择。

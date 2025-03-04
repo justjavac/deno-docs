@@ -1,31 +1,30 @@
 ---
-title: "Key Expiration (TTL for keys)"
+title: "键值过期 (TTL for keys)"
 oldUrl:
   - /kv/manual/key_expiration/
 ---
 
 <deno-admonition></deno-admonition>
 
-Since version 1.36.2, Deno KV supports key expiration, allowing developers to
-control time to live (TTL) for keys in a KV database. This allows an expiration
-timestamp to be associated with a key, after which the key will be automatically
-deleted from the database:
+自 1.36.2 版本起，Deno KV 支持键值过期，允许开发者控制键值在 KV
+数据库中的存活时间
+(TTL)。这可以将一个过期时间戳与键值关联，之后该键值将自动从数据库中删除：
 
 ```ts
 const kv = await Deno.openKv();
 
-// `expireIn` is the number of milliseconds after which the key will expire.
+// `expireIn` 是键值过期前的毫秒数。
 function addSession(session: Session, expireIn: number) {
   await kv.set(["sessions", session.id], session, { expireIn });
 }
 ```
 
-Key expiration is supported on both Deno CLI and Deno Deploy.
+键值过期在 Deno CLI 和 Deno Deploy 中均受支持。
 
-## Atomic expiration of multiple keys
+## 多个键值的原子过期
 
-If multiple keys are set in the same atomic operation and have the same
-`expireIn` value, the expiration of those keys will be atomic. For example:
+如果在同一个原子操作中设置了多个键值，并且它们具有相同的 `expireIn`
+值，那么这些键值的过期将是原子的。例如：
 
 ```ts
 const kv = await Deno.openKv();
@@ -42,10 +41,7 @@ function addUnverifiedUser(
 }
 ```
 
-## Caveats
+## 注意事项
 
-The expire timestamp specifies the _earliest_ time after which the key can be
-deleted from the database. An implementation is allowed to expire a key at any
-time after the specified timestamp, but not before. If you need to strictly
-enforce an expiration time (e.g. for security purposes), please also add it as a
-field of your value and do a check after retrieving the value from the database.
+过期时间戳指定了键值可以从数据库中删除的 _最早_
+时间。实现允许在指定时间戳之后的任何时间删除键值，但不能在此之前。如果需要严格强制执行过期时间（例如出于安全目的），请将其作为值的一个字段，并在从数据库中检索值后进行检查。

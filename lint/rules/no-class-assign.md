@@ -2,23 +2,22 @@
 tags: [recommended]
 ---
 
-Disallows modifying variables of class declarations.
+禁止修改类声明中的变量。
 
-Declaring a class such as `class A {}`, creates a variable `A`. Like any
-variable this can be modified or reassigned. In most cases this is a mistake and
-not what was intended.
+声明一个类，例如 `class A {}`，会创建一个变量
+`A`。与任何变量一样，这可以被修改或重新赋值。在大多数情况下，这是一个错误，并非本意。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 class A {}
-A = 0; // reassigning the class variable itself
+A = 0; // 重新赋值类变量本身
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 class A {}
 let c = new A();
-c = 0; // reassigning the variable `c`
+c = 0; // 重新赋值变量 `c`
 ```

@@ -7,57 +7,43 @@ oldUrl:
 
 <deno-admonition></deno-admonition>
 
-Deno Deploy now offers a built-in serverless key-value database called Deno KV.
+Deno Deploy 现在提供了一个内置的无服务器键值数据库，称为 Deno KV。
 
-Additionally, Deno KV is available within Deno itself, utilizing SQLite as its
-backend. This feature has been accessible since Deno v1.32 with the `--unstable`
-flag. Learn more about [Deno KV](/deploy/kv/manual).
+此外，Deno KV 在 Deno 本身中也可用，使用 SQLite 作为其后端。此功能自 Deno v1.32
+起可通过 `--unstable` 标志使用。了解更多关于 [Deno KV](/deploy/kv/manual)
+的信息。
 
-## Consistency
+## 一致性
 
-Deno KV, by default, is a strongly-consistent database. It provides the
-strictest form of strong consistency called _external consistency_, which
-implies:
+默认情况下，Deno KV 是一个强一致性数据库。它提供了最严格的强一致性形式，称为
+_外部一致性_，这意味着：
 
-- **Serializability**: This is the highest level of isolation for transactions.
-  It ensures that the concurrent execution of multiple transactions results in a
-  system state that would be the same as if the transactions were executed
-  sequentially, one after another. In other words, the end result of
-  serializable transactions is equivalent to some sequential order of these
-  transactions.
-- **Linearizability**: This consistency model guarantees that operations, such
-  as read and write, appear to be instantaneous and occur in real-time. Once a
-  write operation completes, all subsequent read operations will immediately
-  return the updated value. Linearizability ensures a strong real-time ordering
-  of operations, making the system more predictable and easier to reason about.
+- **可串行化**：这是事务的最高隔离级别。它确保多个事务的并发执行结果与这些事务按顺序一个接一个执行时的系统状态相同。换句话说，可串行化事务的最终结果等同于这些事务的某种顺序执行。
+- **线性一致性**：这种一致性模型保证操作（如读取和写入）看起来是瞬时发生的，并且按实时顺序进行。一旦写入操作完成，所有后续的读取操作将立即返回更新后的值。线性一致性确保了操作的强实时顺序，使系统更具可预测性且更易于推理。
 
-Meanwhile, you can choose to relax consistency constraints by setting the
-`consistency: "eventual"` option on individual read operations. This option
-allows the system to serve the read from global replicas and caches for minimal
-latency.
+同时，您可以通过在单个读取操作上设置 `consistency: "eventual"`
+选项来放宽一致性约束。此选项允许系统从全局副本和缓存中提供读取，以实现最低延迟。
 
-Below are the latency figures observed in our top regions:
+以下是我们主要区域中观察到的延迟数据：
 
-| Region                     | Latency (Eventual Consistency) | Latency (Strong Consistency) |
-| -------------------------- | ------------------------------ | ---------------------------- |
-| North Virginia (us-east4)  | 7ms                            | 7ms                          |
-| Frankfurt (europe-west3)   | 7ms                            | 94ms                         |
-| Netherlands (europe-west4) | 13ms                           | 95ms                         |
-| California (us-west2)      | 72ms                           | 72ms                         |
-| Hong Kong (asia-east2)     | 42ms                           | 194ms                        |
+| 区域                    | 延迟（最终一致性） | 延迟（强一致性） |
+| ----------------------- | ------------------ | ---------------- |
+| 北弗吉尼亚 (us-east4)   | 7ms                | 7ms              |
+| 法兰克福 (europe-west3) | 7ms                | 94ms             |
+| 荷兰 (europe-west4)     | 13ms               | 95ms             |
+| 加利福尼亚 (us-west2)   | 72ms               | 72ms             |
+| 香港 (asia-east2)       | 42ms               | 194ms            |
 
-## Distributed queues
+## 分布式队列
 
-Serverless distributed queues are available on Deno Deploy. See
-[Queues on Deno Deploy](/deploy/kv/manual/queue_overview#queues-on-deno-deploy)
-for more details.
+Deno Deploy 上提供了无服务器分布式队列。有关更多详细信息，请参阅
+[Queues on Deno Deploy](/deploy/kv/manual/queue_overview#queues-on-deno-deploy)。
 
-## Connect to managed databases from outside of Deno Deploy
+## 从 Deno Deploy 外部连接到托管数据库
 
-You can connect to your Deno Deploy KV database from your Deno application
-outside of Deno Deploy. To open a managed database, set the
-`DENO_KV_ACCESS_TOKEN` environment variable to a Deno Deploy personal access
-token and provide the URL of the database to `Deno.openKv`:
+您可以从 Deno Deploy 外部的 Deno 应用程序连接到您的 Deno Deploy KV
+数据库。要打开托管数据库，请将 `DENO_KV_ACCESS_TOKEN` 环境变量设置为 Deno Deploy
+个人访问令牌，并将数据库的 URL 提供给 `Deno.openKv`：
 
 ```ts
 const kv = await Deno.openKv(
@@ -65,27 +51,20 @@ const kv = await Deno.openKv(
 );
 ```
 
-Please check the
-[docs](https://github.com/denoland/deno/tree/main/ext/kv#kv-connect) for the
-specification of the protocol for connecting to a remote KV database
+请查看 [文档](https://github.com/denoland/deno/tree/main/ext/kv#kv-connect)
+以了解连接到远程 KV 数据库的协议规范。
 
-## Data distribution
+## 数据分布
 
-Deno KV databases are replicated across at least 6 data centers, spanning 3
-regions (US, Europe, and Asia). Once a write operation is committed, its
-mutations are persistently stored in a minimum of two data centers within the
-primary region. Asynchronous replication typically transfers these mutations to
-the other two regions in under 10 seconds.
+Deno KV 数据库在至少 6 个数据中心之间复制，跨越 3
+个区域（美国、欧洲和亚洲）。一旦写入操作提交，其变更将持久存储在主要区域内的至少两个数据中心中。异步复制通常会在
+10 秒内将这些变更传输到其他两个区域。
 
-The system is designed to tolerate most data center-level failures without
-experiencing downtime or data loss. Recovery Point Objectives (RPO) and Recovery
-Time Objectives (RTO) help quantify the system's resilience under various
-failure modes. RPO represents the maximum acceptable amount of data loss
-measured in time, whereas RTO signifies the maximum acceptable time required to
-restore the system to normal operations after a failure.
+该系统设计为能够容忍大多数数据中心级别的故障，而不会经历停机或数据丢失。恢复点目标（RPO）和恢复时间目标（RTO）有助于量化系统在各种故障模式下的弹性。RPO
+表示以时间衡量的最大可接受数据丢失量，而 RTO
+表示在故障后恢复系统正常运行所需的最大可接受时间。
 
-- Loss of one data center in the primary region: RPO=0 (no data loss), RTO&lt;5s
-  (system restoration in under 5 seconds)
-- Loss of any number of data centers in a replica region: RPO=0, RTO&lt;5s
-- Loss of two or more data centers in the primary region: RPO&lt;60s (under 60
-  seconds of data loss)
+- 主要区域中一个数据中心的丢失：RPO=0（无数据丢失），RTO&lt;5s（系统在 5
+  秒内恢复）
+- 副本区域中任意数量数据中心的丢失：RPO=0，RTO&lt;5s
+- 主要区域中两个或更多数据中心的丢失：RPO&lt;60s（少于 60 秒的数据丢失）

@@ -1,37 +1,37 @@
 ---
-title: "How to Deploy Deno to AWS Lambda"
+title: "如何将 Deno 部署到 AWS Lambda"
 url: /examples/aws_lambda_tutorial/
 oldUrl:
 - /runtime/tutorials/aws_lambda/
 ---
 
-AWS Lambda is a serverless computing service provided by Amazon Web Services. It
-allows you to run code without provisioning or managing servers.
+AWS Lambda 是 Amazon Web Services
+提供的一种无服务器计算服务。它允许你在无需配置或管理服务器的情况下运行代码。
 
-Here's a step by step guide to deploying a Deno app to AWS Lambda using Docker.
+以下是将 Deno 应用程序部署到 AWS Lambda 的分步指南，使用 Docker 进行部署。
 
-The pre-requisites for this are:
+此操作的前提条件是：
 
 - [`docker` CLI](https://docs.docker.com/reference/cli/docker/)
-- an [AWS account](https://aws.amazon.com)
+- 一个 [AWS 账户](https://aws.amazon.com)
 - [`aws` CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
-## Step 1: Create a Deno App
+## 第一步：创建一个 Deno 应用程序
 
-Create a new Deno app using the following code:
+使用以下代码创建一个新的 Deno 应用程序：
 
 ```ts title="main.ts"
 Deno.serve((req) => new Response("Hello World!"));
 ```
 
-Save this code in a file named `main.ts`.
+将此代码保存为名为 `main.ts` 的文件。
 
-## Step 2: Create a Dockerfile
+## 第二步：创建 Dockerfile
 
-Create a new file named `Dockerfile` with the following content:
+创建一个名为 `Dockerfile` 的新文件，内容如下：
 
 ```Dockerfile
-# Set up the base image
+# 设置基础镜像
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4 AS aws-lambda-adapter
 FROM denoland/deno:bin-1.45.2 AS deno_bin
 FROM debian:bookworm-20230703-slim AS deno_runtime
@@ -42,101 +42,92 @@ EXPOSE 8000
 RUN mkdir /var/deno_dir
 ENV DENO_DIR=/var/deno_dir
 
-# Copy the function code
+# 复制函数代码
 WORKDIR "/var/task"
 COPY . /var/task
 
-# Warmup caches
+# 预热缓存
 RUN timeout 10s deno run -A main.ts || [ $? -eq 124 ] || exit 1
 
 CMD ["deno", "run", "-A", "main.ts"]
 ```
 
-This Dockerfile uses the
+此 Dockerfile 使用
 [`aws-lambda-adapter`](https://github.com/awslabs/aws-lambda-web-adapter)
-project to adapt regular HTTP servers, like Deno's `Deno.serve`, to the AWS
-Lambda runtime API.
+项目将常规 HTTP 服务器（如 Deno 的 `Deno.serve`）适配到 AWS Lambda 运行时 API。
 
-We also use the `denoland/deno:bin-1.45.2` image to get the Deno binary and
-`debian:bookworm-20230703-slim` as the base image. The
-`debian:bookworm-20230703-slim` image is used to keep the image size small.
+我们还使用 `denoland/deno:bin-1.45.2` 镜像来获取 Deno 二进制文件，并使用
+`debian:bookworm-20230703-slim` 作为基础镜像。`debian:bookworm-20230703-slim`
+镜像用于保持镜像体积较小。
 
-The `PORT` environment variable is set to `8000` to tell the AWS Lambda adapter
-that we are listening on port `8000`.
+`PORT` 环境变量设置为 `8000`，以告知 AWS Lambda 适配器我们正在监听端口 `8000`。
 
-We set the `DENO_DIR` environment variable to `/var/deno_dir` to store cached
-Deno source code and transpiled modules in the `/var/deno_dir` directory.
+我们将 `DENO_DIR` 环境变量设置为 `/var/deno_dir`，以将缓存的 Deno
+源代码和转译模块存储在 `/var/deno_dir` 目录中。
 
-The warmup caches step is used to warm up the Deno cache before the function is
-invoked. This is done to reduce the cold start time of the function. These
-caches contain the compiled code and dependencies of your function code. This
-step starts your server for 10 seconds and then exits.
+预热缓存步骤用于在函数调用之前预热 Deno
+缓存。这样做是为了减少函数的冷启动时间。这些缓存包含函数代码的编译代码和依赖项。此步骤启动服务器
+10 秒，然后退出。
 
-When using a package.json, remember to run `deno install` to install
-`node_modules` from your `package.json` file before warming up the caches or
-running the function.
+当使用 `package.json` 时，记得在预热缓存或运行函数之前运行 `deno install` 以从
+`package.json` 文件安装 `node_modules`。
 
-## Step 3: Build the Docker Image
+## 第三步：构建 Docker 镜像
 
-Build the Docker image using the following command:
+使用以下命令构建 Docker 镜像：
 
 ```bash
 docker build -t hello-world .
 ```
 
-## Step 4: Create an ECR Docker repository and push the image
+## 第四步：创建 ECR Docker 仓库并推送镜像
 
-With the AWS CLI, create an ECR repository and push the Docker image to it:
+使用 AWS CLI 创建一个 ECR 仓库并将 Docker 镜像推送到其中：
 
 ```bash
 aws ecr create-repository --repository-name hello-world --region us-east-1 | grep repositoryUri
 ```
 
-This should output a repository URI that looks like
-`<account_id>.dkr.ecr.us-east-1.amazonaws.com/hello-world`.
+这将输出一个类似于 `<account_id>.dkr.ecr.us-east-1.amazonaws.com/hello-world`
+的仓库 URI。
 
-Authenticate Docker with ECR, using the repository URI from the previous step:
+使用上一步中的仓库 URI 对 Docker 进行 ECR 身份验证：
 
 ```bash
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <account_id>.dkr.ecr.us-east-1.amazonaws.com
 ```
 
-Tag the Docker image with the repository URI, again using the repository URI
-from the previous steps:
+使用上一步中的仓库 URI 为 Docker 镜像打标签：
 
 ```bash
 docker tag hello-world:latest <account_id>.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest
 ```
 
-Finally, push the Docker image to the ECR repository, using the repository URI
-from the previous steps:
+最后，使用上一步中的仓库 URI 将 Docker 镜像推送到 ECR 仓库：
 
 ```bash
 docker push <account_id>.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest
 ```
 
-## Step 5: Create an AWS Lambda function
+## 第五步：创建 AWS Lambda 函数
 
-Now you can create a new AWS Lambda function from the AWS Management Console.
+现在你可以从 AWS 管理控制台创建一个新的 AWS Lambda 函数。
 
-1. Go to the AWS Management Console and
-   [navigate to the Lambda service](https://us-east-1.console.aws.amazon.com/lambda/home?region=us-east-1).
-2. Click on the "Create function" button.
-3. Choose "Container image".
-4. Enter a name for the function, like "hello-world".
-5. Click on the "Browse images" button and select the image you pushed to ECR.
-6. Click on the "Create function" button.
-7. Wait for the function to be created.
-8. In the "Configuration" tab, go to the "Function URL" section and click on
-   "Create function URL".
-9. Choose "NONE" for the auth type (this will make the lambda function publicly
-   accessible).
-10. Click on the "Save" button.
+1. 转到 AWS 管理控制台并
+   [导航到 Lambda 服务](https://us-east-1.console.aws.amazon.com/lambda/home?region=us-east-1)。
+2. 点击“创建函数”按钮。
+3. 选择“容器镜像”。
+4. 输入函数名称，例如“hello-world”。
+5. 点击“浏览镜像”按钮并选择你推送到 ECR 的镜像。
+6. 点击“创建函数”按钮。
+7. 等待函数创建完成。
+8. 在“配置”选项卡中，转到“函数 URL”部分并点击“创建函数 URL”。
+9. 选择“NONE”作为身份验证类型（这将使 Lambda 函数公开可访问）。
+10. 点击“保存”按钮。
 
-## Step 6: Test the Lambda function
+## 第六步：测试 Lambda 函数
 
-You can now visit your Lambda function's URL to see the response from your Deno
-app.
+你现在可以访问你的 Lambda 函数的 URL 来查看 Deno 应用程序的响应。
 
-🦕 You have successfully deployed a Deno app to AWS Lambda using Docker. You can
-now use this setup to deploy more complex Deno apps to AWS Lambda.
+🦕 你已成功使用 Docker 将 Deno 应用程序部署到 AWS
+Lambda。你现在可以使用此设置将更复杂的 Deno 应用程序部署到 AWS Lambda。

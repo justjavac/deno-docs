@@ -1,75 +1,63 @@
 ---
-title: "Offload webhook processing to a queue"
+title: "将 webhook 处理卸载到队列"
 oldUrl:
   - /kv/tutorials/webhook_processor/
 ---
 
-In a web application, it is often desirable to offload processing of async tasks
-for which a client doesn't need an immediate response to a queue. Doing so can
-keep your web app fast and responsive, instead of taking up valuable resources
-waiting for long-running processes to complete.
+在 web
+应用程序中，通常希望将客户端不需要立即响应的异步任务处理卸载到队列中。这样做可以保持您的
+web 应用程序快速响应，而不是占用宝贵的资源等待长时间运行的进程完成。
 
-One instance where you might want to deploy this technique is when
-[handling webhooks](https://en.wikipedia.org/wiki/Webhook). Immediately upon
-receiving the webhook request from a non-human client that doesn't need a
-response, you can offload that work to a queue where it can be handled more
-efficiently.
+您可能希望部署此技术的一个实例是当[处理 webhook](https://en.wikipedia.org/wiki/Webhook)
+时。在接收到不需要响应的非人类客户端的 webhook
+请求后，您可以立即将该工作卸载到队列中，以便更高效地处理。
 
-In this tutorial, we'll show you how to execute this technique when
-[handling webhook requests for a GitHub repo](https://docs.github.com/en/webhooks/about-webhooks-for-repositories).
+在本教程中，我们将向您展示如何在[处理 GitHub 仓库的 webhook 请求](https://docs.github.com/en/webhooks/about-webhooks-for-repositories)
+时执行此技术。
 
-## Try in a playground
+## 在 playground 中尝试
 
 ✏️
-[**Check out the this playground, which implements a GitHub repo webhook handler**](https://dash.deno.com/playground/github-webhook-example).
+[**查看此 playground，它实现了一个 GitHub 仓库 webhook 处理程序**](https://dash.deno.com/playground/github-webhook-example)。
 
-Using Deno Deploy [playgrounds](/deploy/manual/playgrounds), you can instantly
-deploy your own GitHub webhook handler that uses both queues and Deno KV. We'll
-walk through what this code does in a moment.
+使用 Deno Deploy 的
+[playgrounds](/deploy/manual/playgrounds)，您可以立即部署自己的 GitHub webhook
+处理程序，该程序同时使用队列和 Deno KV。我们稍后将逐步介绍此代码的功能。
 
-## Configuring GitHub webhooks for a repository
+## 为仓库配置 GitHub webhooks
 
-To try out the webhook you just launched in a playground, set up a new webhook
-configuration for a GitHub repository you control. You can find webhook
-configuration under "Settings" for your repository.
+要尝试在 playground 中启动的 webhook，请为您控制的 GitHub 仓库设置一个新的
+webhook 配置。您可以在仓库的“设置”下找到 webhook 配置。
 
-![configure a github webhook](./images/github_webhook.png)
+![配置 GitHub webhook](./images/github_webhook.png)
 
-## Code walkthrough
+## 代码解析
 
-Our webhook handler function is relatively simple - without comments, it's only
-23 lines of code total. It connects to a Deno KV database, sets up a queue
-listener to process incoming messages, and sets up a simple server with
-[`Deno.serve`](https://docs.deno.com/api/deno/~/Deno.serve) which responds to
-incoming webhook requests.
+我们的 webhook 处理函数相对简单——没有注释的情况下，总共只有 23 行代码。它连接到
+Deno KV 数据库，设置一个队列监听器来处理传入的消息，并使用
+[`Deno.serve`](https://docs.denohub.com/api/deno/~/Deno.serve)
+设置一个简单的服务器来响应传入的 webhook 请求。
 
-Read along with the comments below to see what's happening at each step.
+请阅读下面的注释，了解每一步发生了什么。
 
 ```ts title="server.ts"
-// Get a handle for a Deno KV database instance. KV is built in to the Deno
-// runtime, and is available with zero config both locally and on Deno Deploy
+// 获取 Deno KV 数据库实例的句柄。KV 内置于 Deno 运行时中，并且在本地和 Deno Deploy 上都可以零配置使用
 const kv = await Deno.openKv();
 
-// Set up a listener that will handle work that is offloaded from our server.
-// In this case, it's just going to add incoming webhook payloads to a KV
-// database, with a timestamp.
+// 设置一个监听器来处理从服务器卸载的工作。在这种情况下，它只是将传入的 webhook 有效负载添加到 KV 数据库中，并带有时间戳
 kv.listenQueue(async (message) => {
   await kv.set(["github", Date.now()], message);
 });
 
-// This is a simple HTTP server that will handle incoming POST requests from
-// GitHub webhooks.
+// 这是一个简单的 HTTP 服务器，将处理来自 GitHub webhooks 的传入 POST 请求
 Deno.serve(async (req: Request) => {
   if (req.method === "POST") {
-    // GitHub sends webhook requests as POST requests to your server. You can
-    // configure GitHub to send JSON in the POST body, which you can then parse
-    // from the request object.
+    // GitHub 将 webhook 请求作为 POST 请求发送到您的服务器。您可以配置 GitHub 在 POST 正文中发送 JSON，然后可以从请求对象中解析它
     const payload = await req.json();
     await kv.enqueue(payload);
     return new Response("", { status: 200 });
   } else {
-    // If the server is handling a GET request, this will just list out all the
-    // webhook events that have been recorded in our KV database.
+    // 如果服务器处理的是 GET 请求，这将列出我们 KV 数据库中记录的所有 webhook 事件
     const iter = kv.list<string>({ prefix: ["github"] });
     const github = [];
     for await (const res of iter) {

@@ -2,16 +2,16 @@
 tags: [recommended, react, jsx, fresh]
 ---
 
-Pass children as JSX children instead of as an attribute.
+将子元素作为 JSX 子元素传递，而不是作为属性。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 <div children="foo" />
 <div children={[<Foo />, <Bar />]} />
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 <div>foo</div>

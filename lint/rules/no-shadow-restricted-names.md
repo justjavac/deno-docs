@@ -2,10 +2,9 @@
 tags: [recommended]
 ---
 
-Disallows shadowing of restricted names.
+禁止对受限名称进行遮蔽。
 
-The following (a) properties of the global object, or (b) identifiers are
-"restricted" names in JavaScript:
+以下 (a) 全局对象的属性，或 (b) 标识符是 JavaScript 中的“受限”名称：
 
 - [`NaN`]
 - [`Infinity`]
@@ -13,29 +12,28 @@ The following (a) properties of the global object, or (b) identifiers are
 - [`eval`]
 - [`arguments`]
 
-These names are _NOT_ reserved in JavaScript, which means that nothing prevents
-one from assigning other values into them (i.e. shadowing). In other words, you
-are allowed to use, say, `undefined` as an identifier or variable name. (For
-more details see [MDN])
+这些名称在 JavaScript 中 _不是_
+保留的，这意味着没有什么可以阻止你将其他值赋给它们（即遮蔽）。换句话说，你可以使用
+`undefined` 作为标识符或变量名。（更多详情请参见 [MDN]）
 
-[`NaN`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN
-[`Infinity`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity
-[`undefined`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined
-[`eval`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval
-[`arguments`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
-[MDN]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined#description
+[`NaN`]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/NaN
+[`Infinity`]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Infinity
+[`undefined`]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined
+[`eval`]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/eval
+[`arguments`]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/arguments
+[MDN]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined#description
 
 ```typescript
 function foo() {
   const undefined = "bar";
-  console.log(undefined); // output: "bar"
+  console.log(undefined); // 输出: "bar"
 }
 ```
 
-Of course, shadowing like this most likely confuse other developers and should
-be avoided. This lint rule detects and warn them.
+当然，像这样的遮蔽很可能会让其他开发者感到困惑，应该避免。此 lint
+规则会检测并警告它们。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const undefined = 42;
@@ -50,10 +48,10 @@ try {
 } catch (eval) {}
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
-// If not assigned a value, `undefined` may be shadowed
+// 如果没有赋值，`undefined` 可能会被遮蔽
 const undefined;
 
 const Object = 42;

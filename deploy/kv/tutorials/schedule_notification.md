@@ -1,104 +1,97 @@
 ---
-title: "Schedule a notification for a future date"
+title: "为未来日期安排通知"
 oldUrl:
   - /kv/tutorials/schedule_notification/
 ---
 
-A common use case for [queues](../manual/queue_overview.md) is scheduling work
-to be completed at some point in the future. To help demonstrate how this works,
-we've provided a sample application (described below) that schedules
-notification messages sent through the [Courier API](https://www.courier.com/).
-The application runs on [Deno Deploy](https://deno.com/deploy), using the
-built-in KV and queue API implementations available there with zero
-configuration.
+[队列](../manual/queue_overview.md)
+的一个常见用例是安排在未来某个时间点完成的工作。为了帮助演示其工作原理，我们提供了一个示例应用程序（如下所述），该应用程序通过
+[Courier API](https://www.courier.com/) 安排通知消息的发送。该应用程序运行在
+[Deno Deploy](https://deno.com/deploy) 上，使用内置的 KV 和队列 API
+实现，无需任何配置。
 
-## Download and configure the sample
+## 下载并配置示例
 
 ⬇️
-[**Download or clone the complete sample app here**](https://github.com/kwhinnery/deno_courier_example).
+[**在此处下载或克隆完整的示例应用程序**](https://github.com/kwhinnery/deno_courier_example)。
 
-You can run and deploy this sample application yourself using the instructions
-in the GitHub repo's
-[`README` file](https://github.com/kwhinnery/deno_courier_example).
+您可以使用 GitHub 仓库中的
+[`README` 文件](https://github.com/kwhinnery/deno_courier_example)
+中的说明来运行和部署此示例应用程序。
 
-To run the example app above, you'll also need to
-[sign up for Courier](https://app.courier.com/signup). Of course the techniques
-you'll see in the application would just as easily apply to any notification
-service, from [Amazon SNS](https://aws.amazon.com/sns/) to
-[Twilio](https://www.twilio.com), but Courier provides an easy-to-use
-notification API that you can use with a personal GMail account for testing (in
-addition to all the other neat things it can do).
+要运行上述示例应用程序，您还需要
+[注册 Courier](https://app.courier.com/signup)。当然，您在应用程序中看到的技术同样适用于任何通知服务，从
+[Amazon SNS](https://aws.amazon.com/sns/) 到
+[Twilio](https://www.twilio.com)，但 Courier 提供了一个易于使用的通知
+API，您可以使用个人 GMail 账户进行测试（除了它可以做的所有其他很酷的事情）。
 
-## Key functionality
+## 关键功能
 
-After setting up and running the project, we'd like to direct your attention to
-a few key parts of the code that implement the scheduling mechanics.
+在设置并运行项目后，我们希望引导您注意代码中实现调度机制的几个关键部分。
 
-### Connecting to KV and adding a listener on app start
+### 在应用程序启动时连接到 KV 并添加监听器
 
-Most of the example app's functionality lives in
-[server.tsx](https://github.com/kwhinnery/deno_courier_example/blob/main/server.tsx)
-in the top-level directory. When the Deno app process starts, it creates a
-connection to a Deno KV instance and attaches an event handler which will
-process messages as they are received from the queue.
+示例应用程序的大部分功能位于顶级目录中的
+[server.tsx](https://github.com/kwhinnery/deno_courier_example/blob/main/server.tsx)。当
+Deno 应用程序进程启动时，它会创建一个到 Deno KV
+实例的连接，并附加一个事件处理程序，该处理程序将在从队列接收到消息时处理这些消息。
 
 ```ts title="server.tsx"
-// Create a Deno KV database reference
+// 创建一个 Deno KV 数据库引用
 const kv = await Deno.openKv();
 
-// Create a queue listener that will process enqueued messages
+// 创建一个队列监听器来处理入队的消息
 kv.listenQueue(async (message) => {
-  /* ... implementation of listener here ... */
+  /* ... 此处为监听器的实现 ... */
 });
 ```
 
-### Creating and scheduling a notification
+### 创建并安排通知
 
-After a new order is submitted through the form in this demo application, the
-`enqueue` function is called with a delay of five seconds before a notification
-email is sent out.
+在此演示应用程序中，通过表单提交新订单后，将调用 `enqueue`
+函数，并在发送通知电子邮件之前延迟五秒。
 
 ```ts title="server.tsx"
 app.post("/order", async (c) => {
   const { email, order } = await c.req.parseBody();
   const n: Notification = {
     email: email as string,
-    body: `Order received for: "${order as string}"`,
+    body: `订单已接收: "${order as string}"`,
   };
 
-  // Select a time in the future - for now, just wait 5 seconds
+  // 选择一个未来的时间 - 现在，只需等待 5 秒
   const delay = 1000 * 5;
 
-  // Enqueue the message for processing!
+  // 将消息入队以进行处理！
   kv.enqueue(n, { delay });
 
-  // Redirect back home with a success message!
-  setCookie(c, "flash_message", "Order created!");
+  // 重定向回主页并显示成功消息！
+  setCookie(c, "flash_message", "订单已创建！");
   return c.redirect("/");
 });
 ```
 
-### Defining the notification data type in TypeScript
+### 在 TypeScript 中定义通知数据类型
 
-Often, it is desirable to work with strongly typed objects when pushing data
-into or out of the queue. While queue messages are an
+通常，在将数据推入或推出队列时，使用强类型对象是可取的。虽然队列消息最初是
+TypeScript 中的
 [`unknown`](https://www.typescriptlang.org/docs/handbook/2/functions.html#unknown)
-TypeScript type initially, we can use
-[type guards](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) to
-tell the compiler the shape of the data we expect.
+类型，但我们可以使用
+[类型守卫](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)
+来告诉编译器我们期望的数据形状。
 
-Here's the source code for the
-[notification module](https://github.com/kwhinnery/deno_courier_example/blob/main/notification.ts),
-which we use to describe the properties of a notification in our system.
+以下是
+[通知模块](https://github.com/kwhinnery/deno_courier_example/blob/main/notification.ts)
+的源代码，我们使用它来描述系统中通知的属性。
 
 ```ts title="notification.ts"
-// Shape of a notification object
+// 通知对象的形状
 export default interface Notification {
   email: string;
   body: string;
 }
 
-// Type guard for a notification object
+// 通知对象的类型守卫
 export function isNotification(o: unknown): o is Notification {
   return (
     ((o as Notification)?.email !== undefined &&
@@ -109,28 +102,26 @@ export function isNotification(o: unknown): o is Notification {
 }
 ```
 
-In `server.tsx`, we use the exported type guard to ensure we are responding to
-the right message types.
+在 `server.tsx` 中，我们使用导出的类型守卫来确保我们正在响应正确的消息类型。
 
 ```ts title="server.tsx"
 kv.listenQueue(async (message) => {
-  // Use type guard to short circuit early if the message is of the wrong type
+  // 使用类型守卫在消息类型错误时提前退出
   if (!isNotification(message)) return;
 
-  // Grab the relevant data from the message, which TypeScript now knows
-  // is a Notification interface
+  // 从消息中获取相关数据，TypeScript 现在知道这是一个 Notification 接口
   const { email, body } = message;
 
-  // Create an email notification with Courier
+  // 使用 Courier 创建电子邮件通知
   // ...
 });
 ```
 
-### Sending a Courier API request
+### 发送 Courier API 请求
 
-To send an email as scheduled, we use the Courier REST API. More information
-about the Courier REST API can be found in
-[their reference docs](https://www.courier.com/docs/reference/send/message/).
+为了按计划发送电子邮件，我们使用 Courier REST API。有关 Courier REST API
+的更多信息，请参阅
+[他们的参考文档](https://www.courier.com/docs/reference/send/message/)。
 
 ```ts title="server.tsx"
 const response = await fetch("https://api.courier.com/send", {
@@ -142,8 +133,8 @@ const response = await fetch("https://api.courier.com/send", {
     message: {
       to: { email },
       content: {
-        title: "New order placed by Deno!",
-        body: "notification body goes here",
+        title: "Deno 已下新订单！",
+        body: "通知内容在此处",
       },
     },
   }),

@@ -3,7 +3,7 @@
  * @difficulty beginner
  * @tags cli
  * @run <url>
- * @resource {https://docs.deno.com/api/deno/~/Deno.Permissions} Doc: Deno.Permissions
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.Permissions} Doc: Deno.Permissions
  * @group CLI
  *
  * There are times where depending on the state of permissions

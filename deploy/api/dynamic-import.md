@@ -137,7 +137,7 @@ console.log(`Hello from ${name}`); // -> "Hello from external.js"
 但是，请注意，传递给 `import` 的数据 URL 必须是 JavaScript；如果传递的是
 TypeScript，则会在运行时抛出 [TypeError]。
 
-[动态导入]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import
+[动态导入]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/import
 [eszip]: https://github.com/denoland/eszip
-[数据 URL]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs
-[TypeError]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError
+[数据 URL]: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/Data_URLs
+[TypeError]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypeError

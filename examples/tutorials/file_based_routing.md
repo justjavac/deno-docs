@@ -1,21 +1,19 @@
 ---
-title: File-based routing
+title: 基于文件的路由
 url: /examples/file_based_routing_tutorial/
 oldUrl:
 - /examples/http-server-file-router/
 - /runtime/tutorials/file_based_routing/
 ---
 
-If you've used frameworks like [Next.js](https://nextjs.org/), you might be
-familiar with file based routing - you add a file in a specific directory and it
-automatically becomes a route. This tutorial demonstrates how to create a simple
-HTTP server that uses file based routing.
+如果你使用过像 [Next.js](https://nextjs.org/)
+这样的框架，你可能对基于文件的路由很熟悉——你在特定目录中添加一个文件，它就会自动成为一个路由。本教程演示了如何创建一个使用基于文件的路由的简单
+HTTP 服务器。
 
-## Route requests
+## 路由请求
 
-Create a new file called `server.ts`. This file will be used to route requests.
-Set up an async function called `handler` that takes a request object as an
-argument:
+创建一个名为 `server.ts` 的新文件。该文件将用于路由请求。设置一个名为 `handler`
+的异步函数，该函数接受一个请求对象作为参数：
 
 ```ts title="server.ts"
 async function handler(req: Request): Promise<Response> {
@@ -40,34 +38,29 @@ async function handler(req: Request): Promise<Response> {
 Deno.serve(handler);
 ```
 
-The `handler` function sets up a path variable which contains the path,
-extracted from the request URL, and a method variable which contains the request
-method.
+`handler` 函数设置了一个 `path` 变量，该变量包含从请求 URL
+中提取的路径，以及一个 `method` 变量，该变量包含请求方法。
 
-It then tries to import a module based on the path. If the module is not found,
-it returns a 404 response.
+然后，它尝试根据路径导入一个模块。如果未找到该模块，则返回 404 响应。
 
-If the module is found, it checks if the module has a method handler for the
-request method. If the method handler is found, it calls the method handler with
-the request object. If the method handler is not found, it returns a 501
-response.
+如果找到了模块，它会检查该模块是否有处理请求方法的方法处理程序。如果找到了方法处理程序，则使用请求对象调用该方法处理程序。如果未找到方法处理程序，则返回
+501 响应。
 
-Finally, it serves the handler function using `Deno.serve`.
+最后，它使用 `Deno.serve` 来服务 `handler` 函数。
 
-> The path could be any valid URL path such as `/users`, `/posts`, etc. For
-> paths like `/users`, the file `./users.ts` will be imported. However, deeper
-> paths like `/org/users` will require a file `./org/users.ts`. You can create
-> nested routes by creating nested directories and files.
+> 路径可以是任何有效的 URL 路径，例如 `/users`、`/posts` 等。对于像 `/users`
+> 这样的路径，将导入文件 `./users.ts`。然而，像 `/org/users`
+> 这样的更深层次的路径将需要文件
+> `./org/users.ts`。你可以通过创建嵌套目录和文件来创建嵌套路由。
 
-## Handle requests
+## 处理请求
 
-Create a new file called `users.ts` in the same directory as `server.ts`. This
-file will be used to handle requests to the `/users` path. We'll use a `GET`
-request as an example. You could add more HTTP methods such as `POST`, `PUT`,
-`DELETE`, etc.
+在与 `server.ts` 相同的目录中创建一个名为 `users.ts`
+的新文件。该文件将用于处理对 `/users` 路径的请求。我们将以 `GET`
+请求为例。你可以添加更多的 HTTP 方法，例如 `POST`、`PUT`、`DELETE` 等。
 
-In `users.ts`, set up an async function called `GET` that takes a request object
-as an argument:
+在 `users.ts` 中，设置一个名为 `GET`
+的异步函数，该函数接受一个请求对象作为参数：
 
 ```ts title="users.ts"
 export function GET(_req: Request): Response {
@@ -75,24 +68,22 @@ export function GET(_req: Request): Response {
 }
 ```
 
-## Start the server
+## 启动服务器
 
-To start the server, run the following command:
+要启动服务器，请运行以下命令：
 
 ```sh
 deno run --allow-net --allow-read server.ts
 ```
 
-This will start the server on `localhost:8080`. You can now make a `GET` request
-to `localhost:8000/users` and you should see the response `Hello from user.ts`.
+这将在 `localhost:8080` 上启动服务器。你现在可以向 `localhost:8000/users` 发出
+`GET` 请求，你应该会看到响应 `Hello from user.ts`。
 
-This command requires the `--allow-net` and `--allow-read`
-[permissions flags](/runtime/fundamentals/security/) to allow access to the
-network to start the server and to read the `users.ts` file from the file
-system.
+此命令需要 `--allow-net` 和 `--allow-read`
+[权限标志](/runtime/fundamentals/security/)
+以允许访问网络来启动服务器并从文件系统中读取 `users.ts` 文件。
 
-🦕 Now you can set up routing in your apps based on file structure. You can
-extend this example to add more routes and methods as needed.
+🦕
+现在你可以根据文件结构在应用程序中设置路由。你可以根据需要扩展此示例以添加更多路由和方法。
 
-<small>Thanks to [@naishe](https://github.com/naishe) for contributing this
-tutorial.</small>
+<small>感谢 [@naishe](https://github.com/naishe) 贡献本教程。</small>

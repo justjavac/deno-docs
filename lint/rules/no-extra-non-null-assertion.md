@@ -2,14 +2,12 @@
 tags: [recommended]
 ---
 
-Disallows unnecessary non-null assertions.
+禁止不必要非空断言。
 
-Non-null assertions are specified with an `!` saying to the compiler that you
-know this value is not null. Specifying this operator more than once in a row,
-or in combination with the optional chaining operator (`?`) is confusing and
-unnecessary.
+非空断言使用 `!` 来告诉编译器你知道这个值不是
+null。在一行中多次使用此操作符，或与可选链操作符（`?`）结合使用，会让人感到困惑且没有必要。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 const foo: { str: string } | null = null;
@@ -23,7 +21,7 @@ function anotherFunc(bar?: { str: string }) {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 const foo: { str: string } | null = null;

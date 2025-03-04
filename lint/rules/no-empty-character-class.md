@@ -2,27 +2,26 @@
 tags: [recommended]
 ---
 
-Disallows using the empty character class in a regular expression.
+禁止在正则表达式中使用空字符类。
 
-Regular expression character classes are a series of characters in brackets,
-e.g. `[abc]`. if nothing is supplied in the brackets it will not match anything
-which is likely a typo or mistake.
+正则表达式字符类是括号内的一系列字符，例如
+`[abc]`。如果在括号内没有提供任何内容，它将不会匹配任何内容，这很可能是一个拼写错误或错误。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
-/^abc[]/.test("abcdefg"); // false, as `d` does not match an empty character class
+/^abc[]/.test("abcdefg"); // false，因为 `d` 不匹配空字符类
 "abcdefg".match(/^abc[]/); // null
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
-// Without a character class
+// 不使用字符类
 /^abc/.test("abcdefg"); // true
 "abcdefg".match(/^abc/); // ["abc"]
 
-// With a valid character class
+// 使用有效的字符类
 /^abc[a-z]/.test("abcdefg"); // true
 "abcdefg".match(/^abc[a-z]/); // ["abcd"]
 ```

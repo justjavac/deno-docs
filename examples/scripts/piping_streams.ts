@@ -3,7 +3,7 @@
  * @difficulty intermediate
  * @tags cli
  * @run --allow-net --allow-read --allow-write <url>
- * @resource {https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream} MDN: ReadableStream
+ * @resource {https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream} MDN: ReadableStream
  * @resource {/examples/tcp_listener} Example: TCP Listener
  * @group Network
  *

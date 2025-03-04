@@ -2,20 +2,20 @@
 tags: [recommended]
 ---
 
-Enforces the use of block scoped variables over more error prone function scoped
-variables. Block scoped variables are defined using `const` and `let` keywords.
+强制使用块作用域变量，而不是更容易出错的功能作用域变量。块作用域变量使用 `const`
+和 `let` 关键字定义。
 
-`const` and `let` keywords ensure the variables defined using these keywords are
-not accessible outside their block scope. On the other hand, variables defined
-using `var` keyword are only limited by their function scope.
+`const` 和 `let`
+关键字确保使用这些关键字定义的变量在其块作用域之外不可访问。另一方面，使用 `var`
+关键字定义的变量仅受其功能作用域的限制。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 var foo = "bar";
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const foo = 1;

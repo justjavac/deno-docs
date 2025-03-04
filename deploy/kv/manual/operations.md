@@ -1,5 +1,5 @@
 ---
-title: "Operations"
+title: "操作"
 oldUrl:
   - /runtime/manual/runtime/kv/operations/
   - /kv/manual/operations/
@@ -7,32 +7,26 @@ oldUrl:
 
 <deno-admonition></deno-admonition>
 
-The Deno KV API provides a set of operations that can be performed on the key
-space.
+Deno KV API 提供了一组可以在键空间上执行的操作。
 
-There are two operations that read data from the store, and five operations that
-write data to the store.
+有两种操作可以从存储中读取数据，五种操作可以将数据写入存储。
 
-Read operations can either be performed in strong or eventual consistency mode.
-Strong consistency mode guarantees that the read operation will return the most
-recently written value. Eventual consistency mode may return a stale value, but
-is faster.
+读取操作可以在强一致性模式或最终一致性模式下执行。强一致性模式保证读取操作将返回最近写入的值。最终一致性模式可能返回过时的值，但速度更快。
 
-Write operations are always performed in strong consistency mode.
+写入操作始终在强一致性模式下执行。
 
 ## `get`
 
-The `get` operation returns the value and versionstamp associated with a given
-key. If a value does not exist, get returns a `null` value and versionstamp.
+`get` 操作返回与给定键关联的值和版本戳。如果值不存在，`get` 返回 `null`
+值和版本戳。
 
-There are two APIs that can be used to perform a `get` operation. The
-[`Deno.Kv.prototype.get(key, options?)`][get] API, which can be used to read a
-single key, and the [`Deno.Kv.prototype.getMany(keys, options?)`][getMany] API,
-which can be used to read multiple keys at once.
+有两种 API 可以用于执行 `get`
+操作。[`Deno.Kv.prototype.get(key, options?)`][get] API 可用于读取单个键，而
+[`Deno.Kv.prototype.getMany(keys, options?)`][getMany] API
+可用于同时读取多个键。
 
-Get operations are performed as a "snapshot read" in all consistency modes. This
-means that when retrieving multiple keys at once, the values returned will be
-consistent with each other.
+在所有一致性模式下，`get`
+操作都作为“快照读取”执行。这意味着当同时检索多个键时，返回的值将彼此一致。
 
 ```ts
 const res = await kv.get<string>(["config"]);
@@ -53,34 +47,29 @@ console.log(res3); // { key: ["users", "alex"], value: "alex", versionstamp: "00
 
 ## `list`
 
-The `list` operation returns a list of keys that match a given selector. The
-associated values and versionstamps for these keys are also returned. There are
-2 different selectors that can be used to filter the keys matched.
+`list`
+操作返回与给定选择器匹配的键列表。这些键的关联值和版本戳也会返回。有两种不同的选择器可用于过滤匹配的键。
 
-The `prefix` selector matches all keys that start with the given prefix key
-parts, but not inclusive of an exact match of the key. The prefix selector may
-optionally be given a `start` OR `end` key to limit the range of keys returned.
-The `start` key is inclusive, and the `end` key is exclusive.
+`prefix`
+选择器匹配所有以给定前缀键部分开头的键，但不包括与键完全匹配的情况。前缀选择器可以选择性地提供
+`start` 或 `end` 键来限制返回的键范围。`start` 键是包含的，`end` 键是排除的。
 
-The `range` selector matches all keys that are lexicographically between the
-given `start` and `end` keys. The `start` key is inclusive, and the `end` key is
-exclusive.
+`range` 选择器匹配所有在给定 `start` 和 `end` 键之间按字典顺序排列的键。`start`
+键是包含的，`end` 键是排除的。
 
-> Note: In the case of the prefix selector, the `prefix` key must consist only
-> of full (not partial) key parts. For example, if the key `["foo", "bar"]`
-> exists in the store, then the prefix selector `["foo"]` will match it, but the
-> prefix selector `["f"]` will not.
+> 注意：对于前缀选择器，`prefix`
+> 键必须仅由完整（而非部分）键部分组成。例如，如果键 `["foo", "bar"]`
+> 存在于存储中，则前缀选择器 `["foo"]` 将匹配它，但前缀选择器 `["f"]` 不会。
 
-The list operation may optionally be given a `limit` to limit the number of keys
-returned.
+`list` 操作可以选择性地提供 `limit` 来限制返回的键数量。
 
-List operations can be performed using the
-[`Deno.Kv.prototype.list<string>(selector, options?)`][list] method. This method
-returns a `Deno.KvListIterator` that can be used to iterate over the keys
-returned. This is an async iterator, and can be used with `for await` loops.
+可以使用 [`Deno.Kv.prototype.list<string>(selector, options?)`][list] 方法执行
+`list` 操作。此方法返回一个
+`Deno.KvListIterator`，可用于迭代返回的键。这是一个异步迭代器，可以与
+`for await` 循环一起使用。
 
 ```ts
-// Return all users
+// 返回所有用户
 const iter = kv.list<string>({ prefix: ["users"] });
 const users = [];
 for await (const res of iter) users.push(res);
@@ -88,47 +77,44 @@ console.log(users[0]); // { key: ["users", "alex"], value: "alex", versionstamp:
 console.log(users[1]); // { key: ["users", "sam"], value: "sam", versionstamp: "00e0a2a0f0178b270000" }
 console.log(users[2]); // { key: ["users", "taylor"], value: "taylor", versionstamp: "0059e9035e5e7c5e0000" }
 
-// Return the first 2 users
+// 返回前 2 个用户
 const iter = kv.list<string>({ prefix: ["users"] }, { limit: 2 });
 const users = [];
 for await (const res of iter) users.push(res);
 console.log(users[0]); // { key: ["users", "alex"], value: "alex", versionstamp: "00a44a3c3e53b9750000" }
 console.log(users[1]); // { key: ["users", "sam"], value: "sam", versionstamp: "00e0a2a0f0178b270000" }
 
-// Return all users lexicographically after "taylor"
+// 返回按字典顺序在 "taylor" 之后的所有用户
 const iter = kv.list<string>({ prefix: ["users"], start: ["users", "taylor"] });
 const users = [];
 for await (const res of iter) users.push(res);
 console.log(users[0]); // { key: ["users", "taylor"], value: "taylor", versionstamp: "0059e9035e5e7c5e0000" }
 
-// Return all users lexicographically before "taylor"
+// 返回按字典顺序在 "taylor" 之前的所有用户
 const iter = kv.list<string>({ prefix: ["users"], end: ["users", "taylor"] });
 const users = [];
 for await (const res of iter) users.push(res);
 console.log(users[0]); // { key: ["users", "alex"], value: "alex", versionstamp: "00a44a3c3e53b9750000" }
 console.log(users[1]); // { key: ["users", "sam"], value: "sam", versionstamp: "00e0a2a0f0178b270000" }
 
-// Return all users starting with characters between "a" and "n"
+// 返回所有以 "a" 到 "n" 之间字符开头的用户
 const iter = kv.list<string>({ start: ["users", "a"], end: ["users", "n"] });
 const users = [];
 for await (const res of iter) users.push(res);
 console.log(users[0]); // { key: ["users", "alex"], value: "alex", versionstamp: "00a44a3c3e53b9750000" }
 ```
 
-The list operation reads data from the store in batches. The size of each batch
-can be controlled using the `batchSize` option. The default batch size is 500
-keys. Data within a batch is read in a single snapshot read, so the values are
-consistent with each other. Consistency modes apply to each batch of data read.
-Across batches, data is not consistent. The borders between batches is not
-visible from the API as the iterator returns individual keys.
+`list` 操作从存储中批量读取数据。可以使用 `batchSize`
+选项控制每批的大小。默认批量大小为 500
+个键。批内的数据在单个快照读取中读取，因此值彼此一致。一致性模式适用于每批读取的数据。跨批次的数据不一致。批之间的边界在
+API 中不可见，因为迭代器返回单个键。
 
-The list operation can be performed in reverse order by setting the `reverse`
-option to `true`. This will return the keys in lexicographically descending
-order. The `start` and `end` keys are still inclusive and exclusive
-respectively, and are still interpreted as lexicographically ascending.
+可以通过将 `reverse` 选项设置为 `true` 来以相反的顺序执行 `list`
+操作。这将按字典顺序降序返回键。`start` 和 `end`
+键仍然是包含和排除的，并且仍然按字典顺序升序解释。
 
 ```ts
-// Return all users in reverse order, ending with "sam"
+// 以相反顺序返回所有用户，以 "sam" 结尾
 const iter = kv.list<string>({ prefix: ["users"], start: ["users", "sam"] }, {
   reverse: true,
 });
@@ -138,23 +124,20 @@ console.log(users[0]); // { key: ["users", "taylor"], value: "taylor", versionst
 console.log(users[1]); // { key: ["users", "sam"], value: "sam", versionstamp: "00e0a2a0f0178b270000" }
 ```
 
-> Note: in the above example we set the `start` key to `["users", "sam"]`, even
-> though the first key returned is `["users", "taylor"]`. This is because the
-> `start` and `end` keys are always evaluated in lexicographically ascending
-> order, even when the list operation is performed in reverse order (which
-> returns the keys in lexicographically descending order).
+> 注意：在上面的示例中，我们将 `start` 键设置为
+> `["users", "sam"]`，即使返回的第一个键是 `["users", "taylor"]`。这是因为
+> `start` 和 `end` 键始终按字典顺序升序评估，即使 `list`
+> 操作以相反顺序执行（返回的键按字典顺序降序）。
 
 ## `set`
 
-The `set` operation sets the value of a key in the store. If the key does not
-exist, it is created. If the key already exists, its value is overwritten.
+`set` 操作设置存储中键的值。如果键不存在，则创建它。如果键已存在，则覆盖其值。
 
-The `set` operation can be performed using the
-[`Deno.Kv.prototype.set(key, value)`][set] method. This method returns a
-`Promise` that resolves to a `Deno.KvCommitResult` object, which contains the
-`versionstamp` of the commit.
+可以使用 [`Deno.Kv.prototype.set(key, value)`][set] 方法执行 `set`
+操作。此方法返回一个 `Promise`，解析为 `Deno.KvCommitResult`
+对象，其中包含提交的 `versionstamp`。
 
-Set operations are always performed in strong consistency mode.
+`set` 操作始终在强一致性模式下执行。
 
 ```ts
 const res = await kv.set(["users", "alex"], "alex");
@@ -163,13 +146,11 @@ console.log(res.versionstamp); // "00a44a3c3e53b9750000"
 
 ## `delete`
 
-The `delete` operation deletes a key from the store. If the key does not exist,
-the operation is a no-op.
+`delete` 操作从存储中删除一个键。如果键不存在，则操作无效。
 
-The `delete` operation can be performed using the
-[`Deno.Kv.prototype.delete(key)`][delete] method.
+可以使用 [`Deno.Kv.prototype.delete(key)`][delete] 方法执行 `delete` 操作。
 
-Delete operations are always performed in strong consistency mode.
+`delete` 操作始终在强一致性模式下执行。
 
 ```ts
 await kv.delete(["users", "alex"]);
@@ -177,22 +158,20 @@ await kv.delete(["users", "alex"]);
 
 ## `sum`
 
-The `sum` operation atomically adds a value to a key in the store. If the key
-does not exist, it is created with the value of the sum. If the key already
-exists, its value is added to the sum.
+`sum`
+操作原子地将一个值添加到存储中的键。如果键不存在，则创建它并将值设置为和。如果键已存在，则将其值添加到和中。
 
-The `sum` operation can only be performed as part of an atomic operation. The
-[`Deno.AtomicOperation.prototype.mutate({ type: "sum", value })`][mutate] method
-can be used to add a sum mutation to an atomic operation.
+`sum`
+操作只能作为原子操作的一部分执行。[`Deno.AtomicOperation.prototype.mutate({ type: "sum", value })`][mutate]
+方法可用于将和变异添加到原子操作中。
 
-The sum operation can only be performed on values of type `Deno.KvU64`. Both the
-operand and the value in the store must be of type `Deno.KvU64`.
+`sum` 操作只能对 `Deno.KvU64` 类型的值执行。操作数和存储中的值都必须为
+`Deno.KvU64` 类型。
 
-If the new value of the key is greater than `2^64 - 1` or less than `0`, the sum
-operation wraps around. For example, if the value in the store is `2^64 - 1` and
-the operand is `1`, the new value will be `0`.
+如果键的新值大于 `2^64 - 1` 或小于 `0`，则 `sum`
+操作会回绕。例如，如果存储中的值为 `2^64 - 1` 且操作数为 `1`，则新值将为 `0`。
 
-Sum operations are always performed in strong consistency mode.
+`sum` 操作始终在强一致性模式下执行。
 
 ```ts
 await kv.atomic()
@@ -206,19 +185,17 @@ await kv.atomic()
 
 ## `min`
 
-The `min` operation atomically sets a key to the minimum of its current value
-and a given value. If the key does not exist, it is created with the given
-value. If the key already exists, its value is set to the minimum of its current
-value and the given value.
+`min`
+操作原子地将键设置为其当前值和给定值的最小值。如果键不存在，则创建它并将值设置为给定值。如果键已存在，则将其值设置为其当前值和给定值的最小值。
 
-The `min` operation can only be performed as part of an atomic operation. The
-[`Deno.AtomicOperation.prototype.mutate({ type: "min", value })`][mutate] method
-can be used to add a min mutation to an atomic operation.
+`min`
+操作只能作为原子操作的一部分执行。[`Deno.AtomicOperation.prototype.mutate({ type: "min", value })`][mutate]
+方法可用于将最小变异添加到原子操作中。
 
-The min operation can only be performed on values of type `Deno.KvU64`. Both the
-operand and the value in the store must be of type `Deno.KvU64`.
+`min` 操作只能对 `Deno.KvU64` 类型的值执行。操作数和存储中的值都必须为
+`Deno.KvU64` 类型。
 
-Min operations are always performed in strong consistency mode.
+`min` 操作始终在强一致性模式下执行。
 
 ```ts
 await kv.atomic()
@@ -232,19 +209,17 @@ await kv.atomic()
 
 ## `max`
 
-The `max` operation atomically sets a key to the maximum of its current value
-and a given value. If the key does not exist, it is created with the given
-value. If the key already exists, its value is set to the maximum of its current
-value and the given value.
+`max`
+操作原子地将键设置为其当前值和给定值的最大值。如果键不存在，则创建它并将值设置为给定值。如果键已存在，则将其值设置为其当前值和给定值的最大值。
 
-The `max` operation can only be performed as part of an atomic operation. The
-[`Deno.AtomicOperation.prototype.mutate({ type: "max", value })`][mutate] method
-can be used to add a max mutation to an atomic operation.
+`max`
+操作只能作为原子操作的一部分执行。[`Deno.AtomicOperation.prototype.mutate({ type: "max", value })`][mutate]
+方法可用于将最大变异添加到原子操作中。
 
-The max operation can only be performed on values of type `Deno.KvU64`. Both the
-operand and the value in the store must be of type `Deno.KvU64`.
+`max` 操作只能对 `Deno.KvU64` 类型的值执行。操作数和存储中的值都必须为
+`Deno.KvU64` 类型。
 
-Max operations are always performed in strong consistency mode.
+`max` 操作始终在强一致性模式下执行。
 
 ```ts
 await kv.atomic()
@@ -258,16 +233,13 @@ await kv.atomic()
 
 ## `watch`
 
-The `watch` operation accepts an array of keys, and returns a
-[`ReadableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream),
-which emits a new value whenever any of the watched keys change their
-`versionstamp`. The emitted value is an array of
-[Deno.KvEntryMaybe](https://docs.deno.com/api/deno/~/Deno.KvEntryMaybe) objects.
+`watch` 操作接受一个键数组，并返回一个
+[`ReadableStream`](https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream)，每当任何被监视的键更改其
+`versionstamp` 时，它都会发出一个新值。发出的值是一个
+[Deno.KvEntryMaybe](https://docs.denohub.com/api/deno/~/Deno.KvEntryMaybe)
+对象数组。
 
-Note that the returned stream does not return every single intermediate state of
-the watched keys, but keeps you up to date with the latest state of keys. This
-means if a key is modified multiple times quickly, you may not receive a
-notification for every change, but the latest state of the key.
+请注意，返回的流不会返回被监视键的每个中间状态，而是让您了解键的最新状态。这意味着如果键被多次快速修改，您可能不会收到每次更改的通知，但会收到键的最新状态。
 
 ```ts
 const db = await Deno.openKv();
@@ -283,9 +255,9 @@ for await (const entries of stream) {
 }
 ```
 
-[get]: https://docs.deno.com/api/deno/~/Deno.Kv.prototype.get
-[getMany]: https://docs.deno.com/api/deno/~/Deno.Kv.prototype.getMany
-[list]: https://docs.deno.com/api/deno/~/Deno.Kv.prototype.list
-[set]: https://docs.deno.com/api/deno/~/Deno.Kv.prototype.set
-[delete]: https://docs.deno.com/api/deno/~/Deno.Kv.prototype.delete
-[mutate]: https://docs.deno.com/api/deno/~/Deno.AtomicOperation.prototype.mutate
+[get]: https://docs.denohub.com/api/deno/~/Deno.Kv.prototype.get
+[getMany]: https://docs.denohub.com/api/deno/~/Deno.Kv.prototype.getMany
+[list]: https://docs.denohub.com/api/deno/~/Deno.Kv.prototype.list
+[set]: https://docs.denohub.com/api/deno/~/Deno.Kv.prototype.set
+[delete]: https://docs.denohub.com/api/deno/~/Deno.Kv.prototype.delete
+[mutate]: https://docs.denohub.com/api/deno/~/Deno.AtomicOperation.prototype.mutate

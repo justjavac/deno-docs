@@ -2,13 +2,12 @@
 tags: [recommended]
 ---
 
-Disallows the unreachable code after the control flow statements.
+禁止在控制流语句后出现无法到达的代码。
 
-Because the control flow statements (`return`, `throw`, `break` and `continue`)
-unconditionally exit a block of code, any statements after them cannot be
-executed.
+由于控制流语句（`return`、`throw`、`break` 和
+`continue`）会无条件退出代码块，因此它们之后的任何语句都无法执行。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 function foo() {
@@ -52,7 +51,7 @@ for (;;) {}
 console.log("done");
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 function foo() {

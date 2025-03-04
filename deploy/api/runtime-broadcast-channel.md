@@ -6,7 +6,7 @@ oldUrl:
 ---
 
 在 Deno Deploy
-中，代码会在全球不同的数据中心运行，以便通过就近服务客户端请求来减少延迟。在浏览器中，[`BroadcastChannel`](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API)
+中，代码会在全球不同的数据中心运行，以便通过就近服务客户端请求来减少延迟。在浏览器中，[`BroadcastChannel`](https://developer.mozilla.org/zh-CN/docs/Web/API/Broadcast_Channel_API)
 API 允许具有相同源的不同标签页之间交换消息。在 Deno Deploy 中，BroadcastChannel
 API 提供了不同实例之间的通信机制；这是一个简单的消息总线，连接了全球各地的
 Deploy 实例。
@@ -94,6 +94,6 @@ Deno.serve(app.fetch);
 上使用[此 playground](https://dash.deno.com/playground/broadcast-channel-example)
 自行测试此示例。
 
-[eventtarget]: https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
-[messageevent]: https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent
-[object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
+[eventtarget]: https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget
+[messageevent]: https://developer.mozilla.org/zh-CN/docs/Web/API/MessageEvent
+[object]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object

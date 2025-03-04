@@ -1,75 +1,64 @@
 ---
-title: "Environment variables"
+title: "环境变量"
 ---
 
-Environment variables are useful to store values like access tokens of web
-services. Each deployment has a set of environment variables defined at the
-moment of creation and accessible from the code via the `Deno.env` API. There
-are 2 ways to define the environment variables of a deployment:
+环境变量对于存储诸如 Web
+服务的访问令牌等值非常有用。每个部署在创建时都定义了一组环境变量，并可以通过
+`Deno.env` API 从代码中访问。有两种方式可以定义部署的环境变量：
 
-## Project environment variables
+## 项目环境变量
 
-You can define environment variables at the project level. When you create a
-deployment, it will get the set of environment variables the project has defined
-_at that particular moment_.
+您可以在项目级别定义环境变量。当您创建部署时，它将获取项目在 _该特定时刻_
+定义的环境变量集。
 
-For convenience, When you change the environment variables of a project, the
-current production deployment is _redeployed_, creating a new production
-deployment with the new set of environment variables.
+为了方便起见，当您更改项目的环境变量时，当前的生产部署会
+_重新部署_，创建一个具有新环境变量集的新生产部署。
 
 :::note
 
-Deployments are immutable, including their environment variables. Changing the
-environment variables of a project does not change the environment variables of
-existing deployments.
+部署是不可变的，包括它们的环境变量。更改项目的环境变量不会更改现有部署的环境变量。
 
 :::
 
-To add an environment variable to your project, click on the **Settings** button
-on the project page and then on **Environment Variables** from the sidebar. Fill
-in the key/value fields and click on "Add" to add an environment variable to
-your project.
+要向您的项目添加环境变量，请单击项目页面上的 **Settings**
+按钮，然后从侧边栏中选择 **Environment Variables**。填写键/值字段，然后单击
+"Add" 将环境变量添加到您的项目中。
 
 ![environment_variable](../docs-images/fauna2.png)
 
-Updating an existing environment variable works the same way. Click on the "Add
-Variable" button, enter the same name of the environment variable you wish to
-update and enter the new value. Click on the "Save" button to complete the
-update.
+更新现有环境变量的方式相同。单击 "Add Variable"
+按钮，输入您希望更新的环境变量的相同名称，并输入新值。单击 "Save"
+按钮以完成更新。
 
-## Deployment environment variables
+## 部署环境变量
 
-When deploying using `deployctl`, you can specify environment variables
-[using the `--env` or `--env-file` flags](./deployctl.md#environment-variables),
-complementing the environment variables already defined for the project. You can
-also pass multiple `--env-file` arguments (e.g.,
-`--env-file=.env.one --env-file=.env.two`) to include variables from multiple
-files.
+使用 `deployctl` 部署时，您可以
+[使用 `--env` 或 `--env-file` 标志](./deployctl.md#environment-variables)
+指定环境变量，补充项目中已定义的环境变量。您还可以传递多个 `--env-file`
+参数（例如，`--env-file=.env.one --env-file=.env.two`）以包含来自多个文件的变量。
 
 :::note
 
-When multiple declarations for the same environment variable exist within a
-single `.env` file, the first occurrence is applied. However, if the same
-variable is defined across multiple `.env` files (using multiple `--env-file`
-arguments), the value from the last file specified takes precedence. This means
-that the first occurrence found in the last `.env` file listed will be applied.
+当在单个 `.env`
+文件中存在多个相同环境变量的声明时，将应用第一个出现的值。但是，如果相同的变量在多个
+`.env` 文件中定义（使用多个 `--env-file`
+参数），则最后一个指定文件中的值将优先。这意味着将应用最后一个列出的 `.env`
+文件中找到的第一个出现的值。
 
 :::
 
-These env variables will be specific for the deployment being created.
+这些环境变量将特定于正在创建的部署。
 
-### Default environment variables
+### 默认环境变量
 
-Every deployment has the following environment variables preset, which you can
-access from your code.
+每个部署都有以下预设的环境变量，您可以从代码中访问它们。
 
 1. `DENO_REGION`
 
-   It holds the region code of the region in which the deployment is running.
-   You can use this variable to serve region-specific content.
+   它保存部署运行所在区域的区域代码。您可以使用此变量来提供特定区域的内容。
 
-   You can refer to the region code from the [regions page](regions).
+   您可以从 [regions page](regions) 中引用区域代码。
 
 1. `DENO_DEPLOYMENT_ID`
 
-   It holds the ID of the deployment.
+   它保存部署的 ID。

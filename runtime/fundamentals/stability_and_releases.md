@@ -1,76 +1,65 @@
 ---
-title: "Stability and releases"
+title: "稳定性和发布"
 oldUrl:
     - /runtime/manual/runtime/stability/
     - /runtime/fundamentals/stability/
 ---
 
-As of Deno 1.0.0, the `Deno` namespace APIs are stable. That means we will
-strive to make code working under 1.0.0 continue to work in future versions.
+自 Deno 1.0.0 起，`Deno` 命名空间的 API 已稳定。这意味着我们将努力确保在 1.0.0
+版本下运行的代码在未来的版本中继续有效。
 
-## Release schedule, channels and long term support
+## 发布计划、渠道和长期支持
 
-Deno releases a new stable, minor version (eg. v2.1.0, v2.0.0) on a 12 week
-schedule.
+Deno 每 12 周发布一个新的稳定小版本（例如 v2.1.0, v2.0.0）。
 
-Patch releases including bug fixes for the latest minor version are released as
-needed - you can expect several patch releases before a new minor version is
-released.
+包含最新小版本错误修复的补丁版本会根据需要发布——你可以预期在新小版本发布之前会有多个补丁版本发布。
 
-### Release channels
+### 发布渠道
 
-Deno offers 4 release channels
+Deno 提供 4 个发布渠道
 
-- `stable` - a semver minor/patch release, as described above. This is **the
-  default** distribution channel that is recommended for most users.
-- `lts` - long term support for a particular stable release, recommended for
-  enterprise users who prefer not to upgrade so often. See below for details.
-- `rc` - a release candidate for the upcoming semver minor release.
-- `canary` - an unstable release that changes multiple timer per day, allows to
-  try out latest bug fixes and new features that might end up in the `stable`
-  channel.
+- `stable` -
+  一个语义化版本的小/补丁版本，如上所述。这是**默认**的发布渠道，推荐给大多数用户使用。
+- `lts` - 对特定稳定版本的长期支持，推荐给不希望频繁升级的企业用户。详情见下文。
+- `rc` - 即将发布的语义化版本小版本的候选版本。
+- `canary` -
+  一个不稳定的版本，每天会多次更改，允许尝试最新的错误修复和新功能，这些功能可能会最终进入
+  `stable` 渠道。
 
-### Long Term Support (LTS)
+### 长期支持 (LTS)
 
-Starting with Deno v2.1.0 (released in November 2024), Deno offers an LTS
-(long-term support) channel.
+从 Deno v2.1.0（2024 年 11 月发布）开始，Deno 提供 LTS（长期支持）渠道。
 
-An LTS channel is a minor semver version that we maintain with only
-backwards-compatible bug fixes.
+LTS 渠道是一个语义化版本的小版本，我们仅维护向后兼容的错误修复。
 
-![Deno long-term support schedule](./images/deno-lts-support.png)
+![Deno 长期支持计划](./images/deno-lts-support.png)
 
-We are initially keeping the LTS support window short while we refine the
-process. **LTS releases occur every six months**, with patch releases as needed
-for bug fixes. We plan to extend this support window to one year in the future.
+我们最初将 LTS 支持窗口保持较短，以便我们完善流程。**LTS
+版本每六个月发布一次**，并根据需要发布补丁版本以修复错误。我们计划在未来将此支持窗口延长至一年。
 
-LTS backports include:
+LTS 回迁包括：
 
-- Security patches
-- Critical bug fixes (e.g., crashes, incorrect computations)
-- **Critical** performance improvements _may_ be backported based on severity.
+- 安全补丁
+- 关键错误修复（例如崩溃、计算错误）
+- **关键**性能改进可能会根据严重程度回迁。
 
-**API changes and major new features will not be backported.**
+**API 更改和主要新功能将不会回迁。**
 
-## Unstable APIs
+## 不稳定的 API
 
-When introducing new APIs, these are first marked as unstable. This means that
-the API may change in the future. These APIs are not available to use unless you
-explicitly pass an unstable flag, like `--unstable-kv`.
-[Learn more about `--unstable-*` flags](/runtime/reference/cli/unstable_flags).
+在引入新 API 时，这些 API 首先会被标记为不稳定。这意味着 API
+将来可能会发生变化。除非你明确传递一个不稳定标志，例如 `--unstable-kv`，否则这些
+API
+不可用。[了解更多关于 `--unstable-*` 标志的信息](/runtime/reference/cli/unstable_flags)。
 
-There are also some non-runtime features of Deno that are considered unstable,
-and are locked behind unstable flags. For example, the
-`--unstable-sloppy-imports` flag is used to enable `import`ing code without
-specifying file extensions.
+Deno
+还有一些非运行时的功能被认为是不稳定的，并且被锁定在不稳定标志后面。例如，`--unstable-sloppy-imports`
+标志用于启用不指定文件扩展名的 `import` 代码。
 
-## Standard library
+## 标准库
 
-The Deno Standard Library (https://jsr.io/@std) is mostly stable. All standard
-library modules that are version 1.0.0 or higher are considered stable. All
-other modules (0.x) are considered unstable, and may change in the future.
+Deno 标准库 (https://jsr.io/@std) 大部分是稳定的。所有版本为 1.0.0
+或更高的标准库模块都被认为是稳定的。所有其他模块（0.x）被认为是不稳定的，未来可能会发生变化。
 
-Using unstable standard library modules is not recommended for production code,
-but it is a great way to experiment with new features and provide feedback to
-the Deno team. It is not necessary to use any unstable flags to use unstable
-standard library modules.
+不建议在生产代码中使用不稳定的标准库模块，但它是实验新功能并向 Deno
+团队提供反馈的好方法。使用不稳定的标准库模块不需要使用任何不稳定标志。

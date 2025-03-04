@@ -2,23 +2,23 @@
 tags: [recommended]
 ---
 
-Disallows expressing octal numbers via numeric literals beginning with `0`.
+禁止通过以 `0` 开头的数字字面量表示八进制数。
 
-Octal numbers can be expressed via numeric literals with leading `0` like `042`,
-but this expression often confuses programmers. That's why ECMAScript's strict
-mode throws `SyntaxError` for the expression.
+八进制数可以通过以 `0` 开头的数字字面量表示，例如
+`042`，但这种表示方式常常让程序员感到困惑。这就是为什么 ECMAScript
+的严格模式会对此类表达式抛出 `SyntaxError`。
 
-Since ES2015, the other prefix `0o` has been introduced as an alternative. This
-new one is always encouraged to use in today's code.
+自 ES2015 起，引入了另一种前缀 `0o`
+作为替代方案。在当今的代码中，始终鼓励使用这种新的表示方式。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const a = 042;
 const b = 7 + 042;
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const a = 0o42;

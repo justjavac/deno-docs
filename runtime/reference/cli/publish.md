@@ -4,17 +4,16 @@ oldUrl: /runtime/manual/tools/publish/
 command: publish
 ---
 
-## Package Requirements
+## 包要求
 
-Your package must have a `name` and `version` and an `exports` field in its
-`deno.json` or `jsr.json` file.
+你的包必须在 `deno.json` 或 `jsr.json` 文件中包含 `name`、`version` 和 `exports`
+字段。
 
-- The `name` field must be unique and follow the `@<scope_name>/<package_name>`
-  convention.
-- The `version` field must be a valid semver version.
-- The `exports` field must point to the main entry point of the package.
+- `name` 字段必须唯一，并遵循 `@<scope_name>/<package_name>` 的命名规范。
+- `version` 字段必须是一个有效的 semver 版本。
+- `exports` 字段必须指向包的主入口点。
 
-Example:
+示例：
 
 ```json title="deno.json"
 {
@@ -24,37 +23,36 @@ Example:
 }
 ```
 
-Before you publish your package, you must create it in the registry by visiting
-[JSR - Publish a package](https://jsr.io/new).
+在发布你的包之前，你必须通过访问 [JSR - 发布一个包](https://jsr.io/new)
+在注册表中创建它。
 
-## Examples
+## 示例
 
-Publish your current workspace
+发布当前工作区
 
 ```bash
 deno publish
 ```
 
-Publish your current workspace with a specific token, bypassing interactive
-authentication
+使用特定令牌发布当前工作区，绕过交互式身份验证
 
 ```bash
 deno publish --token c00921b1-0d4f-4d18-b8c8-ac98227f9275
 ```
 
-Publish and check for errors in remote modules
+发布并检查远程模块中的错误
 
 ```bash
 deno publish --check=all
 ```
 
-Perform a dry run to simulate publishing.
+执行试运行以模拟发布
 
 ```bash
 deno publish --dry-run
 ```
 
-Publish using settings from a specific configuration file
+使用特定配置文件中的设置进行发布
 
 ```bash
 deno publish --config custom-config.json

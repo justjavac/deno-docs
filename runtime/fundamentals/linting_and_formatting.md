@@ -1,92 +1,78 @@
 ---
-title: "Linting and formatting"
+title: "代码检查和格式化"
 ---
 
-In an ideal world, your code is always clean, consistent, and free of pesky
-errors. That’s the promise of Deno’s built-in linting and formatting tools. By
-integrating these features directly into the runtime, Deno eliminates the need
-for external dependencies and complex configurations in your projects. These
-inbuilt tools are fast and performant, not only saving time but also ensuring
-that every line of code adheres to best practices.
+在理想的世界中，你的代码总是干净、一致且没有烦人的错误。这就是 Deno
+内置的代码检查和格式化工具的承诺。通过将这些功能直接集成到运行时中，Deno
+消除了项目中对外部依赖和复杂配置的需求。这些内置工具快速且高效，不仅节省时间，还确保每一行代码都遵循最佳实践。
 
-With `deno fmt` and `deno lint`, you can focus on writing great code, knowing
-that Deno has your back. It’s like having a vigilant assistant who keeps your
-codebase in top shape, allowing you to concentrate on what truly matters:
-building amazing applications.
+使用 `deno fmt` 和 `deno lint`，你可以专注于编写出色的代码，因为 Deno
+会为你保驾护航。这就像拥有一个警惕的助手，时刻保持你的代码库处于最佳状态，让你能够专注于真正重要的事情：构建出色的应用程序。
 
-## Linting
+## 代码检查
 
-Linting is the process of analyzing your code for potential errors, bugs, and
-stylistic issues. Deno’s built-in linter,
-[`deno lint`](/runtime/reference/cli/linter/), supports recommended set of rules
-from [ESLint](https://eslint.org/) to provide comprehensive feedback on your
-code. This includes identifying syntax errors, enforcing coding conventions, and
-highlighting potential issues that could lead to bugs.
+代码检查是分析代码以发现潜在错误、漏洞和风格问题的过程。Deno 内置的代码检查工具
+[`deno lint`](/runtime/reference/cli/linter/) 支持来自
+[ESLint](https://eslint.org/)
+的推荐规则集，为你的代码提供全面的反馈。这包括识别语法错误、强制执行编码约定，并突出显示可能导致漏洞的潜在问题。
 
-To run the linter, use the following command in your terminal:
+要运行代码检查工具，请在终端中使用以下命令：
 
 ```bash
 deno lint
 ```
 
-By default, `deno lint` analyzes all TypeScript and JavaScript files in the
-current directory and its subdirectories. If you want to lint specific files or
-directories, you can pass them as arguments to the command. For example:
+默认情况下，`deno lint` 会分析当前目录及其子目录中的所有 TypeScript 和
+JavaScript
+文件。如果你想检查特定文件或目录，可以将它们作为参数传递给命令。例如：
 
 ```bash
 deno lint src/
 ```
 
-This command will lint all files in the `src/` directory.
+此命令将检查 `src/` 目录中的所有文件。
 
-The linter can be configured in a
-[`deno.json`](/runtime/fundamentals/configuration/) file. You can specify custom
-rules, plugins, and settings to tailor the linting process to your needs.
+代码检查工具可以在 [`deno.json`](/runtime/fundamentals/configuration/)
+文件中进行配置。你可以指定自定义规则、插件和设置，以满足你的需求。
 
-### Linting rules
+### 代码检查规则
 
-You can view and search the list of available rules and their usage on the
-[List of rules](/lint/) documentation page.
+你可以在 [规则列表](/lint/) 文档页面上查看和搜索可用规则及其用法。
 
-## Formatting
+## 格式化
 
-Formatting is the process of automatically adjusting the layout of your code to
-adhere to a consistent style. Deno’s built-in formatter, `deno fmt`, uses the
-powerful [dprint](https://dprint.dev/) engine to ensure that your code is always
-clean, readable, and consistent.
+格式化是自动调整代码布局以遵循一致风格的过程。Deno 内置的格式化工具 `deno fmt`
+使用强大的 [dprint](https://dprint.dev/)
+引擎，确保你的代码始终干净、可读且一致。
 
-To format your code, simply execute the following command in your terminal:
+要格式化你的代码，只需在终端中执行以下命令：
 
 ```bash
 deno fmt
 ```
 
-By default, `deno fmt` formats all TypeScript and JavaScript files in the
-current directory and its subdirectories. If you want to format specific files
-or directories, you can pass them as arguments to the command. For example:
+默认情况下，`deno fmt` 会格式化当前目录及其子目录中的所有 TypeScript 和
+JavaScript
+文件。如果你想格式化特定文件或目录，可以将它们作为参数传递给命令。例如：
 
 ```bash
 deno fmt src/
 ```
 
-This command will format all files in the `src/` directory.
+此命令将格式化 `src/` 目录中的所有文件。
 
-### Checking your formatting
+### 检查格式化
 
-The `deno fmt --check` command is used to verify if your code is properly
-formatted according to Deno’s default formatting rules. Instead of modifying the
-files, it checks them and reports any formatting issues. This is particularly
-useful for integrating into continuous integration (CI) pipelines or pre-commit
-hooks to ensure code consistency across your project.
+`deno fmt --check` 命令用于验证你的代码是否按照 Deno
+的默认格式化规则正确格式化。它不会修改文件，而是检查它们并报告任何格式化问题。这对于集成到持续集成（CI）管道或预提交钩子中特别有用，以确保项目中的代码一致性。
 
-If there are formatting issues, `deno fmt --check` will list the files that need
-formatting. If all files are correctly formatted, it will simply exit without
-any output.
+如果存在格式化问题，`deno fmt --check`
+将列出需要格式化的文件。如果所有文件都正确格式化，它将直接退出而不输出任何内容。
 
-### Integration in CI
+### 在 CI 中集成
 
-You can add `deno fmt --check` to your CI pipeline to automatically check for
-formatting issues. For example, in a GitHub Actions workflow:
+你可以将 `deno fmt --check` 添加到你的 CI 管道中，以自动检查格式化问题。例如，在
+GitHub Actions 工作流中：
 
 ```yaml
 jobs:
@@ -100,22 +86,20 @@ jobs:
       - run: deno fmt --check
 ```
 
-This ensures that any code changes adhere to the project’s formatting standards
-before being merged.
+这确保任何代码更改在合并之前都符合项目的格式化标准。
 
-### Available options
+### 可用选项
 
-| Rule               | Description                                            | Default    | possible values         |
-| ------------------ | ------------------------------------------------------ | ---------- | ----------------------- |
-| indent-width       | Define indentation width                               | **2**      | number                  |
-| line-width         | Define maximum line width                              | **80**     | number                  |
-| no-semicolons      | Don't use semicolons except where necessary            | **false**  | true, false             |
-| prose-wrap         | Define how prose should be wrapped                     | **always** | always, never, preserve |
-| single-quote       | Use single quotes                                      | **false**  | true, false             |
-| unstable-component | Enable formatting Svelte, Vue, Astro and Angular files |            |                         |
-| unstable-sql       | Enable formatting SQL files                            |            |                         |
-| use-tabs           | Use tabs instead of spaces for indentation             | **false**  | true, false             |
+| 规则               | 描述                                          | 默认值     | 可能值                  |
+| ------------------ | --------------------------------------------- | ---------- | ----------------------- |
+| indent-width       | 定义缩进宽度                                  | **2**      | 数字                    |
+| line-width         | 定义最大行宽                                  | **80**     | 数字                    |
+| no-semicolons      | 除非必要，否则不使用分号                      | **false**  | true, false             |
+| prose-wrap         | 定义散文应如何换行                            | **always** | always, never, preserve |
+| single-quote       | 使用单引号                                    | **false**  | true, false             |
+| unstable-component | 启用格式化 Svelte、Vue、Astro 和 Angular 文件 |            |                         |
+| unstable-sql       | 启用格式化 SQL 文件                           |            |                         |
+| use-tabs           | 使用制表符而不是空格进行缩进                  | **false**  | true, false             |
 
-The formatter can be configured in a
-[`deno.json`](/runtime/fundamentals/configuration/#formatting) file. You can
-specify custom settings to tailor the formatting process to your needs.
+格式化工具可以在 [`deno.json`](/runtime/fundamentals/configuration/#formatting)
+文件中进行配置。你可以指定自定义设置，以满足你的需求。

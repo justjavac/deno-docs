@@ -3,8 +3,8 @@
  * @difficulty beginner
  * @tags cli, deploy
  * @run --allow-net <url>
- * @resource {https://docs.deno.com/api/deno/~/Deno.resolveDns} Doc: Deno.resolveDns
- * @resource {https://developer.mozilla.org/en-US/docs/Glossary/DNS} MDN: DNS
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.resolveDns} Doc: Deno.resolveDns
+ * @resource {https://developer.mozilla.org/zh-CN/docs/Glossary/DNS} MDN: DNS
  * @group Network
  *
  * There are some cases when running DNS queries is useful. This is

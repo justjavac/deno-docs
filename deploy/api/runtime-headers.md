@@ -1,63 +1,62 @@
 ---
-title: "HTTP Headers"
+title: "HTTP 头信息"
 oldUrl:
   - /deploy/docs/runtime-headers/
 ---
 
-The [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers)
-interface is part of the Fetch API. It allows you create and manipulate the HTTP
-headers of request and response resources of fetch().
+[Headers](https://developer.mozilla.org/zh-CN/docs/Web/API/Headers) 接口是 Fetch
+API 的一部分。它允许你创建和操作 `fetch()` 请求和响应资源的 HTTP 头信息。
 
-- [Constructor](#constructor)
-  - [Parameters](#parameters)
-- [Methods](#methods)
-- [Example](#example)
+- [构造函数](#constructor)
+  - [参数](#parameters)
+- [方法](#methods)
+- [示例](#example)
 
-## Constructor
+## 构造函数
 
-The Header() constructor creates a new `Header` instance.
+`Header()` 构造函数创建一个新的 `Header` 实例。
 
 ```ts
 let headers = new Headers(init);
 ```
 
-#### Parameters
+#### 参数
 
-| name | type                                    | optional | description                                                                                             |
-| ---- | --------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| init | `Headers` / `{ [key: string]: string }` | `true`   | The init option lets you initialize the headers object with an existing `Headers` or an object literal. |
+| 名称 | 类型                                    | 可选   | 描述                                                                   |
+| ---- | --------------------------------------- | ------ | ---------------------------------------------------------------------- |
+| init | `Headers` / `{ [key: string]: string }` | `true` | `init` 选项允许你使用现有的 `Headers` 或对象字面量来初始化头信息对象。 |
 
-The return type of the constructor is a `Headers` instance.
+构造函数的返回类型是一个 `Headers` 实例。
 
-## Methods
+## 方法
 
-| name                                  | description                                                       |
-| ------------------------------------- | ----------------------------------------------------------------- |
-| `append(name: string, value: string)` | Appends a header (overwrites existing one) to the Headers object. |
-| `delete(name: string)`                | Deletes a header from the Headers object.                         |
-| `set(name: string, value: string)`    | Create a new header in the Headers object.                        |
-| `get(name: string)`                   | Get the value of the header in the Headers object.                |
-| `has(name: string)`                   | Check if the header exists in the Headers objects.                |
-| `entries()`                           | Get the headers as key-value pair. The result is iterable.        |
-| `keys()`                              | Get all the keys of the Headers object. The result is iterable.   |
+| 名称                                  | 描述                                              |
+| ------------------------------------- | ------------------------------------------------- |
+| `append(name: string, value: string)` | 向 `Headers` 对象追加一个头信息（覆盖已存在的）。 |
+| `delete(name: string)`                | 从 `Headers` 对象中删除一个头信息。               |
+| `set(name: string, value: string)`    | 在 `Headers` 对象中创建一个新的头信息。           |
+| `get(name: string)`                   | 获取 `Headers` 对象中头信息的值。                 |
+| `has(name: string)`                   | 检查 `Headers` 对象中是否存在某个头信息。         |
+| `entries()`                           | 以键值对的形式获取头信息。结果是可迭代的。        |
+| `keys()`                              | 获取 `Headers` 对象中的所有键。结果是可迭代的。   |
 
-## Example
+## 示例
 
 ```ts
-// Create a new headers object from an object literal.
+// 从对象字面量创建一个新的头信息对象。
 const myHeaders = new Headers({
   accept: "application/json",
 });
 
-// Append a header to the headers object.
+// 向头信息对象追加一个头信息。
 myHeaders.append("user-agent", "Deno Deploy");
 
-// Print the headers of the headers object.
+// 打印头信息对象的头信息。
 for (const [key, value] of myHeaders.entries()) {
   console.log(key, value);
 }
 
-// You can pass the headers instance to Response or Request constructors.
+// 你可以将头信息实例传递给 `Response` 或 `Request` 构造函数。
 const request = new Request("https://api.github.com/users/denoland", {
   method: "POST",
   headers: myHeaders,

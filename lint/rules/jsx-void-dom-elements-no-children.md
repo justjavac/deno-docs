@@ -2,19 +2,18 @@
 tags: [recommended, react, jsx, fresh]
 ---
 
-Ensure that void elements in HTML don't have any children as that is not valid
-HTML. See
-[`Void element` article on MDN](https://developer.mozilla.org/en-US/docs/Glossary/Void_element)
-for more information.
+确保 HTML 中的空元素没有任何子元素，因为这是无效的 HTML。有关更多信息，请参阅
+MDN 上的
+[`Void element` 文章](https://developer.mozilla.org/zh-CN/docs/Glossary/Void_element)。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 <br>foo</br>
 <img src="a.jpg">foo</img>
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 <br />

@@ -2,14 +2,12 @@
 tags: [recommended]
 ---
 
-Disallows async functions that have no await expression or await using
-declaration.
+禁止没有 await 表达式或 await using 声明的异步函数。
 
-In general, the primary reason to use async functions is to use await
-expressions or await using declarations inside. If an async function has
-neither, it is most likely an unintentional mistake.
+一般来说，使用异步函数的主要原因是为了在内部使用 await 表达式或 await using
+声明。如果一个异步函数两者都没有，那很可能是无意的错误。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 async function f1() {
@@ -35,7 +33,7 @@ class MyClass {
 }
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 await asyncFunction();
@@ -64,11 +62,11 @@ async function f5() {
   using = createResource();
 }
 
-// empty functions are valid
+// 空函数是有效的
 async function emptyFunction() {}
 const emptyArrowFunction = async () => {};
 
-// generators are also valid
+// 生成器也是有效的
 async function* gen() {
   console.log(42);
 }

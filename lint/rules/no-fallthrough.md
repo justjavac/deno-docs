@@ -2,17 +2,15 @@
 tags: [recommended]
 ---
 
-Disallows the implicit fallthrough of case statements.
+禁止 case 语句的隐式贯穿。
 
-Case statements without a `break` will execute their body and then fallthrough
-to the next case or default block and execute this block as well. While this is
-sometimes intentional, many times the developer has forgotten to add a break
-statement, intending only for a single case statement to be executed. This rule
-enforces that you either end each case statement with a break statement or an
-explicit comment that fallthrough was intentional. The fallthrough comment must
-contain one of `fallthrough`, `falls through` or `fall through`.
+没有 `break` 的 case 语句会执行其主体，然后贯穿到下一个 case 或 default
+块并执行该块。虽然有时这是故意的，但很多时候开发者忘记添加 break
+语句，原本只希望执行单个 case 语句。此规则强制要求你必须在每个 case
+语句的末尾添加 break 语句或显式注释，表明贯穿是故意的。贯穿注释必须包含
+`fallthrough`、`falls through` 或 `fall through` 之一。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 switch (myVar) {
@@ -22,10 +20,10 @@ switch (myVar) {
   case 2:
     console.log("2");
 }
-// If myVar = 1, outputs both `1` and `2`.  Was this intentional?
+// 如果 myVar = 1，输出 `1` 和 `2`。这是故意的吗？
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 switch (myVar) {
@@ -37,7 +35,7 @@ switch (myVar) {
     console.log("2");
     break;
 }
-// If myVar = 1, outputs only `1`
+// 如果 myVar = 1，仅输出 `1`
 
 switch (myVar) {
   case 1:
@@ -46,5 +44,5 @@ switch (myVar) {
   case 2:
     console.log("2");
 }
-// If myVar = 1, intentionally outputs both `1` and `2`
+// 如果 myVar = 1，故意输出 `1` 和 `2`
 ```

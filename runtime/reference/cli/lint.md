@@ -8,16 +8,15 @@ oldUrl:
 command: lint
 ---
 
-## Available rules
+## 可用规则
 
-For a complete list of supported rules, visit [List of rules](/lint/)
-documentation page.
+有关支持的完整规则列表，请访问 [规则列表](/lint/) 文档页面。
 
-## Ignore directives
+## 忽略指令
 
-### File level
+### 文件级别
 
-To ignore a whole file use `// deno-lint-ignore-file` at the top of the file:
+要忽略整个文件，请在文件顶部使用 `// deno-lint-ignore-file`：
 
 ```ts
 // deno-lint-ignore-file
@@ -27,23 +26,23 @@ function foo(): any {
 }
 ```
 
-You can also specify the reason for ignoring the file:
+您还可以指定忽略文件的原因：
 
 ```ts
-// deno-lint-ignore-file -- reason for ignoring
+// deno-lint-ignore-file -- 忽略原因
 
 function foo(): any {
   // ...
 }
 ```
 
-The ignore directive must be placed before the first statement or declaration:
+忽略指令必须放在第一个语句或声明之前：
 
 ```ts
 // Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
 
 /**
- * Some JS doc
+ * 一些 JS 文档
  */
 
 // deno-lint-ignore-file
@@ -55,7 +54,7 @@ function foo(): any {
 }
 ```
 
-You can also ignore certain diagnostics in the whole file:
+您还可以忽略整个文件中的某些诊断：
 
 ```ts
 // deno-lint-ignore-file no-explicit-any no-empty
@@ -65,25 +64,23 @@ function foo(): any {
 }
 ```
 
-If there are multiple `// deno-lint-ignore-file` directives, all but the first
-one are ignored:
+如果有多个 `// deno-lint-ignore-file` 指令，除第一个外，其他均无效：
 
 ```ts
-// This is effective
+// 这个有效
 // deno-lint-ignore-file no-explicit-any no-empty
 
-// But this is NOT effective
+// 但这个无效
 // deno-lint-ignore-file no-debugger
 
 function foo(): any {
-  debugger; // not ignored!
+  debugger; // 未被忽略！
 }
 ```
 
-### Line level
+### 行级别
 
-To ignore specific diagnostics use `// deno-lint-ignore <codes...>` on the
-preceding line of the offending line.
+要忽略特定诊断，请在问题行的前一行使用 `// deno-lint-ignore <codes...>`。
 
 ```ts
 // deno-lint-ignore no-explicit-any
@@ -97,43 +94,37 @@ function bar(a: any) {
 }
 ```
 
-You must specify the names of the rules to be ignored.
+您必须指定要忽略的规则名称。
 
-You can also specify the reason for ignoring the diagnostic:
+您还可以指定忽略诊断的原因：
 
 ```ts
-// deno-lint-ignore no-explicit-any -- reason for ignoring
+// deno-lint-ignore no-explicit-any -- 忽略原因
 function foo(): any {
   // ...
 }
 ```
 
-## Ignore `ban-unused-ignore` itself
+## 忽略 `ban-unused-ignore` 本身
 
-`deno lint` provides [`ban-unused-ignore` rule](/lint/rules/ban-unused-ignore/),
-which will detect ignore directives that don't ever suppress certain
-diagnostics. This is useful when you want to discover ignore directives that are
-no longer necessary after refactoring the code.
+`deno lint` 提供了
+[`ban-unused-ignore` 规则](/lint/rules/ban-unused-ignore/)，它将检测那些从未抑制某些诊断的忽略指令。这在您希望发现重构代码后不再需要的忽略指令时非常有用。
 
-In a few cases, however, you might want to ignore `ban-unused-ignore` rule
-itself. One of the typical cases would be when working with auto-generated
-files; it makes sense to add file-level ignore directives for some rules, and
-there's almost no need for detecting unused directives via `ban-unused-ignore`
-in this case.
+然而，在某些情况下，您可能希望忽略 `ban-unused-ignore`
+规则本身。一个典型的例子是处理自动生成的文件时；为某些规则添加文件级别的忽略指令是有意义的，在这种情况下，几乎不需要通过
+`ban-unused-ignore` 检测未使用的指令。
 
-You can use `// deno-lint-ignore-file ban-unused-ignore` as always if you want
-to suppress the rule for a whole file:
+如果您想在整个文件中抑制该规则，可以像往常一样使用
+`// deno-lint-ignore-file ban-unused-ignore`：
 
 ```ts
 // deno-lint-ignore-file ban-unused-ignore no-explicit-any
 
-// `no-explicit-any` isn't used but you'll get no diagnostics because of ignoring
-// `ban-unused-ignore`
+// `no-explicit-any` 未被使用，但由于忽略了 `ban-unused-ignore`，您不会收到任何诊断信息
 console.log(42);
 ```
 
-Do note that ignoring `ban-unused-ignore` itself only works via file-level
-ignore directives. This means that per line directives, like
-`// deno-lint-ignore ban-unused-ignore`, don't work at all. If you want to
-ignore `ban-unused-ignore` for some special reasons, make sure to add it as a
-file-level ignore directive.
+请注意，忽略 `ban-unused-ignore`
+本身仅通过文件级别的忽略指令有效。这意味着每行指令，如
+`// deno-lint-ignore ban-unused-ignore`，根本不起作用。如果您因某些特殊原因想要忽略
+`ban-unused-ignore`，请确保将其添加为文件级别的忽略指令。

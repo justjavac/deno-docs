@@ -1,82 +1,79 @@
 ---
-title: "`deno run`, run a file"
+title: "`deno run`，运行一个文件"
 oldUrl: /runtime/manual/tools/run/
 command: run
 ---
 
-## Usage
+## 用法
 
-To run [this file](https://docs.deno.com/examples/scripts/hello_world.ts) use:
+要运行
+[这个文件](https://docs.denohub.com/examples/scripts/hello_world.ts)，请使用：
 
 ```console
-deno run https://docs.deno.com/examples/scripts/hello_world.ts
+deno run https://docs.denohub.com/examples/scripts/hello_world.ts
 ```
 
-You can also run files locally. Ensure that you are in the correct directory and
-use:
+你也可以在本地运行文件。确保你在正确的目录下，并使用：
 
 ```console
 deno run hello-world.ts
 ```
 
-By default, Deno runs programs in a sandbox without access to disk, network or
-ability to spawn subprocesses. This is because the Deno runtime is
-[secure by default](/runtime/fundamentals/security/). You can grant or deny
-required permissions using the
-[`--allow-*` and `--deny-*` flags](/runtime/fundamentals/security/#permissions-list).
+默认情况下，Deno
+在沙盒中运行程序，没有访问磁盘、网络或生成子进程的权限。这是因为 Deno 运行时是
+[默认安全的](/runtime/fundamentals/security/)。你可以使用
+[`--allow-*` 和 `--deny-*` 标志](/runtime/fundamentals/security/#permissions-list)
+来授予或拒绝所需的权限。
 
-### Permissions examples
+### 权限示例
 
-Grant permission to read from disk and listen to network:
+授予从磁盘读取和监听网络的权限：
 
 ```console
 deno run --allow-read --allow-net server.ts
 ```
 
-Grant permission to read allow-listed files from disk:
+授予从磁盘读取允许列表中的文件的权限：
 
 ```console
 deno run --allow-read=/etc server.ts
 ```
 
-Grant all permissions _this is not recommended and should only be used for
-testing_:
+授予所有权限 _不推荐这样做，仅用于测试_：
 
 ```console
 deno run -A server.ts
 ```
 
-If your project requires multiple security flags you should consider using a
-[`deno task`](/runtime/reference/cli/task/) to execute them.
+如果你的项目需要多个安全标志，你应该考虑使用
+[`deno task`](/runtime/reference/cli/task/) 来执行它们。
 
-## Watch
+## 监听
 
-To watch for file changes and restart process automatically use the `--watch`
-flag. Deno's built in application watcher will restart your application as soon
-as files are changed.
+要监听文件更改并自动重启进程，请使用 `--watch` 标志。Deno
+内置的应用程序监听器会在文件更改时立即重启你的应用程序。
 
-_Be sure to put the flag before the file name_ eg:
+_确保将标志放在文件名之前_，例如：
 
 ```console
 deno run --allow-net --watch server.ts
 ```
 
-Deno's watcher will notify you of changes in the console, and will warn in the
-console if there are errors while you work.
+Deno 的监听器会在控制台中通知你更改，并在你工作时在控制台中警告错误。
 
-## Running a package.json script
+## 运行 package.json 脚本
 
-`package.json` scripts can be executed with the
-[`deno task`](/runtime/reference/cli/task/) command.
+`package.json` 脚本可以使用 [`deno task`](/runtime/reference/cli/task/)
+命令执行。
 
-## Running code from stdin
+## 从 stdin 运行代码
 
-You can pipe code from stdin and run it immediately with:
+你可以从 stdin 管道代码并立即运行它：
 
 ```console
-curl https://docs.deno.com/examples/scripts/hello_world.ts | deno run -
+curl https://docs.denohub.com/examples/scripts/hello_world.ts | deno run -
 ```
 
-## Terminate run
+## 终止运行
 
-To stop the run command use `ctrl + c`.
+要停止运行命令，请使用 `ctrl + c`。

@@ -2,12 +2,11 @@
 tags: [recommended]
 ---
 
-Disallows using a class member function name more than once.
+禁止在类中多次使用相同的成员函数名称。
 
-Declaring a function of the same name twice in a class will cause the previous
-declaration(s) to be overwritten, causing unexpected behaviors.
+在类中两次声明相同名称的函数会导致之前的声明被覆盖，从而引发意外行为。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 class Foo {
@@ -16,7 +15,7 @@ class Foo {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 class Foo {

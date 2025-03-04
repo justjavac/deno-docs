@@ -3,7 +3,7 @@
  * @difficulty intermediate
  * @tags cli
  * @run --allow-net <url>
- * @resource {https://docs.deno.com/api/deno/~/Deno.connect} Doc: Deno.connect
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.connect} Doc: Deno.connect
  * @resource {/examples/tcp_listener} Example: TCP Listener
  * @group Network
  *

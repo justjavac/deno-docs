@@ -35,9 +35,9 @@ Deno Deploy 会在以下情况下跳过压缩：
 当您在响应中设置 Etag 头时，如果我们对响应体应用了压缩，我们会将该头的值转换为
 Weak Etag。如果它已经是 Weak Etag，我们不会修改该头。
 
-[accept-encoding]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding
-[cache-control]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
-[content-encoding]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
-[content-type]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
-[no-transform]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#other
-[content-range]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range
+[accept-encoding]: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Encoding
+[cache-control]: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Cache-Control
+[content-encoding]: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Encoding
+[content-type]: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Type
+[no-transform]: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Cache-Control#other
+[content-range]: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Range

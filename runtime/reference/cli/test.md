@@ -4,40 +4,37 @@ oldUrl: /runtime/manual/tools/test/
 command: test
 ---
 
-## Additional information
+## 附加信息
 
-It can be executed in watch mode (`--watch`), supports parallel execution
-(`--parallel`), and can be configured to run tests in a random order with
-(`--shuffle`). Additionally, there is built in support for code coverage
-(`--coverage`) and leak detection (`--trace-leaks`).
+它可以在监视模式下执行（`--watch`），支持并行执行（`--parallel`），并且可以配置为以随机顺序运行测试（`--shuffle`）。此外，还内置了对代码覆盖率（`--coverage`）和内存泄漏检测（`--trace-leaks`）的支持。
 
-## Examples
+## 示例
 
-Run tests
+运行测试
 
 ```bash
 deno test
 ```
 
-Run tests in specific files
+运行特定文件中的测试
 
 ```bash
 deno test src/fetch_test.ts src/signal_test.ts
 ```
 
-Run tests where glob matches
+运行匹配 glob 模式的测试
 
 ```bash
 deno test src/*.test.ts
 ```
 
-Run tests and skip type-checking
+运行测试并跳过类型检查
 
 ```bash
 deno test --no-check
 ```
 
-Run tests, re-running on file change
+运行测试，并在文件更改时重新运行
 
 ```bash
 deno test --watch

@@ -15,34 +15,34 @@ oldUrl:
 
 ### Web API
 
-- [`console`](https://developer.mozilla.org/en-US/docs/Web/API/console)
-- [`atob`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/atob)
-- [`btoa`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa)
-- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- [`console`](https://developer.mozilla.org/zh-CN/docs/Web/API/console)
+- [`atob`](https://developer.mozilla.org/zh-CN/docs/Web/API/WindowOrWorkerGlobalScope/atob)
+- [`btoa`](https://developer.mozilla.org/zh-CN/docs/Web/API/WindowOrWorkerGlobalScope/btoa)
+- [Fetch API](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API)
   - `fetch`
   - `Request`
   - `Response`
   - `URL`
   - `File`
   - `Blob`
-- [TextEncoder](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder)
-- [TextDecoder](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder)
-- [TextEncoderStream](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoderStream)
-- [TextDecoderStream](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoderStream)
-- [Performance](https://developer.mozilla.org/en-US/docs/Web/API/Performance)
-- [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Crypto)
+- [TextEncoder](https://developer.mozilla.org/zh-CN/docs/Web/API/TextEncoder)
+- [TextDecoder](https://developer.mozilla.org/zh-CN/docs/Web/API/TextDecoder)
+- [TextEncoderStream](https://developer.mozilla.org/zh-CN/docs/Web/API/TextEncoderStream)
+- [TextDecoderStream](https://developer.mozilla.org/zh-CN/docs/Web/API/TextDecoderStream)
+- [Performance](https://developer.mozilla.org/zh-CN/docs/Web/API/Performance)
+- [Web Crypto API](https://developer.mozilla.org/zh-CN/docs/Web/API/Crypto)
   - `randomUUID()`
   - `getRandomValues()`
-  - [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto)
-- [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
-- [Timers](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout)
+  - [SubtleCrypto](https://developer.mozilla.org/zh-CN/docs/Web/API/SubtleCrypto)
+- [WebSocket API](https://developer.mozilla.org/zh-CN/docs/Web/API/WebSocket)
+- [Timers](https://developer.mozilla.org/zh-CN/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout)
   (`setTimeout`, `clearTimeout`, 和 `setInterval`)
-- [Streams API](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API)
+- [Streams API](https://developer.mozilla.org/zh-CN/docs/Web/API/Streams_API)
   - `ReadableStream`
   - `WritableStream`
   - `TransformStream`
-- [URLPattern API](https://developer.mozilla.org/en-US/docs/Web/API/URLPattern)
-- [Import Maps](https://docs.deno.com/runtime/manual/basics/import_maps/)
+- [URLPattern API](https://developer.mozilla.org/zh-CN/docs/Web/API/URLPattern)
+- [Import Maps](https://docs.denohub.com/runtime/manual/basics/import_maps/)
   - 注意：`import maps` 目前仅通过
     [deployctl](https://github.com/denoland/deployctl) 或
     [deployctl GitHub Action](https://github.com/denoland/deployctl/blob/main/action/README.md)
@@ -52,42 +52,43 @@ oldUrl:
 
 > 注意：在 Deploy 中仅提供 Deno 的稳定 API。
 
-- [`Deno.env`](https://docs.deno.com/api/deno/~/Deno.env) -
+- [`Deno.env`](https://docs.denohub.com/api/deno/~/Deno.env) -
   与环境变量（密钥）交互。
   - `get(key: string): string | undefined` - 获取环境变量的值。
   - `toObject(): { [key: string]: string }` - 将所有环境变量作为对象获取。
-- [`Deno.connect`](https://docs.deno.com/api/deno/~/Deno.connect) - 连接到 TCP
-  套接字。
-- [`Deno.connectTls`](https://docs.deno.com/api/deno/~/Deno.connectTls) - 使用
-  TLS 连接到 TCP 套接字。
-- [`Deno.startTls`](https://docs.deno.com/api/deno/~/Deno.startTls) - 从现有的
-  TCP 连接启动 TLS 握手。
-- [`Deno.resolveDns`](https://docs.deno.com/api/deno/~/Deno.resolveDns) - 进行
-  DNS 查询
+- [`Deno.connect`](https://docs.denohub.com/api/deno/~/Deno.connect) - 连接到
+  TCP 套接字。
+- [`Deno.connectTls`](https://docs.denohub.com/api/deno/~/Deno.connectTls) -
+  使用 TLS 连接到 TCP 套接字。
+- [`Deno.startTls`](https://docs.denohub.com/api/deno/~/Deno.startTls) -
+  从现有的 TCP 连接启动 TLS 握手。
+- [`Deno.resolveDns`](https://docs.denohub.com/api/deno/~/Deno.resolveDns) -
+  进行 DNS 查询
 - 文件系统 API
-  - [`Deno.cwd`](https://docs.deno.com/api/deno/~/Deno.cwd) - 获取当前工作目录
-  - [`Deno.readDir`](https://docs.deno.com/api/deno/~/Deno.readDir) -
+  - [`Deno.cwd`](https://docs.denohub.com/api/deno/~/Deno.cwd) -
+    获取当前工作目录
+  - [`Deno.readDir`](https://docs.denohub.com/api/deno/~/Deno.readDir) -
     获取目录列表
-  - [`Deno.readFile`](https://docs.deno.com/api/deno/~/Deno.readFile) -
+  - [`Deno.readFile`](https://docs.denohub.com/api/deno/~/Deno.readFile) -
     将文件读入内存
-  - [`Deno.readTextFile`](https://docs.deno.com/api/deno/~/Deno.readTextFile) -
+  - [`Deno.readTextFile`](https://docs.denohub.com/api/deno/~/Deno.readTextFile) -
     将文本文件读入内存
-  - [`Deno.open`](https://docs.deno.com/api/deno/~/Deno.open) -
+  - [`Deno.open`](https://docs.denohub.com/api/deno/~/Deno.open) -
     打开文件以进行流式读取
-  - [`Deno.stat`](https://docs.deno.com/api/deno/~/Deno.stat) -
+  - [`Deno.stat`](https://docs.denohub.com/api/deno/~/Deno.stat) -
     获取文件系统条目信息
-  - [`Deno.lstat`](https://docs.deno.com/api/deno/~/Deno.lstat) -
+  - [`Deno.lstat`](https://docs.denohub.com/api/deno/~/Deno.lstat) -
     获取文件系统条目信息而不跟随符号链接
-  - [`Deno.realPath`](https://docs.deno.com/api/deno/~/Deno.realPath) -
+  - [`Deno.realPath`](https://docs.denohub.com/api/deno/~/Deno.realPath) -
     解析符号链接后获取文件的真实路径
-  - [`Deno.readLink`](https://docs.deno.com/api/deno/~/Deno.readLink) -
+  - [`Deno.readLink`](https://docs.denohub.com/api/deno/~/Deno.readLink) -
     获取给定符号链接的目标路径
 
 ## 未来支持
 
 未来将添加以下 API：
 
-- [Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache)
+- [Cache API](https://developer.mozilla.org/zh-CN/docs/Web/API/Cache)
 - UDP API：
   - `Deno.connectDatagram` 用于出站 UDP 套接字
 - 使用 `Deno.createHttpClient` 自定义 `fetch` 选项

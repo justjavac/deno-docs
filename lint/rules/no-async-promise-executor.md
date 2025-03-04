@@ -2,30 +2,27 @@
 tags: [recommended]
 ---
 
-Requires that async promise executor functions are not used.
+要求不使用异步的 Promise 执行器函数。
 
-Promise constructors take an executor function as an argument with `resolve` and
-`reject` parameters that can be used to control the state of the created
-Promise. This function is allowed to be async but this is generally not a good
-idea for several reasons:
+Promise 构造函数接受一个执行器函数作为参数，该函数带有 `resolve` 和 `reject`
+参数，可用于控制创建的 Promise
+的状态。虽然允许此函数是异步的，但通常不建议这样做，原因如下：
 
-- If an async executor function throws an error, the error will be lost and
-  won't cause the newly-constructed Promise to reject. This could make it
-  difficult to debug and handle some errors.
-- If an async Promise executor function is using await, then this is usually a
-  sign that it is not actually necessary to use the new Promise constructor and
-  the code can be restructured to avoid the use of a promise, or the scope of
-  the new Promise constructor can be reduced, extracting the async code and
-  changing it to be synchronous.
+- 如果异步执行器函数抛出错误，该错误将会丢失，并且不会导致新创建的 Promise
+  被拒绝。这可能会使调试和处理某些错误变得困难。
+- 如果异步的 Promise 执行器函数使用了
+  `await`，那么这通常表明实际上没有必要使用新的 Promise
+  构造函数，代码可以重构以避免使用 Promise，或者可以减少新 Promise
+  构造函数的作用范围，提取异步代码并将其改为同步。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 new Promise(async function (resolve, reject) {});
 new Promise(async (resolve, reject) => {});
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 new Promise(function (resolve, reject) {});

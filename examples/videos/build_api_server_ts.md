@@ -1,31 +1,31 @@
 ---
-title: "Build an API server with TypeScript"
+title: "使用 TypeScript 构建 API 服务器"
 url: /examples/build_api_server_ts/
 videoUrl: https://www.youtube.com/watch?v=J8kZ-s-5-ms&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=13
 layout: video.tsx
 ---
 
-## Description of video
+## 视频描述
 
-Use the light-weight Hono framework (spiritual successor to Express) to build a
-RESTful API server that supports CRUD operations with a database.
+使用轻量级的 Hono 框架（Express 的精神继承者）构建一个支持 CRUD 操作的 RESTful
+API 服务器，并与数据库交互。
 
-## Transcript and code
+## 文字稿和代码
 
-If you’ve worked on a Node project in the past, you might have used Express to
-set up a web server or to host an API. Let’s take a look at how we might do
-something similar by using Hono, a small simple framework that we can use with
-any runtime, but we’re going to use it with Deno. Basic Hono Setup
+如果你过去曾参与过 Node 项目，你可能使用过 Express 来设置 Web 服务器或托管
+API。让我们看看如何使用 Hono 实现类似的功能，Hono
+是一个小巧简单的框架，可以与任何运行时一起使用，但我们将它与 Deno
+结合使用。基本的 Hono 设置
 
-We’ll add Hono to our project with [JSR](https://jsr.io):
+我们将通过 [JSR](https://jsr.io) 将 Hono 添加到项目中：
 
 ```shell
 deno add jsr:@hono/hono
 ```
 
-That will then be added to the deno.json file.
+这将会被添加到 deno.json 文件中。
 
-Then in our main file, we’ll create the basic Hono setup.
+然后，在我们的主文件中，我们将创建基本的 Hono 设置。
 
 ```ts
 import { Hono } from "@hono/hono";
@@ -39,20 +39,16 @@ app.get("/", (c) => {
 Deno.serve(app.fetch);
 ```
 
-Let’s run that `deno run --allow-net main.ts` and we’ll see it in the browser at
-`localhost:8000`.
+让我们运行 `deno run --allow-net main.ts`，然后在浏览器中访问 `localhost:8000`。
 
-## CRUD Operations
+## CRUD 操作
 
-Now that we’ve set up the simple server with Hono, we can start to build out our
-database.
+现在我们已经用 Hono 设置了简单的服务器，我们可以开始构建数据库。
 
-We’re going to use localStorage for this, but keep in mind that you can use any
-persistent data storage with Deno - postgres, sql - Wherever you like to store
-your data.
+我们将使用 localStorage，但请记住，你可以使用任何持久化数据存储与 Deno 结合使用
+—— postgres、sql —— 无论你喜欢在哪里存储数据。
 
-Let’s start by creating a container for some data. We’ll start with an interface
-that describes a tree type:
+让我们从创建一个数据容器开始。我们将从一个描述树类型的接口开始：
 
 ```ts
 interface Tree {
@@ -63,7 +59,7 @@ interface Tree {
 }
 ```
 
-Then we’ll create some data:
+然后我们创建一些数据：
 
 ```ts
 const oak: Tree = {
@@ -74,8 +70,7 @@ const oak: Tree = {
 };
 ```
 
-Then we’re going to create a few helper functions that will help us interact
-with localStorage:
+然后我们将创建一些辅助函数，帮助我们与 localStorage 交互：
 
 ```ts
 const setItem = (key: string, value: Tree) => {
@@ -88,7 +83,7 @@ const getItem = (key: string): Tree | null => {
 };
 ```
 
-Now let’s use them:
+现在让我们使用它们：
 
 ```ts
 setItem(`trees_${oak.id}`, oak);
@@ -100,9 +95,8 @@ console.log(newTree);
 deno --allow-net main.ts
 ```
 
-- `setItem` is adding the tree
-- You can also use `setItem` to update the record -- if the key already exists
-  the value will be updated
+- `setItem` 正在添加树
+- 你也可以使用 `setItem` 更新记录 —— 如果键已经存在，值将被更新
 
 ```ts
 const oak: Tree = {
@@ -115,8 +109,8 @@ const oak: Tree = {
 localStorage.setItem(`trees_${oak.id}`, JSON.stringify(oak));
 ```
 
-Ok, so now let’s use Hono’s routing to create some REST API routes now that we
-understand how to work with these database methods:
+好的，现在让我们使用 Hono 的路由功能创建一些 REST API
+路由，既然我们已经了解了如何使用这些数据库方法：
 
 ```ts
 app.post("/trees", async (c) => {
@@ -129,7 +123,7 @@ app.post("/trees", async (c) => {
 });
 ```
 
-To test this out we’ll send a curl request:
+为了测试这一点，我们将发送一个 curl 请求：
 
 ```shell
 curl -X POST http://localhost:8000/trees \
@@ -137,7 +131,7 @@ curl -X POST http://localhost:8000/trees \
   -d '{"id": "2", "species": "Willow", "age": 100, "location": "Juniper Park"}'
 ```
 
-To prove that we created that tree, let’s get the data by its ID:
+为了证明我们创建了那棵树，让我们通过其 ID 获取数据：
 
 ```ts
 app.get("/trees/:id", async (c) => {
@@ -150,16 +144,15 @@ app.get("/trees/:id", async (c) => {
 });
 ```
 
-To test that, let’s run a curl request for the data
+为了测试这一点，让我们运行一个 curl 请求来获取数据：
 
 ```shell
 curl http://localhost:8000/trees/1
 ```
 
-Or you can go to it in the browser: `http://localhost:8000/trees/1`
+或者你可以在浏览器中访问：`http://localhost:8000/trees/1`
 
-We can update a tree of course. Kind of like before but we’ll create a route for
-that:
+当然，我们可以更新一棵树。类似于之前的方式，但我们将为此创建一个路由：
 
 ```ts
 app.put("/trees/:id", (c) => {
@@ -173,8 +166,7 @@ app.put("/trees/:id", (c) => {
 });
 ```
 
-And we’ll change the location because we’re going to PUT this tree somewhere
-else:
+我们将更改位置，因为我们要将这棵树放到其他地方：
 
 ```shell
 curl -X PUT http://localhost:8000/trees/1 \
@@ -182,7 +174,7 @@ curl -X PUT http://localhost:8000/trees/1 \
   -d '{"species": "Oak", "age": 8, "location": "Theft Park"}'
 ```
 
-Finally if we wanted to delete a tree we can using the Hono delete function.
+最后，如果我们想删除一棵树，可以使用 Hono 的删除功能。
 
 ```ts
 const deleteItem = (key: string) => {
@@ -198,14 +190,14 @@ app.delete("/trees/:id", (c) => {
 });
 ```
 
-We’ve used Deno in combination with Hono to build a little REST API for our tree
-data. If we wanted to deploy this, we could and we could deploy with zero config
-to [Deno deploy](https://deno.com/deploy).
+我们已经使用 Deno 和 Hono 结合构建了一个用于树数据的小型 REST
+API。如果我们想部署它，我们可以零配置地部署到
+[Deno deploy](https://deno.com/deploy)。
 
-You can deploy this to any cloud VPS like AWS, GCP, Digital Ocean, with the
-[official Docker image](https://github.com/denoland/deno_docker)
+你可以将此部署到任何云 VPS，如 AWS、GCP、Digital Ocean，使用
+[官方 Docker 镜像](https://github.com/denoland/deno_docker)
 
-## Complete code sample
+## 完整代码示例
 
 ```ts
 import { Hono } from "@hono/hono";

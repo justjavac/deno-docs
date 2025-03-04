@@ -1,22 +1,18 @@
 ---
-title: "Deno documentation"
+title: "Deno 文档"
 ---
 
-We welcome and appreciate contributions to the Deno documentation. If you find
-an issue, or want to add to the docs, each page has an "Edit this page" button
-at the bottom of the page. Clicking this button will take you to the source file
-for that page in the [Deno docs repository](https://github.com/denoland/docs/).
-You can then make your changes and submit a pull request.
+我们欢迎并感谢对 Deno
+文档的贡献。如果您发现问题，或想要添加内容，每个页面底部都有一个“编辑此页面”按钮。点击此按钮将带您进入
+[Deno 文档仓库](https://github.com/denoland/docs/)
+中该页面的源文件。然后您可以进行更改并提交拉取请求。
 
-Some pages in the Deno documentation are generated from source files in the Deno
-repository. These pages are not directly editable:
+Deno 文档中的某些页面是从 Deno 仓库中的源文件生成的。这些页面无法直接编辑：
 
-- The [API reference](/api/deno/) pages are generated from type definitions in
-  the Deno repository.
-- The [CLI reference](/runtime/reference/cli/) pages for each individual command
-  are generated from source files in the Deno repository.
+- [API 参考](/api/deno/) 页面是从 Deno 仓库中的类型定义生成的。
+- 每个单独命令的 [CLI 参考](/runtime/reference/cli/) 页面是从 Deno
+  仓库中的源文件生成的。
 
-If you find an issue with one of these pages, you can either submit a pull
-request to the Deno repository. Or raise an issue in the
-[Deno docs repository](https://github.com/denoland/docs/issues) and we'll get it
-fixed.
+如果您发现这些页面中的问题，您可以向 Deno 仓库提交拉取请求。或者在
+[Deno 文档仓库](https://github.com/denoland/docs/issues)
+中提出问题，我们会尽快修复。

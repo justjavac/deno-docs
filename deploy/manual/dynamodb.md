@@ -1,54 +1,50 @@
 ---
-title: "Connect to DynamoDB"
+title: "连接到 DynamoDB"
 ---
 
-Amazon DynamoDB is a fully managed NoSQL database. To persist data to DynamoDB,
-follow the steps below:
+Amazon DynamoDB 是一个完全托管的 NoSQL 数据库。要将数据持久化到
+DynamoDB，请按照以下步骤操作：
 
-The tutorial assumes that you have an AWS and Deno Deploy account.
+本教程假设您已经拥有 AWS 和 Deno Deploy 账户。
 
-You can find a more comprehensive tutorial that builds a sample application on
-top of DynamoDB [here](../tutorials/tutorial-dynamodb).
+您可以在此处找到一个更全面的教程，该教程在 DynamoDB 之上构建了一个示例应用程序
+[这里](../tutorials/tutorial-dynamodb)。
 
-## Gather credentials from DynamoDB
+## 从 DynamoDB 获取凭证
 
-The first step in the process is to generate AWS credentials to programmatically
-access DynamoDB.
+该过程的第一步是生成 AWS 凭证，以便以编程方式访问 DynamoDB。
 
-Generate Credentials:
+生成凭证：
 
-1. Go to https://console.aws.amazon.com/iam/ and go to the "Users" section.
-2. Click on the **Add user** button, fill the **User name** field (maybe use
-   `denamo`), and select **Programmatic access** type.
-3. Click on **Next: Permissions**, then on **Attach existing policies
-   directly**, search for `AmazonDynamoDBFullAccess` and select it.
-4. Click on **Next: Tags**, then on **Next: Review** and finally **Create
-   user**.
-5. Click on **Download .csv** button to download the credentials.
+1. 访问 https://console.aws.amazon.com/iam/ 并进入 "Users" 部分。
+2. 点击 **Add user** 按钮，填写 **User name** 字段（可以使用 `denamo`），并选择
+   **Programmatic access** 类型。
+3. 点击 **Next: Permissions**，然后点击 **Attach existing policies
+   directly**，搜索 `AmazonDynamoDBFullAccess` 并选择它。
+4. 点击 **Next: Tags**，然后点击 **Next: Review**，最后点击 **Create user**。
+5. 点击 **Download .csv** 按钮以下载凭证。
 
-## Create a project in Deno Deploy
+## 在 Deno Deploy 中创建项目
 
-Next, let's create a project in Deno Deploy and set it up with the requisite
-environment variables:
+接下来，让我们在 Deno Deploy 中创建一个项目，并设置必要的环境变量：
 
-1. Go to [https://dash.deno.com/new](https://dash.deno.com/new) (Sign in with
-   GitHub if you didn't already) and click on **+ Empty Project** under **Deploy
-   from the command line**.
-2. Now click on the **Settings** button available on the project page.
-3. Navigate to **Environment Variables** Section and add the following secrets.
+1. 访问
+   [https://dash.deno.com/new](https://dash.deno.com/new)（如果尚未登录，请使用
+   GitHub 登录），然后在 **Deploy from the command line** 下点击 **+ Empty
+   Project**。
+2. 现在点击项目页面上的 **Settings** 按钮。
+3. 导航到 **Environment Variables** 部分并添加以下密钥。
 
-- `AWS_ACCESS_KEY_ID` - Use the value that's available under **Access key ID**
-  column in the downloaded CSV.
-- `AWS_SECRET_ACCESS_KEY` - Use the value that's available under **Secret access
-  key** column in the downloaded CSV.
+- `AWS_ACCESS_KEY_ID` - 使用下载的 CSV 文件中 **Access key ID** 列下的值。
+- `AWS_SECRET_ACCESS_KEY` - 使用下载的 CSV 文件中 **Secret access key**
+  列下的值。
 
-## Write code that connects to DynamoDB
+## 编写连接到 DynamoDB 的代码
 
-AWS has an
-[official SDK](https://www.npmjs.com/package/@aws-sdk/client-dynamodb) that
-works with browsers. As most Deno Deploy's APIs are similar to browsers', the
-same SDK works with Deno Deploy. To use the SDK in Deno, import from a cdn like
-below and create a client:
+AWS 提供了一个
+[官方 SDK](https://www.npmjs.com/package/@aws-sdk/client-dynamodb)，该 SDK
+适用于浏览器。由于大多数 Deno Deploy 的 API 与浏览器的 API 相似，因此相同的 SDK
+也适用于 Deno Deploy。要在 Deno 中使用该 SDK，请从 CDN 导入并创建一个客户端：
 
 ```js
 import {
@@ -57,10 +53,8 @@ import {
   PutItemCommand,
 } from "https://esm.sh/@aws-sdk/client-dynamodb?dts";
 
-// Create a client instance by providing your region information.
-// The credentials are automatically obtained from environment variables which
-// we set during our project creation step on Deno Deploy, so we don't have to
-// pass them manually here.
+// 通过提供您的区域信息创建一个客户端实例。
+// 凭证会自动从我们在 Deno Deploy 项目创建步骤中设置的环境变量中获取，因此我们无需在此手动传递它们。
 const client = new ApiFactory().makeNew(DynamoDB);
 
 serve({
@@ -71,33 +65,30 @@ async function handleRequest(request) {
   // async/await.
   try {
     const data = await client.send(command);
-    // process data.
+    // 处理数据。
   } catch (error) {
-    // error handling.
+    // 错误处理。
   } finally {
-    // finally.
+    // 最终处理。
   }
 }
 ```
 
-## Deploy application to Deno Deploy
+## 将应用程序部署到 Deno Deploy
 
-Once you have finished writing your application, you can deploy it on Deno
-Deploy.
+完成应用程序编写后，您可以将其部署到 Deno Deploy。
 
-To do this, go back to your project page at
-`https://dash.deno.com/projects/<project-name>`.
+为此，请返回您的项目页面 `https://dash.deno.com/projects/<project-name>`。
 
-You should see a couple of options to deploy:
+您应该会看到几个部署选项：
 
-- [Github integration](ci_github)
+- [Github 集成](ci_github)
 - [`deployctl`](./deployctl.md)
   ```sh
   deployctl deploy --project=<project-name> <application-file-name>
   ```
 
-Unless you want to add a build step, we recommend that you select the Github
-integration.
+除非您想添加构建步骤，否则我们建议您选择 Github 集成。
 
-For more details on the different ways to deploy on Deno Deploy and the
-different configuration options, read [here](how-to-deploy).
+有关在 Deno Deploy 上部署的不同方式及不同配置选项的更多详细信息，请阅读
+[这里](how-to-deploy)。

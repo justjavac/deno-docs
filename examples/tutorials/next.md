@@ -1,48 +1,45 @@
 ---
-title: "Build a Next.js App"
+title: "构建一个 Next.js 应用"
 url: /examples/next_tutorial/
 oldUrl:
   - /runtime/tutorials/how_to_with_npm/next/
 ---
 
-[Next.js](https://nextjs.org/) is a popular framework for building
-server-side-rendered applications. It is built on top of React and provides a
-lot of features out of the box.
+[Next.js](https://nextjs.org/)
+是一个流行的用于构建服务器端渲染应用的框架。它基于 React
+构建，并提供了许多开箱即用的功能。
 
-In this tutorial, we'll build a simple Next.js application and run it with Deno.
-The app will display a list of dinosaurs. When you click on one, it'll take you
-to a dinosaur page with more details.
+在本教程中，我们将构建一个简单的 Next.js 应用，并使用 Deno
+运行它。该应用将显示一个恐龙列表。当你点击其中一个时，它会带你到一个包含更多详细信息的恐龙页面。
 
-![demo of the app](./images/how-to/next/dinoapp.gif)
+![应用演示](./images/how-to/next/dinoapp.gif)
 
-Start by verifying that you have the latest version of Deno installed, you will
-need at least Deno 1.46.0:
+首先，请确保你已安装最新版本的 Deno，至少需要 Deno 1.46.0：
 
 ```sh
 deno --version
 ```
 
-## Create a Next.js app with Deno
+## 使用 Deno 创建 Next.js 应用
 
-Next provides a CLI tool to quickly scaffold a new Next.js app. In your terminal
-run the following command to create a new Next.js app with Deno:
+Next 提供了一个 CLI 工具来快速搭建一个新的 Next.js
+应用。在终端中运行以下命令以使用 Deno 创建一个新的 Next.js 应用：
 
 ```sh
 deno run -A npm:create-next-app@latest
 ```
 
-When prompted, select the default options to create a new Next.js app with
-TypeScript.
+当提示时，选择默认选项以创建一个带有 TypeScript 的新 Next.js 应用。
 
-Then, `cd` into the newly created project folder and run the following command
-to install the dependencies
+然后，`cd` 进入新创建的项目文件夹，并运行以下命令以安装依赖项：
 
 ```sh
 deno install
 ```
 
-Next.js has some dependencies that still rely on `Object.prototype.__proto__`,
-so you need to allow it. In a new `deno.json` file, add the following lines:
+Next.js 有一些依赖项仍然依赖于
+`Object.prototype.__proto__`，因此你需要允许它。在一个新的 `deno.json`
+文件中，添加以下行：
 
 ```json deno.json
 {
@@ -50,36 +47,33 @@ so you need to allow it. In a new `deno.json` file, add the following lines:
 }
 ```
 
-Now you can serve your new Next.js app:
+现在你可以启动你的新 Next.js 应用：
 
 ```sh
 deno task dev
 ```
 
-This will start the Next.js server, click the output link to localhost to see
-your app in the browser.
+这将启动 Next.js 服务器，点击输出的 localhost 链接以在浏览器中查看你的应用。
 
-## Add a backend
+## 添加后端
 
-The next step is to add a backend API. We'll create a very simple API that
-returns information about dinosaurs.
+下一步是添加一个后端 API。我们将创建一个非常简单的 API，返回有关恐龙的信息。
 
-We'll use Next.js's
-[built in API route handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)
-to set up our dinosaur API. Next.js uses a file-system-based router, where the
-folder structure directly defines the routes.
+我们将使用 Next.js
+的[内置 API 路由处理器](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)来设置我们的恐龙
+API。Next.js 使用基于文件系统的路由器，其中文件夹结构直接定义了路由。
 
-We'll define three routes, The first route at `/api` will return the string
-`Welcome to the dinosaur API`, then we'll set up `/api/dinosaurs` to return all
-the dinosaurs, and finally `/api/dinosaur/[dinosaur]` to return a specific
-dinosaur based on the name in the URL.
+我们将定义三个路由，第一个路由在 `/api` 将返回字符串
+`Welcome to the dinosaur API`，然后我们将设置 `/api/dinosaurs`
+以返回所有恐龙，最后 `/api/dinosaur/[dinosaur]` 将根据 URL
+中的名称返回特定的恐龙。
 
 ### /api/
 
-In the `app` folder of your new project, create an `api` folder. In that folder,
-create a `route.ts` file, which will handle requests to `/api/.
+在你的新项目的 `app` 文件夹中，创建一个 `api` 文件夹。在该文件夹中，创建一个
+`route.ts` 文件，它将处理对 `/api/` 的请求。
 
-Copy and paste the following code into the `api/route.ts` file:
+将以下代码复制并粘贴到 `api/route.ts` 文件中：
 
 ```ts title="route.ts"
 export async function GET() {
@@ -87,20 +81,18 @@ export async function GET() {
 }
 ```
 
-This code defines a simple route handler that returns a JSON response with the
-string `welcome to the dinosaur API`.
+这段代码定义了一个简单的路由处理器，返回一个包含字符串
+`welcome to the dinosaur API` 的 JSON 响应。
 
 ### /api/dinosaurs
 
-In the `api` folder, create a folder called `dinosaurs`. In that folder, make a
-`data.json` file, which will contain the hard coded dinosaur data. Copy and
-paste
-[this json file](https://raw.githubusercontent.com/denoland/deno-vue-example/main/api/data.json)
-into the `data.json` file.
+在 `api` 文件夹中，创建一个名为 `dinosaurs` 的文件夹。在该文件夹中，创建一个
+`data.json`
+文件，其中将包含硬编码的恐龙数据。将[这个 json 文件](https://raw.githubusercontent.com/denoland/deno-vue-example/main/api/data.json)复制并粘贴到
+`data.json` 文件中。
 
-Create a `route.ts` file in the `dinosaurs` directory, which will handle
-requests to `/api/dinosaurs`. In this route we'll read the `data.json` file and
-return the dinosaurs as JSON:
+在 `dinosaurs` 目录中创建一个 `route.ts` 文件，它将处理对 `/api/dinosaurs`
+的请求。在这个路由中，我们将读取 `data.json` 文件并返回恐龙数据作为 JSON：
 
 ```ts title="route.ts"
 import data from "./data.json" with { type: "json" };
@@ -112,10 +104,10 @@ export async function GET() {
 
 ### /api/dinosaurs/[dinosaur]
 
-And for the final route, `/api/dinosaurs/[dinosaur]`, we'll create a folder
-called `[dinosaur]` in the `dinosaurs` directory. In there, create a `route.ts`
-file. In this file we'll read the `data.json` file, find the dinosaur with the
-name in the URL, and return it as JSON:
+对于最后一个路由 `/api/dinosaurs/[dinosaur]`，我们将在 `dinosaurs`
+目录中创建一个名为 `[dinosaur]` 的文件夹。在其中创建一个 `route.ts`
+文件。在这个文件中，我们将读取 `data.json` 文件，找到 URL
+中名称对应的恐龙，并将其作为 JSON 返回：
 
 ```ts title="route.ts"
 import { NextRequest } from "next/server";
@@ -138,32 +130,29 @@ export const GET = async (request: NextRequest, { params }: RouteParams) => {
 };
 ```
 
-Now, if you run the app with `deno task dev` and visit
-`http://localhost:3000/api/dinosaurs/brachiosaurus` in your browser, you should
-see the details of the brachiosaurus dinosaur.
+现在，如果你使用 `deno task dev` 运行应用，并在浏览器中访问
+`http://localhost:3000/api/dinosaurs/brachiosaurus`，你应该会看到腕龙的详细信息。
 
-## Build the frontend
+## 构建前端
 
-Now that we have our backend API set up, let's build the frontend to display the
-dinosaur data.
+现在我们已经设置好了后端 API，让我们构建前端以显示恐龙数据。
 
-### Define the dinosaur type
+### 定义恐龙类型
 
-Firstly we'll set up a new type, to define the shape of the dinosaur data. In
-the `app` directory, create a `types.ts` file and add the following code:
+首先，我们将设置一个新类型，以定义恐龙数据的形状。在 `app` 目录中，创建一个
+`types.ts` 文件，并添加以下代码：
 
 ```ts title="types.ts"
 export type Dino = { name: string; description: string };
 ```
 
-### Update the homepage
+### 更新主页
 
-We'll update the `page.tsx` file in the `app` directory to fetch the dinosaur
-data from our API and display it as a list of links.
+我们将更新 `app` 目录中的 `page.tsx` 文件，以从我们的 API
+获取恐龙数据并将其显示为链接列表。
 
-To execute client-side code in Next.js we need to use the `use Client` directive
-at the top of the file. Then we'll import the modules that we'll need in this
-page and export the default function that will render the page:
+要在 Next.js 中执行客户端代码，我们需要在文件顶部使用 `use Client`
+指令。然后我们将导入我们在此页面中需要的模块，并导出将渲染页面的默认函数：
 
 ```tsx title="page.tsx"
 "use client";
@@ -176,9 +165,8 @@ export default function Home() {
 }
 ```
 
-Inside the body of the `Home` function, we'll define a state variable to store
-the dinosaur data, and a `useEffect` hook to fetch the data from the API when
-the component mounts:
+在 `Home` 函数的主体中，我们将定义一个状态变量来存储恐龙数据，并定义一个
+`useEffect` 钩子以在组件挂载时从 API 获取数据：
 
 ```tsx title="page.tsx"
 const [dinosaurs, setDinosaurs] = useState<Dino[]>([]);
@@ -192,8 +180,8 @@ useEffect(() => {
 }, []);
 ```
 
-Beneath this, still inside the body of the `Home` function, we'll return a list
-of links, each linking to the dinosaur's page:
+在这之后，仍然在 `Home`
+函数的主体中，我们将返回一个链接列表，每个链接都指向恐龙的页面：
 
 ```tsx title="page.tsx"
 return (
@@ -215,15 +203,12 @@ return (
 );
 ```
 
-### Create the dinosaur page
+### 创建恐龙页面
 
-Inside the `app` directory, create a new folder called `[dinosaur]`. Inside this
-folder create a `page.tsx` file. This file will fetch the details of a specific
-dinosaur from the API and render them on the page.
+在 `app` 目录中，创建一个名为 `[dinosaur]` 的新文件夹。在该文件夹中创建一个
+`page.tsx` 文件。该文件将从 API 获取特定恐龙的详细信息并将其渲染到页面上。
 
-Much like the homepage, we'll need client side code, and we'll import the
-modules we need and export a default function. We'll pass the incoming to the
-function and set up a type for this parameter:
+与主页类似，我们需要客户端代码，我们将导入我们需要的模块并导出一个默认函数。我们将传入的参数传递给函数，并为此参数设置一个类型：
 
 ```tsx title="[dinosaur]/page.tsx"
 "use client";
@@ -238,9 +223,9 @@ export default function Dinosaur({ params }: RouteParams) {
 }
 ```
 
-Inside the body of the `Dinosaur` function we'll get the selected dinosaur from
-the request, set up a state variable to store the dinosaur data, and write a
-`useEffect` hook to fetch the data from the API when the component mounts:
+在 `Dinosaur`
+函数的主体中，我们将从请求中获取选定的恐龙，设置一个状态变量来存储恐龙数据，并编写一个
+`useEffect` 钩子以在组件挂载时从 API 获取数据：
 
 ```tsx title="[dinosaur]/page.tsx"
 const selectedDinosaur = params.then((params) => params.dinosaur);
@@ -255,8 +240,8 @@ useEffect(() => {
 }, []);
 ```
 
-Finally, still inside the `Dinosaur` function body, we'll return a paragraph
-element containing the dinosaur's name and description:
+最后，仍然在 `Dinosaur`
+函数的主体中，我们将返回一个包含恐龙名称和描述的段落元素：
 
 ```tsx title="[dinosaur]/page.tsx"
 return (
@@ -268,16 +253,14 @@ return (
 );
 ```
 
-## Run the app
+## 运行应用
 
-Now you can run the app with `deno task dev` and visit `http://localhost:3000`
-in your browser to see the list of dinosaurs. Click on a dinosaur to see more
-details!
+现在你可以使用 `deno task dev` 运行应用，并在浏览器中访问
+`http://localhost:3000` 以查看恐龙列表。点击一个恐龙以查看更多详细信息！
 
-![demo of the app](./images/how-to/next/dinoapp.gif)
+![应用演示](./images/how-to/next/dinoapp.gif)
 
-🦕 Now you can build and run a Next.js app with Deno! To build on your app you
-could consider [adding a database](/runtime/tutorials/connecting_to_databases/)
-to replace your `data.json` file, or consider
-[writing some tests](/runtime/fundamentals/testing/) to make your app reliable
-and production ready.
+🦕 现在你可以使用 Deno 构建和运行一个 Next.js
+应用！为了进一步扩展你的应用，你可以考虑[添加一个数据库](/runtime/tutorials/connecting_to_databases/)来替换你的
+`data.json`
+文件，或者考虑[编写一些测试](/runtime/fundamentals/testing/)以使你的应用可靠并准备好投入生产。

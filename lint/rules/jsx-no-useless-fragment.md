@@ -2,10 +2,10 @@
 tags: [recommended, react, jsx, fresh]
 ---
 
-Fragments are only necessary at the top of a JSX "block" and only when there are
-multiple children. Fragments are not needed in other scenarios.
+Fragments 仅在 JSX "块" 的顶部且存在多个子元素时才需要。在其他场景中不需要使用
+Fragments。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 <></>
@@ -14,7 +14,7 @@ multiple children. Fragments are not needed in other scenarios.
 <p>foo <>bar</></p>
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 <>{foo}</>

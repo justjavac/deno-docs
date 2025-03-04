@@ -2,10 +2,9 @@
 tags: [react, fresh]
 ---
 
-Using JSX children together with `dangerouslySetInnerHTML` is invalid as they
-will be ignored.
+将 JSX 子元素与 `dangerouslySetInnerHTML` 一起使用是无效的，因为它们将被忽略。
 
-**Invalid:**
+**无效示例：**
 
 ```tsx
 <div dangerouslySetInnerHTML={{ __html: "<h1>hello</h1>" }}>
@@ -13,7 +12,7 @@ will be ignored.
 </div>;
 ```
 
-**Valid:**
+**有效示例：**
 
 ```tsx
 <div dangerouslySetInnerHTML={{ __html: "<h1>hello</h1>" }} />;

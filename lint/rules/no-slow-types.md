@@ -2,6 +2,6 @@
 tags: [jsr]
 ---
 
-Enforces using types that are explicit or can be simply inferred.
+强制使用明确或可以简单推断的类型。
 
-Read more: https://jsr.io/docs/about-slow-types
+阅读更多：https://jsr.io/docs/about-slow-types

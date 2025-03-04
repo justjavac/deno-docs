@@ -2,14 +2,11 @@
 tags: [recommended]
 ---
 
-Disallows the use of empty block statements.
+禁止使用空的块语句。
 
-Empty block statements are legal but often represent that something was missed
-and can make code less readable. This rule ignores block statements that only
-contain comments. This rule also ignores empty constructors and function bodies
-(including arrow functions).
+空的块语句是合法的，但通常表示遗漏了某些内容，并且可能使代码的可读性降低。此规则忽略仅包含注释的块语句。此规则还忽略空的构造函数和函数体（包括箭头函数）。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 if (foo) {}
@@ -25,7 +22,7 @@ try {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 if (foo) {

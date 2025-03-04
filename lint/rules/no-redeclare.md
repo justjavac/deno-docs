@@ -2,20 +2,18 @@
 tags: [recommended]
 ---
 
-Disallows redeclaration of variables, functions, parameters with the same name.
+禁止使用相同名称重新声明变量、函数、参数。
 
-JavaScript allows us to redeclare variables with the same name using `var`, but
-redeclaration should not be used since it can make variables hard to trace.
+JavaScript 允许我们使用 `var` 重新声明同名变量，但
+不应使用重新声明，因为它会使变量难以追踪。
 
-In addition, this lint rule disallows redeclaration using `let` or `const` as
-well, although ESLint allows. This is useful because we can notice a syntax
-error before actually running the code.
+此外，此 lint 规则还禁止使用 `let` 或 `const` 进行重新声明， 尽管 ESLint
+允许这样做。这很有用，因为我们可以在实际运行代码之前注意到语法错误。
 
-As for functions and parameters, JavaScript just treats these as runtime errors,
-throwing `SyntaxError` when being run. It's also beneficial to detect this sort
-of errors statically.
+对于函数和参数，JavaScript 只是将这些视为运行时错误， 在运行时抛出
+`SyntaxError`。静态检测此类错误也很有益。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 var a = 3;
@@ -37,7 +35,7 @@ function e(arg: number) {
 function f(arg: number, arg: string) {}
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 var a = 3;

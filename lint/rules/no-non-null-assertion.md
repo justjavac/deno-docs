@@ -2,15 +2,14 @@
 tags: []
 ---
 
-Disallow non-null assertions using the `!` postfix operator.
+禁止使用 `!` 后缀运算符进行非空断言。
 
-TypeScript's `!` non-null assertion operator asserts to the type system that an
-expression is non-nullable, as in not `null` or `undefined`. Using assertions to
-tell the type system new information is often a sign that code is not fully
-type-safe. It's generally better to structure program logic so that TypeScript
-understands when values may be nullable.
+TypeScript 的 `!` 非空断言运算符向类型系统断言某个表达式是非空的，即不是 `null`
+或
+`undefined`。使用断言来向类型系统传递新信息通常表明代码并不完全类型安全。通常更好的做法是构建程序逻辑，使
+TypeScript 能够理解值何时可能为空。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 interface Example {
@@ -21,7 +20,7 @@ declare const example: Example;
 const includes = example.property!.includes("foo");
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 interface Example {

@@ -3,7 +3,7 @@
  * @difficulty beginner
  * @tags cli, deploy, web
  * @run <url>
- * @resource {https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID} MDN: crypto.randomUUID
+ * @resource {https://developer.mozilla.org/zh-CN/docs/Web/API/Crypto/randomUUID} MDN: crypto.randomUUID
  * @resource {https://jsr.io/@std/uuid/doc} Doc: @std/uuid
  * @group Cryptography
  *

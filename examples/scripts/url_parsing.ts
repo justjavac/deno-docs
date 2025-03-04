@@ -3,7 +3,7 @@
  * @difficulty beginner
  * @tags cli, deploy, web
  * @run <url>
- * @resource {https://developer.mozilla.org/en-US/docs/Web/API/URL} MDN: URL
+ * @resource {https://developer.mozilla.org/zh-CN/docs/Web/API/URL} MDN: URL
  * @group Basics
  *
  * URL is the web standard interface to parse and manipulate URLs.
@@ -28,7 +28,7 @@ console.log(url.pathname); // /manual/introduction
 console.log(url.protocol); // https:
 
 // When parsing a url we often need to read the search parameters.
-url = new URL("https://docs.deno.com/api/deno?s=Deno.readFile");
+url = new URL("https://docs.denohub.com/api/deno?s=Deno.readFile");
 
 console.log(url.searchParams.get("s")); // Deno.readFile
 

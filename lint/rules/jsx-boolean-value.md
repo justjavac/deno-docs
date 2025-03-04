@@ -2,17 +2,16 @@
 tags: [recommended, react, jsx]
 ---
 
-Enforce a consistent JSX boolean value style. Passing `true` as the boolean
-value can be omitted with the shorthand syntax.
+强制一致的 JSX 布尔值风格。使用简写语法时，可以省略传递 `true` 作为布尔值。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 const foo = <Foo isFoo={true} />;
 const foo = <Foo isFoo={false} />;
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 const foo = <Foo isFoo />;

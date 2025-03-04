@@ -1,57 +1,50 @@
 ---
-title: Fundamentals
+title: 基础
 ---
 
-Deno is designed with the developer in mind, aiming to provide a smooth and
-enjoyable development process. Its simplicity and efficiency make it quick and
-easy to pick up, even for those new to the backend development.
+Deno
+的设计以开发者为中心，旨在提供流畅且愉快的开发体验。其简洁性和高效性使得即使对于后端开发新手来说，也能快速轻松上手。
 
-## Built in tooling
+## 内置工具
 
-Deno’s inbuilt tooling significantly eases the onboarding process. With a single
-executable, you can get started without worrying about complex setups or
-dependencies. This allows you to focus on writing code rather than configuring
-your environment.
+Deno
+的内置工具极大地简化了入门过程。通过一个单一的可执行文件，您可以立即开始，而无需担心复杂的设置或依赖关系。这使您能够专注于编写代码，而不是配置环境。
 
-- [Configuring your project](/runtime/fundamentals/configuration/)
-- [TypeScript support](/runtime/fundamentals/typescript/)
-- [Linting and formatting](/runtime/fundamentals/linting_and_formatting/)
-- [Testing](/runtime/fundamentals/testing/)
-- [Debugging](/runtime/fundamentals/debugging/)
-- [HTTP server](/runtime/fundamentals/http_server/)
+- [配置您的项目](/runtime/fundamentals/configuration/)
+- [TypeScript 支持](/runtime/fundamentals/typescript/)
+- [代码检查和格式化](/runtime/fundamentals/linting_and_formatting/)
+- [测试](/runtime/fundamentals/testing/)
+- [调试](/runtime/fundamentals/debugging/)
+- [HTTP 服务器](/runtime/fundamentals/http_server/)
 
-## Node and npm Support
+## Node 和 npm 支持
 
-Deno supports Node.js and npm packages, enabling you to leverage the vast
-ecosystem of existing libraries and tools. This compatibility ensures that you
-can integrate Deno into your projects seamlessly.
+Deno 支持 Node.js 和 npm
+包，使您能够利用现有库和工具的庞大生态系统。这种兼容性确保您可以无缝地将 Deno
+集成到您的项目中。
 
-- [Node.js compatibility](/runtime/fundamentals/node/)
-- [npm compatibility](/runtime/fundamentals/node/#using-npm-packages)
+- [Node.js 兼容性](/runtime/fundamentals/node/)
+- [npm 兼容性](/runtime/fundamentals/node/#using-npm-packages)
 
-## Standard Library
+## 标准库
 
-Deno comes with a comprehensive standard library written in TypeScript. This
-library includes modules for common tasks such as HTTP servers, file system
-operations, and more, allowing you to avoid “reinventing the wheel” and focus on
-your application’s features.
+Deno 附带了一个用 TypeScript 编写的全面标准库。该库包括用于常见任务的模块，如
+HTTP
+服务器、文件系统操作等，使您能够避免“重新发明轮子”，并专注于应用程序的功能。
 
-- [Standard Library](/runtime/fundamentals/standard_library/)
+- [标准库](/runtime/fundamentals/standard_library/)
 
-## Secure by Default
+## 默认安全
 
-Security is a top priority for Deno. By default, it requires explicit permission
-for file, network, and environment access, reducing the risk of security
-vulnerabilities. This secure-by-default approach helps protect your applications
-from potential threats.
+安全性是 Deno
+的首要任务。默认情况下，它需要明确的权限才能访问文件、网络和环境，从而降低安全漏洞的风险。这种默认安全的方法有助于保护您的应用程序免受潜在威胁。
 
-- [Security and permissions](/runtime/fundamentals/security/)
+- [安全性和权限](/runtime/fundamentals/security/)
 
-## Modern Language Features
+## 现代语言特性
 
-Deno embraces modern JavaScript features, including ESModules. This means you
-can use the latest syntax and capabilities of the language, ensuring your code
-is up-to-date and leveraging the best practices in the industry.
+Deno 拥抱现代 JavaScript 特性，包括
+ESModules。这意味着您可以使用语言的最新语法和功能，确保您的代码是最新的，并利用行业中的最佳实践。
 
-- [Using ESModules](/runtime/fundamentals/modules/)
-- [Migrating from CJS to ESM](/runtime/tutorials/cjs_to_esm/)
+- [使用 ESModules](/runtime/fundamentals/modules/)
+- [从 CJS 迁移到 ESM](/runtime/tutorials/cjs_to_esm/)

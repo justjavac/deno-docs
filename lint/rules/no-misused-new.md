@@ -2,12 +2,11 @@
 tags: [recommended]
 ---
 
-Disallows defining `constructor`s for interfaces or `new` for classes
+禁止在接口中定义 `constructor` 或在类中定义 `new` 方法
 
-Specifying a `constructor` for an interface or defining a `new` method for a
-class is incorrect and should be avoided.
+在接口中指定 `constructor` 或在类中定义 `new` 方法是错误的，应避免这样做。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 class C {
@@ -19,7 +18,7 @@ interface I {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 class C {

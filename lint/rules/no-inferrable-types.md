@@ -2,14 +2,13 @@
 tags: []
 ---
 
-Disallows easily inferrable types.
+禁止使用易于推断的类型。
 
-Variable initializations to JavaScript primitives (and `null`) are obvious in
-their type. Specifying their type can add additional verbosity to the code. For
-example, with `const x: number = 5`, specifying `number` is unnecessary as it is
-obvious that `5` is a number.
+JavaScript 原始类型（以及
+`null`）的变量初始化在类型上是显而易见的。指定它们的类型可能会增加代码的冗余。例如，在
+`const x: number = 5` 中，指定 `number` 是不必要的，因为很明显 `5` 是一个数字。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 const a: bigint = 10n;
@@ -38,7 +37,7 @@ class Foo {
 function fn(s: number = 5, t: boolean = true) {}
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 const a = 10n;

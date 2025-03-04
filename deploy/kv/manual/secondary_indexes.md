@@ -1,5 +1,5 @@
 ---
-title: "Secondary Indexes"
+title: "二级索引"
 oldUrl:
   - /runtime/manual/runtime/kv/secondary_indexes
   - /kv/manual/secondary_indexes
@@ -7,35 +7,21 @@ oldUrl:
 
 <deno-admonition></deno-admonition>
 
-Key-value stores like Deno KV organize data as collections of key-value pairs,
-where each unique key is associated with a single value. This structure enables
-easy retrieval of values based on their keys but does not allow for querying
-based on the values themselves. To overcome this constraint, you can create
-secondary indexes, which store the same value under additional keys that include
-(part of) that value.
+像 Deno KV
+这样的键值存储将数据组织为键值对的集合，其中每个唯一的键都与一个值相关联。这种结构使得基于键的值检索变得容易，但不允许基于值本身进行查询。为了克服这一限制，可以创建二级索引，它将相同的值存储在包含（部分）该值的附加键下。
 
-Maintaining consistency between primary and secondary keys is crucial when using
-secondary indexes. If a value is updated at the primary key without updating the
-secondary key, the data returned from a query targeting the secondary key will
-be incorrect. To ensure that primary and secondary keys always represent the
-same data, use atomic operations when inserting, updating, or deleting data.
-This approach ensures that the group of mutation actions are executed as a
-single unit, and either all succeed or all fail, preventing inconsistencies.
+在使用二级索引时，保持主键和二级键之间的一致性至关重要。如果在主键处更新了值而未更新二级键，则针对二级键的查询返回的数据将不正确。为了确保主键和二级键始终表示相同的数据，在插入、更新或删除数据时使用原子操作。这种方法确保一组变异操作作为一个单元执行，要么全部成功，要么全部失败，从而防止不一致。
 
-## Unique indexes (one-to-one)
+## 唯一索引（一对一）
 
-Unique indexes have each key in the index associated with exactly one primary
-key. For example, when storing user data and looking up users by both their
-unique IDs and email addresses, store user data under two separate keys: one for
-the primary key (user ID) and another for the secondary index (email). This
-setup allows querying users based on either their ID or their email. The
-secondary index can also enforce uniqueness constraints on values in the store.
-In the case of user data, use the index to ensure that each email address is
-associated with only one user - in other words that emails are unique.
+唯一索引中的每个键都与一个主键相关联。例如，在存储用户数据并通过其唯一 ID
+和电子邮件地址查找用户时，将用户数据存储在两个单独的键下：一个用于主键（用户
+ID），另一个用于二级索引（电子邮件）。这种设置允许基于 ID
+或电子邮件查询用户。二级索引还可以对存储中的值强制执行唯一性约束。在用户数据的情况下，使用索引确保每个电子邮件地址仅与一个用户相关联——换句话说，电子邮件是唯一的。
 
-To implement a unique secondary index for this example, follow these steps:
+要为这个示例实现唯一的二级索引，请按照以下步骤操作：
 
-1. Create a `User` interface representing the data:
+1. 创建一个表示数据的 `User` 接口：
 
    ```ts
    interface User {
@@ -45,8 +31,7 @@ To implement a unique secondary index for this example, follow these steps:
    }
    ```
 
-2. Define an `insertUser` function that stores user data at both the primary and
-   secondary keys:
+2. 定义一个 `insertUser` 函数，将用户数据存储在主键和二级键下：
 
    ```ts
    async function insertUser(user: User) {
@@ -64,11 +49,10 @@ To implement a unique secondary index for this example, follow these steps:
    }
    ```
 
-   > This function performs the insert using an atomic operation that checks
-   > that no user with the same ID or email already exists. If either of these
-   > constraints is violated, the insert fails and no data is modified.
+   > 此函数使用原子操作执行插入，检查是否已存在具有相同 ID
+   > 或电子邮件的用户。如果违反了这些约束中的任何一个，插入将失败，并且不会修改任何数据。
 
-3. Define a `getUser` function to retrieve a user by their ID:
+3. 定义一个 `getUser` 函数，通过 ID 检索用户：
 
    ```ts
    async function getUser(id: string): Promise<User | null> {
@@ -77,7 +61,7 @@ To implement a unique secondary index for this example, follow these steps:
    }
    ```
 
-4. Define a `getUserByEmail` function to retrieve a user by their email address:
+4. 定义一个 `getUserByEmail` 函数，通过电子邮件地址检索用户：
 
    ```ts
    async function getUserByEmail(email: string): Promise<User | null> {
@@ -86,10 +70,9 @@ To implement a unique secondary index for this example, follow these steps:
    }
    ```
 
-   This function queries the store using the secondary key
-   (`["users_by_email", email]`).
+   此函数使用二级键（`["users_by_email", email]`）查询存储。
 
-5. Define a deleteUser function to delete users by their ID:
+5. 定义一个 `deleteUser` 函数，通过 ID 删除用户：
 
    ```ts
    async function deleteUser(id: string) {
@@ -106,30 +89,16 @@ To implement a unique secondary index for this example, follow these steps:
    }
    ```
 
-   > This function first retrieves the user by their ID to get the users email
-   > address. This is needed to retrieve the email that is needed to construct
-   > the key for the secondary index for this user address. It then performs an
-   > atomic operation that checks that the user in the database has not changed,
-   > and then deletes both the primary and secondary key pointing to the user
-   > value. If this fails (the user has been modified between query and delete),
-   > the atomic operation aborts. The entire procedure is retried until the
-   > delete succeeds. The check is required to prevent race conditions where
-   > value may have been modified between the retrieve and delete. This race can
-   > occur if an update changes the user's email, because the secondary index
-   > moves in this case. The delete of the secondary index then fails, because
-   > the delete is targeting the old secondary index key.
+   > 此函数首先通过 ID
+   > 检索用户以获取用户的电子邮件地址。这是为了获取构建该用户地址的二级索引键所需的电子邮件。然后，它执行一个原子操作，检查数据库中的用户是否未更改，然后删除指向用户值的主键和二级键。如果失败（用户在查询和删除之间已被修改），原子操作将中止。整个过程将重试，直到删除成功。需要检查以防止在检索和删除之间值可能已被修改的竞争条件。如果更新更改了用户的电子邮件，则可能会发生这种竞争，因为在这种情况下二级索引会移动。然后，二级索引的删除将失败，因为删除的目标是旧的二级索引键。
 
-## Non-Unique Indexes (One-to-Many)
+## 非唯一索引（一对多）
 
-Non-unique indexes are secondary indexes where a single key can be associated
-with multiple primary keys, allowing you to query for multiple items based on a
-shared attribute. For example, when querying users by their favorite color,
-implement this using a non-unique secondary index. The favorite color is a
-non-unique attribute since multiple users can have the same favorite color.
+非唯一索引是二级索引，其中单个键可以与多个主键相关联，允许基于共享属性查询多个项目。例如，在通过用户最喜欢的颜色查询用户时，使用非唯一二级索引实现此功能。最喜欢的颜色是非唯一属性，因为多个用户可以有相同的最喜欢的颜色。
 
-To implement a non-unique secondary index for this example, follow these steps:
+要为这个示例实现非唯一二级索引，请按照以下步骤操作：
 
-1. Define the `User` interface:
+1. 定义 `User` 接口：
 
    ```ts
    interface User {
@@ -139,7 +108,7 @@ To implement a non-unique secondary index for this example, follow these steps:
    }
    ```
 
-2. Define the `insertUser` function:
+2. 定义 `insertUser` 函数：
 
    ```ts
    async function insertUser(user: User) {
@@ -157,7 +126,7 @@ To implement a non-unique secondary index for this example, follow these steps:
    }
    ```
 
-3. Define a function to retrieve users by their favorite color:
+3. 定义一个函数，通过最喜欢的颜色检索用户：
 
    ```ts
    async function getUsersByFavoriteColor(color: string): Promise<User[]> {
@@ -170,16 +139,7 @@ To implement a non-unique secondary index for this example, follow these steps:
    }
    ```
 
-This example demonstrates the use of a non-unique secondary index,
-`users_by_favorite_color`, which allows querying users based on their favorite
-color. The primary key remains the user `id`.
+此示例演示了非唯一二级索引 `users_by_favorite_color`
+的使用，它允许基于用户最喜欢的颜色查询用户。主键仍然是用户 `id`。
 
-The primary difference between the implementation of unique and non-unique
-indexes lies in the structure and organization of the secondary keys. In unique
-indexes, each secondary key is associated with exactly one primary key, ensuring
-that the indexed attribute is unique across all records. In the case of
-non-unique indexes, a single secondary key can be associated with multiple
-primary keys, as the indexed attribute may be shared among multiple records. To
-achieve this, non-unique secondary keys are typically structured with an
-additional unique identifier (e.g., primary key) as part of the key, allowing
-multiple records with the same attribute to coexist without conflicts.
+唯一索引和非唯一索引的实现之间的主要区别在于二级键的结构和组织。在唯一索引中，每个二级键与一个主键相关联，确保索引属性在所有记录中是唯一的。在非唯一索引的情况下，单个二级键可以与多个主键相关联，因为索引属性可能在多个记录之间共享。为了实现这一点，非唯一二级键通常以附加的唯一标识符（例如主键）作为键的一部分进行结构化，从而允许多个具有相同属性的记录共存而不会发生冲突。

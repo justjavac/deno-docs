@@ -1,5 +1,5 @@
 ---
-title: "Modules and dependencies"
+title: "模块与依赖"
 oldUrl:
   - /runtime/manual/basics/modules/
   - /runtime/manual/basics/modules/integrity_checking/
@@ -20,21 +20,20 @@ oldUrl:
   - /runtime/reference/private_repositories/
 ---
 
-Deno uses
-[ECMAScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
-as its default module system to align with modern JavaScript standards and to
-promote a more efficient and consistent development experience. It's the
-official standard for JavaScript modules, allows for better tree-shaking,
-improved tooling integration, and native support across different environments.
+Deno 使用
+[ECMAScript 模块](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules)
+作为其默认模块系统，以与现代 JavaScript
+标准保持一致，并促进更高效和一致的开发体验。它是 JavaScript
+模块的官方标准，允许更好的
+tree-shaking、改进的工具集成以及跨不同环境的原生支持。
 
-By adopting ECMAScript modules, Deno ensures compatibility with the
-ever-evolving JavaScript ecosystem. For developers, this means a streamlined and
-predictable module system that avoids the complexities associated with legacy
-module formats like CommonJS.
+通过采用 ECMAScript 模块，Deno 确保了与不断发展的 JavaScript
+生态系统的兼容性。对于开发者来说，这意味着一个简化且可预测的模块系统，避免了与旧版模块格式（如
+CommonJS）相关的复杂性。
 
-## Importing modules
+## 导入模块
 
-In this example the `add` function is imported from a local `calc.ts` module.
+在此示例中，`add` 函数从本地的 `calc.ts` 模块导入。
 
 ```ts title="calc.ts"
 export function add(a: number, b: number): number {
@@ -43,31 +42,29 @@ export function add(a: number, b: number): number {
 ```
 
 ```ts title="main.ts"
-// imports the `calc.ts` module next to this file
+// 导入与此文件相邻的 `calc.ts` 模块
 import { add } from "./calc.ts";
 
 console.log(add(1, 2)); // 3
 ```
 
-You can run this example by calling `deno run main.ts` in the directory that
-contains both `main.ts` and `calc.ts`.
+你可以通过在包含 `main.ts` 和 `calc.ts` 的目录中调用 `deno run main.ts`
+来运行此示例。
 
-With ECMAScript modules, local import specifiers must always include the full
-file extension. It cannot be omitted.
+使用 ECMAScript 模块时，本地导入说明符必须始终包含完整的文件扩展名，不能省略。
 
 ```ts title="example.ts"
-// WRONG: missing file extension
+// 错误：缺少文件扩展名
 import { add } from "./calc";
 
-// CORRECT: includes file extension
+// 正确：包含文件扩展名
 import { add } from "./calc.ts";
 ```
 
-## Importing third party modules and libraries
+## 导入第三方模块和库
 
-When working with third-party modules in Deno, use the same `import` syntax as
-you do for local code. Third party modules are typically imported from a remote
-registry and start with `jsr:` , `npm:` or `https://`.
+在 Deno 中使用第三方模块时，使用与本地代码相同的 `import`
+语法。第三方模块通常从远程注册表导入，并以 `jsr:`、`npm:` 或 `https://` 开头。
 
 ```ts title="main.ts"
 import { camelCase } from "jsr:@luca/cases@1.0.0";
@@ -75,22 +72,20 @@ import { say } from "npm:cowsay@1.6.0";
 import { pascalCase } from "https://deno.land/x/case/mod.ts";
 ```
 
-Deno recommends [JSR](https://jsr.io), the modern JavaScript registry, for third
-party modules. There, you'll find plenty of well documented ES modules for your
-projects, including the
-[Deno Standard Library](/runtime/fundamentals/standard_library/).
+Deno 推荐使用 [JSR](https://jsr.io)，这是现代的 JavaScript
+注册表，用于第三方模块。在那里，你可以找到许多为你的项目精心记录的 ES 模块，包括
+[Deno 标准库](/runtime/fundamentals/standard_library/)。
 
-You can
-[read more about Deno's support for npm packages here](/runtime/fundamentals/node/#using-npm-modules).
+你可以
+[在此处阅读更多关于 Deno 对 npm 包的支持](/runtime/fundamentals/node/#using-npm-modules)。
 
-## Managing third party modules and libraries
+## 管理第三方模块和库
 
-Typing out the module name with the full version specifier can become tedious
-when importing them in multiple files. You can centralize management of remote
-modules with an `imports` field in your `deno.json` file. We call this `imports`
-field the **import map**, which is based on the [Import Maps Standard].
+在多个文件中导入模块时，输入带有完整版本说明符的模块名称可能会变得繁琐。你可以通过在
+`deno.json` 文件中的 `imports` 字段集中管理远程模块。我们将此 `imports` 字段称为
+**导入映射**，它基于 [导入映射标准]。
 
-[Import Maps Standard]: https://github.com/WICG/import-maps
+[导入映射标准]: https://github.com/WICG/import-maps
 
 ```json title="deno.json"
 {
@@ -102,7 +97,7 @@ field the **import map**, which is based on the [Import Maps Standard].
 }
 ```
 
-With remapped specifiers, the code looks cleaner:
+使用重新映射的说明符后，代码看起来更简洁：
 
 ```ts title="main.ts"
 import { camelCase } from "@luca/cases";
@@ -110,19 +105,17 @@ import { say } from "cowsay";
 import { pascalCase } from "cases";
 ```
 
-The remapped name can be any valid specifier. It's a very powerful feature in
-Deno that can remap anything. Learn more about what the import map can do
-[here](/runtime/fundamentals/configuration/#dependencies).
+重新映射的名称可以是任何有效的说明符。这是 Deno
+中一个非常强大的功能，可以重新映射任何内容。了解更多关于导入映射的功能
+[在此处](/runtime/fundamentals/configuration/#dependencies)。
 
-## Differentiating between `imports` or `importMap` in `deno.json` and `--import-map` option
+## 区分 `deno.json` 中的 `imports` 或 `importMap` 与 `--import-map` 选项
 
-The [Import Maps Standard] requires two entries for each module: one for the
-module specifier and another for the specifier with a trailing `/`. This is
-because the standard allows only one entry per module specifier, and the
-trailing `/` indicates that the specifier refers to a directory. For example,
-when using the `--import-map import_map.json` option, the `import_map.json` file
-must include both entries for each module (note the use of `jsr:/@std/async`
-instead of `jsr:@std/async`):
+[导入映射标准] 要求每个模块有两个条目：一个用于模块说明符，另一个用于带有尾部
+`/` 的说明符。这是因为该标准只允许每个模块说明符有一个条目，而尾部 `/`
+表示该说明符引用的是一个目录。例如，当使用 `--import-map import_map.json`
+选项时，`import_map.json` 文件必须包含每个模块的两个条目（注意使用
+`jsr:/@std/async` 而不是 `jsr:@std/async`）：
 
 ```json title="import_map.json"
 {
@@ -133,10 +126,9 @@ instead of `jsr:@std/async`):
 }
 ```
 
-In contrast, `deno.json` extends the import maps standard. When you use the
-imports field in `deno.json` or reference an `import_map.json` file via the
-`importMap` field, you only need to specify the module specifier without the
-trailing `/`:
+相比之下，`deno.json` 扩展了导入映射标准。当你在 `deno.json` 中使用 `imports`
+字段或通过 `importMap` 字段引用 `import_map.json`
+文件时，你只需要指定模块说明符，而不需要尾部 `/`：
 
 ```json title="deno.json"
 {
@@ -146,14 +138,13 @@ trailing `/`:
 }
 ```
 
-## Adding dependencies with `deno add`
+## 使用 `deno add` 添加依赖项
 
-The installation process is made easy with the `deno add` subcommand. It will
-automatically add the latest version of the package you requested to the
-`imports` section in `deno.json`.
+安装过程通过 `deno add` 子命令变得简单。它会自动将你请求的包的最新版本添加到
+`deno.json` 的 `imports` 部分。
 
 ```sh
-# Add the latest version of the module to deno.json
+# 将模块的最新版本添加到 deno.json
 $ deno add jsr:@luca/cases
 Add @luca/cases - jsr:@luca/cases@1.0.0
 ```
@@ -166,17 +157,17 @@ Add @luca/cases - jsr:@luca/cases@1.0.0
 }
 ```
 
-You can also specify an exact version:
+你也可以指定一个确切的版本：
 
 ```sh
-# Passing an exact version
+# 传递一个确切的版本
 $ deno add jsr:@luca/cases@1.0.0
 Add @luca/cases - jsr:@luca/cases@1.0.0
 ```
 
-Read more in [`deno add` reference](/runtime/reference/cli/add/).
+阅读更多在 [`deno add` 参考](/runtime/reference/cli/add/)。
 
-You can also remove dependencies using `deno remove`:
+你也可以使用 `deno remove` 移除依赖项：
 
 ```sh
 $ deno remove @luca/cases
@@ -189,49 +180,48 @@ Remove @luca/cases
 }
 ```
 
-Read more in [`deno remove` reference](/runtime/reference/cli/remove/).
+阅读更多在 [`deno remove` 参考](/runtime/reference/cli/remove/)。
 
-## Package Versions
+## 包版本
 
-It is possible to specify a version range for the package you are importing.
-This is done using the `@` symbol followed by a version range specifier, and
-follows the [semver](https://semver.org/) versioning scheme.
+可以为导入的包指定一个版本范围。这是通过使用 `@`
+符号后跟一个版本范围说明符来完成的，并遵循 [semver](https://semver.org/)
+版本控制方案。
 
-For example:
+例如：
 
 ```bash
-@scopename/mypackage           # highest version
-@scopename/mypackage@16.1.0    # exact version
-@scopename/mypackage@16        # highest 16.x version >= 16.0.0
-@scopename/mypackage@^16.1.0   # highest 16.x version >= 16.1.0
-@scopename/mypackage@~16.1.0   # highest 16.1.x version >= 16.1.0
+@scopename/mypackage           # 最高版本
+@scopename/mypackage@16.1.0    # 确切版本
+@scopename/mypackage@16        # 最高 16.x 版本 >= 16.0.0
+@scopename/mypackage@^16.1.0   # 最高 16.x 版本 >= 16.1.0
+@scopename/mypackage@~16.1.0   # 最高 16.1.x 版本 >= 16.1.0
 ```
 
-Here is an overview of all the ways you can specify a version or a range:
+以下是所有可以指定版本或范围的方式的概述：
 
-| Symbol    | Description                                                                                                                                                         | Example   |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| `1.2.3`   | An exact version. Only this specific version will be used.                                                                                                          | `1.2.3`   |
-| `^1.2.3`  | Compatible with version 1.2.3. Allows updates that do not change the leftmost non-zero digit. <br>For example, `1.2.4` and `1.3.0` are allowed, but `2.0.0` is not. | `^1.2.3`  |
-| `~1.2.3`  | Approximately equivalent to version 1.2.3. Allows updates to the patch version. <br> For example, `1.2.4` is allowed, but `1.3.0` is not.                           | `~1.2.3`  |
-| `>=1.2.3` | Greater than or equal to version 1.2.3. Any version `1.2.3` or higher is allowed.                                                                                   | `>=1.2.3` |
-| `<=1.2.3` | Less than or equal to version 1.2.3. Any version `1.2.3` or lower is allowed.                                                                                       | `<=1.2.3` |
-| `>1.2.3`  | Greater than version 1.2.3. Only versions higher than `1.2.3` are allowed.                                                                                          | `>1.2.3`  |
-| `<1.2.3`  | Less than version 1.2.3. Only versions lower than `1.2.3` are allowed.                                                                                              | `<1.2.3`  |
-| `1.2.x`   | Any patch version within the minor version 1.2. For example, `1.2.0`, `1.2.1`, etc.                                                                                 | `1.2.x`   |
-| `1.x`     | Any minor and patch version within the major version 1. For example, `1.0.0`, `1.1.0`, `1.2.0`, etc.                                                                | `1.x`     |
-| `*`       | Any version is allowed.                                                                                                                                             | `*`       |
+| 符号      | 描述                                                                                                        | 示例      |
+| --------- | ----------------------------------------------------------------------------------------------------------- | --------- |
+| `1.2.3`   | 确切版本。仅使用此特定版本。                                                                                | `1.2.3`   |
+| `^1.2.3`  | 与版本 1.2.3 兼容。允许不更改最左侧非零数字的更新。<br>例如，`1.2.4` 和 `1.3.0` 是允许的，但 `2.0.0` 不是。 | `^1.2.3`  |
+| `~1.2.3`  | 大约等同于版本 1.2.3。允许更新补丁版本。<br>例如，`1.2.4` 是允许的，但 `1.3.0` 不是。                       | `~1.2.3`  |
+| `>=1.2.3` | 大于或等于版本 1.2.3。允许任何版本 `1.2.3` 或更高。                                                         | `>=1.2.3` |
+| `<=1.2.3` | 小于或等于版本 1.2.3。允许任何版本 `1.2.3` 或更低。                                                         | `<=1.2.3` |
+| `>1.2.3`  | 大于版本 1.2.3。仅允许高于 `1.2.3` 的版本。                                                                 | `>1.2.3`  |
+| `<1.2.3`  | 小于版本 1.2.3。仅允许低于 `1.2.3` 的版本。                                                                 | `<1.2.3`  |
+| `1.2.x`   | 任何在次要版本 1.2 内的补丁版本。例如，`1.2.0`、`1.2.1` 等。                                                | `1.2.x`   |
+| `1.x`     | 任何在主版本 1 内的次要和补丁版本。例如，`1.0.0`、`1.1.0`、`1.2.0` 等。                                     | `1.x`     |
+| `*`       | 允许任何版本。                                                                                              | `*`       |
 
-## HTTPS imports
+## HTTPS 导入
 
-Deno also supports import statements that reference HTTP/HTTPS URLs, either
-directly:
+Deno 还支持引用 HTTP/HTTPS URL 的导入语句，可以直接使用：
 
 ```js
 import { Application } from "https://deno.land/x/oak/mod.ts";
 ```
 
-or part of your `deno.json` import map:
+或作为 `deno.json` 导入映射的一部分：
 
 ```json
 {
@@ -241,45 +231,41 @@ or part of your `deno.json` import map:
 }
 ```
 
-Supporting HTTPS imports enables us to support the following JavaScript CDNs, as
-they provide URL access to JavaScript modules:
+支持 HTTPS 导入使我们能够支持以下 JavaScript CDN，因为它们提供了对 JavaScript
+模块的 URL 访问：
 
 - [deno.land/x](https://deno.land/x)
 - [esm.sh](https://esm.sh)
 - [unpkg.com](https://unpkg.com)
 
-HTTPS imports are useful if you have a small, often single file, Deno project
-that doesn't require any other configuration. With HTTPS imports, you can avoid
-having a `deno.json` file at all. It is **not** advised to use this style of
-import in larger applications however, as you may end up with version conflicts
-(where different files use different version specifiers).
+HTTPS 导入在你有小型、通常是单文件的 Deno
+项目时非常有用，这些项目不需要任何其他配置。使用 HTTPS 导入，你可以完全避免使用
+`deno.json`
+文件。然而，不建议在大型应用程序中使用这种导入方式，因为你可能会遇到版本冲突（不同文件使用不同的版本说明符）。
 
 :::info
 
-Use HTTPS imports with caution, and only **from trusted sources**. If the server
-is compromised, it could serve malicious code to your application. They can also
-cause versioning issues if you import different versions in different files.
-HTTPS imports remain supported, **but we recommend using a package registry for
-the best experience.**
+谨慎使用 HTTPS 导入，并且 **仅从受信任的来源**
+导入。如果服务器被攻陷，它可能会向你的应用程序提供恶意代码。如果你在不同文件中导入不同版本，它们也可能导致版本问题。HTTPS
+导入仍然受支持，**但我们建议使用包注册表以获得最佳体验。**
 
 :::
 
-## Overriding dependencies
+## 覆盖依赖项
 
-Deno provides mechanisms to override dependencies, enabling developers to use
-custom or local versions of libraries during development or testing.
+Deno
+提供了覆盖依赖项的机制，使开发者能够在开发或测试期间使用自定义或本地版本的库。
 
-Note: If you need to cache and modify dependencies locally for use across
-builds, consider [vendoring remote modules](#vendoring-remote-modules).
+注意：如果你需要缓存和修改依赖项以在构建中使用，请考虑
+[远程模块的本地化](#vendoring-remote-modules)。
 
-### Overriding local JSR packages
+### 覆盖本地 JSR 包
 
-For developers familiar with `npm link` in Node.js, Deno provides a similar
-feature for local JSR packages through the `patch` field in `deno.json`. This
-allows you to override dependencies with local versions during development
-without needing to publish them.
+对于熟悉 Node.js 中 `npm link` 的开发者，Deno 通过 `deno.json` 中的 `patch`
+字段为本地 JSR
+包提供了类似的功能。这允许你在开发期间覆盖依赖项为本地版本，而无需发布它们。
 
-Example:
+示例：
 
 ```json title="deno.json"
 {
@@ -289,39 +275,33 @@ Example:
 }
 ```
 
-Key points:
+关键点：
 
-- The `patch` field accepts paths to directories containing JSR packages or
-  workspaces. If you reference a single package within a workspace, the entire
-  workspace will be included.
-- This feature is only respected in the workspace root. Using `patch` elsewhere
-  will trigger warnings.
-- Currently, `patch` is limited to JSR packages. Attempting to patch `npm`
-  packages will result in a warning with no effect.
+- `patch` 字段接受包含 JSR
+  包或工作区的目录路径。如果你引用工作区中的单个包，整个工作区将被包含。
+- 此功能仅在工作区根目录中有效。在其他地方使用 `patch` 将触发警告。
+- 目前，`patch` 仅限于 JSR 包。尝试覆盖 `npm` 包将导致警告且无效。
 
-Limitations:
+限制：
 
-- `npm` package overrides are not supported yet. This is planned for future
-  updates.
-- Git-based dependency overrides are unavailable.
-- The `patch` field requires proper configuration in the workspace root.
-- This feature is experimental and may change based on user feedback.
+- 尚不支持 `npm` 包覆盖。这计划在未来的更新中实现。
+- 基于 Git 的依赖项覆盖不可用。
+- `patch` 字段需要在工作区根目录中正确配置。
+- 此功能是实验性的，可能会根据用户反馈进行更改。
 
-### Overriding NPM packages
+### 覆盖 NPM 包
 
-We plan to support NPM packages with the patch functionality described above,
-but until then if you have a `node_modules` directory, `npm link` can be used
-without change to accheive the same effect. This is typically done with
-`{ "nodeModulesDir": "manual" }` set in the `deno.json` file. See also the
-documentation on [`node_modules`](/runtime/fundamentals/node/#node_modules)
+我们计划支持上述描述的 `patch` 功能的 NPM 包，但在此之前，如果你有
+`node_modules` 目录，可以使用 `npm link` 来实现相同的效果。这通常通过在
+`deno.json` 文件中设置 `{ "nodeModulesDir": "manual" }` 来完成。另请参阅
+[`node_modules` 文档](/runtime/fundamentals/node/#node_modules)。
 
-### Overriding HTTPS imports
+### 覆盖 HTTPS 导入
 
-Deno also allows overriding HTTPS imports through the `importMap` field in
-`deno.json`. This feature is particularly useful when substituting a remote
-dependency with a local patched version for debugging or temporary fixes.
+Deno 还允许通过 `deno.json` 中的 `importMap` 字段覆盖 HTTPS
+导入。此功能在将远程依赖项替换为本地修补版本以进行调试或临时修复时特别有用。
 
-Example:
+示例：
 
 ```json title="deno.json"
 {
@@ -336,23 +316,19 @@ Example:
 }
 ```
 
-Key points:
+关键点：
 
-- The `scopes` field in the import map allows you to redirect specific imports
-  to alternative paths.
-- This is commonly used to override remote dependencies with local files for
-  testing or development purposes.
-- Import maps apply only to the root of your project. Nested import maps within
-  dependencies are ignored.
+- 导入映射中的 `scopes` 字段允许你将特定导入重定向到替代路径。
+- 这通常用于在测试或开发期间将远程依赖项覆盖为本地文件。
+- 导入映射仅适用于项目的根目录。依赖项中的嵌套导入映射将被忽略。
 
-## Vendoring remote modules
+## 远程模块的本地化
 
-If your project has external dependencies, you may want to store them locally to
-avoid downloading them from the internet every time you build your project. This
-is especially useful when building your project on a CI server or in a Docker
-container, or patching or otherwise modifying the remote dependencies.
+如果你的项目有外部依赖项，你可能希望将它们存储在本地，以避免每次构建项目时都从互联网下载它们。这在
+CI 服务器或 Docker
+容器中构建项目时特别有用，或者在对远程依赖项进行修补或其他修改时。
 
-Deno offers this functionality through a setting in your `deno.json` file:
+Deno 通过 `deno.json` 文件中的设置提供此功能：
 
 ```json
 {
@@ -360,87 +336,79 @@ Deno offers this functionality through a setting in your `deno.json` file:
 }
 ```
 
-Add the above snippet to your `deno.json` file and Deno will cache all
-dependencies locally in a `vendor` directory when the project is run, or you can
-optionally run the `deno install --entrypoint` command to cache the dependencies
-immediately:
+将上述代码片段添加到你的 `deno.json` 文件中，Deno
+将在项目运行时将所有依赖项缓存在本地的 `vendor` 目录中，或者你可以选择运行
+`deno install --entrypoint` 命令立即缓存依赖项：
 
 ```bash
 deno install --entrypoint main.ts
 ```
 
-You can then run the application as usual with `deno run`:
+然后你可以像往常一样使用 `deno run` 运行应用程序：
 
 ```bash
 deno run main.ts
 ```
 
-After vendoring, you can run `main.ts` without internet access by using the
-`--cached-only` flag, which forces Deno to use only locally available modules.
+本地化后，你可以使用 `--cached-only` 标志在没有互联网访问的情况下运行
+`main.ts`，该标志强制 Deno 仅使用本地可用的模块。
 
-For more advanced overrides, such as substituting dependencies during
-development, see [Overriding dependencies](#overriding-dependencies).
+有关更高级的覆盖，例如在开发期间替换依赖项，请参阅
+[覆盖依赖项](#overriding-dependencies)。
 
-## Publishing modules
+## 发布模块
 
-Any Deno program that defines an export can be published as a module. This
-allows other developers to import and use your code in their own projects.
-Modules can be published to:
+任何定义了导出的 Deno
+程序都可以作为模块发布。这允许其他开发者导入并在他们自己的项目中使用你的代码。模块可以发布到：
 
-- [JSR](https://jsr.io) - recommended, supports TypeScript natively and
-  auto-generates documentation for you
-- [npm](https://www.npmjs.com/) - use [dnt](https://github.com/denoland/dnt) to
-  create the npm package
-- [deno.land/x](https://deno.com/add_module) - for HTTPS imports, use JSR
-  instead if possible
+- [JSR](https://jsr.io) - 推荐，原生支持 TypeScript 并自动为你生成文档
+- [npm](https://www.npmjs.com/) - 使用 [dnt](https://github.com/denoland/dnt)
+  创建 npm 包
+- [deno.land/x](https://deno.com/add_module) - 对于 HTTPS 导入，如果可能，请使用
+  JSR
 
-## Reloading modules
+## 重新加载模块
 
-By default, Deno uses a global cache directory (`DENO_DIR`) for downloaded
-dependencies. This cache is shared across all projects.
+默认情况下，Deno
+使用全局缓存目录（`DENO_DIR`）来存储下载的依赖项。此缓存在所有项目之间共享。
 
-You can force deno to refetch and recompile modules into the cache using the
-`--reload` flag.
+你可以使用 `--reload` 标志强制 Deno 重新获取并重新编译模块到缓存中。
 
 ```bash
-# Reload everything
+# 重新加载所有内容
 deno run --reload my_module.ts
 
-# Reload a specific module
+# 重新加载特定模块
 deno run --reload=jsr:@std/fs my_module.ts
 ```
 
-## Using only cached modules
+## 仅使用缓存的模块
 
-To force Deno to only use modules that have previously been cached, use the
-`--cached-only` flag:
+要强制 Deno 仅使用之前缓存的模块，请使用 `--cached-only` 标志：
 
 ```shell
 deno run --cached-only mod.ts
 ```
 
-This will fail if there are any dependencies in the dependency tree for mod.ts
-which are not yet cached.
+如果 mod.ts 的依赖树中有任何尚未缓存的依赖项，此操作将失败。
 
-## Integrity Checking and Lock Files
+## 完整性检查和锁定文件
 
-Imagine your module relies on a remote module located at https://some.url/a.ts.
-When you compile your module for the first time, `a.ts` is fetched, compiled,
-and cached. This cached version will be used until you either run your module on
-a different machine (such as in a production environment) or manually reload the
-cache (using a command like `deno install --reload`).
+想象一下，你的模块依赖于位于 https://some.url/a.ts
+的远程模块。当你第一次编译你的模块时，`a.ts`
+被获取、编译并缓存。此缓存版本将一直使用，直到你在不同的机器上运行你的模块（例如在生产环境中）或手动重新加载缓存（使用
+`deno install --reload` 等命令）。
 
-But what if the content at `https://some.url/a.ts` changes? This could result in
-your production module running with different dependency code than your local
-module. To detect this, Deno uses integrity checking and lock files.
+但如果 `https://some.url/a.ts`
+的内容发生变化怎么办？这可能导致你的生产模块运行与本地模块不同的依赖代码。为了检测这一点，Deno
+使用完整性检查和锁定文件。
 
-Deno uses a `deno.lock` file to check external module integrity. To opt into a
-lock file, either:
+Deno 使用 `deno.lock` 文件来检查外部模块的完整性。要选择使用锁定文件，可以：
 
-1. Create a `deno.json` file in the current or an ancestor directory, which will
-   automatically create an additive lockfile at `deno.lock`.
+1. 在当前或祖先目录中创建一个 `deno.json` 文件，这将自动在 `deno.lock`
+   处创建一个附加锁定文件。
 
-   Note that this can be disabled by specifying the following in your deno.json:
+   注意，这可以通过在 deno.json 中指定以下内容来禁用：
 
    ```json title="deno.json"
    {
@@ -448,136 +416,17 @@ lock file, either:
    }
    ```
 
-2. Use the `--lock` flag to enable and specify lock file checking.
+2. 使用 `--lock` 标志启用并指定锁定文件检查。
 
-### Frozen lockfile
+### 冻结锁定文件
 
-By default, Deno uses an additive lockfile, where new dependencies are added to
-the lockfile instead of erroring.
+默认情况下，Deno 使用附加锁定文件，其中新依赖项会添加到锁定文件中，而不是报错。
 
-This might not be desired in certain scenarios (ex. CI pipelines or production
-environments) where you'd rather have Deno error when it encounters a dependency
-it's never seen before. To enable this, you can specify the `--frozen` flag or
-set the following in a deno.json file:
+在某些场景下（例如 CI 管道或生产环境），你可能希望 Deno
+在遇到从未见过的依赖项时报错。要启用此功能，你可以指定 `--frozen` 标志或在
+deno.json 文件中设置以下内容：
 
 ```json title="deno.json"
 {
   "lock": {
-    "frozen": true
-  }
-}
 ```
-
-When running a deno command with a frozen lockfile, any attempts to update the
-lockfile with new contents will cause the command to exit with an error showing
-the modifications that would have been made.
-
-If you wish to update the lockfile, specify `--frozen=false` on the command line
-to temporarily disable the frozen lockfile.
-
-### Changing lockfile path
-
-The lockfile path can be configured by specifying `--lock=deps.lock` or the
-following in a Deno configuration file:
-
-```json title="deno.json"
-{
-  "lock": {
-    "path": "deps.lock"
-  }
-}
-```
-
-## Private repositories
-
-:::note
-
-If you're looking for private npm registries and `.npmrc` support, visit the
-[npm support](/runtime/fundamentals/node/#private-registries) page.
-
-:::
-
-There may be instances where you want to load a remote module that is located in
-a _private_ repository, like a private repository on GitHub.
-
-Deno supports sending bearer tokens when requesting a remote module. Bearer
-tokens are the predominant type of access token used with OAuth 2.0, and are
-broadly supported by hosting services (e.g., GitHub, GitLab, Bitbucket,
-Cloudsmith, etc.).
-
-### DENO_AUTH_TOKENS
-
-The Deno CLI will look for an environment variable named `DENO_AUTH_TOKENS` to
-determine what authentication tokens it should consider using when requesting
-remote modules. The value of the environment variable is in the format of _n_
-number of tokens delimited by a semi-colon (`;`) where each token is either:
-
-- a bearer token in the format of `{token}@{hostname[:port]}` or
-- basic auth data in the format of `{username}:{password}@{hostname[:port]}`
-
-For example, a single token for `deno.land` would look something like this:
-
-```sh
-DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land
-```
-
-or:
-
-```sh
-DENO_AUTH_TOKENS=username:password@deno.land
-```
-
-And multiple tokens would look like this:
-
-```sh
-DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land;f1e2d3c4b5a6@example.com:8080;username:password@deno.land
-```
-
-When Deno goes to fetch a remote module, where the hostname matches the hostname
-of the remote module, Deno will set the `Authorization` header of the request to
-the value of `Bearer {token}` or `Basic {base64EncodedData}`. This allows the
-remote server to recognize that the request is an authorized request tied to a
-specific authenticated user, and provide access to the appropriate resources and
-modules on the server.
-
-### GitHub
-
-To access private repositories on GitHub, you would need to issue yourself a
-_personal access token_. You do this by logging into GitHub and going under
-_Settings -> Developer settings -> Personal access tokens_:
-
-![Personal access tokens settings on GitHub](./images/private-pat.png)
-
-You would then choose to _Generate new token_ and give your token a description
-and appropriate access to the `repo` scope. The `repo` scope will enable reading
-file contents (more on
-[scopes in the GitHub docs](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps#available-scopes)):
-
-![Creating a new personal access token on GitHub](./images/private-github-new-token.png)
-
-And once created GitHub will display the new token a single time, the value of
-which you would want to use in the environment variable:
-
-![Display of newly created token on GitHub](./images/private-github-token-display.png)
-
-In order to access modules that are contained in a private repository on GitHub,
-you would want to use the generated token in the `DENO_AUTH_TOKENS` environment
-variable scoped to the `raw.githubusercontent.com` hostname. For example:
-
-```sh
-DENO_AUTH_TOKENS=a1b2c3d4e5f6@raw.githubusercontent.com
-```
-
-This should allow Deno to access any modules that the user who the token was
-issued for has access to.
-
-When the token is incorrect, or the user does not have access to the module,
-GitHub will issue a `404 Not Found` status, instead of an unauthorized status.
-So if you are getting errors that the modules you are trying to access are not
-found on the command line, check the environment variable settings and the
-personal access token settings.
-
-In addition, `deno run -L debug` should print out a debug message about the
-number of tokens that are parsed out of the environment variable. It will print
-an error message if it feels any of the tokens are malformed. It won't print any
-details about the tokens for security purposes.

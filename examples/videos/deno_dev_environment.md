@@ -1,41 +1,38 @@
 ---
-title: "Your Deno Dev Environment"
+title: "您的 Deno 开发环境"
 url: /examples/deno_dev_environment/
 videoUrl: https://www.youtube.com/watch?v=BFfrGrLm2tw&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=3
 layout: video.tsx
 ---
 
-## Description of video
+## 视频描述
 
-How to set up your development environment for Deno
+如何为 Deno 设置您的开发环境
 
-## Transcript and code
+## 文字稿和代码
 
-To install Deno, we'll run curl. So we're going to grab this curl command
-[from the documentation](https://docs.deno.com/runtime/getting_started/installation/).
+要安装 Deno，我们将运行 curl。所以我们将从文档中获取这个 curl 命令。
 
 ```shell
 curl -fsSL https://deno.land/install.sh | sh
 ```
 
-We'll go to our terminal, we'll paste that in, hit enter, and this will install
-Deno in the background to the most recent version. When I do this, it'll ask me
-if I want to add Deno to the path. We'll go ahead and say yes, and you can add
-these setup completions here.
+我们将打开终端，粘贴该命令，按下回车，这将在后台安装最新版本的
+Deno。当我执行此操作时，它会询问我是否要将 Deno
+添加到路径中。我们将选择是，您可以在此处添加这些设置补全。
 
-And now we have installed this to our path. If you're on Windows, there are
-installation instructions for you here in the documentation.
+现在我们已经将其安装到路径中。如果您使用的是
+Windows，文档中提供了适用于您的安装说明。
 
-To generate a Deno project from scratch, let's go ahead and type
-`deno init MyDenoProject`. This is going to create that folder for me. I can
-then cd into that folder. Now if we open this up in VSCode, this has created a
-`deno.json` file, a `main_test.ts` file, and a `main.ts` file. So this is a
-quick way of getting started.
+要从头生成一个 Deno 项目，让我们继续输入
+`deno init MyDenoProject`。这将为我创建该文件夹。然后我可以 cd
+进入该文件夹。现在如果我们在 VSCode 中打开它，这将创建一个 `deno.json`
+文件、一个 `main_test.ts` 文件和一个 `main.ts`
+文件。所以这是一个快速入门的方法。
 
-If you're using VSCode, there are a few configuration options that you'll want
-to set up. So we'll go up here to code and settings. We'll select extensions. So
-over here in your extensions, you're going to search for Deno, and then we'll
-[select the one that has been created by Denoland here](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno).
+如果您使用的是
+VSCode，有一些配置选项您需要设置。所以我们将在这里转到代码和设置。我们将选择扩展。所以在您的扩展中，您将搜索
+Deno，然后我们将选择由 Denoland 创建的那个。
 
 ```javascript
 {
@@ -43,40 +40,30 @@ over here in your extensions, you're going to search for Deno, and then we'll
 }
 ```
 
-We're going to run install, and this will install our Deno land extension. Next
-we'll type `command shift P`. This will open up our command palette here, and we
-can type `deno initialize workspace configuration`. We're going to go ahead and
-click that. That's going to generate this VSCode folder with settings. This is
-going to enable hints and autocomplete and all of that right here in the code
-editor. So if I start to type anything from `deno serve`, for example, that's
-going to give me a look at what the expected parameters of that function are.
-That's very helpful.
+我们将运行安装，这将安装我们的 Deno land 扩展。接下来我们将输入
+`command shift P`。这将打开我们的命令面板，我们可以输入
+`deno initialize workspace configuration`。我们将继续点击它。这将生成这个带有设置的
+VSCode 文件夹。这将在此代码编辑器中启用提示和自动补全等功能。所以如果我开始输入
+`deno serve`，例如，这将让我查看该函数的预期参数。这非常有帮助。
 
-This is also going to give us hints when importing. So we'll say import star as
-path from JSR at standard slash path.
+这还将为我们提供导入时的提示。所以我们将说从 JSR 导入星号作为路径。
 
 ```javascript
 import * as path from "jsr:@std/path";
 ```
 
-So all of them are listed there. Pretty cool. And then if we wanted to do
-something for a remote module, something like OpenAI from
+所以它们都列在那里。非常酷。然后如果我们想为远程模块做一些事情，比如从
 [https://deno.land/x/openai@v4.67.1/mod.ts](https://deno.land/x/openai@v4.67.1/mod.ts)
-(or now, even better, from [JSR](https://jsr.io/@openai/openai))
+导入 OpenAI（或者现在更好的是从 [JSR](https://jsr.io/@openai/openai) 导入）
 
 ```javascript
 import OpenAI from "jsr:@openai/openai";
 ```
 
-This is then going to give us the standard library as well as X for all of those
-third party APIs. So you can actually drill down into OpenAI from here. You just
-need to select the version, so we'll say OpenAI at v461. And then you can even
-drill down into that individual file.
+这将为我们提供标准库以及 X 的所有第三方 API。所以您实际上可以从此处深入查看
+OpenAI。您只需要选择版本，所以我们将说 OpenAI at
+v461。然后您甚至可以深入查看该单个文件。
 
-If you take a look at
-[the documentation
-here, this will guide you through the process of setting up your own unique
-environment](/runtime/getting_started/setup_your_environment/). There are
-[shell completions](/runtime/getting_started/setup_your_environment/#shell-completions)
-that you can add, so depending on which CLI tool you're using, you can set this
-up over here, whether it's Bash or PowerShell or ZShell or whatever it might be.
+如果您查看这里的文档，这将指导您完成设置您自己独特环境的过程。有您可以添加的
+shell 补全，所以根据您使用的 CLI 工具，您可以在此处设置它，无论是 Bash 还是
+PowerShell 或 ZShell 或其他任何工具。

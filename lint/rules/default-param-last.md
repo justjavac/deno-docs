@@ -2,21 +2,18 @@
 tags: []
 ---
 
-Enforces default parameter(s) to be last in the function signature.
+强制将默认参数放在函数签名的最后。
 
-Parameters with default values are optional by nature but cannot be left out of
-the function call without mapping the function inputs to different parameters
-which is confusing and error prone. Specifying them last allows them to be left
-out without changing the semantics of the other parameters.
+具有默认值的参数本质上是可选的，但如果不将函数输入映射到不同的参数，则无法在函数调用中省略这些参数，这会导致混淆且容易出错。将它们指定在最后允许在不改变其他参数语义的情况下省略它们。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 function f(a = 2, b) {}
 function f(a = 5, b, c = 5) {}
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 function f() {}

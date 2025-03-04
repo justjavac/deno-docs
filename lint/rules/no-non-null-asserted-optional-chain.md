@@ -2,20 +2,19 @@
 tags: []
 ---
 
-Disallow non-null assertions after an optional chain expression.
+禁止在可选链表达式后使用非空断言。
 
-`?.` optional chain expressions provide undefined if an object is `null` or
-`undefined`. Using a `!` non-null assertion to assert the result of an `?.`
-optional chain expression is non-nullable is likely wrong.
+`?.` 可选链表达式在对象为 `null` 或 `undefined` 时返回 `undefined`。使用 `!`
+非空断言来断言 `?.` 可选链表达式的结果为非空值很可能是错误的。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 foo?.bar!;
 foo?.bar()!;
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 foo?.bar;

@@ -2,35 +2,32 @@
 tags: []
 ---
 
-Disallows the use of the `console` global.
+禁止使用 `console` 全局对象。
 
-Oftentimes, developers accidentally commit `console.log`/`console.error`
-statements, left in particularly after debugging. Moreover, using these in code
-may leak sensitive information to the output or clutter the console with
-unnecessary information. This rule helps maintain clean and secure code by
-disallowing the use of `console`.
+通常情况下，开发者在调试后会不小心提交 `console.log`/`console.error`
+语句。此外，在代码中使用这些语句可能会将敏感信息泄露到输出中，或者用不必要的信息污染控制台。此规则通过禁止使用
+`console` 来帮助保持代码的整洁和安全。
 
-This rule is especially useful in libraries where you almost never want to
-output to the console.
+此规则在几乎从不希望输出到控制台的库中尤其有用。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
-console.log("Debug message");
-console.error("Debug message");
+console.log("调试信息");
+console.error("调试信息");
 console.debug(obj);
 
-if (debug) console.log("Debugging");
+if (debug) console.log("调试中");
 
 function log() {
-  console.log("Log");
+  console.log("日志");
 }
 ```
 
-**Valid:**
+**有效示例：**
 
-It is recommended to explicitly enable the console via a `deno-lint-ignore`
-comment for any calls where you actually want to use it.
+建议通过 `deno-lint-ignore` 注释显式启用
+`console`，以便在确实需要使用它的地方进行调用。
 
 ```typescript
 function logWarning(message: string) {

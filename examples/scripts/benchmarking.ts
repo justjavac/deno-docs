@@ -2,7 +2,7 @@
  * @title Benchmarking
  * @difficulty beginner
  * @tags cli
- * @resource {https://docs.deno.com/runtime/reference/cli/benchmarker} Manual: Benchmarker tool_requests} Example: HTTP Requests
+ * @resource {https://docs.denohub.com/runtime/reference/cli/benchmarker} Manual: Benchmarker tool_requests} Example: HTTP Requests
  * @group System
  *
  * When writing libraries, a very common task that needs to be done is

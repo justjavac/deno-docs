@@ -1,37 +1,35 @@
 ---
-title: "Publishing Modules with JSR"
+title: "使用 JSR 发布模块"
 url: /examples/publishing_modules_with_jsr/
 videoUrl: https://www.youtube.com/watch?v=7uiL4WYvZVs&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=8
 layout: video.tsx
 ---
 
-## Transcript and examples
+## 文字稿和示例
 
-[JSR](https://jsr.io) is a registry specifically designed for modern JavaScript
-projects. JSR - the JavaScript registry - has a bunch of cool features. But if
-you've used npm before, you might be thinking, "why do I need this and why do I
-need to learn another one of these?"
+[JSR](https://jsr.io) 是一个专门为现代 JavaScript 项目设计的注册表。JSR -
+JavaScript 注册表 - 有一堆很酷的功能。但如果你之前用过
+npm，你可能会想，“为什么我需要这个，为什么我需要再学一个这样的东西？”
 
-- Well, first it's optimized for TypeScript.
-- JSR only supports ES Modules.
-- And finally, npm is the centralized registry for node projects, but there are
-  other runtimes. Obviously Deno, but you can also use these packages in Bun,
-  Cloudflare workers and more
+- 首先，它是为 TypeScript 优化的。
+- JSR 只支持 ES 模块。
+- 最后，npm 是 Node 项目的集中式注册表，但还有其他运行时。显然有
+  Deno，但你也可以在 Bun、Cloudflare workers 等中使用这些包。
 
-Think of it like a superset. JSR doesn't replace npm, it builds on top of it.
+可以把它想象成一个超集。JSR 并没有取代 npm，而是在它的基础上构建的。
 
-So here at [jsr.io](https://jsr.io), you can search for whatever you want. I'm
-looking for this library called Oak that is a middleware framework for handling
-HTTP requests. I'll search for it here, and this will take me to
-[the documentation page](https://jsr.io/@oak/oak).
+所以在这里
+[jsr.io](https://jsr.io)，你可以搜索任何你想要的东西。我正在寻找一个叫做 Oak
+的库，它是一个用于处理 HTTP 请求的中间件框架。我会在这里搜索它，这将带我进入
+[文档页面](https://jsr.io/@oak/oak)。
 
-If you want to install a package, all you need to do is add it:
+如果你想安装一个包，你只需要添加它：
 
 ```sh
 deno add jsr:@oak/oak
 ```
 
-Then we can use it inside of our file like this.
+然后我们可以在我们的文件中这样使用它。
 
 ```javascript
 import { Application } from "jsr:@oak/oak/application";
@@ -49,15 +47,13 @@ app.use(router.allowedMethods());
 app.listen({ port: 8080 });
 ```
 
-Pretty cool! But what is it like to publish our own JSR package? It's actually
-great.
+很酷吧！但是发布我们自己的 JSR 包是什么感觉呢？实际上很棒。
 
-JSR packages can depend on other packages from JSR but also on any npm package.
+JSR 包可以依赖于其他 JSR 包，也可以依赖于任何 npm 包。
 
-Let's build a small library and publish it to JSR. Remember
-[our `sing` function from earlier](/examples/all-in-one_tooling/), let's make
-this a function that can be consumed by other people in the JavaScript
-community. You're welcome everyone.
+让我们构建一个小库并将其发布到 JSR。还记得
+[我们之前的 `sing` 函数](/examples/all-in-one_tooling/)，让我们把它变成一个可以被
+JavaScript 社区其他人使用的函数。大家不客气。
 
 ```typescript
 export function sing(
@@ -70,37 +66,33 @@ export function sing(
 sing("la", 3);
 ```
 
-Now if we [head over to jsr.io, we can publish it](https://jsr.io/new). The
-first time I ever try to publish a package, JSR will ask me which scope I want
-to publish to. I can create that here.
+现在如果我们
+[前往 jsr.io，我们可以发布它](https://jsr.io/new)。我第一次尝试发布包时，JSR
+会问我想要发布到哪个范围。我可以在这里创建它。
 
-Then I'll create the package name and follow the instructions.
+然后我会创建包名并按照说明操作。
 
-Let's try using our new packaga in a project using Vite. The following command
-will walk us through setting up a new Vite project.
+让我们尝试在一个使用 Vite 的项目中使用我们的新包。以下命令将引导我们设置一个新的
+Vite 项目。
 
 ```shell
 deno run --allow-read --allow-write --allow-env npm:create-vite-extra@latest
 ```
 
-Now we can import our new package by adding it to our project:
+现在我们可以通过将其添加到我们的项目中来导入我们的新包：
 
 ```shell
 deno add jsr:@eveporcello/sing
 ```
 
-And then importing it when we need it
+然后在需要时导入它
 
 ```typescript
 import { sing } from "@eveporcello/sing";
 ```
 
- So if I had to give myself a grade on this, I don't even have to give myself a
-grade. [JSR will give me a grade](https://jsr.io/@eveporcello/sing/score) of
-29%, which I don't know. Probably not so good. But this has a whole list of
-improvements that I can make.
+所以如果我要给自己打分，我甚至不需要给自己打分。[JSR 会给我打 29% 的分数](https://jsr.io/@eveporcello/sing/score)，我不知道。可能不太好。但这有一整列我可以做的改进。
 
-I need to add a readme to my package. I need to add examples. All of these
-different things. So I can on my own time develop this to ensure that I have 100
-percent here so that my code is well documented and very consumable by other
-developers.
+我需要为我的包添加一个
+readme。我需要添加示例。所有这些不同的东西。所以我可以在自己的时间里开发这个，以确保我在这里有
+100 分，这样我的代码就得到了很好的文档记录，并且非常容易被其他开发者使用。

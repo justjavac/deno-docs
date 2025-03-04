@@ -2,13 +2,12 @@
 tags: [recommended]
 ---
 
-Disallows the overwriting/reassignment of an existing function.
+禁止覆盖/重新分配现有函数。
 
-Javascript allows for the reassignment of a function definition. This is
-generally a mistake on the developers part, or poor coding practice as code
-readability and maintainability will suffer.
+Javascript
+允许重新分配函数定义。这通常是开发人员的错误，或者是糟糕的编码实践，因为代码的可读性和可维护性会受到影响。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 function foo() {}
@@ -22,7 +21,7 @@ myFunc = existingFunc;
 function myFunc() {}
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 function foo() {}
@@ -35,5 +34,5 @@ const a = function baz() {
 const anotherFuncRef = existingFunc;
 
 let myFuncVar = function () {};
-myFuncVar = bar; // variable reassignment, not function re-declaration
+myFuncVar = bar; // 变量重新分配，不是函数重新声明
 ```

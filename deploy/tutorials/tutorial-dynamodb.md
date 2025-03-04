@@ -1,29 +1,28 @@
 ---
-title: "API server with DynamoDB"
+title: "使用 DynamoDB 的 API 服务器"
 oldUrl:
   - /deploy/docs/tutorial-dynamodb/
 ---
 
-In this tutorial let's take a look at how we can use it to build a small API
-that has endpoints to insert and retrieve information, backed by DynamoDB.
+在本教程中，我们将学习如何使用它来构建一个小型 API，该 API
+具有插入和检索信息的端点，并由 DynamoDB 提供支持。
 
-The tutorial assumes that you have an AWS and Deno Deploy account.
+本教程假设您拥有 AWS 和 Deno Deploy 账户。
 
-- [Overview](#overview)
-- [Setup DynamoDB](#setup-dynamodb)
-- [Create a Project in Deno Deploy](#create-a-project-in-deno-deploy)
-- [Write the Application](#write-the-application)
-- [Deploy the Application](#deploy-the-application)
+- [概述](#overview)
+- [设置 DynamoDB](#setup-dynamodb)
+- [在 Deno Deploy 中创建项目](#create-a-project-in-deno-deploy)
+- [编写应用程序](#write-the-application)
+- [部署应用程序](#deploy-the-application)
 
-## Overview
+## 概述
 
-We're going to build an API with a single endpoint that accepts GET/POST
-requests and returns appropriate information
+我们将构建一个具有单个端点的 API，该端点接受 GET/POST 请求并返回相应的信息。
 
 ```sh
-# A GET request to the endpoint should return the details of the song based on its title.
-GET /songs?title=Song%20Title # '%20' == space
-# response
+# 对端点的 GET 请求应根据歌曲标题返回歌曲的详细信息。
+GET /songs?title=Song%20Title # '%20' == 空格
+# 响应
 {
   title: "Song Title"
   artist: "Someone"
@@ -32,9 +31,9 @@ GET /songs?title=Song%20Title # '%20' == space
   genres: "country rap",
 }
 
-# A POST request to the endpoint should insert the song details.
+# 对端点的 POST 请求应插入歌曲详细信息。
 POST /songs
-# post request body
+# POST 请求体
 {
   title: "A New Title"
   artist: "Someone New"
@@ -44,41 +43,36 @@ POST /songs
 }
 ```
 
-## Setup DynamoDB
+## 设置 DynamoDB
 
-Our first step in the process is to generate AWS credentials to programmatically
-access DynamoDB.
+我们在此过程中的第一步是生成 AWS 凭证，以便以编程方式访问 DynamoDB。
 
-Generate Credentials:
+生成凭证：
 
-1. Go to https://console.aws.amazon.com/iam/ and go to "Users" section.
-2. Click on **Create user** button, fill the **User name** field (maybe use
-   `denamo`) and select **Programmatic access** type.
-3. Click **Next**
-4. Select **Attach policies directly** and search for
-   `AmazonDynamoDBFullAccess`. Check the box next to this policy in the results.
-5. Click **Next** and **Create user**
-6. On the resulting **Users** page, click through to the user you just created
-7. Click on **Create access key**
-8. Select **Application running outside AWS**
-9. Click ***Create**
-10. Click **Download .csv file** to download the credentials you just created.
+1. 访问 https://console.aws.amazon.com/iam/ 并进入 "Users" 部分。
+2. 点击 **Create user** 按钮，填写 **User name** 字段（可以使用 `denamo`）并选择
+   **Programmatic access** 类型。
+3. 点击 **Next**
+4. 选择 **Attach policies directly** 并搜索
+   `AmazonDynamoDBFullAccess`。在结果中勾选此策略旁边的复选框。
+5. 点击 **Next** 和 **Create user**
+6. 在生成的 **Users** 页面上，点击进入您刚刚创建的用户
+7. 点击 **Create access key**
+8. 选择 **Application running outside AWS**
+9. 点击 ***Create**
+10. 点击 **Download .csv file** 以下载您刚刚创建的凭证。
 
-Create database table:
+创建数据库表：
 
-1. Go to https://console.aws.amazon.com/dynamodb and click on **Create table**
-   button.
-2. Fill the **Table name** field with `songs` and **Partition key** with
-   `title`.
-3. Scroll down and click on **Create table**.
-4. Once the table is created, click on the table name and find its **General
-   information**
-5. Under **Amazon Resource Name (ARN)** take note of the region of your new
-   table (for example us-east-1).
+1. 访问 https://console.aws.amazon.com/dynamodb 并点击 **Create table** 按钮。
+2. 填写 **Table name** 字段为 `songs`，**Partition key** 为 `title`。
+3. 向下滚动并点击 **Create table**。
+4. 表创建完成后，点击表名并找到其 **General information**
+5. 在 **Amazon Resource Name (ARN)** 下，记下新表的区域（例如 us-east-1）。
 
-## Write the Application
+## 编写应用程序
 
-Create a file called `index.js` and insert the following:
+创建一个名为 `index.js` 的文件并插入以下内容：
 
 ```js
 import {
@@ -86,19 +80,16 @@ import {
   serve,
   validateRequest,
 } from "https://deno.land/x/sift@0.6.0/mod.ts";
-// AWS has an official SDK that works with browsers. As most Deno Deploy's
-// APIs are similar to browser's, the same SDK works with Deno Deploy.
-// So we import the SDK along with some classes required to insert and
-// retrieve data.
+// AWS 有一个适用于浏览器的官方 SDK。由于大多数 Deno Deploy 的 API 与浏览器的 API 相似，因此相同的 SDK 也适用于 Deno Deploy。
+// 因此我们导入 SDK 以及一些插入和检索数据所需的类。
 import {
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
 } from "https://esm.sh/@aws-sdk/client-dynamodb";
 
-// Create a client instance by providing your region information.
-// The credentials are obtained from environment variables which
-// we set during our project creation step on Deno Deploy.
+// 通过提供您的区域信息创建客户端实例。
+// 凭证是从环境变量中获取的，我们在 Deno Deploy 上的项目创建步骤中设置了这些变量。
 const client = new DynamoDBClient({
   region: Deno.env.get("AWS_TABLE_REGION"),
   credentials: {
@@ -112,10 +103,8 @@ serve({
 });
 
 async function handleRequest(request) {
-  // The endpoint allows GET and POST request. A parameter named "title"
-  // for a GET request to be processed. And body with the fields defined
-  // below are required to process POST request.
-  // validateRequest ensures that the provided terms are met by the request.
+  // 该端点允许 GET 和 POST 请求。GET 请求需要名为 "title" 的参数。POST 请求需要包含以下字段的请求体。
+  // validateRequest 确保请求满足提供的条件。
   const { error, body } = await validateRequest(request, {
     GET: {
       params: ["title"],
@@ -128,20 +117,17 @@ async function handleRequest(request) {
     return json({ error: error.message }, { status: error.status });
   }
 
-  // Handle POST request.
+  // 处理 POST 请求。
   if (request.method === "POST") {
     try {
-      // When we want to interact with DynamoDB, we send a command using the client
-      // instance. Here we are sending a PutItemCommand to insert the data from the
-      // request.
+      // 当我们想要与 DynamoDB 交互时，我们使用客户端实例发送命令。这里我们发送 PutItemCommand 以插入请求中的数据。
       const {
         $metadata: { httpStatusCode },
       } = await client.send(
         new PutItemCommand({
           TableName: "songs",
           Item: {
-            // Here 'S' implies that the value is of type string
-            // and 'N' implies a number.
+            // 这里 'S' 表示值为字符串类型，'N' 表示数字类型。
             title: { S: body.title },
             artist: { S: body.artist },
             album: { S: body.album },
@@ -151,26 +137,22 @@ async function handleRequest(request) {
         }),
       );
 
-      // On a successful put item request, dynamo returns a 200 status code (weird).
-      // So we test status code to verify if the data has been inserted and respond
-      // with the data provided by the request as a confirmation.
+      // 在成功的 put item 请求中，dynamo 返回 200 状态码（奇怪）。因此我们测试状态码以验证数据是否已插入，并返回请求提供的数据作为确认。
       if (httpStatusCode === 200) {
         return json({ ...body }, { status: 201 });
       }
     } catch (error) {
-      // If something goes wrong while making the request, we log
-      // the error for our reference.
+      // 如果在请求过程中出现问题，我们记录错误以供参考。
       console.log(error);
     }
 
-    // If the execution reaches here it implies that the insertion wasn't successful.
+    // 如果执行到这里，意味着插入未成功。
     return json({ error: "couldn't insert data" }, { status: 500 });
   }
 
-  // Handle GET request.
+  // 处理 GET 请求。
   try {
-    // We grab the title form the request and send a GetItemCommand
-    // to retrieve the information about the song.
+    // 我们从请求中获取标题并发送 GetItemCommand 以检索歌曲的信息。
     const { searchParams } = new URL(request.url);
     const { Item } = await client.send(
       new GetItemCommand({
@@ -181,8 +163,7 @@ async function handleRequest(request) {
       }),
     );
 
-    // The Item property contains all the data, so if it's not undefined,
-    // we proceed to returning the information about the title
+    // Item 属性包含所有数据，因此如果它不为 undefined，我们继续返回标题的信息。
     if (Item) {
       return json({
         title: Item.title.S,
@@ -196,9 +177,8 @@ async function handleRequest(request) {
     console.log(error);
   }
 
-  // We might reach here if an error is thrown during the request to database
-  // or if the Item is not found in the database.
-  // We reflect both conditions with a general message.
+  // 如果在数据库请求期间抛出错误或数据库中未找到 Item，我们可能会到达这里。
+  // 我们用一条通用消息反映这两种情况。
   return json(
     {
       message: "couldn't find the title",
@@ -208,36 +188,34 @@ async function handleRequest(request) {
 }
 ```
 
-Initialize git in your new project and
-[push it to GitHub](https://docs.github.com/en/get-started/start-your-journey/hello-world#step-1-create-a-repository).
+在您的新项目中初始化 git
+并[将其推送到 GitHub](https://docs.github.com/en/get-started/start-your-journey/hello-world#step-1-create-a-repository)。
 
-## Deploy the Application
+## 部署应用程序
 
-Now that we have everything in place, let's deploy your new application!
+现在我们已经准备好了一切，让我们部署您的新应用程序吧！
 
-1. In your browser, visit [Deno Deploy](https://dash.deno.com/new_project) and
-   link your GitHub account.
-2. Select the repository which contains your new application.
-3. You can give your project a name or allow Deno to generate one for you
-4. Select `index.js` in the Entrypoint dropdown
-5. Click **Deploy Project**
+1. 在浏览器中访问 [Deno Deploy](https://dash.deno.com/new_project) 并链接您的
+   GitHub 账户。
+2. 选择包含您新应用程序的仓库。
+3. 您可以为您的项目命名或允许 Deno 为您生成一个名称。
+4. 在 Entrypoint 下拉菜单中选择 `index.js`
+5. 点击 **Deploy Project**
 
-In order for your Application to work, we will need to configure its environment
-variables.
+为了使您的应用程序正常工作，我们需要配置其环境变量。
 
-On your project's success page, or in your project dashboard, click on **Add
-environmental variables**. Under Environment Variables, click **+ Add
-Variable**. Create the following variables:
+在项目的成功页面或项目仪表板上，点击 **Add environmental variables**。在
+Environment Variables 下，点击 **+ Add Variable**。创建以下变量：
 
-1. `AWS_ACCESS_KEY_ID` - with the value from the CSV you downloaded
-2. `AWS_SECRET_ACCESS_KEY` - with the value from the CSV you downloaded.
-3. `AWS_TABLE_REGION` - with your table's region
+1. `AWS_ACCESS_KEY_ID` - 使用您下载的 CSV 文件中的值。
+2. `AWS_SECRET_ACCESS_KEY` - 使用您下载的 CSV 文件中的值。
+3. `AWS_TABLE_REGION` - 使用您的表所在的区域。
 
-Click to save the variables.
+点击保存变量。
 
-Let's test the API.
+让我们测试一下 API。
 
-POST some data.
+POST 一些数据。
 
 ```sh
 curl --request POST --data \
@@ -245,10 +223,10 @@ curl --request POST --data \
 --dump-header - https://<project_name>.deno.dev/songs
 ```
 
-GET information about the title.
+获取标题的信息。
 
 ```sh
 curl https://<project_name>.deno.dev/songs?title=Old%20Town%20Road
 ```
 
-Congratulations on learning how to use DynamoDB with Deno Deploy!
+恭喜您学会了如何在 Deno Deploy 中使用 DynamoDB！

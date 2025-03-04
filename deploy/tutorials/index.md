@@ -1,20 +1,20 @@
 ---
-title: "Tutorials"
-sidebar_title: "Overview"
+title: "教程"
+sidebar_title: "概览"
 pagination_next: /deploy/tutorials/tutorial-http-server
 ---
 
-Here, you'll find a collection of tutorials and example applications for Deno
-Deploy. Check our ever expanding list of tutorials in the nav, and explore
-[examples.deno.land](https://examples.deno.land) for even more.
+在这里，您将找到 Deno Deploy
+的教程和示例应用程序集合。查看我们不断扩展的教程列表，并访问
+[examples.deno.land](https://examples.deno.land) 获取更多内容。
 
-## Code examples
+## 代码示例
 
-- [Build a simple API server](./simple-api.md)
-- [Serve static assets](./static-site.md)
+- [构建一个简单的 API 服务器](./simple-api.md)
+- [提供静态资源](./static-site.md)
 
-## App building tutorials
+## 应用构建教程
 
-- [Build a Fresh app](./fresh.md)
-- [Build a Discord slash command](./discord-slash.md)
-- [Build a site with Vite](./vite.md)
+- [构建一个 Fresh 应用](./fresh.md)
+- [构建一个 Discord 斜杠命令](./discord-slash.md)
+- [使用 Vite 构建一个站点](./vite.md)

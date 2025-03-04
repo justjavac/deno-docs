@@ -2,53 +2,49 @@
 tags: []
 ---
 
-Requires all functions called with any amount of `boolean` literals as
-parameters to use a self-documenting constant instead.
+要求所有使用任意数量的 `boolean` 字面量作为参数的函数，使用自解释的常量来代替。
 
-Is common to define functions that can take `booleans` as arguments. However,
-passing `boolean` literals as parameters can lead to lack of context regarding
-the role of the argument inside the function in question.
+定义可以接受 `boolean` 作为参数的函数是很常见的。然而，将 `boolean`
+字面量作为参数传递可能会导致在函数内部缺乏关于参数作用的上下文。
 
-A simple fix for the points mentioned above is the use of self documenting
-constants that will end up working as "named booleans", that allow for a better
-understanding on what the parameters mean in the context of the function call.
+对于上述问题的一个简单修复方法是使用自解释的常量，这些常量最终将作为“命名的布尔值”使用，从而更好地理解函数调用中参数的含义。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 function redraw(allViews: boolean, inline: boolean) {
-  // redraw logic.
+  // redraw 逻辑。
 }
 redraw(true, true);
 
 function executeCommand(recursive: boolean, executionMode: EXECUTION_MODES) {
-  // executeCommand logic.
+  // executeCommand 逻辑。
 }
 executeCommand(true, EXECUTION_MODES.ONE);
 
 function enableLogs(enable: boolean) {
-  // enabledLogs logic.
+  // enabledLogs 逻辑。
 }
 enableLogs(true);
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 function redraw(allViews: boolean, inline: boolean) {
-  // redraw logic.
+  // redraw 逻辑。
 }
 const ALL_VIEWS = true, INLINE = true;
 redraw(ALL_VIEWS, INLINE);
 
 function executeCommand(recursive: boolean, executionMode: EXECUTION_MODES) {
-  // executeCommand logic.
+  // executeCommand 逻辑。
 }
 const RECURSIVE = true;
 executeCommand(RECURSIVE, EXECUTION_MODES.ONE);
 
 function enableLogs(enable: boolean) {
-  // enabledLogs logic.
+  // enabledLogs 逻辑。
 }
 const ENABLE = true;
 enableLogs(ENABLE);

@@ -2,10 +2,10 @@
 tags: []
 ---
 
-Checks that a `<button>` JSX element has a valid `type` attribute. The default
-value is `"submit"` which is often not the desired behavior.
+检查 `<button>` JSX 元素是否具有有效的 `type` 属性。默认值为
+`"submit"`，这通常不是期望的行为。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 <button />
@@ -15,7 +15,7 @@ value is `"submit"` which is often not the desired behavior.
 <button type={2} />
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 <button type="submit" />

@@ -2,12 +2,11 @@
 tags: [recommended]
 ---
 
-Warns the usage of the deprecated - Deno APIs.
+警告使用已弃用的 Deno API。
 
-The following APIs will be removed from the `Deno.*` namespace but have newer
-APIs to migrate to. See the
-[Deno 1.x to 2.x Migration Guide](https://docs.deno.com/runtime/manual/advanced/migrate_deprecations)
-for migration instructions.
+以下 API 将从 `Deno.*` 命名空间中移除，但有新的 API 可以迁移。请参阅
+[Deno 1.x 到 2.x 迁移指南](https://docs.denohub.com/runtime/manual/advanced/migrate_deprecations)
+获取迁移说明。
 
 - `Deno.Buffer`
 - `Deno.Closer`
@@ -52,8 +51,7 @@ for migration instructions.
 - `Deno.write()`
 - `new Deno.FsFile()`
 
-The following APIs will be removed from the `Deno.*` namespace without
-replacement.
+以下 API 将从 `Deno.*` 命名空间中移除，且没有替代方案。
 
 - `Deno.resources()`
 - `Deno.metrics()`

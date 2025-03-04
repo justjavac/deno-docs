@@ -4,7 +4,7 @@
  * @tags cli
  * @run --allow-read <url>
  * @resource {https://jsr.io/@std/path/doc} Doc: @std/path
- * @resource {https://docs.deno.com/api/deno/~/Deno.cwd} Deno: Deno.cwd
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.cwd} Deno: Deno.cwd
  * @group File System
  *
  * Many applications need to manipulate file paths in one way or another.

@@ -2,11 +2,11 @@
 tags: []
 ---
 
-Disallows modifying a variable declared as `const`.
+禁止修改声明为 `const` 的变量。
 
-Modifying a variable declared as `const` will result in a runtime error.
+修改声明为 `const` 的变量将导致运行时错误。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 const a = 0;
@@ -16,12 +16,12 @@ a++;
 ++a;
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 const a = 0;
 const b = a + 1;
 
-// `c` is out of scope on each loop iteration, allowing a new assignment
+// `c` 在每次循环迭代时都超出作用域，允许重新赋值
 for (const c in [1, 2, 3]) {}
 ```

@@ -2,10 +2,9 @@
 tags: [recommended, react, jsx]
 ---
 
-Disallow duplicated JSX props. Later props will always overwrite earlier props
-often leading to unexpected results.
+禁止重复的 JSX 属性。后面的属性总是会覆盖前面的属性，通常会导致意外的结果。
 
-**Invalid:**
+**无效示例：**
 
 ```tsx
 <div id="1" id="2" />;
@@ -13,7 +12,7 @@ often leading to unexpected results.
 <App a {...b} a />;
 ```
 
-**Valid:**
+**有效示例：**
 
 ```tsx
 <div id="1" />

@@ -15,7 +15,7 @@
   "subcommands": [
     {
       "name": "run",
-      "about": "Run a JavaScript or TypeScript program, or a task or script.\n\nBy default all programs are run in sandbox without access to disk, network or ability to spawn subprocesses.\n  \u001b[38;5;245mdeno run https://examples.deno.land/hello-world.ts\u001b[39m\n\nGrant permission to read from disk and listen to network:\n  \u001b[38;5;245mdeno run --allow-read --allow-net jsr:@std/http/file-server\u001b[39m\n\nGrant permission to read allow-listed files from disk:\n  \u001b[38;5;245mdeno run --allow-read=/etc jsr:@std/http/file-server\u001b[39m\n\nGrant all permissions:\n  \u001b[38;5;245mdeno run -A jsr:@std/http/file-server\u001b[39m\n\nSpecifying the filename '-' to read the file from stdin.\n  \u001b[38;5;245mcurl https://examples.deno.land/hello-world.ts | deno run -\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/run\u001b[39m",
+      "about": "Run a JavaScript or TypeScript program, or a task or script.\n\nBy default all programs are run in sandbox without access to disk, network or ability to spawn subprocesses.\n  \u001b[38;5;245mdeno run https://examples.deno.land/hello-world.ts\u001b[39m\n\nGrant permission to read from disk and listen to network:\n  \u001b[38;5;245mdeno run --allow-read --allow-net jsr:@std/http/file-server\u001b[39m\n\nGrant permission to read allow-listed files from disk:\n  \u001b[38;5;245mdeno run --allow-read=/etc jsr:@std/http/file-server\u001b[39m\n\nGrant all permissions:\n  \u001b[38;5;245mdeno run -A jsr:@std/http/file-server\u001b[39m\n\nSpecifying the filename '-' to read the file from stdin.\n  \u001b[38;5;245mcurl https://examples.deno.land/hello-world.ts | deno run -\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/run\u001b[39m",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -139,7 +139,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -184,7 +184,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -410,7 +410,7 @@
     },
     {
       "name": "serve",
-      "about": "Run a server defined in a main module\n\nThe serve command uses the default exports of the main module to determine which servers to start.\n\nStart a server defined in server.ts:\n  \u001b[38;5;245mdeno serve server.ts\u001b[39m\n\nStart a server defined in server.ts, watching for changes and running on port 5050:\n  \u001b[38;5;245mdeno serve --watch --port 5050 server.ts\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/serve\u001b[39m",
+      "about": "Run a server defined in a main module\n\nThe serve command uses the default exports of the main module to determine which servers to start.\n\nStart a server defined in server.ts:\n  \u001b[38;5;245mdeno serve server.ts\u001b[39m\n\nStart a server defined in server.ts, watching for changes and running on port 5050:\n  \u001b[38;5;245mdeno serve --watch --port 5050 server.ts\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/serve\u001b[39m",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -534,7 +534,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -579,7 +579,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -884,7 +884,7 @@
     },
     {
       "name": "bench",
-      "about": "Run benchmarks using Deno's built-in bench tool.\n\nEvaluate the given files, run all benches declared with 'Deno.bench()' and report results to standard output:\n  \u001b[38;5;245mdeno bench src/fetch_bench.ts src/signal_bench.ts\u001b[39m\n\nIf you specify a directory instead of a file, the path is expanded to all contained files matching the glob \u001b[36m{*_,*.,}bench.{js,mjs,ts,mts,jsx,tsx}\u001b[39m:\n  \u001b[38;5;245mdeno bench src/\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/bench\u001b[39m",
+      "about": "Run benchmarks using Deno's built-in bench tool.\n\nEvaluate the given files, run all benches declared with 'Deno.bench()' and report results to standard output:\n  \u001b[38;5;245mdeno bench src/fetch_bench.ts src/signal_bench.ts\u001b[39m\n\nIf you specify a directory instead of a file, the path is expanded to all contained files matching the glob \u001b[36m{*_,*.,}bench.{js,mjs,ts,mts,jsx,tsx}\u001b[39m:\n  \u001b[38;5;245mdeno bench src/\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/bench\u001b[39m",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -1008,7 +1008,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -1053,7 +1053,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -1288,7 +1288,7 @@
     },
     {
       "name": "bundle",
-      "about": "`deno bundle` was removed in Deno 2.\n\nSee the Deno 1.x to 2.x Migration Guide for migration instructions: https://docs.deno.com/runtime/manual/advanced/migrate_deprecations",
+      "about": "`deno bundle` was removed in Deno 2.\n\nSee the Deno 1.x to 2.x Migration Guide for migration instructions: https://docs.denohub.com/runtime/manual/advanced/migrate_deprecations",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -1332,7 +1332,7 @@
     },
     {
       "name": "cache",
-      "about": "Cache and compile remote dependencies.\n\nDownload and compile a module with all of its static dependencies and save them in the local cache, without running any code:\n  \u001b[38;5;245mdeno cache jsr:@std/http/file-server\u001b[39m\n\nFuture runs of this module will trigger no downloads or compilation unless --reload is specified\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/cache\u001b[39m",
+      "about": "Cache and compile remote dependencies.\n\nDownload and compile a module with all of its static dependencies and save them in the local cache, without running any code:\n  \u001b[38;5;245mdeno cache jsr:@std/http/file-server\u001b[39m\n\nFuture runs of this module will trigger no downloads or compilation unless --reload is specified\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/cache\u001b[39m",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -1375,7 +1375,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -1420,7 +1420,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -1529,7 +1529,7 @@
     },
     {
       "name": "check",
-      "about": "Download and type-check without execution.\n\n  \u001b[38;5;245mdeno check jsr:@std/http/file-server\u001b[39m\n\nUnless --reload is specified, this command will not re-download already cached dependencies\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/check\u001b[39m",
+      "about": "Download and type-check without execution.\n\n  \u001b[38;5;245mdeno check jsr:@std/http/file-server\u001b[39m\n\nUnless --reload is specified, this command will not re-download already cached dependencies\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/check\u001b[39m",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -1644,7 +1644,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -1689,7 +1689,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -1823,7 +1823,7 @@
     },
     {
       "name": "compile",
-      "about": "Compiles the given script into a self contained executable.\n\n  \u001b[38;5;245mdeno compile --allow-read --allow-net jsr:@std/http/file-server\u001b[39m\n  \u001b[38;5;245mdeno compile --output file_server jsr:@std/http/file-server\u001b[39m\n\nAny flags specified which affect runtime behavior will be applied to the resulting binary.\n\nThis allows distribution of a Deno application to systems that do not have Deno installed.\nUnder the hood, it bundles a slimmed down version of the Deno runtime along with your\nJavaScript or TypeScript code.\n\nCross-compiling to different target architectures is supported using the \u001b[36m--target\u001b[39m flag.\nOn the first invocation with deno will download the proper binary and cache it in \u001b[36m$DENO_DIR\u001b[39m.\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/compile\u001b[39m\n",
+      "about": "Compiles the given script into a self contained executable.\n\n  \u001b[38;5;245mdeno compile --allow-read --allow-net jsr:@std/http/file-server\u001b[39m\n  \u001b[38;5;245mdeno compile --output file_server jsr:@std/http/file-server\u001b[39m\n\nAny flags specified which affect runtime behavior will be applied to the resulting binary.\n\nThis allows distribution of a Deno application to systems that do not have Deno installed.\nUnder the hood, it bundles a slimmed down version of the Deno runtime along with your\nJavaScript or TypeScript code.\n\nCross-compiling to different target architectures is supported using the \u001b[36m--target\u001b[39m flag.\nOn the first invocation with deno will download the proper binary and cache it in \u001b[36m$DENO_DIR\u001b[39m.\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/compile\u001b[39m\n",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -1947,7 +1947,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -1992,7 +1992,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -2217,7 +2217,7 @@
     },
     {
       "name": "coverage",
-      "about": "Print coverage reports from coverage profiles.\n\nCollect a coverage profile with deno test:\n  \u001b[38;5;245mdeno test --coverage=cov_profile\u001b[39m\n\nPrint a report to stdout:\n  \u001b[38;5;245mdeno coverage cov_profile\u001b[39m\n\nInclude urls that start with the file schema and exclude files ending with \u001b[36mtest.ts\u001b[39m and \u001b[36mtest.js\u001b[39m,\nfor an url to match it must match the include pattern and not match the exclude pattern:\n  \u001b[38;5;245mdeno coverage --include=\"^file:\" --exclude=\"test\\.(ts|js)\" cov_profile\u001b[39m\n\nWrite a report using the lcov format:\n  \u001b[38;5;245mdeno coverage --lcov --output=cov.lcov cov_profile/\u001b[39m\n\nGenerate html reports from lcov:\n  \u001b[38;5;245mgenhtml -o html_cov cov.lcov\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/coverage\u001b[39m",
+      "about": "Print coverage reports from coverage profiles.\n\nCollect a coverage profile with deno test:\n  \u001b[38;5;245mdeno test --coverage=cov_profile\u001b[39m\n\nPrint a report to stdout:\n  \u001b[38;5;245mdeno coverage cov_profile\u001b[39m\n\nInclude urls that start with the file schema and exclude files ending with \u001b[36mtest.ts\u001b[39m and \u001b[36mtest.js\u001b[39m,\nfor an url to match it must match the include pattern and not match the exclude pattern:\n  \u001b[38;5;245mdeno coverage --include=\"^file:\" --exclude=\"test\\.(ts|js)\" cov_profile\u001b[39m\n\nWrite a report using the lcov format:\n  \u001b[38;5;245mdeno coverage --lcov --output=cov.lcov cov_profile/\u001b[39m\n\nGenerate html reports from lcov:\n  \u001b[38;5;245mgenhtml -o html_cov cov.lcov\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/coverage\u001b[39m",
       "args": [
         {
           "name": "ignore",
@@ -2297,7 +2297,7 @@
     },
     {
       "name": "doc",
-      "about": "Show documentation for a module.\n\nOutput documentation to standard output:\n    \u001b[38;5;245mdeno doc ./path/to/module.ts\u001b[39m\n\nOutput documentation in HTML format:\n    \u001b[38;5;245mdeno doc --html --name=\"My library\" ./path/to/module.ts\u001b[39m\n\nLint a module for documentation diagnostics:\n    \u001b[38;5;245mdeno doc --lint ./path/to/module.ts\u001b[39m\n\nTarget a specific symbol:\n    \u001b[38;5;245mdeno doc ./path/to/module.ts MyClass.someField\u001b[39m\n\nShow documentation for runtime built-ins:\n    \u001b[38;5;245mdeno doc\u001b[39m\n    \u001b[38;5;245mdeno doc --filter Deno.Listener\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/doc\u001b[39m",
+      "about": "Show documentation for a module.\n\nOutput documentation to standard output:\n    \u001b[38;5;245mdeno doc ./path/to/module.ts\u001b[39m\n\nOutput documentation in HTML format:\n    \u001b[38;5;245mdeno doc --html --name=\"My library\" ./path/to/module.ts\u001b[39m\n\nLint a module for documentation diagnostics:\n    \u001b[38;5;245mdeno doc --lint ./path/to/module.ts\u001b[39m\n\nTarget a specific symbol:\n    \u001b[38;5;245mdeno doc ./path/to/module.ts MyClass.someField\u001b[39m\n\nShow documentation for runtime built-ins:\n    \u001b[38;5;245mdeno doc\u001b[39m\n    \u001b[38;5;245mdeno doc --filter Deno.Listener\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/doc\u001b[39m",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -2331,7 +2331,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -2512,7 +2512,7 @@
     },
     {
       "name": "eval",
-      "about": "Evaluate JavaScript from the command line.\n  \u001b[38;5;245mdeno eval \"console.log('hello world')\"\u001b[39m\n\nTo evaluate as TypeScript:\n  \u001b[38;5;245mdeno eval --ext=ts \"const v: string = 'hello'; console.log(v)\"\u001b[39m\n\nThis command has implicit access to all permissions.\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/eval\u001b[39m",
+      "about": "Evaluate JavaScript from the command line.\n  \u001b[38;5;245mdeno eval \"console.log('hello world')\"\u001b[39m\n\nTo evaluate as TypeScript:\n  \u001b[38;5;245mdeno eval --ext=ts \"const v: string = 'hello'; console.log(v)\"\u001b[39m\n\nThis command has implicit access to all permissions.\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/eval\u001b[39m",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -2636,7 +2636,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -2681,7 +2681,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -2871,14 +2871,14 @@
     },
     {
       "name": "fmt",
-      "about": "Auto-format various file types.\n  \u001b[38;5;245mdeno fmt myfile1.ts myfile2.ts\u001b[39m\n\nSupported file types are:\n  \u001b[38;5;245mJavaScript, TypeScript, Markdown, JSON(C) and Jupyter Notebooks\u001b[39m\n\nSupported file types which are behind corresponding unstable flags (see formatting options):\n  \u001b[38;5;245mHTML, CSS, SCSS, SASS, LESS, YAML, Svelte, Vue, Astro and Angular\u001b[39m\n\nFormat stdin and write to stdout:\n  \u001b[38;5;245mcat file.ts | deno fmt -\u001b[39m\n\nCheck if the files are formatted:\n  \u001b[38;5;245mdeno fmt --check\u001b[39m\n\nIgnore formatting code by preceding it with an ignore comment:\n  \u001b[38;5;245m// deno-fmt-ignore\u001b[39m\n\nIgnore formatting a file by adding an ignore comment at the top of the file:\n  \u001b[38;5;245m// deno-fmt-ignore-file\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/fmt\u001b[39m",
+      "about": "Auto-format various file types.\n  \u001b[38;5;245mdeno fmt myfile1.ts myfile2.ts\u001b[39m\n\nSupported file types are:\n  \u001b[38;5;245mJavaScript, TypeScript, Markdown, JSON(C) and Jupyter Notebooks\u001b[39m\n\nSupported file types which are behind corresponding unstable flags (see formatting options):\n  \u001b[38;5;245mHTML, CSS, SCSS, SASS, LESS, YAML, Svelte, Vue, Astro and Angular\u001b[39m\n\nFormat stdin and write to stdout:\n  \u001b[38;5;245mcat file.ts | deno fmt -\u001b[39m\n\nCheck if the files are formatted:\n  \u001b[38;5;245mdeno fmt --check\u001b[39m\n\nIgnore formatting code by preceding it with an ignore comment:\n  \u001b[38;5;245m// deno-fmt-ignore\u001b[39m\n\nIgnore formatting a file by adding an ignore comment at the top of the file:\n  \u001b[38;5;245m// deno-fmt-ignore-file\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/fmt\u001b[39m",
       "args": [
         {
           "name": "config",
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -3076,7 +3076,7 @@
     },
     {
       "name": "info",
-      "about": "Show information about a module or the cache directories.\n\nGet information about a module:\n  \u001b[38;5;245mdeno info jsr:@std/http/file-server\u001b[39m\n\nThe following information is shown:\n  local: Local path of the file\n  type: JavaScript, TypeScript, or JSON\n  emit: Local path of compiled source code (TypeScript only)\n  dependencies: Dependency tree of the source file\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/info\u001b[39m",
+      "about": "Show information about a module or the cache directories.\n\nGet information about a module:\n  \u001b[38;5;245mdeno info jsr:@std/http/file-server\u001b[39m\n\nThe following information is shown:\n  local: Local path of the file\n  type: JavaScript, TypeScript, or JSON\n  emit: Local path of compiled source code (TypeScript only)\n  dependencies: Dependency tree of the source file\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/info\u001b[39m",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -3200,7 +3200,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -3209,7 +3209,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -3379,7 +3379,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -3424,7 +3424,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -3933,14 +3933,14 @@
     },
     {
       "name": "lsp",
-      "about": "The 'deno lsp' subcommand provides a way for code editors and IDEs to interact with Deno\nusing the Language Server Protocol. Usually humans do not use this subcommand directly.\nFor example, 'deno lsp' can provide IDEs with go-to-definition support and automatic code formatting.\n\nHow to connect various editors and IDEs to 'deno lsp': https://docs.deno.com/go/lsp",
+      "about": "The 'deno lsp' subcommand provides a way for code editors and IDEs to interact with Deno\nusing the Language Server Protocol. Usually humans do not use this subcommand directly.\nFor example, 'deno lsp' can provide IDEs with go-to-definition support and automatic code formatting.\n\nHow to connect various editors and IDEs to 'deno lsp': https://docs.denohub.com/go/lsp",
       "args": [],
       "subcommands": [],
       "usage": "\u001b[37mUsage:\u001b[0m \u001b[32mdeno lsp\u001b[0m \u001b[32m[OPTIONS]\u001b[0m"
     },
     {
       "name": "lint",
-      "about": "Lint JavaScript/TypeScript source code.\n\n  \u001b[38;5;245mdeno lint\u001b[39m\n  \u001b[38;5;245mdeno lint myfile1.ts myfile2.js\u001b[39m\n\nPrint result as JSON:\n  \u001b[38;5;245mdeno lint --json\u001b[39m\n\nRead from stdin:\n  \u001b[38;5;245mcat file.ts | deno lint -\u001b[39m\n  \u001b[38;5;245mcat file.ts | deno lint --json -\u001b[39m\n\nList available rules:\n  \u001b[38;5;245mdeno lint --rules\u001b[39m\n\nTo ignore specific diagnostics, you can write an ignore comment on the preceding line with a rule name (or multiple):\n  \u001b[38;5;245m// deno-lint-ignore no-explicit-any\u001b[39m\n  \u001b[38;5;245m// deno-lint-ignore require-await no-empty\u001b[39m\n\nTo ignore linting on an entire file, you can add an ignore comment at the top of the file:\n  \u001b[38;5;245m// deno-lint-ignore-file\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/lint\u001b[39m\n",
+      "about": "Lint JavaScript/TypeScript source code.\n\n  \u001b[38;5;245mdeno lint\u001b[39m\n  \u001b[38;5;245mdeno lint myfile1.ts myfile2.js\u001b[39m\n\nPrint result as JSON:\n  \u001b[38;5;245mdeno lint --json\u001b[39m\n\nRead from stdin:\n  \u001b[38;5;245mcat file.ts | deno lint -\u001b[39m\n  \u001b[38;5;245mcat file.ts | deno lint --json -\u001b[39m\n\nList available rules:\n  \u001b[38;5;245mdeno lint --rules\u001b[39m\n\nTo ignore specific diagnostics, you can write an ignore comment on the preceding line with a rule name (or multiple):\n  \u001b[38;5;245m// deno-lint-ignore no-explicit-any\u001b[39m\n  \u001b[38;5;245m// deno-lint-ignore require-await no-empty\u001b[39m\n\nTo ignore linting on an entire file, you can add an ignore comment at the top of the file:\n  \u001b[38;5;245m// deno-lint-ignore-file\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/lint\u001b[39m\n",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -4037,7 +4037,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -4171,7 +4171,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -4395,7 +4395,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -4440,7 +4440,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -4709,7 +4709,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -4782,7 +4782,7 @@
     },
     {
       "name": "test",
-      "about": "Run tests using Deno's built-in test runner.\n\nEvaluate the given modules, run all tests declared with \u001b[1mDeno.\u001b[33m\u001b[22mtest()\u001b[39m and report results to standard output:\n  \u001b[38;5;245mdeno test src/fetch_test.ts src/signal_test.ts\u001b[39m\n\nDirectory arguments are expanded to all contained files matching the glob \u001b[36m{*_,*.,}test.{js,mjs,ts,mts,jsx,tsx}\u001b[39m\nor \u001b[36m**/__tests__/**\u001b[39m:\n \u001b[38;5;245mdeno test src/\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/test\u001b[39m",
+      "about": "Run tests using Deno's built-in test runner.\n\nEvaluate the given modules, run all tests declared with \u001b[1mDeno.\u001b[33m\u001b[22mtest()\u001b[39m and report results to standard output:\n  \u001b[38;5;245mdeno test src/fetch_test.ts src/signal_test.ts\u001b[39m\n\nDirectory arguments are expanded to all contained files matching the glob \u001b[36m{*_,*.,}test.{js,mjs,ts,mts,jsx,tsx}\u001b[39m\nor \u001b[36m**/__tests__/**\u001b[39m:\n \u001b[38;5;245mdeno test src/\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/test\u001b[39m",
       "args": [
         {
           "name": "unstable-bare-node-builtins",
@@ -4906,7 +4906,7 @@
           "short": null,
           "long": "import-map",
           "required": false,
-          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.deno.com/runtime/manual/basics/import_maps\u001b[39m",
+          "help": "Load import map file from local file or remote URL\n  \u001b[38;5;245mDocs: https://docs.denohub.com/runtime/manual/basics/import_maps\u001b[39m",
           "help_heading": "Dependency management options",
           "usage": "--import-map <FILE>"
         },
@@ -4951,7 +4951,7 @@
           "short": "c",
           "long": "config",
           "required": false,
-          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.deno.com/go/config\u001b[39m",
+          "help": "Configure different aspects of deno including TypeScript, linting, and code formatting\n  \u001b[38;5;245mTypically the configuration file will be called `deno.json` or `deno.jsonc` and\n  automatically detected; in that case this flag is not necessary.\n  Docs: https://docs.denohub.com/go/config\u001b[39m",
           "help_heading": null,
           "usage": "--config <FILE>"
         },
@@ -5301,7 +5301,7 @@
     },
     {
       "name": "upgrade",
-      "about": "Upgrade deno executable to the given version.\n\n\u001b[32mLatest\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m\n\n\u001b[32mSpecific version\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245m1.45.0\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245m1.46.0-rc.1\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245m9bc2dd29ad6ba334fd57a20114e367d3c04763d4\u001b[39m\n\n\u001b[32mChannel\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245mstable\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245mrc\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245mcanary\u001b[39m\n\nThe version is downloaded from \u001b[38;5;245mhttps://dl.deno.land\u001b[39m and is used to replace the current executable.\n\nIf you want to not replace the current Deno executable but instead download an update to a\ndifferent location, use the \u001b[36m--output\u001b[39m flag:\n  \u001b[38;5;245mdeno upgrade --output $HOME/my_deno\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.deno.com/go/upgrade\u001b[39m",
+      "about": "Upgrade deno executable to the given version.\n\n\u001b[32mLatest\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m\n\n\u001b[32mSpecific version\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245m1.45.0\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245m1.46.0-rc.1\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245m9bc2dd29ad6ba334fd57a20114e367d3c04763d4\u001b[39m\n\n\u001b[32mChannel\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245mstable\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245mrc\u001b[39m\n  \u001b[1mdeno upgrade\u001b[22m \u001b[38;5;245mcanary\u001b[39m\n\nThe version is downloaded from \u001b[38;5;245mhttps://dl.deno.land\u001b[39m and is used to replace the current executable.\n\nIf you want to not replace the current Deno executable but instead download an update to a\ndifferent location, use the \u001b[36m--output\u001b[39m flag:\n  \u001b[38;5;245mdeno upgrade --output $HOME/my_deno\u001b[39m\n\n\u001b[33mRead more:\u001b[39m \u001b[36mhttps://docs.denohub.com/go/upgrade\u001b[39m",
       "args": [
         {
           "name": "output",
@@ -5354,7 +5354,7 @@
     },
     {
       "name": "vendor",
-      "about": "`deno vendor` was removed in Deno 2.\n\nSee the Deno 1.x to 2.x Migration Guide for migration instructions: https://docs.deno.com/runtime/manual/advanced/migrate_deprecations",
+      "about": "`deno vendor` was removed in Deno 2.\n\nSee the Deno 1.x to 2.x Migration Guide for migration instructions: https://docs.denohub.com/runtime/manual/advanced/migrate_deprecations",
       "args": [
         {
           "name": "unstable-bare-node-builtins",

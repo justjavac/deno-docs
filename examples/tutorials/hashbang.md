@@ -1,35 +1,30 @@
 ---
-title: "Executable scripts"
+title: "可执行脚本"
 url: /examples/hashbang_tutorial/
 oldUrl:
   - /runtime/manual/examples/hashbang/
   - /runtime/tutorials/hashbang/
 ---
 
-Making Deno scripts executable can come in handy when creating small tools or
-utilities for tasks like file manipulation, data processing or repetitive tasks
-that you might want to run from the command line. Executable scripts allow you
-to create ad-hoc solutions without setting up an entire project.
+在创建小型工具或实用程序时，使 Deno
+脚本可执行会非常有用，特别是当你需要处理文件操作、数据处理或重复任务时，这些任务可能希望从命令行运行。可执行脚本允许你创建临时解决方案，而无需设置整个项目。
 
-## Creating an example script
+## 创建示例脚本
 
-To make a script executable, start the script with a hashbang, (sometimes called
-a shebang). This is a sequence of characters (#!) that tells your operating
-system how to execute a script. It is followed by the path to the interpreter
-that should be used to run the script.
+要使脚本可执行，请在脚本开头添加一个 hashbang（有时称为
+shebang）。这是一个字符序列（#!），它告诉操作系统如何执行脚本。它后面跟着应该用于运行脚本的解释器的路径。
 
 :::note
 
-To use a hashbang on Windows you will need to install the Windows Subsystem for
-Linux (WSL) or use a Unix-like shell like
-[Git Bash](https://git-scm.com/downloads).
+要在 Windows 上使用 hashbang，你需要安装 Windows Subsystem for Linux (WSL)
+或使用类似 Unix 的 shell，如 [Git Bash](https://git-scm.com/downloads)。
 
 :::
 
-We'll make a simple script that prints the Deno installation path using the
-[Deno.env](/api/deno/~/Deno.env) API.
+我们将创建一个简单的脚本，使用 [Deno.env](/api/deno/~/Deno.env) API 打印 Deno
+的安装路径。
 
-Create a file named `hashbang.ts` with the following content:
+创建一个名为 `hashbang.ts` 的文件，内容如下：
 
 ```ts title="hashbang.ts"
 #!/usr/bin/env -S deno run --allow-env
@@ -38,35 +33,33 @@ const path = Deno.env.get("DENO_INSTALL");
 console.log("Deno Install Path:", path);
 ```
 
-This script tells the system to use the deno runtime to run the script. The -S
-flag splits the command into arguments and indicates that the following argument
-(`deno run --allow-env`) should be passed to the env command.
+此脚本告诉系统使用 deno 运行时来运行脚本。-S
+标志将命令拆分为参数，并指示应将后续参数（`deno run --allow-env`）传递给 env
+命令。
 
-The script then retrieves the value associated with the environment variable
-named `DENO_INSTALL` with `Deno.env.get()` and assigns it to a variable called
-`path`. Finally, it prints the path to the console using `console.log()`.
+然后，脚本使用 `Deno.env.get()` 检索与名为 `DENO_INSTALL`
+的环境变量关联的值，并将其分配给名为 `path` 的变量。最后，它使用 `console.log()`
+将路径打印到控制台。
 
-### Execute the script
+### 执行脚本
 
-In order to execute the script, you may need to give the script execution
-permissions, you can do so using the `chmod` command with a `+x` flag (for
-execute):
+为了执行脚本，你可能需要为脚本赋予执行权限，你可以使用 `chmod` 命令并添加 `+x`
+标志（表示执行）：
 
 ```sh
 chmod +x hashbang.ts
 ```
 
-You can execute the script directly in the command line with:
+你可以直接在命令行中执行脚本：
 
 ```sh
 ./hashbang.ts
 ```
 
-## Using hashbang in files with no extension
+## 在无扩展名的文件中使用 hashbang
 
-For brevity, you may wish to omit the extension for your script's filename. In
-this case, supply one using the `--ext` flag in the script itself, then you can
-run the script with just the file name:
+为了简洁起见，你可能希望省略脚本文件名的扩展名。在这种情况下，请在脚本本身中使用
+`--ext` 标志提供一个扩展名，然后你可以仅使用文件名运行脚本：
 
 ```shell title="my_script"
 $ cat my_script
@@ -76,7 +69,6 @@ $ ./my_script
 Hello!
 ```
 
-🦕 Now you can directly execute Deno scripts from the command line! Remember to
-set the execute permission (`chmod +x`) for your script file, and you’re all set
-to build anything from simple utilities to complex tools. Check out the
-[Deno examples](/examples/) for inspiration on what you can script.
+🦕 现在你可以直接从命令行执行 Deno
+脚本了！记得为你的脚本文件设置执行权限（`chmod +x`），你就可以开始构建从简单实用程序到复杂工具的任何东西了。查看
+[Deno 示例](/examples/) 以获取脚本灵感的启发。

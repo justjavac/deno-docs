@@ -1,5 +1,5 @@
 ---
-title: "Testing"
+title: "测试"
 oldUrl:
   - /runtime/manual/advanced/language_server/testing_api/
   - /runtime/manual/basics/testing/
@@ -14,117 +14,106 @@ oldUrl:
   - /runtime/manual/basics/testing/documentation/
 ---
 
-Deno provides a built-in test runner for writing and running tests in both
-JavaScript and TypeScript. This makes it easy to ensure your code is reliable
-and functions as expected without needing to install any additional dependencies
-or tools. The `deno test` runner allows you fine-grained control over
-permissions for each test, ensuring that code does not do anything unexpected.
+Deno 提供了一个内置的测试运行器，用于编写和运行 JavaScript 和 TypeScript
+的测试。这使得确保代码可靠并按预期运行变得容易，而无需安装任何额外的依赖或工具。`deno test`
+运行器允许你对每个测试的权限进行细粒度控制，确保代码不会执行任何意外操作。
 
-In addition to the built-in test runner, you can also use other test runners
-from the JS ecosystem, such as Jest, Mocha, or AVA, with Deno. We will not cover
-these in this document however.
+除了内置的测试运行器，你还可以使用来自 JS 生态系统的其他测试运行器，例如
+Jest、Mocha 或 AVA，与 Deno 一起使用。然而，本文档不会涵盖这些内容。
 
-## Writing Tests
+## 编写测试
 
-To define a test in Deno, you use the `Deno.test()` function. Here are some
-examples:
+要在 Deno 中定义一个测试，你可以使用 `Deno.test()` 函数。以下是一些示例：
 
 ```ts title="my_test.ts"
 import { assertEquals } from "jsr:@std/assert";
 
-Deno.test("simple test", () => {
+Deno.test("简单测试", () => {
   const x = 1 + 2;
   assertEquals(x, 3);
 });
 
 import { delay } from "jsr:@std/async";
 
-Deno.test("async test", async () => {
+Deno.test("异步测试", async () => {
   const x = 1 + 2;
   await delay(100);
   assertEquals(x, 3);
 });
 
 Deno.test({
-  name: "read file test",
+  name: "读取文件测试",
   permissions: { read: true },
   fn: () => {
     const data = Deno.readTextFileSync("./somefile.txt");
-    assertEquals(data, "expected content");
+    assertEquals(data, "预期内容");
   },
 });
 ```
 
-If you prefer a "jest-like" `expect` style of assertions, the Deno standard
-library provides an [`expect`](https://jsr.io/@std/expect) function that can be
-used in place of `assertEquals`:
+如果你更喜欢类似 Jest 的 `expect` 风格的断言，Deno 标准库提供了一个
+[`expect`](https://jsr.io/@std/expect) 函数，可以替代 `assertEquals`：
 
 ```ts title="my_test.ts"
 import { expect } from "jsr:@std/expect";
 import { add } from "./add.js";
 
-Deno.test("add function adds two numbers correctly", () => {
+Deno.test("add 函数正确相加两个数字", () => {
   const result = add(2, 3);
   expect(result).toBe(5);
 });
 ```
 
-## Running Tests
+## 运行测试
 
-To run your tests, use the [`deno test`](/runtime/reference/cli/test/)
-subcommand.
+要运行你的测试，请使用 [`deno test`](/runtime/reference/cli/test/) 子命令。
 
-If run without a file name or directory name, this subcommand will automatically
-find and execute all tests in the current directory (recursively) that match the
-glob `{*_,*.,}test.{ts, tsx, mts, js, mjs, jsx}`.
+如果运行时不带文件名或目录名，此子命令将自动查找并执行当前目录（递归）中与 glob
+`{*_,*.,}test.{ts, tsx, mts, js, mjs, jsx}` 匹配的所有测试。
 
 ```sh
-# Run all tests in the current directory and all sub-directories
+# 运行当前目录及所有子目录中的所有测试
 deno test
 
-# Run all tests in the util directory
+# 运行 util 目录中的所有测试
 deno test util/
 
-# Run just my_test.ts
+# 仅运行 my_test.ts
 deno test my_test.ts
 
-# Run test modules in parallel
+# 并行运行测试模块
 deno test --parallel
 
-# Pass additional arguments to the test file that are visible in `Deno.args`
+# 将额外的参数传递给测试文件，这些参数在 `Deno.args` 中可见
 deno test my_test.ts -- -e --foo --bar
 
-# Provide permission for deno to read from the filesystem, which is necessary
-# for the final test above to pass
+# 为 deno 提供读取文件系统的权限，这对于上面的最后一个测试通过是必要的
 deno test --allow-read my_test.ts
 ```
 
-## Test Steps
+## 测试步骤
 
-Deno also supports test steps, which allow you to break down tests into smaller,
-manageable parts. This is useful for setup and teardown operations within a
-test:
+Deno
+还支持测试步骤，允许你将测试分解为更小、更易管理的部分。这对于测试中的设置和清理操作非常有用：
 
 ```ts
-Deno.test("database operations", async (t) => {
+Deno.test("数据库操作", async (t) => {
   using db = await openDatabase();
-  await t.step("insert user", async () => {
-    // Insert user logic
+  await t.step("插入用户", async () => {
+    // 插入用户逻辑
   });
-  await t.step("insert book", async () => {
-    // Insert book logic
+  await t.step("插入书籍", async () => {
+    // 插入书籍逻辑
   });
 });
 ```
 
-## Command line filtering
+## 命令行过滤
 
-Deno allows you to run specific tests or groups of tests using the `--filter`
-option on the command line. This option accepts either a string or a pattern to
-match test names. Filtering does not affect steps; if a test name matches the
-filter, all of its steps are executed.
+Deno 允许你使用命令行上的 `--filter`
+选项运行特定的测试或测试组。此选项接受字符串或模式来匹配测试名称。过滤不会影响步骤；如果测试名称匹配过滤器，则其所有步骤都将执行。
 
-Consider the following tests:
+考虑以下测试：
 
 ```ts
 Deno.test("my-test", () => {});
@@ -132,38 +121,36 @@ Deno.test("test-1", () => {});
 Deno.test("test-2", () => {});
 ```
 
-### Filtering by string
+### 按字符串过滤
 
-To run all tests that contain the word "my" in their names, use:
+要运行名称中包含单词 "my" 的所有测试，请使用：
 
 ```sh
 deno test --filter "my" tests/
 ```
 
-This command will execute `my-test` because it contains the word "my".
+此命令将执行 `my-test`，因为它包含单词 "my"。
 
-### Filtering by Pattern
+### 按模式过滤
 
-To run tests that match a specific pattern, use:
+要运行匹配特定模式的测试，请使用：
 
 ```sh
 deno test --filter "/test-*\d/" tests/
 ```
 
-This command will run `test-1` and `test-2` because they match the pattern
-`test-*` followed by a digit.
+此命令将运行 `test-1` 和 `test-2`，因为它们匹配模式 `test-*` 后跟一个数字。
 
-To indicate that you are using a pattern (regular expression), wrap your filter
-value with forward slashes `/`, much like JavaScript’s syntax for regular
-expressions.
+要指示你正在使用模式（正则表达式），请将过滤器值用正斜杠 `/` 包裹，就像
+JavaScript 的正则表达式语法一样。
 
-### Including and excluding test files in the configuration file
+### 在配置文件中包含和排除测试文件
 
-You can also filter tests by specifying paths to include or exclude in the
-[Deno configuration file](/runtime/fundamentals/configuration).
+你还可以通过在 [Deno 配置文件](/runtime/fundamentals/configuration)
+中指定路径来过滤测试。
 
-For example, if you want to only test `src/fetch_test.ts` and
-`src/signal_test.ts` and exclude everything in `out/`:
+例如，如果你只想测试 `src/fetch_test.ts` 和 `src/signal_test.ts` 并排除 `out/`
+中的所有内容：
 
 ```json
 {
@@ -176,7 +163,7 @@ For example, if you want to only test `src/fetch_test.ts` and
 }
 ```
 
-Or more likely:
+或者更可能的情况：
 
 ```json
 {
@@ -186,162 +173,155 @@ Or more likely:
 }
 ```
 
-## Test definition selection
+## 测试定义选择
 
-Deno provides two options for selecting tests within the test definitions
-themselves: ignoring tests and focusing on specific tests.
+Deno 提供了两个选项用于在测试定义本身中选择测试：忽略测试和专注于特定测试。
 
-### Ignoring/Skipping Tests
+### 忽略/跳过测试
 
-You can ignore certain tests based on specific conditions using the `ignore`
-boolean in the test definition. If `ignore` is set to `true`, the test will be
-skipped. This is useful, for example, if you only want a test to run on a
-specific operating system.
+你可以使用测试定义中的 `ignore` 布尔值根据特定条件忽略某些测试。如果 `ignore`
+设置为
+`true`，则测试将被跳过。例如，如果你只想在特定操作系统上运行测试，这将非常有用。
 
 ```ts
 Deno.test({
-  name: "do macOS feature",
-  ignore: Deno.build.os !== "darwin", // This test will be ignored if not running on macOS
+  name: "执行 macOS 功能",
+  ignore: Deno.build.os !== "darwin", // 如果不在 macOS 上运行，此测试将被忽略
   fn() {
-    // do MacOS feature here
+    // 在此执行 MacOS 功能
   },
 });
 ```
 
-If you want to ignore a test without passing any conditions, you can use the
-`ignore()` function from the `Deno.test` object:
+如果你想在不传递任何条件的情况下忽略测试，可以使用 `Deno.test` 对象中的
+`ignore()` 函数：
 
 ```ts
-Deno.test.ignore("my test", () => {
-  // your test code
+Deno.test.ignore("我的测试", () => {
+  // 你的测试代码
 });
 ```
 
-### Only Run Specific Tests
+### 仅运行特定测试
 
-If you want to focus on a particular test and ignore the rest, you can use the
-`only` option. This tells the test runner to run only the tests with `only` set
-to true. Multiple tests can have this option set. However, if any test is
-flagged with only, the overall test run will always fail, as this is intended to
-be a temporary measure for debugging.
+如果你想专注于特定测试并忽略其他测试，可以使用 `only`
+选项。这告诉测试运行器仅运行 `only` 设置为 true
+的测试。多个测试可以设置此选项。然而，如果任何测试被标记为
+only，整个测试运行将始终失败，因为这旨在作为调试的临时措施。
 
 ```ts
-Deno.test.only("my test", () => {
-  // some test code
+Deno.test.only("我的测试", () => {
+  // 一些测试代码
 });
 ```
 
-or
+或
 
 ```ts
 Deno.test({
-  name: "Focus on this test only",
-  only: true, // Only this test will run
+  name: "仅专注于此测试",
+  only: true, // 仅此测试将运行
   fn() {
-    // test complicated stuff here
+    // 在此测试复杂的内容
   },
 });
 ```
 
-## Failing fast
+## 快速失败
 
-If you have a long-running test suite and wish for it to stop on the first
-failure, you can specify the `--fail-fast` flag when running the suite.
+如果你有一个长时间运行的测试套件，并希望它在第一次失败时停止，你可以在运行套件时指定
+`--fail-fast` 标志。
 
 ```shell
 deno test --fail-fast
 ```
 
-This will cause the test runner to stop execution after the first test failure.
+这将导致测试运行器在第一次测试失败后停止执行。
 
-## Reporters
+## 报告器
 
-Deno includes three built-in reporters to format test output:
+Deno 包含三个内置的报告器来格式化测试输出：
 
-- `pretty` (default): Provides a detailed and readable output.
-- `dot`: Offers a concise output, useful for quickly seeing test results.
-- `junit`: Produces output in JUnit XML format, which is useful for integrating
-  with CI/CD tools.
+- `pretty`（默认）：提供详细且可读的输出。
+- `dot`：提供简洁的输出，便于快速查看测试结果。
+- `junit`：生成 JUnit XML 格式的输出，便于与 CI/CD 工具集成。
 
-You can specify which reporter to use with the --reporter flag:
+你可以使用 --reporter 标志指定要使用的报告器：
 
 ```sh
-# Use the default pretty reporter
+# 使用默认的 pretty 报告器
 deno test
 
-# Use the dot reporter for concise output
+# 使用 dot 报告器以获得简洁的输出
 deno test --reporter=dot
 
-# Use the JUnit reporter
+# 使用 JUnit 报告器
 deno test --reporter=junit
 ```
 
-Additionally, you can write the JUnit report to a file while still getting
-human-readable output in the terminal by using the `--junit-path` flag:
+此外，你还可以通过使用 `--junit-path` 标志将 JUnit
+报告写入文件，同时在终端中获得人类可读的输出：
 
 ```sh
 deno test --junit-path=./report.xml
 ```
 
-## Spying, mocking (test doubles), stubbing and faking time
+## 监视、模拟（测试替身）、存根和伪造时间
 
-The [Deno Standard Library](/runtime/fundamentals/standard_library/) provides a
-set of functions to help you write tests that involve spying, mocking, and
-stubbing. Check out the
-[@std/testing documentation on JSR](https://jsr.io/@std/testing) for more
-information on each of these utilities.
+[Deno 标准库](/runtime/fundamentals/standard_library/)
+提供了一组函数，帮助你编写涉及监视、模拟和存根的测试。查看
+[JSR 上的 @std/testing 文档](https://jsr.io/@std/testing)
+以获取有关这些实用程序的更多信息。
 
-## Coverage
+## 覆盖率
 
-Deno will collect test coverage into a directory for your code if you specify
-the `--coverage` flag when starting `deno test`. This coverage information is
-acquired directly from the V8 JavaScript engine, ensuring high accuracy.
+如果你在启动 `deno test` 时指定 `--coverage` 标志，Deno
+将收集代码的测试覆盖率到一个目录中。此覆盖率信息直接从 V8 JavaScript
+引擎获取，确保高准确性。
 
-This can then be further processed from the internal format into well known
-formats like `lcov` with the [`deno coverage`](/runtime/reference/cli/coverage/)
-tool.
+然后可以使用 [`deno coverage`](/runtime/reference/cli/coverage/)
+工具将此内部格式进一步处理为众所周知的格式，如 `lcov`。
 
-## Behavior-Driven Development
+## 行为驱动开发
 
-With the [@std/testing/bdd](https://jsr.io/@std/testing/doc/bdd/~) module you
-can write your tests in a familiar format for grouping tests and adding
-setup/teardown hooks used by other JavaScript testing frameworks like Jasmine,
-Jest, and Mocha.
+使用 [@std/testing/bdd](https://jsr.io/@std/testing/doc/bdd/~)
+模块，你可以以熟悉的格式编写测试，用于分组测试和添加设置/清理钩子，这些钩子被其他
+JavaScript 测试框架如 Jasmine、Jest 和 Mocha 使用。
 
-The `describe` function creates a block that groups together several related
-tests. The `it` function registers an individual test case. For example:
+`describe` 函数创建一个块，将几个相关的测试分组在一起。`it`
+函数注册一个单独的测试用例。例如：
 
 ```ts
 import { describe, it } from "jsr:@std/testing/bdd";
 import { expect } from "jsr:@std/expect";
 import { add } from "./add.js";
 
-describe("add function", () => {
-  it("adds two numbers correctly", () => {
+describe("add 函数", () => {
+  it("正确相加两个数字", () => {
     const result = add(2, 3);
     expect(result).toBe(5);
   });
 
-  it("handles negative numbers", () => {
+  it("处理负数", () => {
     const result = add(-2, -3);
     expect(result).toBe(-5);
   });
 });
 ```
 
-Check out the [documentation on JSR](https://jsr.io/@std/testing/doc/bdd/~) for
-more information on these functions and hooks.
+查看 [JSR 上的文档](https://jsr.io/@std/testing/doc/bdd/~)
+以获取有关这些函数和钩子的更多信息。
 
-## Documentation Tests
+## 文档测试
 
-Deno allows you to evaluate code snippets written in JSDoc or markdown files.
-This ensures the examples in your documentation are up-to-date and functional.
+Deno 允许你评估写在 JSDoc 或 markdown
+文件中的代码片段。这确保了你文档中的示例是最新且功能正常的。
 
-### Example code blocks
+### 示例代码块
 
 ````ts title="example.ts"
 /**
- * # Examples
+ * # 示例
  *
  * ```ts
  * import { assertEquals } from "jsr:@std/assert/equals";
@@ -355,9 +335,7 @@ export function add(a: number, b: number): number {
 }
 ````
 
-The triple backticks mark the start and end of code blocks, the language is
-determined by the language identifier attribute which may be one of the
-following:
+三重反引号标记代码块的开始和结束，语言由语言标识符属性确定，该属性可以是以下之一：
 
 - `js`
 - `javascript`
@@ -370,15 +348,13 @@ following:
 - `cts`
 - `tsx`
 
-If no language identifier is specified then the language is inferred from media
-type of the source document that the code block is extracted from.
+如果未指定语言标识符，则语言将从提取代码块的源文档的媒体类型推断出来。
 
 ```sh
 deno test --doc example.ts
 ```
 
-The above command will extract this example, turn it into a pseudo test case
-that looks like below:
+上述命令将提取此示例，将其转换为如下所示的伪测试用例：
 
 ```ts title="example.ts$4-10.ts" ignore
 import { assertEquals } from "jsr:@std/assert/equals";
@@ -390,31 +366,27 @@ Deno.test("example.ts$4-10.ts", async () => {
 });
 ```
 
-and then run it as a standalone module living in the same directory as the
-module being documented.
+然后将其作为与正在记录的模块位于同一目录中的独立模块运行。
 
-:::tip Want to type-check only?
+:::tip 只想进行类型检查？
 
-If you want to type-check your code snippets in JSDoc and markdown files without
-actually running them, you can use [`deno check`](/runtime/reference/cli/check/)
-command with `--doc` option (for JSDoc) or with `--doc-only` option (for
-markdown) instead.
+如果你想在不实际运行代码片段的情况下对 JSDoc 和 markdown
+文件中的代码片段进行类型检查，可以使用
+[`deno check`](/runtime/reference/cli/check/) 命令，并带有 `--doc` 选项（用于
+JSDoc）或 `--doc-only` 选项（用于 markdown）。
 
 :::
 
-### Exported items are automatically imported
+### 导出的项目会自动导入
 
-Looking at the generated test code above, you will notice that it includes the
-`import` statement to import the `add` function even though the original code
-block does not have it. When documenting a module, any items exported from the
-module are automatically included in the generated test code using the same
-name.
+查看上面生成的测试代码，你会注意到它包含了 `import` 语句来导入 `add`
+函数，即使原始代码块中没有它。在记录模块时，从模块导出的任何项目都会使用相同的名称自动包含在生成的测试代码中。
 
-Let's say we have the following module:
+假设我们有以下模块：
 
 ````ts title="example.ts"
 /**
- * # Examples
+ * # 示例
  *
  * ```ts
  * import { assertEquals } from "jsr:@std/assert/equals";
@@ -433,7 +405,7 @@ export default function getTwo() {
 }
 ````
 
-This will get converted to the following test case:
+这将转换为以下测试用例：
 
 ```ts title="example.ts$4-10.ts" ignore
 import { assertEquals } from "jsr:@std/assert/equals";
@@ -445,68 +417,63 @@ Deno.test("example.ts$4-10.ts", async () => {
 });
 ```
 
-### Skipping code blocks
+### 跳过代码块
 
-You can skip the evaluation of code blocks by adding the `ignore` attribute.
+你可以通过添加 `ignore` 属性来跳过代码块的评估。
 
 ````ts
 /**
- * This code block will not be run.
+ * 此代码块将不会运行。
  *
  * ```ts ignore
  * await sendEmail("deno@example.com");
  * ```
  */
 export async function sendEmail(to: string) {
-  // send an email to the given address...
+  // 向给定地址发送电子邮件...
 }
 ````
 
-## Sanitizers
+## 清理器
 
-The test runner offers several sanitizers to ensure that the test behaves in a
-reasonable and expected way.
+测试运行器提供了几个清理器，以确保测试行为合理且符合预期。
 
-### Resource sanitizer
+### 资源清理器
 
-The resource sanitizer ensures that all I/O resources created during a test are
-closed, to prevent leaks.
+资源清理器确保测试期间创建的所有 I/O 资源都已关闭，以防止泄漏。
 
-I/O resources are things like `Deno.FsFile` handles, network connections,
-`fetch` bodies, timers, and other resources that are not automatically garbage
-collected.
+I/O 资源包括 `Deno.FsFile` 句柄、网络连接、`fetch`
+主体、计时器和其他不会自动垃圾回收的资源。
 
-You should always close resources when you are done with them. For example, to
-close a file:
+你应该在使用完资源后始终关闭它们。例如，关闭文件：
 
 ```ts
 const file = await Deno.open("hello.txt");
-// Do something with the file
-file.close(); // <- Always close the file when you are done with it
+// 对文件执行某些操作
+file.close(); // <- 使用完文件后始终关闭它
 ```
 
-To close a network connection:
+关闭网络连接：
 
 ```ts
 const conn = await Deno.connect({ hostname: "example.com", port: 80 });
-// Do something with the connection
-conn.close(); // <- Always close the connection when you are done with it
+// 对连接执行某些操作
+conn.close(); // <- 使用完连接后始终关闭它
 ```
 
-To close a `fetch` body:
+关闭 `fetch` 主体：
 
 ```ts
 const response = await fetch("https://example.com");
-// Do something with the response
-await response.body?.cancel(); // <- Always cancel the body when you are done with it, if you didn't consume it otherwise
+// 对响应执行某些操作
+await response.body?.cancel(); // <- 如果你没有以其他方式消费它，使用完主体后始终取消它
 ```
 
-This sanitizer is enabled by default, but can be disabled in this test with
-`sanitizeResources: false`:
+此清理器默认启用，但可以在测试中通过 `sanitizeResources: false` 禁用：
 
 ```ts
 Deno.test({
-  name: "leaky resource test",
+  name: "泄漏资源测试",
   async fn() {
     await Deno.open("hello.txt");
   },
@@ -514,31 +481,26 @@ Deno.test({
 });
 ```
 
-### Async operation sanitizer
+### 异步操作清理器
 
-The async operation sanitizer ensures that all async operations started in a
-test are completed before the test ends. This is important because if an async
-operation is not awaited, the test will end before the operation is completed,
-and the test will be marked as successful even if the operation may have
-actually failed.
+异步操作清理器确保测试中启动的所有异步操作在测试结束前完成。这很重要，因为如果异步操作未被等待，测试将在操作完成前结束，并且即使操作可能实际上失败了，测试也会被标记为成功。
 
-You should always await all async operations in your tests. For example:
+你应该始终在测试中等待所有异步操作。例如：
 
 ```ts
 Deno.test({
-  name: "async operation test",
+  name: "异步操作测试",
   async fn() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   },
 });
 ```
 
-This sanitizer is enabled by default, but can be disabled with
-`sanitizeOps: false`:
+此清理器默认启用，但可以通过 `sanitizeOps: false` 禁用：
 
 ```ts
 Deno.test({
-  name: "leaky operation test",
+  name: "泄漏操作测试",
   fn() {
     crypto.subtle.digest(
       "SHA-256",
@@ -549,41 +511,33 @@ Deno.test({
 });
 ```
 
-### Exit sanitizer
+### 退出清理器
 
-The exit sanitizer ensures that tested code doesn’t call `Deno.exit()`, which
-could signal a false test success.
+退出清理器确保测试代码不会调用 `Deno.exit()`，这可能会发出错误的测试成功信号。
 
-This sanitizer is enabled by default, but can be disabled with
-`sanitizeExit: false`.
+此清理器默认启用，但可以通过 `sanitizeExit: false` 禁用。
 
 ```ts
 Deno.test({
-  name: "false success",
+  name: "错误成功",
   fn() {
     Deno.exit(0);
   },
   sanitizeExit: false,
 });
 
-// This test never runs, because the process exits during "false success" test
+// 此测试永远不会运行，因为进程在 "错误成功" 测试期间退出
 Deno.test({
-  name: "failing test",
+  name: "失败测试",
   fn() {
-    throw new Error("this test fails");
+    throw new Error("此测试失败");
   },
 });
 ```
 
-## Snapshot testing
+## 快照测试
 
-The [Deno Standard Library](/runtime/fundamentals/standard_library/) includes a
-[snapshot module](https://jsr.io/@std/testing/doc/snapshot/~) that allows
-developers to write tests by comparing values against reference snapshots. These
-snapshots are serialized representations of the original values and are stored
-alongside the test files.
+[Deno 标准库](/runtime/fundamentals/standard_library/) 包含一个
+[快照模块](https://jsr.io/@std/testing/doc/snapshot/~)，允许开发者通过将值与参考快照进行比较来编写测试。这些快照是原始值的序列化表示，并与测试文件一起存储。
 
-Snapshot testing enables catching a wide array of bugs with very little code. It
-is particularly helpful in situations where it is difficult to precisely express
-what should be asserted, without requiring a prohibitive amount of code, or
-where the assertions a test makes are expected to change often.
+快照测试能够以非常少的代码捕获各种错误。在难以精确表达应该断言什么的情况下，或者测试所做的断言预计会经常变化的情况下，它特别有用。

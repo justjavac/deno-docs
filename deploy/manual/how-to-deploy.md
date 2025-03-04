@@ -1,26 +1,23 @@
 ---
-title: "Deploy with GitHub integration"
+title: "通过 GitHub 集成部署"
 ---
 
-The simplest way to deploy more complex projects is via our Github integration.
-This allows you to link a Deno Deploy project to a GitHub repository. Every time
-you push to the repository, your changes will be automatically deployed.
+部署更复杂项目的最简单方法是通过我们的 Github 集成。 这允许你将 Deno Deploy
+项目链接到 GitHub 仓库。每次你推送到仓库时，你的更改将自动部署。
 
-Via the Github integration, you can add a Github Action that defines a build
-step in your deployment process.
+通过 Github 集成，你可以添加一个 Github Action，在部署过程中定义构建步骤。
 
-See [the Github integration page](ci_github) for more details.
+有关更多详细信息，请参阅 [Github 集成页面](ci_github)。
 
-### Deploy from command line with [`deployctl`](./deployctl.md)
+### 使用 [`deployctl`](./deployctl.md) 从命令行部署
 
-`deployctl` is a command line tool for deploying your code to Deno Deploy. You
-can control more details of your deployment than the above automatic GitHub
-integration by using `deployctl`.
+`deployctl` 是一个命令行工具，用于将你的代码部署到 Deno Deploy。通过使用
+`deployctl`，你可以比上述自动 GitHub 集成更详细地控制部署。
 
-See [the `deployctl` page](./deployctl.md) for more details.
+有关更多详细信息，请参阅 [`deployctl` 页面](./deployctl.md)。
 
-### Deploy with playground
+### 通过 playground 部署
 
-The easiest way to deploy some code is via a Deno Deploy playground.
+部署代码的最简单方法是通过 Deno Deploy playground。
 
-See the [playground page](playgrounds) for more details.
+有关更多详细信息，请参阅 [playground 页面](playgrounds)。

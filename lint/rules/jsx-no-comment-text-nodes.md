@@ -2,17 +2,16 @@
 tags: [recommended, react, jsx, fresh]
 ---
 
-JavaScript comments inside text nodes are rendered as plain text in JSX. This is
-often unexpected.
+在 JSX 中，文本节点内的 JavaScript 注释会被渲染为纯文本。这通常是出乎意料的。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 <div>// comment</div>
 <div>/* comment */</div>
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 <div>{/* comment */}</div>;

@@ -1,56 +1,50 @@
 ---
-title: "Chat application with WebSockets"
+title: "使用 WebSockets 的聊天应用"
 url: /examples/chat_app_tutorial/
 oldUrl:
   - /runtime/manual/examples/chat_app/
   - /runtime/tutorials/chat_app/
 ---
 
-WebSockets are a powerful tool for building real-time applications. They allow
-for bidirectional communication between the client and server without the need
-for constant polling. A frequent use case for WebSockets are chat applications.
+WebSockets
+是构建实时应用的强大工具。它们允许客户端和服务器之间进行双向通信，而无需不断轮询。WebSockets
+的一个常见用例是聊天应用。
 
-In this tutorial we'll create a simple chat app using Deno and the built in
-[WebSockets API](/api/web/websockets). The chat app will allow multiple chat
-clients to connect to the same backend and send group messages. After a client
-enters a username, they can then start sending messages to other online clients.
-Each client also displays the list of currently active users.
+在本教程中，我们将使用 Deno 和内置的 [WebSockets API](/api/web/websockets)
+创建一个简单的聊天应用。该聊天应用允许多个聊天客户端连接到同一个后端并发送群组消息。客户端输入用户名后，就可以开始向其他在线客户端发送消息。每个客户端还会显示当前活跃用户的列表。
 
-You can see the
-[finished chat app on GitHub](https://github.com/denoland/tutorial-with-websockets).
+你可以在
+[GitHub 上查看完成的聊天应用](https://github.com/denoland/tutorial-with-websockets)。
 
-![Chat app UI](./images/websockets.gif)
+![聊天应用 UI](./images/websockets.gif)
 
-## Initialize a new project
+## 初始化新项目
 
-First, create a new directory for your project and navigate into it.
+首先，为你的项目创建一个新目录并进入该目录。
 
 ```sh
 deno init chat-app
 cd deno-chat-app
 ```
 
-## Build the backend
+## 构建后端
 
-We'll start by building the backend server that will handle the WebSocket
-connections and broadcast messages to all connected clients. We'll use the
-[`oak`](https://jsr.io/@oak/oak) middleware framework to set up our server,
-clients can connect to the server, send messages and receive updates about other
-connected users. Additionally the server will serve the static HTML, CSS and
-JavaScript files that make up the chat client.
+我们将从构建后端服务器开始，该服务器将处理 WebSocket
+连接并向所有连接的客户端广播消息。我们将使用 [`oak`](https://jsr.io/@oak/oak)
+中间件框架来设置服务器，客户端可以连接到服务器、发送消息并接收有关其他连接用户的更新。此外，服务器还将提供构成聊天客户端的静态
+HTML、CSS 和 JavaScript 文件。
 
-### Import dependencies
+### 导入依赖项
 
-First, we'll need to import the necessary dependencies. Use the `deno add`
-command to add Oak to your project:
+首先，我们需要导入必要的依赖项。使用 `deno add` 命令将 Oak 添加到你的项目中：
 
 ```sh
 deno add jsr:@oak/oak
 ```
 
-### Set up the server
+### 设置服务器
 
-In your `main.ts` file, add the following code:
+在你的 `main.ts` 文件中，添加以下代码：
 
 ```ts title="main.ts"
 import { Application, Context, Router } from "@oak/oak";
@@ -76,9 +70,8 @@ console.log("Listening at http://localhost:" + port);
 await app.listen({ port });
 ```
 
-Next, create a new file called `ChatServer.ts` in the same directory as your
-`main.ts` file. In this file we'll put the logic for handling the WebSocket
-connections:
+接下来，在与 `main.ts` 文件相同的目录中创建一个名为 `ChatServer.ts`
+的新文件。在这个文件中，我们将放置处理 WebSocket 连接的逻辑：
 
 ```ts title="ChatServer.ts"
 import { Context } from "@oak/oak";
@@ -147,31 +140,28 @@ export default class ChatServer {
 }
 ```
 
-This code sets up a `handleConnection` method that is called when a new
-WebSocket connection is established. It receives a Context object from the Oak
-framework and upgrades it to a WebSocket connection. It extracts the username
-from the URL query parameters. If the username is already taken (i.e., exists in
-connectedClients), it closes the socket with an appropriate message. Otherwise,
-it sets the username property on the socket, assigns event handlers, and adds
-the socket to `connectedClients`.
+这段代码设置了一个 `handleConnection` 方法，当建立新的 WebSocket
+连接时调用。它从 Oak 框架接收一个 Context 对象并将其升级为 WebSocket 连接。它从
+URL 查询参数中提取用户名。如果用户名已被占用（即存在于 `connectedClients`
+中），它会关闭套接字并显示适当的消息。否则，它会在套接字上设置用户名属性，分配事件处理程序，并将套接字添加到
+`connectedClients` 中。
 
-When the socket opens, it triggers the `broadcastUsernames` method, which sends
-the list of connected usernames to all clients. When the socket closes, it calls
-the `clientDisconnected` method to remove the client from the list of connected
-clients.
+当套接字打开时，它会触发 `broadcastUsernames`
+方法，该方法将连接的用户名列表发送给所有客户端。当套接字关闭时，它会调用
+`clientDisconnected` 方法，将客户端从连接客户端列表中移除。
 
-When a message of type `send-message` is received, it broadcasts the message to
-all connected clients, including the sender’s username.
+当接收到类型为 `send-message`
+的消息时，它会将消息广播给所有连接的客户端，包括发送者的用户名。
 
-## Build the frontend
+## 构建前端
 
-We'll build a simple UI that shows a text input and a send button and displays
-the sent messages, alongside a list of users in the chat.
+我们将构建一个简单的
+UI，显示文本输入和发送按钮，并显示发送的消息以及聊天中的用户列表。
 
 ### HTML
 
-In your new project directory, create a `public` folder and add an `index.html`
-file and add the following code:
+在你的新项目目录中，创建一个 `public` 文件夹并添加一个 `index.html`
+文件，并添加以下代码：
 
 ```html title="index.html"
 <!DOCTYPE html>
@@ -217,15 +207,14 @@ file and add the following code:
 
 ### CSS
 
-If you'd like to style your chat app, create a `style.css` file in the `public`
-folder and add this
-[pre-made CSS](https://raw.githubusercontent.com/denoland/tutorial-with-websockets/refs/heads/main/public/style.css).
+如果你想为聊天应用添加样式，可以在 `public` 文件夹中创建一个 `style.css`
+文件，并添加这个
+[预制的 CSS](https://raw.githubusercontent.com/denoland/tutorial-with-websockets/refs/heads/main/public/style.css)。
 
 ### JavaScript
 
-We'll set up the client side JavaScript in an `app.js` file, you'll have seen it
-linked in the HTML we just wrote. In the `public` folder and add an `app.js`
-file with the following code:
+我们将在 `app.js` 文件中设置客户端 JavaScript，你已经在刚刚编写的 HTML
+中看到了它的链接。在 `public` 文件夹中添加一个 `app.js` 文件，并添加以下代码：
 
 ```js title="app.js"
 const myUsername = prompt("Please enter your name") || "Anonymous";
@@ -280,33 +269,27 @@ form.onsubmit = (e) => {
 };
 ```
 
-This code prompts the user for a username, then creates a WebSocket connection
-to the server with the username as a query parameter. It listens for messages
-from the server and either updates the list of connected users or adds a new
-message to the chat window. It also sends messages to the server when the user
-submits the form either by pressing enter or clicking the send button. We use an
-[HTML template](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template)
-to scaffold out the new messages to show in the chat window.
+这段代码提示用户输入用户名，然后使用用户名作为查询参数创建与服务器的 WebSocket
+连接。它监听来自服务器的消息，并更新连接用户列表或将新消息添加到聊天窗口中。当用户提交表单时，无论是按回车键还是点击发送按钮，它都会向服务器发送消息。我们使用
+[HTML 模板](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/template)
+来搭建要在聊天窗口中显示的新消息。
 
-## Run the server
+## 运行服务器
 
-To run the server we'll need to grant the necessary permissions to Deno. In your
-`deno.json` file, update the `dev` task to allow read and network access:
+要运行服务器，我们需要授予 Deno 必要的权限。在你的 `deno.json` 文件中，更新
+`dev` 任务以允许读取和网络访问：
 
 ```diff title="deno.json"
 -"dev": "deno run --watch main.ts"
 +"dev": "deno run --allow-net --allow-read --watch main.ts"
 ```
 
-Now if you visit [http://localhost:8080](http://localhost:8080/) you will be
-able to start a chat session. You can open 2 simultaneous tabs and try chatting
-with yourself.
+现在，如果你访问
+[http://localhost:8080](http://localhost:8080/)，你将能够开始聊天会话。你可以打开
+2 个同时的标签页并尝试与自己聊天。
 
-![Chat app UI](./images/websockets.gif)
+![聊天应用 UI](./images/websockets.gif)
 
-🦕 Now you can use WebSockets with Deno you're ready to build all kinds of
-realtime applications! WebSockets can be used to build realtime dashboards,
-games and collaborative editing tools and much more! If you're looking for ways
-to expand upon your chat app, perhaps you could consider adding data to the
-messages to allow you to style messages differently if they're sent from you or
-someone else. Whatever you're building, Deno will WebSocket to ya!
+🦕 现在你可以使用 Deno 的 WebSockets 来构建各种实时应用了！WebSockets
+可用于构建实时仪表板、游戏和协作编辑工具等等！如果你想扩展你的聊天应用，或许可以考虑为消息添加数据，以便你可以根据消息是来自你还是其他人来设置不同的样式。无论你在构建什么，Deno
+都会用 WebSocket 与你交流！

@@ -1,59 +1,57 @@
 ---
-title: "API server with FaunaDB"
+title: "使用 FaunaDB 的 API 服务器"
 oldUrl:
   - /deploy/docs/tutorial-faunadb/
 ---
 
-FaunaDB calls itself "The data API for modern applications". It's a database
-with a GraphQL interface that enables you to use GraphQL to interact with it.
-Since we communicate with it using HTTP requests, we don't need to manage
-connections which suits very well for serverless applications.
+FaunaDB 自称是“现代应用程序的数据 API”。它是一个带有 GraphQL
+接口的数据库，允许你使用 GraphQL 与其交互。由于我们通过 HTTP
+请求与其通信，因此不需要管理连接，这非常适合无服务器应用程序。
 
-The tutorial assumes that you have [FaunaDB](https://fauna.com) and Deno Deploy
-accounts, Deno Deploy CLI installed, and some basic knowledge of GraphQL.
+本教程假设你已拥有 [FaunaDB](https://fauna.com) 和 Deno Deploy 账户，已安装 Deno
+Deploy CLI，并且对 GraphQL 有一些基本了解。
 
-- [Overview](#overview)
-- [Build the API Endpoints](#build-the-api-endpoints)
-- [Use FaunaDB for Persistence](#use-faunadb-for-persistence)
-- [Deploy the API](#deploy-the-api)
+- [概述](#overview)
+- [构建 API 端点](#build-the-api-endpoints)
+- [使用 FaunaDB 进行持久化](#use-faunadb-for-persistence)
+- [部署 API](#deploy-the-api)
 
-## Overview
+## 概述
 
-In this tutorial, let's build a small quotes API with endpoints to insert and
-retrieve quotes. And later use FaunaDB to persist the quotes.
+在本教程中，我们将构建一个小的名言
+API，包含插入和检索名言的端点。之后，我们将使用 FaunaDB 来持久化这些名言。
 
-Let's start by defining the API endpoints.
+让我们从定义 API 端点开始。
 
 ```sh
-# A POST request to the endpoint should insert the quote to the list.
+# 向该端点发送 POST 请求应将名言插入到列表中。
 POST /quotes/
-# Body of the request.
+# 请求体。
 {
-  "quote": "Don't judge each day by the harvest you reap but by the seeds that you plant.",
-  "author": "Robert Louis Stevenson"
+  "quote": "不要以收获的多少来判断每一天，而要以播种的多少来判断。",
+  "author": "罗伯特·路易斯·史蒂文森"
 }
 
-# A GET request to the endpoint should return all the quotes from the database.
+# 向该端点发送 GET 请求应从数据库中返回所有名言。
 GET /quotes/
-# Response of the request.
+# 请求的响应。
 {
   "quotes": [
     {
-      "quote": "Don't judge each day by the harvest you reap but by the seeds that you plant.",
-      "author": "Robert Louis Stevenson"
+      "quote": "不要以收获的多少来判断每一天，而要以播种的多少来判断。",
+      "author": "罗伯特·路易斯·史蒂文森"
     }
   ]
 }
 ```
 
-Now that we understand how the endpoint should behave, let's proceed to build
-it.
+现在我们了解了端点的行为方式，让我们继续构建它。
 
-## Build the API Endpoints
+## 构建 API 端点
 
-First, create a file named `quotes.ts` and paste the following content.
+首先，创建一个名为 `quotes.ts` 的文件，并粘贴以下内容。
 
-Read through the comments in the code to understand what's happening.
+阅读代码中的注释以了解发生了什么。
 
 ```ts
 import {
@@ -66,55 +64,53 @@ serve({
   "/quotes": handleQuotes,
 });
 
-// To get started, let's just use a global array of quotes.
+// 为了开始，我们只使用一个全局的名言数组。
 const quotes = [
   {
-    quote: "Those who can imagine anything, can create the impossible.",
-    author: "Alan Turing",
+    quote: "那些能够想象任何事情的人，可以创造不可能。",
+    author: "艾伦·图灵",
   },
   {
-    quote: "Any sufficiently advanced technology is equivalent to magic.",
-    author: "Arthur C. Clarke",
+    quote: "任何足够先进的技术都与魔法无异。",
+    author: "亚瑟·克拉克",
   },
 ];
 
 async function handleQuotes(request: Request) {
-  // Make sure the request is a GET request.
+  // 确保请求是 GET 请求。
   const { error } = await validateRequest(request, {
     GET: {},
   });
-  // validateRequest populates the error if the request doesn't meet
-  // the schema we defined.
+  // 如果请求不符合我们定义的模式，validateRequest 会填充错误。
   if (error) {
     return json({ error: error.message }, { status: error.status });
   }
 
-  // Return all the quotes.
+  // 返回所有名言。
   return json({ quotes });
 }
 ```
 
-Run the above program using [the Deno CLI](https://deno.land).
+使用 [Deno CLI](https://deno.land) 运行上述程序。
 
 ```sh
 deno run --allow-net=:8000 ./path/to/quotes.ts
-# Listening on http://0.0.0.0:8000/
+# 监听 http://0.0.0.0:8000/
 ```
 
-And curl the endpoint to see some quotes.
+然后使用 curl 访问端点以查看一些名言。
 
 ```sh
 curl http://127.0.0.1:8000/quotes
 # {"quotes":[
-# {"quote":"Those who can imagine anything, can create the impossible.", "author":"Alan Turing"},
-# {"quote":"Any sufficiently advanced technology is equivalent to magic.","author":"Arthur C. Clarke"}
+# {"quote":"那些能够想象任何事情的人，可以创造不可能。", "author":"艾伦·图灵"},
+# {"quote":"任何足够先进的技术都与魔法无异。","author":"亚瑟·克拉克"}
 # ]}
 ```
 
-Let's proceed to handle the POST request.
+让我们继续处理 POST 请求。
 
-Update the `validateRequest` function to make sure a POST request follows the
-provided body scheme.
+更新 `validateRequest` 函数，以确保 POST 请求遵循提供的请求体模式。
 
 ```diff
 -  const { error } = await validateRequest(request, {
@@ -126,8 +122,7 @@ provided body scheme.
   });
 ```
 
-Handle the POST request by updating `handleQuotes` function with the following
-code.
+通过更新 `handleQuotes` 函数来处理 POST 请求，代码如下。
 
 ```diff
 async function handleQuotes(request: Request) {
@@ -141,7 +136,7 @@ async function handleQuotes(request: Request) {
     return json({ error: error.message }, { status: error.status });
   }
 
-+  // Handle POST requests.
++  // 处理 POST 请求。
 +  if (request.method === "POST") {
 +    const { quote, author } = body as { quote: string; author: string };
 +    quotes.push({ quote, author });
@@ -152,55 +147,53 @@ async function handleQuotes(request: Request) {
 }
 ```
 
-Let's test it by inserting some data.
+让我们通过插入一些数据来测试它。
 
 ```sh
-curl --dump-header - --request POST --data '{"quote": "A program that has not been tested does not work.", "author": "Bjarne Stroustrup"}' http://127.0.0.1:8000/quotes
+curl --dump-header - --request POST --data '{"quote": "未经测试的程序无法工作。", "author": "比雅尼·斯特劳斯特鲁普"}' http://127.0.0.1:8000/quotes
 ```
 
-The output might look like something below.
+输出可能如下所示。
 
 ```console
 HTTP/1.1 201 Created
 transfer-encoding: chunked
 content-type: application/json; charset=utf-8
 
-{"quote":"A program that has not been tested does not work.","author":"Bjarne Stroustrup"}
+{"quote":"未经测试的程序无法工作。","author":"比雅尼·斯特劳斯特鲁普"}
 ```
 
-Awesome! We built our API endpoint, and it's working as expected. Since the data
-is stored in memory, it will be lost after a restart. Let's use FaunaDB to
-persist our quotes.
+太棒了！我们构建了我们的 API
+端点，并且它按预期工作。由于数据存储在内存中，重启后会丢失。让我们使用 FaunaDB
+来持久化我们的名言。
 
-## Use FaunaDB for Persistence
+## 使用 FaunaDB 进行持久化
 
-Let's define our database schema using GraphQL Schema.
+让我们使用 GraphQL Schema 定义我们的数据库模式。
 
 ```gql
-# We're creating a new type named `Quote` to represent a quote and its author.
+# 我们正在创建一个名为 `Quote` 的新类型来表示名言及其作者。
 type Quote {
   quote: String!
   author: String!
 }
 
 type Query {
-  # A new field in the Query operation to retrieve all quotes.
+  # Query 操作中的一个新字段，用于检索所有名言。
   allQuotes: [Quote!]
 }
 ```
 
-Fauna has a graphql endpoint for its database, and it generates essential
-mutations like create, update, delete for a data type defined in the schema. For
-example, fauna will generate a mutation named `createQuote` to create a new
-quote in the database for the data type `Quote`. And we're additionally defining
-a query field named `allQuotes` that returns all the quotes in the database.
+Fauna 为其数据库提供了一个 graphql
+端点，并为模式中定义的数据类型生成必要的突变，如创建、更新、删除。例如，fauna
+将为数据类型 `Quote` 生成一个名为 `createQuote`
+的突变，以在数据库中创建新名言。我们还定义了一个名为 `allQuotes`
+的查询字段，它返回数据库中的所有名言。
 
-Let's get to writing the code to interact with fauna from Deno Deploy
-applications.
+让我们开始编写代码，从 Deno Deploy 应用程序与 fauna 交互。
 
-To interact with fauna, we need to make a POST request to its graphql endpoint
-with appropriate query and parameters to get the data in return. So let's
-construct a generic function that will handle those things.
+要与 fauna 交互，我们需要向其 graphql 端点发送 POST
+请求，并附带适当的查询和参数以获取返回的数据。因此，让我们构建一个通用函数来处理这些事情。
 
 ```typescript
 async function queryFauna(
@@ -210,15 +203,14 @@ async function queryFauna(
   data?: any;
   error?: any;
 }> {
-  // Grab the secret from the environment.
+  // 从环境中获取密钥。
   const token = Deno.env.get("FAUNA_SECRET");
   if (!token) {
-    throw new Error("environment variable FAUNA_SECRET not set");
+    throw new Error("环境变量 FAUNA_SECRET 未设置");
   }
 
   try {
-    // Make a POST request to fauna's graphql endpoint with body being
-    // the query and its variables.
+    // 向 fauna 的 graphql 端点发送 POST 请求，请求体为查询及其变量。
     const res = await fetch("https://graphql.fauna.com/graphql", {
       method: "POST",
       headers: {
@@ -233,7 +225,7 @@ async function queryFauna(
 
     const { data, errors } = await res.json();
     if (errors) {
-      // Return the first error if there are any.
+      // 如果有错误，返回第一个错误。
       return { data, error: errors[0] };
     }
 
@@ -244,8 +236,7 @@ async function queryFauna(
 }
 ```
 
-Add this code to the `quotes.ts` file. Now let's proceed to update the endpoint
-to use fauna.
+将此代码添加到 `quotes.ts` 文件中。现在让我们继续更新端点以使用 fauna。
 
 ```diff
 async function handleQuotes(request: Request) {
@@ -264,7 +255,7 @@ async function handleQuotes(request: Request) {
 +      body as { quote: string; author: string }
 +    );
 +    if (error) {
-+      return json({ error: "couldn't create the quote" }, { status: 500 });
++      return json({ error: "无法创建名言" }, { status: 500 });
 +    }
 
     return json({ quote, author }, { status: 201 });
@@ -298,37 +289,35 @@ async function handleQuotes(request: Request) {
 +}
 ```
 
-Now that we've updated the code to insert new quotes let's set up a fauna
-database before proceeding to test the code.
+现在我们已经更新了代码以插入新名言，让我们在继续测试代码之前设置一个 fauna
+数据库。
 
-Create a new database:
+创建一个新数据库：
 
-1. Go to https://dashboard.fauna.com (login if required) and click on **New
-   Database**
-2. Fill the **Database Name** field and click on **Save**.
-3. Click on **GraphQL** section visible on the left sidebar.
-4. Create a file ending with `.gql` extension with the content being the schema
-   we defined above.
+1. 访问 https://dashboard.fauna.com （如果需要请登录）并点击 **New Database**
+2. 填写 **Database Name** 字段并点击 **Save**。
+3. 点击左侧边栏中可见的 **GraphQL** 部分。
+4. 创建一个以 `.gql` 结尾的文件，内容为我们上面定义的模式。
 
-Generate a secret to access the database:
+生成访问数据库的密钥：
 
-1. Click on **Security** section and click on **New Key**.
-2. Select **Server** role and click on **Save**. Copy the secret.
+1. 点击 **Security** 部分并点击 **New Key**。
+2. 选择 **Server** 角色并点击 **Save**。复制密钥。
 
-Let's now run the application with the secret.
+现在让我们使用密钥运行应用程序。
 
 ```sh
-FAUNA_SECRET=<the_secret_you_just_obtained> deno run --allow-net=:8000 --watch quotes.ts
-# Listening on http://0.0.0.0:8000
+FAUNA_SECRET=<你刚刚获得的密钥> deno run --allow-net=:8000 --watch quotes.ts
+# 监听 http://0.0.0.0:8000
 ```
 
 ```sh
-curl --dump-header - --request POST --data '{"quote": "A program that has not been tested does not work.", "author": "Bjarne Stroustrup"}' http://127.0.0.1:8000/quotes
+curl --dump-header - --request POST --data '{"quote": "未经测试的程序无法工作。", "author": "比雅尼·斯特劳斯特鲁普"}' http://127.0.0.1:8000/quotes
 ```
 
-Notice how the quote was added to your collection in FaunaDB.
+注意名言是如何添加到你的 FaunaDB 集合中的。
 
-Let's write a new function to get all the quotes.
+让我们编写一个新函数来获取所有名言。
 
 ```ts
 async function getAllQuotes() {
@@ -357,18 +346,18 @@ async function getAllQuotes() {
 }
 ```
 
-And update the `handleQuotes` function with the following code.
+并更新 `handleQuotes` 函数，代码如下。
 
 ```diff
--// To get started, let's just use a global array of quotes.
+-// 为了开始，我们只使用一个全局的名言数组。
 -const quotes = [
 -  {
--    quote: "Those who can imagine anything, can create the impossible.",
--    author: "Alan Turing",
+-    quote: "那些能够想象任何事情的人，可以创造不可能。",
+-    author: "艾伦·图灵",
 -  },
 -  {
--    quote: "Any sufficiently advanced technology is equivalent to magic.",
--    author: "Arthur C. Clarke",
+-    quote: "任何足够先进的技术都与魔法无异。",
+-    author: "亚瑟·克拉克",
 -  },
 -];
 
@@ -388,17 +377,17 @@ async function handleQuotes(request: Request) {
       body as { quote: string; author: string },
     );
     if (error) {
-      return json({ error: "couldn't create the quote" }, { status: 500 });
+      return json({ error: "无法创建名言" }, { status: 500 });
     }
 
     return json({ quote, author }, { status: 201 });
   }
 
-+  // It's assumed that the request method is "GET".
++  // 假设请求方法是 "GET"。
 +  {
 +    const { quotes, error } = await getAllQuotes();
 +    if (error) {
-+      return json({ error: "couldn't fetch the quotes" }, { status: 500 });
++      return json({ error: "无法获取名言" }, { status: 500 });
 +    }
 +
 +    return json({ quotes });
@@ -410,29 +399,27 @@ async function handleQuotes(request: Request) {
 curl http://127.0.0.1:8000/quotes
 ```
 
-You should see all the quotes we've inserted into the database. The final code
-of the API is available at https://deno.com/examples/fauna.ts.
+你应该会看到我们插入到数据库中的所有名言。API 的最终代码可在
+https://deno.com/examples/fauna.ts 获取。
 
-## Deploy the API
+## 部署 API
 
-Now that we have everything in place, let's deploy your new API!
+现在一切就绪，让我们部署你的新 API！
 
-1. In your browser, visit [Deno Deploy](https://dash.deno.com/new_project) and
-   link your GitHub account.
-2. Select the repository which contains your new API.
-3. You can give your project a name or allow Deno to generate one for you
-4. Select `index.ts` in the Entrypoint dropdown
-5. Click **Deploy Project**
+1. 在浏览器中访问 [Deno Deploy](https://dash.deno.com/new_project) 并链接你的
+   GitHub 账户。
+2. 选择包含你新 API 的仓库。
+3. 你可以为你的项目命名，或允许 Deno 为你生成一个名称。
+4. 在 Entrypoint 下拉菜单中选择 `index.ts`。
+5. 点击 **Deploy Project**
 
-In order for your Application to work, we will need to configure its environment
-variables.
+为了使你的应用程序正常工作，我们需要配置其环境变量。
 
-On your project's success page, or in your project dashboard, click on **Add
-environmental variables**. Under Environment Variables, click **+ Add
-Variable**. Create a new variable called `FAUNA_SECRET` - The value should be
-the secret we created earlier.
+在你的项目成功页面或项目仪表板中，点击 **Add environmental variables**。在
+Environment Variables 下，点击 **+ Add Variable**。创建一个名为 `FAUNA_SECRET`
+的新变量 - 值应为我们之前创建的密钥。
 
-Click to save the variables.
+点击保存变量。
 
-On your project overview, click **View** to view the project in your browser,
-add `/quotes` to the end of the url to see the content of your FaunaDB.
+在你的项目概览中，点击 **View** 以在浏览器中查看项目，在 URL 末尾添加 `/quotes`
+以查看你的 FaunaDB 内容。

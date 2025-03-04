@@ -2,16 +2,16 @@
 tags: [recommended]
 ---
 
-Disallows the use of empty patterns in destructuring.
+禁止在解构中使用空模式。
 
-In destructuring, it is possible to use empty patterns such as `{}` or `[]`
-which have no effect, most likely not what the author intended.
+在解构中，可能会使用诸如 `{}` 或 `[]`
+这样的空模式，这些模式没有任何效果，很可能不是作者的本意。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
-// In these examples below, {} and [] are not object literals or empty arrays,
-// but placeholders for destructured variable names
+// 在下面的示例中，{} 和 [] 不是对象字面量或空数组，
+// 而是解构变量名的占位符
 const {} = someObj;
 const [] = someArray;
 const {a: {}} = someObj;
@@ -20,16 +20,16 @@ function myFunc({}) {}
 function myFunc([]) {}
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 const { a } = someObj;
 const [a] = someArray;
 
-// Correct way to default destructured variable to object literal
+// 正确的方式是将解构变量默认设置为对象字面量
 const { a = {} } = someObj;
 
-// Correct way to default destructured variable to empty array
+// 正确的方式是将解构变量默认设置为空数组
 const [a = []] = someArray;
 
 function myFunc({ a }) {}

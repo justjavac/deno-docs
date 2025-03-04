@@ -3,9 +3,9 @@
  * @difficulty beginner
  * @tags cli, deploy
  * @run --allow-sys <url>
- * @resource {https://docs.deno.com/api/deno/~/Deno.systemMemoryInfo} Doc: Deno.systemMemoryInfo
- * @resource {https://docs.deno.com/api/deno/~/Deno.loadavg} Doc: Deno.loadavg
- * @resource {https://docs.deno.com/api/deno/~/Deno.memoryUsage} Doc: Deno.memoryUsage
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.systemMemoryInfo} Doc: Deno.systemMemoryInfo
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.loadavg} Doc: Deno.loadavg
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.memoryUsage} Doc: Deno.memoryUsage
  * @group System
  *
  * This example demonstrates how to use Deno's built-in methods to read

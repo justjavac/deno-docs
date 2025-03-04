@@ -1,58 +1,54 @@
 ---
-title: "Deploy a React app with Vite"
+title: "使用 Vite 部署 React 应用"
 oldUrl:
   - /deploy/docs/vite/
   - /deploy/manual/vite
 ---
 
-This tutorial covers how to deploy a Vite Deno and React app on Deno Deploy.
+本教程介绍如何在 Deno Deploy 上部署一个使用 Vite 构建的 Deno 和 React 应用。
 
-## Step 1: Create a Vite app
+## 第一步：创建 Vite 应用
 
-Let's use [Vite](https://vitejs.dev/) to quickly scaffold a Deno and React app:
+让我们使用 [Vite](https://vitejs.dev/) 快速搭建一个 Deno 和 React 应用：
 
 ```sh
 deno run -RWE npm:create-vite-extra@latest
 ```
 
-We'll name our project `vite-project`. Be sure to select `deno-react` in the
-project configuration.
+我们将项目命名为 `vite-project`。在项目配置中，请确保选择 `deno-react`。
 
-Then, `cd` into the newly created project folder.
+然后，使用 `cd` 进入新创建的项目文件夹。
 
-## Step 2: Run the repo locally
+## 第二步：在本地运行项目
 
-To see and edit your new project locally you can run:
+要查看和编辑你的新项目，可以在本地运行：
 
 ```sh
 deno task dev
 ```
 
-## Step 3: Deploy your project with Deno Deploy
+## 第三步：使用 Deno Deploy 部署你的项目
 
-Now that we have everything in place, let's deploy your new project!
+现在一切就绪，让我们部署你的新项目！
 
-1. In your browser, visit [Deno Deploy](https://dash.deno.com/new_project) and
-   link your GitHub account.
-2. Select the repository which contains your new Vite project.
-3. You can give your project a name or allow Deno to generate one for you.
-4. Select **Vite** from the **Framework Preset** dropdown. This will populate
-   the **Entrypoint** form field.
-5. Leave the **Install step** empty.
-6. Set the **Build step** to `deno task build`.
-7. Set the **Root directory** to `dist`
-8. Click **Deploy Project**
+1. 在浏览器中访问 [Deno Deploy](https://dash.deno.com/new_project) 并链接你的
+   GitHub 账户。
+2. 选择包含你新 Vite 项目的仓库。
+3. 你可以为项目命名，或者让 Deno 自动生成一个名称。
+4. 在 **Framework Preset** 下拉菜单中选择 **Vite**。这将自动填充 **Entrypoint**
+   表单字段。
+5. 将 **Install step** 留空。
+6. 将 **Build step** 设置为 `deno task build`。
+7. 将 **Root directory** 设置为 `dist`。
+8. 点击 **Deploy Project**。
 
-> NB. The entrypoint that is set will be `jsr:@std/http/file-server`. Note that
-> this is not a file that exists in the Vite repo itself. Instead, it is an
-> external program. When run, this program uploads all the static asset files in
-> your current repo (`vite-project/dist`) to Deno Deploy. Then when you navigate
-> to the deployment URL, it serves up the local directory.
+> 注意：设置的入口点将是 `jsr:@std/http/file-server`。请注意，这并不是 Vite
+> 仓库中存在的文件，而是一个外部程序。运行时，该程序会将当前仓库（`vite-project/dist`）中的所有静态资源文件上传到
+> Deno Deploy。然后，当你访问部署 URL 时，它会提供本地目录中的内容。
 
 ### `deployctl`
 
-Alternatively, you can use `deployctl` directly to deploy `vite-project` to Deno
-Deploy.
+或者，你可以直接使用 `deployctl` 将 `vite-project` 部署到 Deno Deploy。
 
 ```console
 cd /dist

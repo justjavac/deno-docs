@@ -2,18 +2,17 @@
 tags: [recommended]
 ---
 
-Disallows comparisons to `NaN`.
+禁止与 `NaN` 进行比较。
 
-Because `NaN` is unique in JavaScript by not being equal to anything, including
-itself, the results of comparisons to `NaN` are confusing:
+由于 `NaN` 在 JavaScript 中是独一无二的，它不等于任何值，包括它自己，因此与
+`NaN` 进行比较的结果会令人困惑：
 
-- `NaN === NaN` or `NaN == NaN` evaluate to `false`
-- `NaN !== NaN` or `NaN != NaN` evaluate to `true`
+- `NaN === NaN` 或 `NaN == NaN` 的值为 `false`
+- `NaN !== NaN` 或 `NaN != NaN` 的值为 `true`
 
-Therefore, this rule makes you use the `isNaN()` or `Number.isNaN()` to judge
-the value is `NaN` or not.
+因此，该规则要求你使用 `isNaN()` 或 `Number.isNaN()` 来判断某个值是否为 `NaN`。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 if (foo == NaN) {
@@ -35,7 +34,7 @@ switch (foo) {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 if (isNaN(foo)) {

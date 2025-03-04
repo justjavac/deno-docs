@@ -3,8 +3,8 @@
  * @difficulty intermediate
  * @tags cli, deploy
  * @run --unstable-kv <url>
- * @resource {https://docs.deno.com/deploy/kv/manual/queue_overview} Deno Queues user guide
- * @resource {https://docs.deno.com/api/deno/~/Deno.Kv} Deno Queues Runtime API docs
+ * @resource {https://docs.denohub.com/deploy/kv/manual/queue_overview} Deno Queues user guide
+ * @resource {https://docs.denohub.com/api/deno/~/Deno.Kv} Deno Queues Runtime API docs
  * @group Unstable APIs
  *
  * <strong>Warning: This is an unstable API that is subject to change or removal at anytime.</strong><br>Deno Queues, built on Deno KV, allow you to offload parts of your application

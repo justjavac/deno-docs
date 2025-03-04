@@ -1,85 +1,83 @@
 ---
-title: "`deno init`, start a new project"
+title: "`deno init`，开始一个新项目"
 oldUrl: /runtime/manual/tools/init/
 command: init
 ---
 
-## Examples
+## 示例
 
 ```sh
 $ deno init
-✅ Project initialized
-Run these commands to get started
+✅ 项目已初始化
+运行以下命令以开始
 
-  // Run the program
+  // 运行程序
   deno run main.ts
 
-  // Run the program and watch for file changes
+  // 运行程序并监视文件更改
   deno task dev
 
-  // Run the tests
+  // 运行测试
   deno test
 
 $ deno run main.ts
-Add 2 + 3 = 5
+2 + 3 = 5
 
 $ deno test
-Check file:///dev/main_test.ts
-running 1 test from main_test.ts
-addTest ... ok (6ms)
+检查文件:///dev/main_test.ts
+从 main_test.ts 运行 1 个测试
+addTest ... 通过 (6ms)
 
-ok | 1 passed | 0 failed (29ms)
+通过 | 1 个通过 | 0 个失败 (29ms)
 ```
 
-The `init` subcommand will create two files (`main.ts` and `main_test.ts`).
-These files provide a basic example of how to write a Deno program and how to
-write tests for it. The `main.ts` file exports a `add` function that adds two
-numbers together and the `main_test.ts` file contains a test for this function.
+`init` 子命令将创建两个文件（`main.ts` 和 `main_test.ts`）。
+这些文件提供了一个基本的示例，展示了如何编写 Deno
+程序以及如何为其编写测试。`main.ts` 文件导出了一个 `add`
+函数，用于将两个数字相加，而 `main_test.ts` 文件包含了对该函数的测试。
 
-You can also specify an argument to `deno init` to initialize a project in a
-specific directory:
+你也可以为 `deno init` 指定一个参数，以在特定目录中初始化项目：
 
 ```sh
 $ deno init my_deno_project
-✅ Project initialized
+✅ 项目已初始化
 
-Run these commands to get started
+运行以下命令以开始
 
   cd my_deno_project
 
-  // Run the program
+  // 运行程序
   deno run main.ts
 
-  // Run the program and watch for file changes
+  // 运行程序并监视文件更改
   deno task dev
 
-  // Run the tests
+  // 运行测试
   deno test
 ```
 
-## Init a JSR package
+## 初始化一个 JSR 包
 
-By running `deno init --lib` Deno will bootstrap a project that is ready to be
-published on [JSR](https://jsr.io/).
+通过运行 `deno init --lib`，Deno 将引导一个准备发布到 [JSR](https://jsr.io/)
+的项目。
 
 ```sh
 $ deno init --lib
-✅ Project initialized
+✅ 项目已初始化
 
-Run these commands to get started
+运行以下命令以开始
 
-  # Run the tests
+  # 运行测试
   deno test
 
-  # Run the tests and watch for file changes
+  # 运行测试并监视文件更改
   deno task dev
 
-  # Publish to JSR (dry run)
+  # 发布到 JSR（试运行）
   deno publish --dry-run
 ```
 
-Inside `deno.json` you'll see that the entries for `name`, `exports` and
-`version` are prefilled.
+在 `deno.json` 中，你会看到 `name`、`exports` 和 `version` 的条目已预填充。
 
 ```json
 {
@@ -95,29 +93,28 @@ Inside `deno.json` you'll see that the entries for `name`, `exports` and
 }
 ```
 
-## Initialize a web server
+## 初始化一个 Web 服务器
 
-Running `deno init --serve` bootstraps a web server that works with
-[`deno serve`](./serve).
+运行 `deno init --serve` 将引导一个与 [`deno serve`](./serve) 兼容的 Web
+服务器。
 
 ```sh
 $ deno init --serve
-✅ Project initialized
+✅ 项目已初始化
 
-Run these commands to get started
+运行以下命令以开始
 
-  # Run the server
+  # 运行服务器
   deno serve -R main.ts
 
-  # Run the server and watch for file changes
+  # 运行服务器并监视文件更改
   deno task dev
 
-  # Run the tests
+  # 运行测试
   deno -R test
 ```
 
-Your [`deno.json`](/runtime/fundamentals/configuration/) file will look like
-this:
+你的 [`deno.json`](/runtime/fundamentals/configuration/) 文件将如下所示：
 
 ```json
 {
@@ -131,28 +128,27 @@ this:
 }
 ```
 
-Now, you can start your web server, which
-[watches for changes](/runtime/getting_started/command_line_interface/#watch-mode),
-by running `deno task dev`.
+现在，你可以通过运行 `deno task dev` 来启动你的 Web
+服务器，它将[监视更改](/runtime/getting_started/command_line_interface/#watch-mode)。
 
 ```sh
 $ deno task dev
-Task dev deno serve --watch -R main.ts
-Watcher Process started.
-deno serve: Listening on http://0.0.0.0:8000/
+任务 dev deno serve --watch -R main.ts
+监视器进程已启动。
+deno serve: 正在监听 http://0.0.0.0:8000/
 ```
 
-## Generate a library project
+## 生成一个库项目
 
-You can append a `--lib` flag to add extra parameters to your `deno.json`, such
-as "name", "version" and an "exports" fields.
+你可以附加一个 `--lib` 标志，以向你的 `deno.json` 添加额外的参数，例如
+"name"、"version" 和 "exports" 字段。
 
 ```sh
 $ deno init my_deno_project --lib
-✅ Project initialized
+✅ 项目已初始化
 ```
 
-The resulting `deno.json will be as follows:
+生成的 `deno.json` 将如下所示：
 
 ```jsonc
 {

@@ -1,30 +1,26 @@
 ---
-title: Pricing and Limits
+title: 定价与限制
 ---
 
-## Deployment size
+## 部署大小
 
-Deployments should be less than 1GB across all source code and assets in
-aggregate, per deployment.
+每次部署中，所有源代码和资源的总和应小于 1GB。
 
-## Deployment frequency
+## 部署频率
 
-The maximum number of deployments per hour that a subhosting user can make is
-either 60 (on the free tier) or 300 (on the builder tier). Higher limits are
-available for organizations on the enterprise plan.
+子托管用户每小时的最大部署次数为 60 次（免费层级）或 300
+次（构建者层级）。企业计划中的组织可获得更高的限制。
 
-## CPU time per request
+## 每次请求的 CPU 时间
 
-- 50ms or 200ms, depending on tier.
-- CPU time limit per request is limited on the average across many requests. It
-  is not strictly enforced on a per-request basis.
-- Does not include time that a deployment is waiting for I/O (e.g. while waiting
-  for the remote server while making a fetch() request)
+- 50ms 或 200ms，取决于层级。
+- 每次请求的 CPU 时间限制是基于多次请求的平均值，并非严格按每次请求执行。
+- 不包括部署等待 I/O 的时间（例如，在发出 fetch() 请求时等待远程服务器的时间）。
 
-## Blocking the event loop
+## 阻塞事件循环
 
-Programs should not block the event loop for more than 1s.
+程序不应阻塞事件循环超过 1 秒。
 
-## Available memory
+## 可用内存
 
-512MB max memory is available.
+最大可用内存为 512MB。

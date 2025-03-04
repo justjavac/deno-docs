@@ -1,30 +1,28 @@
 ---
-title: "API server with Firestore (Firebase)"
+title: "使用 Firestore (Firebase) 的 API 服务器"
 oldUrl:
   - /deploy/docs/tutorial-firebase/
 ---
 
-Firebase is a platform developed by Google for creating mobile and web
-applications. You can persist data on the platform using Firestore. In this
-tutorial let's take a look at how we can use it to build a small API that has
-endpoints to insert and retrieve information.
+Firebase 是 Google 开发的用于创建移动和 Web 应用程序的平台。您可以使用 Firestore
+在平台上持久化数据。在本教程中，我们将了解如何使用它来构建一个具有插入和检索信息端点的小型
+API。
 
-- [Overview](#overview)
-- [Concepts](#concepts)
-- [Setup Firebase](#setup-firebase)
-- [Write the application](#write-the-application)
-- [Deploy the application](#deploy-the-application)
+- [概述](#overview)
+- [概念](#concepts)
+- [设置 Firebase](#setup-firebase)
+- [编写应用程序](#write-the-application)
+- [部署应用程序](#deploy-the-application)
 
-## Overview
+## 概述
 
-We are going to build an API with a single endpoint that accepts `GET` and
-`POST` requests and returns a JSON payload of information:
+我们将构建一个具有单个端点的 API，该端点接受 `GET` 和 `POST` 请求并返回信息的
+JSON 负载：
 
 ```sh
-# A GET request to the endpoint without any sub-path should return the details
-# of all songs in the store:
+# 不带任何子路径的 GET 请求应返回商店中所有歌曲的详细信息：
 GET /songs
-# response
+# 响应
 [
   {
     title: "Song Title",
@@ -35,10 +33,9 @@ GET /songs
   }
 ]
 
-# A GET request to the endpoint with a sub-path to the title should return the
-# details of the song based on its title.
-GET /songs/Song%20Title # '%20' == space
-# response
+# 带有标题子路径的 GET 请求应返回基于标题的歌曲详细信息。
+GET /songs/Song%20Title # '%20' == 空格
+# 响应
 {
   title: "Song Title"
   artist: "Someone"
@@ -47,9 +44,9 @@ GET /songs/Song%20Title # '%20' == space
   genres: "country rap",
 }
 
-# A POST request to the endpoint should insert the song details.
+# 对端点的 POST 请求应插入歌曲详细信息。
 POST /songs
-# post request body
+# POST 请求体
 {
   title: "A New Title"
   artist: "Someone New"
@@ -59,83 +56,67 @@ POST /songs
 }
 ```
 
-In this tutorial, we will be:
+在本教程中，我们将：
 
-- Creating and setting up a
-  [Firebase Project](https://console.firebase.google.com/).
-- Using a text editor to create our application.
-- Creating a [gist](https://gist.github.com/) to "host" our application.
-- Deploying our application on [Deno Deploy](https://dash.deno.com/).
-- Testing our application using [cURL](https://curl.se/).
+- 创建并设置 [Firebase 项目](https://console.firebase.google.com/)。
+- 使用文本编辑器创建我们的应用程序。
+- 创建一个 [gist](https://gist.github.com/) 来“托管”我们的应用程序。
+- 在 [Deno Deploy](https://dash.deno.com/) 上部署我们的应用程序。
+- 使用 [cURL](https://curl.se/) 测试我们的应用程序。
 
-## Concepts
+## 概念
 
-There are a few concepts that help in understanding why we take a particular
-approach in the rest of the tutorial, and can help in extending the application.
-You can skip ahead to [Setup Firebase](#setup-firebase) if you want.
+有几个概念有助于理解为什么我们在教程的其余部分采取特定方法，并且可以帮助扩展应用程序。如果您愿意，可以跳到
+[设置 Firebase](#setup-firebase)。
 
-### Deploy is browser-like
+### Deploy 类似于浏览器
 
-Even though Deploy runs in the cloud, in many aspects the APIs it provides are
-based on web standards. So when using Firebase, the Firebase APIs are more
-compatible with the web than those that are designed for server run times. That
-means we will be using the Firebase web libraries in this tutorial.
+尽管 Deploy 在云中运行，但在许多方面，它提供的 API 基于 Web 标准。因此，在使用
+Firebase 时，Firebase API 与 Web 的兼容性比那些为服务器运行时设计的 API
+更高。这意味着我们将在本教程中使用 Firebase Web 库。
 
-### Firebase uses XHR
+### Firebase 使用 XHR
 
-Firebase uses a wrapper around Closure's
+Firebase 使用 Closure 的
 [WebChannel](https://google.github.io/closure-library/api/goog.net.WebChannel.html)
-and WebChannel was originally built around
-[`XMLHttpRequest`](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest).
-While WebChannel supports the more modern `fetch()` API, current versions of
-Firebase for the web do not uniformly instantiate WebChannel with `fetch()`
-support, and instead use `XMLHttpRequest`.
+的包装器，而 WebChannel 最初是围绕
+[`XMLHttpRequest`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)
+构建的。虽然 WebChannel 支持更现代的 `fetch()` API，但当前版本的 Firebase Web
+并未统一使用 `fetch()` 支持实例化 WebChannel，而是使用 `XMLHttpRequest`。
 
-While Deploy is browser-like, it does not support `XMLHttpRequest`.
-`XMLHttpRequest` is a "legacy" browser API that has several limitations and
-features that would be difficult to implement in Deploy, which means it is
-unlikely that Deploy will ever implement that API.
+尽管 Deploy 类似于浏览器，但它不支持 `XMLHttpRequest`。`XMLHttpRequest`
+是一个“传统”浏览器 API，具有一些限制和功能，这些功能在 Deploy
+中难以实现，这意味着 Deploy 不太可能实现该 API。
 
-So, in this tutorial we will be using a limited _polyfill_ that provides enough
-of the `XMLHttpRequest` feature set to allow Firebase/WebChannel to communicate
-with the server.
+因此，在本教程中，我们将使用一个有限的 _polyfill_，它提供了足够的
+`XMLHttpRequest` 功能集，以允许 Firebase/WebChannel 与服务器通信。
 
-### Firebase auth
+### Firebase 身份验证
 
-Firebase offers quite [a few options](https://firebase.google.com/docs/auth)
-around authentication. In this tutorial we are going to be using email and
-password authentication.
+Firebase 提供了相当多的
+[身份验证选项](https://firebase.google.com/docs/auth)。在本教程中，我们将使用电子邮件和密码身份验证。
 
-When a user is logged in, Firebase can persist that authentication. Because we
-are using the web libraries for Firebase, persisting the authentication allows a
-user to navigate away from a page and not need to re-log in when returning.
-Firebase allows authentication to be persisted in local storage, session storage
-or none.
+当用户登录时，Firebase 可以持久化该身份验证。因为我们使用的是 Firebase 的 Web
+库，持久化身份验证允许用户离开页面并在返回时无需重新登录。Firebase
+允许身份验证持久化在本地存储、会话存储或不持久化。
 
-In a Deploy context, it is a little different. A Deploy deployment will remain
-"active" meaning that in-memory state will be present from request to request on
-some requests, but under various conditions a new deployment can be started up
-or shutdown. Currently, Deploy doesn't offer any persistence outside of
-in-memory allocation. In addition it doesn't currently offer the global
-`localStorage` or `sessionStorage`, which is what is used by Firebase to store
-the authentication information.
+在 Deploy 上下文中，情况略有不同。Deploy
+部署将保持“活动”状态，这意味着某些请求之间的内存状态将在请求之间保持，但在各种条件下，可能会启动或关闭新的部署。目前，Deploy
+不提供任何内存分配之外的持久化。此外，它目前不提供全局的 `localStorage` 或
+`sessionStorage`，而 Firebase 使用这些来存储身份验证信息。
 
-In order to reduce the need to re-authenticate but also ensure that we can
-support multiple-users with a single deployment, we are going to use a polyfill
-that will allow us to provide a `localStorage` interface to Firebase, but store
-the information as a cookie in the client.
+为了减少重新身份验证的需要，同时确保我们可以支持多用户使用单个部署，我们将使用一个
+polyfill，它允许我们为 Firebase 提供 `localStorage` 接口，但将信息存储为客户端的
+cookie。
 
-## Setup Firebase
+## 设置 Firebase
 
-[Firebase](https://firebase.google.com/) is a feature rich platform. All the
-details of Firebase administration are beyond the scope of this tutorial. We
-will cover what it needed for this tutorial.
+[Firebase](https://firebase.google.com/) 是一个功能丰富的平台。Firebase
+管理的所有细节超出了本教程的范围。我们将介绍本教程所需的内容。
 
-1. Create a new project under the
-   [Firebase console](https://console.firebase.google.com/).
-2. Add a web application to your project. Make note of the `firebaseConfig`
-   provided in the setup wizard. It should look something like the below. We
-   will use this later:
+1. 在 [Firebase 控制台](https://console.firebase.google.com/) 下创建一个新项目。
+2. 向您的项目添加一个 Web 应用程序。记下设置向导中提供的
+   `firebaseConfig`。它应该类似于以下内容。我们稍后将使用它：
 
    ```js title="firebase.js"
    var firebaseConfig = {
@@ -148,26 +129,24 @@ will cover what it needed for this tutorial.
    };
    ```
 
-3. Under `Authentication` in the administration console for, you will want to
-   enable the `Email/Password` sign-in method.
-4. You will want to add a user and password under `Authentication` and then
-   `Users` section, making note of the values used for later.
-5. Add `Firestore Database` to your project. The console will allow you to setup
-   in _production mode_ or _test mode_. It is up to you how you configure this,
-   but _production mode_ will require you to setup further security rules.
-6. Add a collection to the database named `songs`. This will require you to add
-   at least one document. Just set the document with an _Auto ID_.
+3. 在管理控制台的 `Authentication` 下，您需要启用 `Email/Password` 登录方法。
+4. 您需要在 `Authentication` 下的 `Users`
+   部分添加一个用户和密码，并记下稍后使用的值。
+5. 向您的项目添加 `Firestore Database`。控制台将允许您以 _生产模式_ 或
+   _测试模式_ 进行设置。您可以自行配置，但 _生产模式_
+   需要您设置进一步的安全规则。
+6. 向数据库添加一个名为 `songs` 的集合。这将要求您至少添加一个文档。只需使用
+   _自动 ID_ 设置文档。
 
-_Note_ depending on the status of your Google account, there maybe other setup
-and administration steps that need to occur.
+_注意_ 根据您的 Google 帐户状态，可能需要进行其他设置和管理步骤。
 
-## Write the application
+## 编写应用程序
 
-We want to create our application as a JavaScript file in our favorite editor.
+我们希望在最喜欢的编辑器中创建一个 JavaScript 文件作为我们的应用程序。
 
-The first thing we will do is import the `XMLHttpRequest` polyfill that Firebase
-needs to work under Deploy as well as a polyfill for `localStorage` to allow the
-Firebase auth to persist logged in users:
+我们要做的第一件事是导入 Firebase 在 Deploy 下工作所需的 `XMLHttpRequest`
+polyfill，以及一个用于 `localStorage` 的 polyfill，以允许 Firebase
+身份验证持久化登录用户：
 
 ```js title="firebase.js"
 import "https://deno.land/x/xhr@0.1.1/mod.ts";
@@ -175,13 +154,11 @@ import { installGlobals } from "https://deno.land/x/virtualstorage@0.1.0/mod.ts"
 installGlobals();
 ```
 
-> ℹ️ we are using the current version of packages at the time of the writing of
-> this tutorial. They may not be up-to-date and you may want to double check
-> current versions.
+> ℹ️
+> 我们使用的是撰写本教程时的当前版本包。它们可能不是最新的，您可能需要仔细检查当前版本。
 
-Because Deploy has a lot of the web standard APIs, it is best to use the web
-libraries for Firebase under deploy. Currently v9 is in still in beta for
-Firebase, so we will use v8 in this tutorial:
+由于 Deploy 具有许多 Web 标准 API，最好在 Deploy 下使用 Firebase 的 Web 库。目前
+Firebase 的 v9 仍处于测试阶段，因此我们将在本教程中使用 v8：
 
 ```js title="firebase.js"
 import firebase from "https://esm.sh/firebase@8.7.0/app";
@@ -189,9 +166,8 @@ import "https://esm.sh/firebase@8.7.0/auth";
 import "https://esm.sh/firebase@8.7.0/firestore";
 ```
 
-We are also going to use [oak](https://deno.land/x/oak) as the middleware
-framework for creating the APIs, including middleware that will take the
-`localStorage` values and set them as client cookies:
+我们还将使用 [oak](https://deno.land/x/oak) 作为创建 API 的中间件框架，包括将
+`localStorage` 值设置为客户端 cookie 的中间件：
 
 ```js title="firebase.js"
 import {
@@ -202,10 +178,9 @@ import {
 import { virtualStorage } from "https://deno.land/x/virtualstorage@0.1.0/middleware.ts";
 ```
 
-Now we need to setup our Firebase application. We will be getting the
-configuration from environment variables we will setup later under the key
-`FIREBASE_CONFIG` and get references to the parts of Firebase we are going to
-use:
+现在我们需要设置我们的 Firebase
+应用程序。我们将从稍后设置的环境变量中获取配置，键为
+`FIREBASE_CONFIG`，并获取我们将使用的 Firebase 部分的引用：
 
 ```js title="firebase.js"
 const firebaseConfig = JSON.parse(Deno.env.get("FIREBASE_CONFIG"));
@@ -214,30 +189,26 @@ const auth = firebase.auth(firebaseApp);
 const db = firebase.firestore(firebaseApp);
 ```
 
-We are also going to setup the application to handle signed in users per
-request. So we will create a map of users that we have previously signed in in
-this deployment. While in this tutorial we will only ever have one signed in
-user, the code can easily be adapted to allow clients to sign-in individually:
+我们还将设置应用程序以处理每个请求的登录用户。因此，我们将创建一个用户映射，其中包含我们在此部署中之前登录的用户。虽然在本教程中我们只会有一个登录用户，但代码可以轻松适应允许客户端单独登录：
 
 ```js title="firebase.js"
 const users = new Map();
 ```
 
-Let's create our middleware router and create three different middleware
-handlers to support `GET` and `POST` of `/songs` and a `GET` of a specific song
-on `/songs/{title}`:
+让我们创建我们的中间件路由器，并创建三个不同的中间件处理程序来支持 `/songs` 的
+`GET` 和 `POST` 以及对 `/songs/{title}` 的特定歌曲的 `GET`：
 
 ```js title="firebase.js"
 const router = new Router();
 
-// Returns any songs in the collection
+// 返回集合中的任何歌曲
 router.get("/songs", async (ctx) => {
   const querySnapshot = await db.collection("songs").get();
   ctx.response.body = querySnapshot.docs.map((doc) => doc.data());
   ctx.response.type = "json";
 });
 
-// Returns the first document that matches the title
+// 返回与标题匹配的第一个文档
 router.get("/songs/:title", async (ctx) => {
   const { title } = ctx.params;
   const querySnapshot = await db.collection("songs").where("title", "==", title)
@@ -257,7 +228,7 @@ function isSong(value) {
   return typeof value === "object" && value !== null && "title" in value;
 }
 
-// Removes any songs with the same title and adds the new song
+// 删除具有相同标题的任何歌曲并添加新歌曲
 router.post("/songs", async (ctx) => {
   const body = ctx.request.body();
   if (body.type !== "json") {
@@ -278,18 +249,15 @@ router.post("/songs", async (ctx) => {
 });
 ```
 
-Ok, we are almost done. We just need to create our middleware application, and
-add the `localStorage` middleware we imported:
+好的，我们快完成了。我们只需要创建我们的中间件应用程序，并添加我们导入的
+`localStorage` 中间件：
 
 ```js title="firebase.js"
 const app = new Application();
 app.use(virtualStorage());
 ```
 
-And then we need to add middleware to authenticate the user. In this tutorial we
-are simply grabbing the username and password from the environment variables we
-will be setting up, but this could easily be adapted to redirect a user to a
-sign-in page if they are not logged in:
+然后我们需要添加中间件来验证用户。在本教程中，我们只是从我们将设置的环境变量中获取用户名和密码，但这可以轻松适应如果用户未登录则重定向到登录页面：
 
 ```js title="firebase.js"
 app.use(async (ctx, next) => {
@@ -312,8 +280,7 @@ app.use(async (ctx, next) => {
 });
 ```
 
-Now let's add our router to the middleware application and set the application
-to listen on port 8000:
+现在让我们将我们的路由器添加到中间件应用程序，并将应用程序设置为监听端口 8000：
 
 ```js title="firebase.js"
 app.use(router.routes());
@@ -321,33 +288,30 @@ app.use(router.allowedMethods());
 await app.listen({ port: 8000 });
 ```
 
-Now we have an application that should serve up our APIs.
+现在我们有了一个应该提供我们的 API 的应用程序。
 
-## Deploy the Application
+## 部署应用程序
 
-Now that we have everything in place, let's deploy your new application!
+现在我们已经准备好了一切，让我们部署您的新应用程序！
 
-1. In your browser, visit [Deno Deploy](https://dash.deno.com/new_project) and
-   link your GitHub account.
-2. Select the repository which contains your new application.
-3. You can give your project a name or allow Deno to generate one for you
-4. Select `firebase.js` in the Entrypoint dropdown
-5. Click **Deploy Project**
+1. 在浏览器中访问 [Deno Deploy](https://dash.deno.com/new_project) 并链接您的
+   GitHub 帐户。
+2. 选择包含您新应用程序的存储库。
+3. 您可以为您的项目命名或允许 Deno 为您生成一个名称
+4. 在 Entrypoint 下拉菜单中选择 `firebase.js`
+5. 点击 **Deploy Project**
 
-In order for your Application to work, we will need to configure its environment
-variables.
+为了使您的应用程序正常工作，我们需要配置其环境变量。
 
-On your project's success page, or in your project dashboard, click on **Add
-environmental variables**. Under Environment Variables, click **+ Add
-Variable**. Create the following variables:
+在您的项目成功页面或项目仪表板上，点击 **添加环境变量**。在环境变量下，点击 **+
+添加变量**。创建以下变量：
 
-1. `FIREBASE_USERNAME` - The Firebase user (email address) that was added above
-2. `FIREBASE_PASSWORD` - The Firebase user password that was added above
-3. `FIREBASE_CONFIG` - The configuration of the Firebase application as a string
-   of JSON
+1. `FIREBASE_USERNAME` - 上面添加的 Firebase 用户（电子邮件地址）
+2. `FIREBASE_PASSWORD` - 上面添加的 Firebase 用户密码
+3. `FIREBASE_CONFIG` - Firebase 应用程序的配置作为 JSON 字符串
 
-The configuration needs to be a valid JSON string to be readable by the
-application. If the code snippet given when setting up looked like this:
+配置需要是一个有效的 JSON
+字符串才能被应用程序读取。如果设置时给出的代码片段如下所示：
 
 ```js
 var firebaseConfig = {
@@ -360,8 +324,7 @@ var firebaseConfig = {
 };
 ```
 
-You would need to set the value of the string to this (noting that spacing and
-new lines are not required):
+您需要将字符串的值设置为以下内容（注意不需要空格和换行）：
 
 ```json
 {
@@ -374,11 +337,11 @@ new lines are not required):
 }
 ```
 
-Click to save the variables.
+点击保存变量。
 
-Now let's take our API for a spin.
+现在让我们试试我们的 API。
 
-We can create a new song:
+我们可以创建一首新歌：
 
 ```sh
 curl --request POST \
@@ -388,13 +351,13 @@ curl --request POST \
   - https://<project_name>.deno.dev/songs
 ```
 
-And we can get all the songs in our collection:
+我们可以获取集合中的所有歌曲：
 
 ```sh
 curl https://<project_name>.deno.dev/songs
 ```
 
-And we get specific information about a title we created:
+我们可以获取我们创建的标题的特定信息：
 
 ```sh
 curl https://<project_name>.deno.dev/songs/Old%20Town%20Road
