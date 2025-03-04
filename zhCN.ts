@@ -49,17 +49,9 @@ async function translate(
 
   const { text } = await generateText({
     model,
+    maxTokens: 16384,
     prompt:
-      `Translate the following text to chinese. my input is mdx/json format. The requirements are as follows:
-  
-  - Add spaces between Chinese and English
-  - Only reply with the translation, no other words
-  - Check if the content meets the requirements before outputting the results
-  - If the content is json, please translate values only, output MUST be welformated json format
-
-  you MUST keep the format unchanged
-  
-  My content is:
+      `你是一个翻译助手，很擅长翻译 deno 的文章。我给你发一句英文，你帮我翻译。不需要任何额外的输出，只需要翻译就行。保留我的格式。如果是 json 文件，只需要翻译 value，不要翻译 key。务必保留我的格式。
   
   ${content}
   `,
