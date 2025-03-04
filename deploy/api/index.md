@@ -1,21 +1,19 @@
 ---
-title: "API Reference"
-sidebar_title: "Overview"
+title: "API 参考"
+sidebar_title: "概述"
 pagination_next: /deploy/api/runtime-broadcast-channel
 oldUrl:
   - /deploy/docs/runtime-api/
   - /deploy/manual/runtime-api/
 ---
 
-This is a reference for runtime APIs available on Deno Deploy. This API is very
-similar to the standard [runtime API](/runtime/manual/runtime), but some APIs
-are not available in the same way, given that Deno Deploy is a serverless
-environment.
+这是 Deno Deploy 上可用的运行时 API 的参考。此 API 与标准的
+[运行时 API](/runtime/manual/runtime) 非常相似，但由于 Deno Deploy
+是一个无服务器环境，某些 API 的可用性有所不同。
 
-Please use this section of the documentation to explore available APIs on Deno
-Deploy.
+请使用本文档的此部分来探索 Deno Deploy 上可用的 API。
 
-### Web APIs
+### Web API
 
 - [`console`](https://developer.mozilla.org/en-US/docs/Web/API/console)
 - [`atob`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/atob)
@@ -38,66 +36,63 @@ Deploy.
   - [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto)
 - [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
 - [Timers](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout)
-  (`setTimeout`, `clearTimeout`, and `setInterval`)
+  (`setTimeout`, `clearTimeout`, 和 `setInterval`)
 - [Streams API](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API)
   - `ReadableStream`
   - `WritableStream`
   - `TransformStream`
 - [URLPattern API](https://developer.mozilla.org/en-US/docs/Web/API/URLPattern)
 - [Import Maps](https://docs.deno.com/runtime/manual/basics/import_maps/)
-  - Note: `import maps` are currently only available via
-    [deployctl](https://github.com/denoland/deployctl) or
+  - 注意：`import maps` 目前仅通过
+    [deployctl](https://github.com/denoland/deployctl) 或
     [deployctl GitHub Action](https://github.com/denoland/deployctl/blob/main/action/README.md)
-    workflows.
+    工作流可用。
 
-### Deno APIs
+### Deno API
 
-> Note: only stable APIs of Deno are made available in Deploy.
+> 注意：在 Deploy 中仅提供 Deno 的稳定 API。
 
-- [`Deno.env`](https://docs.deno.com/api/deno/~/Deno.env) - Interact with
-  environment variables (secrets).
-  - `get(key: string): string | undefined` - get the value of an environment
-    variable.
-  - `toObject(): { [key: string]: string }` - get all environment variables as
-    an object.
-- [`Deno.connect`](https://docs.deno.com/api/deno/~/Deno.connect) - Connect to
-  TCP sockets.
-- [`Deno.connectTls`](https://docs.deno.com/api/deno/~/Deno.connectTls) -
-  Connect to TCP sockets using TLS.
-- [`Deno.startTls`](https://docs.deno.com/api/deno/~/Deno.startTls) - Start TLS
-  handshake from an existing TCP connection.
-- [`Deno.resolveDns`](https://docs.deno.com/api/deno/~/Deno.resolveDns) - Make
-  DNS queries
-- File system API
-  - [`Deno.cwd`](https://docs.deno.com/api/deno/~/Deno.cwd) - Get the current
-    working directory
-  - [`Deno.readDir`](https://docs.deno.com/api/deno/~/Deno.readDir) - Get
-    directory listings
-  - [`Deno.readFile`](https://docs.deno.com/api/deno/~/Deno.readFile) - Read a
-    file into memory
+- [`Deno.env`](https://docs.deno.com/api/deno/~/Deno.env) -
+  与环境变量（密钥）交互。
+  - `get(key: string): string | undefined` - 获取环境变量的值。
+  - `toObject(): { [key: string]: string }` - 将所有环境变量作为对象获取。
+- [`Deno.connect`](https://docs.deno.com/api/deno/~/Deno.connect) - 连接到 TCP
+  套接字。
+- [`Deno.connectTls`](https://docs.deno.com/api/deno/~/Deno.connectTls) - 使用
+  TLS 连接到 TCP 套接字。
+- [`Deno.startTls`](https://docs.deno.com/api/deno/~/Deno.startTls) - 从现有的
+  TCP 连接启动 TLS 握手。
+- [`Deno.resolveDns`](https://docs.deno.com/api/deno/~/Deno.resolveDns) - 进行
+  DNS 查询
+- 文件系统 API
+  - [`Deno.cwd`](https://docs.deno.com/api/deno/~/Deno.cwd) - 获取当前工作目录
+  - [`Deno.readDir`](https://docs.deno.com/api/deno/~/Deno.readDir) -
+    获取目录列表
+  - [`Deno.readFile`](https://docs.deno.com/api/deno/~/Deno.readFile) -
+    将文件读入内存
   - [`Deno.readTextFile`](https://docs.deno.com/api/deno/~/Deno.readTextFile) -
-    Read a text file into memory
-  - [`Deno.open`](https://docs.deno.com/api/deno/~/Deno.open) - Open a file for
-    streaming reading
-  - [`Deno.stat`](https://docs.deno.com/api/deno/~/Deno.stat) - Get file system
-    entry information
-  - [`Deno.lstat`](https://docs.deno.com/api/deno/~/Deno.lstat) - Get file
-    system entry information without following symlinks
-  - [`Deno.realPath`](https://docs.deno.com/api/deno/~/Deno.realPath) - Get the
-    real path of a file after resolving symlinks
-  - [`Deno.readLink`](https://docs.deno.com/api/deno/~/Deno.readLink) - Get the
-    target path for the given symlink
+    将文本文件读入内存
+  - [`Deno.open`](https://docs.deno.com/api/deno/~/Deno.open) -
+    打开文件以进行流式读取
+  - [`Deno.stat`](https://docs.deno.com/api/deno/~/Deno.stat) -
+    获取文件系统条目信息
+  - [`Deno.lstat`](https://docs.deno.com/api/deno/~/Deno.lstat) -
+    获取文件系统条目信息而不跟随符号链接
+  - [`Deno.realPath`](https://docs.deno.com/api/deno/~/Deno.realPath) -
+    解析符号链接后获取文件的真实路径
+  - [`Deno.readLink`](https://docs.deno.com/api/deno/~/Deno.readLink) -
+    获取给定符号链接的目标路径
 
-## Future support
+## 未来支持
 
-In the future, these APIs will also be added:
+未来将添加以下 API：
 
 - [Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache)
-- UDP API:
-  - `Deno.connectDatagram` for outbound UDP sockets
-- Customizable `fetch` options using `Deno.createHttpClient`
+- UDP API：
+  - `Deno.connectDatagram` 用于出站 UDP 套接字
+- 使用 `Deno.createHttpClient` 自定义 `fetch` 选项
 
-## Limitations
+## 限制
 
-Just like the Deno CLI, we do not implement the `__proto__` object field as
-specified in ECMA Script Annex B.
+与 Deno CLI 一样，我们没有实现 ECMA Script 附录 B 中指定的 `__proto__`
+对象字段。
