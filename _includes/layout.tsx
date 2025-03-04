@@ -79,12 +79,6 @@ export default function Layout(data: Lume.Data) {
         <script type="module" defer src="/copy.client.js"></script>
         <script type="module" defer src="/tabs.client.js"></script>
         <script type="module" defer src="/feedback.client.js"></script>
-        <script
-          async
-          src="https://www.googletagmanager.com/gtm.js?id=GTM-5B5TH8ZJ"
-        >
-        </script>
-        <link rel="preconnect" href="https://www.googletagmanager.com"></link>
       </head>
       <body>
         <data.comp.Header currentSection={section} />

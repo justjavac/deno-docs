@@ -12,7 +12,7 @@ export default function Feedback({ file }: { file: string | undefined }) {
       >
         <h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary
         mb-2 pb-2 font-normal">
-          你找到你需要的内容了吗？
+          你找到需要的内容了吗？
         </h2>
         <div class="flex flex-col sm:flex-row sm:flex-wrap gap-8">
           <div class="flex-1">

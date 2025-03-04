@@ -124,7 +124,7 @@ export default function renderCommand(
     <div>
       <div class="p-4 bg-stone-100 dark:bg-transparent rounded border border-gray-300 dark:border-background-tertiary mt-6 mb-6 relative">
         <h3 class="!text-xs !m-0 -top-2.5 bg-background-primary border border-gray-600/25 px-2 py-0.5 rounded absolute !font-normal">
-          Command line usage
+          命令行用法
         </h3>
         <div>
           <pre class="!mb-0 !px-3 !py-2">

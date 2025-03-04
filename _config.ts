@@ -25,7 +25,6 @@ import relativeLinksPlugin from "./markdown-it/relative-path.ts";
 import replacerPlugin from "./markdown-it/replacer.ts";
 import apiDocumentContentTypeMiddleware from "./middleware/apiDocContentType.ts";
 import createRoutingMiddleware from "./middleware/functionRoutes.ts";
-import createGAMiddleware from "./middleware/googleAnalytics.ts";
 import redirectsMiddleware, {
   toFileAndInMemory,
 } from "./middleware/redirects.ts";
@@ -41,9 +40,6 @@ const site = lume(
       middlewares: [
         redirectsMiddleware,
         createRoutingMiddleware(),
-        createGAMiddleware({
-          addr: { transport: "tcp", hostname: "localhost", port: 3000 },
-        }),
         apiDocumentContentTypeMiddleware,
       ],
       page404: "/404",

@@ -13,7 +13,10 @@ const translation: Record<string, string> = JSON.parse(
   await Deno.readTextFile(TRANSLATION_FILE),
 );
 
-const fileWantedToTranslate = walk(EN_CONTENT_DIR, { exts: [".md", ".mdx"] });
+const fileWantedToTranslate = walk(EN_CONTENT_DIR, {
+  exts: [".md", ".mdx"],
+  skip: [/reference_gen/, /node_modules/, /_site/],
+});
 
 const ark = createOpenAICompatible({
   baseURL: "https://ark.cn-beijing.volces.com/api/v3",
@@ -36,6 +39,9 @@ try {
     if (translation[zhPath] === hash) {
       continue;
     }
+
+    // console.log(`Translating ${zhPath}`);
+    // console.log(hash);
 
     const { text } = await generateText({
       model,

@@ -15,8 +15,8 @@ export default function () {
               Deno 文档
             </h1>
             <p class="text-md max-w-[600px] md:text-lg">
-              Deno，一个用于TypeScript和JavaScript的开源运行时。
-              内置开发工具、强大的平台API，并原生支持TypeScript和JSX。
+              Deno，一个用于 TypeScript 和J avaScript 的开源运行时。
+              内置开发工具、强大的平台 API，并原生支持 TypeScript 和 JSX。
             </p>
             {/* CTA Group */}
 

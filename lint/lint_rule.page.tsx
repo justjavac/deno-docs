@@ -27,6 +27,11 @@ export default function* (_data: Lume.Data, helpers: Lume.Helpers) {
 
     const ruleName = basename(file.path).slice(0, -3);
 
+    if (fmData.attrs.tags === undefined) {
+      console.error("tags is undefined", ruleName, fmData);
+      return null;
+    }
+
     yield {
       url: `/lint/rules/${ruleName}/`,
       title: ruleName,
