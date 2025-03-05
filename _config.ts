@@ -3,6 +3,7 @@ import "@std/dotenv/load";
 import lume from "lume/mod.ts";
 import esbuild from "lume/plugins/esbuild.ts";
 import jsx from "lume/plugins/jsx_preact.ts";
+import mdx from "lume/plugins/mdx.ts";
 import postcss from "lume/plugins/postcss.ts";
 import redirects from "lume/plugins/redirects.ts";
 import search from "lume/plugins/search.ts";
@@ -42,7 +43,7 @@ const site = lume(
         createRoutingMiddleware(),
         apiDocumentContentTypeMiddleware,
       ],
-      page404: "/404",
+      page404: "/404/",
     },
     watcher: {
       ignore: [
@@ -95,6 +96,9 @@ const site = lume(
   },
 );
 
+// ignore some folders that have their own build tasks
+// site.ignore("styleguide");
+
 site.copy("static", ".");
 site.copy("timeUtils.ts");
 site.copy("subhosting/api/images");
@@ -124,6 +128,7 @@ site.use(
 
 site.use(search());
 site.use(jsx());
+site.use(mdx());
 
 site.use(
   postcss({
@@ -171,7 +176,11 @@ site.ignore(
   // "deploy",
   // "runtime",
   // "subhosting",
+  // "404",
 );
+
+// the default layout if no other layout is specified
+site.data("layout", "doc.tsx");
 
 site.scopedUpdates(
   (path) => path == "/overrides.css",
