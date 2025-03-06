@@ -124,15 +124,15 @@ export function subtract(a: number, b: number): number {
    是你可以选择的“作用域”名称。有了这两个选项，就不需要在导入语句中使用长且相对的文件路径。
 
 1. `npm:chalk@5` 包是整个工作区的共享依赖项。工作区成员“继承”工作区根目录的
-   `imports`，允许在整个代码库中轻松管理单一版本的依赖项。
+   `imports`，从而允许在整个代码库中轻松管理单一版本的依赖项。
 
 1. `add` 子目录在其 `deno.json` 中指定 `deno fmt`
-   不应在格式化代码时应用分号。这使得现有项目的过渡更加顺畅，无需一次性更改数十或数百个文件。
+   在格式化代码时不应应用分号。这使得现有项目的过渡更加顺畅，无需一次性更改数十或数百个文件。
 
 ---
 
-Deno 工作区非常灵活，可以与 Node 包一起使用。为了使现有 Node.js
-项目的迁移更容易，你可以在单个工作区中同时拥有 Deno-first 和 Node-first 的包。
+Deno 工作区非常灵活，可以与 Node 包一起工作。为了使现有 Node.js
+项目的迁移更容易，你可以在一个工作区中同时包含 Deno-first 和 Node-first 的包。
 
 ## Deno 如何解析工作区依赖项
 
@@ -144,7 +144,7 @@ Deno 工作区非常灵活，可以与 Node 包一起使用。为了使现有 No
 3. 如果找到，它会检查该文件中的 `workspace` 属性
 4. 对于项目 A 中的每个导入语句，Deno 检查导入是否与任何工作区成员的 `deno.json`
    中定义的包名称匹配
-5. 如果找到匹配的包名称，Deno 会验证包含的目录是否列在根工作区配置中
+5. 如果找到匹配的包名称，Deno 会验证包含目录是否列在根工作区配置中
 6. 然后使用工作区成员的 `deno.json` 中的 `exports` 字段将导入解析为正确的文件
 
 例如，给定以下结构：
@@ -184,11 +184,11 @@ COPY project-a/ /app/project-a/
 COPY project-b/ /app/project-b/
 ```
 
-这将保留 Deno 用于查找和导入工作区依赖项的工作区解析机制。
+这保留了 Deno 用于查找和导入工作区依赖项的工作区解析机制。
 
 ### 多个包入口
 
-到目前为止，我们的包只有一个入口。这对于简单的包来说没问题，但通常你会希望有多个入口来分组包的相关方面。这可以通过将
+到目前为止，我们的包只有一个入口。这对于简单的包来说是可以的，但通常你会希望有多个入口来分组包的相关方面。这可以通过将
 `object` 而不是 `string` 传递给 `exports` 来实现：
 
 ```json title="my-package/deno.json"
@@ -203,8 +203,8 @@ COPY project-b/ /app/project-b/
 }
 ```
 
-`"."` 入口是导入 `@scope/my-package` 时选择的默认入口。因此，上面的 `deno.json`
-示例提供了以下入口：
+`"."` 条目是导入 `@scope/my-package` 时选择的默认条目。因此，上面的 `deno.json`
+示例提供了以下条目：
 
 - `@scope/my-package`
 - `@scope/my-package/foo`
@@ -272,7 +272,7 @@ export function sayHiTo(name: string) {
 }
 ```
 
-现在，我们可以编写一个导入并调用 `hi` 的 `main.ts` 文件：
+现在，我们可以编写一个 `main.ts` 文件来导入并调用 `hi`：
 
 ```ts title="main.ts"
 import { sayHiTo } from "@deno/hi";
@@ -285,7 +285,7 @@ $ deno run main.ts
 Hi, friend!
 ```
 
-你甚至可以在现有的 Node.js 包中同时拥有 `deno.json` 和
+你甚至可以在现有的 Node.js 包中同时包含 `deno.json` 和
 `package.json`。此外，你可以删除根目录的 package.json 并在 deno.json
 工作区成员中指定 npm 包。这允许你逐步迁移到 Deno，而无需投入大量前期工作。
 
@@ -310,47 +310,47 @@ Hi, friend!
 ## 配置内置的 Deno 工具
 
 某些配置选项仅在工作区的根目录有意义，例如在其中一个成员中指定 `nodeModulesDir`
-选项不可用，如果需要在工作区根目录应用某个选项，Deno 会发出警告。
+选项是不可用的，如果某个选项需要应用于工作区根目录，Deno 会发出警告。
 
 以下是工作区根目录及其成员可用的各种 `deno.json` 选项的完整矩阵：
 
-| 选项               | 工作区 | 包 | 注释                                                                                                                                                                                                       |
-| ------------------ | ------ | -- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| compilerOptions    | ✅     | ❌ | 目前我们只允许每个工作区使用一组 compilerOptions。这是因为需要对 deno_graph 和 TSC 集成进行多次更改才能允许多组。此外，我们还需要确定哪些 compilerOptions 适用于远程依赖项。我们可以在未来重新审视这一点。 |
-| importMap          | ✅     | ❌ | 与每个配置文件中的 imports 和 scopes 互斥。此外，不支持在工作区配置中拥有 importMap，而在包配置中拥有 imports。                                                                                            |
-| imports            | ✅     | ✅ | 与每个配置文件中的 importMap 互斥。                                                                                                                                                                        |
-| scopes             | ✅     | ❌ | 与每个配置文件中的 importMap 互斥。                                                                                                                                                                        |
-| exclude            | ✅     | ✅ |                                                                                                                                                                                                            |
-| lint.include       | ✅     | ✅ |                                                                                                                                                                                                            |
-| lint.exclude       | ✅     | ✅ |                                                                                                                                                                                                            |
-| lint.files         | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                     |
-| lint.rules.tags    | ✅     | ✅ | 标签通过将包附加到工作区列表来合并。重复项被忽略。                                                                                                                                                         |
-| lint.rules.include |        |    |                                                                                                                                                                                                            |
-| lint.rules.exclude | ✅     | ✅ | 规则按包合并，包的优先级高于工作区（包的 include 比工作区的 exclude 更强）。                                                                                                                               |
-| lint.report        | ✅     | ❌ | 一次只能激活一个报告器，因此允许每个工作区使用不同的报告器在跨多个包的文件 lint 时不起作用。                                                                                                               |
-| fmt.include        | ✅     | ✅ |                                                                                                                                                                                                            |
-| fmt.exclude        | ✅     | ✅ |                                                                                                                                                                                                            |
-| fmt.files          | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                     |
-| fmt.useTabs        | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                     |
-| fmt.indentWidth    | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                     |
-| fmt.singleQuote    | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                     |
-| fmt.proseWrap      | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                     |
-| fmt.semiColons     | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                     |
-| fmt.options.\*     | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                     |
-| nodeModulesDir     | ✅     | ❌ | 整个工作区的解析行为必须相同。                                                                                                                                                                             |
-| vendor             | ✅     | ❌ | 整个工作区的解析行为必须相同。                                                                                                                                                                             |
-| tasks              | ✅     | ✅ | 包任务的优先级高于工作区。使用的 cwd 是任务所在配置文件的 cwd。                                                                                                                                            |
-| test.include       | ✅     | ✅ |                                                                                                                                                                                                            |
-| test.exclude       | ✅     | ✅ |                                                                                                                                                                                                            |
-| test.files         | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                     |
-| publish.include    | ✅     | ✅ |                                                                                                                                                                                                            |
-| publish.exclude    | ✅     | ✅ |                                                                                                                                                                                                            |
-| bench.include      | ✅     | ✅ |                                                                                                                                                                                                            |
-| bench.exclude      | ✅     | ✅ |                                                                                                                                                                                                            |
-| bench.files        | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                     |
-| lock               | ✅     | ❌ | 每个解析器只能存在一个锁文件，每个工作区只能存在一个解析器，因此按包有条件地启用锁文件没有意义。                                                                                                           |
-| unstable           | ✅     | ❌ | 为了简单起见，我们不允许不稳定标志，因为很多 CLI 假设不稳定标志是不可变的并且对整个进程是全局的。此外，与 DENO_UNSTABLE_\* 标志的奇怪交互。                                                                |
-| name               | ❌     | ✅ |                                                                                                                                                                                                            |
-| version            | ❌     | ✅ |                                                                                                                                                                                                            |
-| exports            | ❌     | ✅ |                                                                                                                                                                                                            |
-| workspace          | ✅     | ❌ | 不支持嵌套工作区。                                                                                                                                                                                         |
+| 选项               | 工作区 | 包 | 注释                                                                                                                                                                                                           |
+| ------------------ | ------ | -- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| compilerOptions    | ✅     | ❌ | 目前我们只允许每个工作区使用一组 compilerOptions。这是因为需要同时对 deno_graph 和 TSC 集成进行多次更改才能允许多组。此外，我们还需要确定哪些 compilerOptions 适用于远程依赖项。我们可以在未来重新审视这一点。 |
+| importMap          | ✅     | ❌ | 与每个配置文件中的 imports 和 scopes 互斥。此外，不支持在工作区配置中具有 importMap，而在包配置中具有 imports。                                                                                                |
+| imports            | ✅     | ✅ | 与每个配置文件中的 importMap 互斥。                                                                                                                                                                            |
+| scopes             | ✅     | ❌ | 与每个配置文件中的 importMap 互斥。                                                                                                                                                                            |
+| exclude            | ✅     | ✅ |                                                                                                                                                                                                                |
+| lint.include       | ✅     | ✅ |                                                                                                                                                                                                                |
+| lint.exclude       | ✅     | ✅ |                                                                                                                                                                                                                |
+| lint.files         | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                         |
+| lint.rules.tags    | ✅     | ✅ | 标签通过将包附加到工作区列表来合并。重复项被忽略。                                                                                                                                                             |
+| lint.rules.include |        |    |                                                                                                                                                                                                                |
+| lint.rules.exclude | ✅     | ✅ | 规则按包合并，包的优先级高于工作区（包的 include 比工作区的 exclude 更强）。                                                                                                                                   |
+| lint.report        | ✅     | ❌ | 一次只能激活一个报告器，因此允许每个工作区使用不同的报告器在跨越多个包的文件时不起作用。                                                                                                                       |
+| fmt.include        | ✅     | ✅ |                                                                                                                                                                                                                |
+| fmt.exclude        | ✅     | ✅ |                                                                                                                                                                                                                |
+| fmt.files          | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                         |
+| fmt.useTabs        | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                         |
+| fmt.indentWidth    | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                         |
+| fmt.singleQuote    | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                         |
+| fmt.proseWrap      | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                         |
+| fmt.semiColons     | ✅     | ✅ | 包的优先级高于工作区。                                                                                                                                                                                         |
+| fmt.options.\*     | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                         |
+| nodeModulesDir     | ✅     | ❌ | 解析行为在整个工作区中必须相同。                                                                                                                                                                               |
+| vendor             | ✅     | ❌ | 解析行为在整个工作区中必须相同。                                                                                                                                                                               |
+| tasks              | ✅     | ✅ | 包任务的优先级高于工作区。使用的 cwd 是任务所在配置文件的 cwd。                                                                                                                                                |
+| test.include       | ✅     | ✅ |                                                                                                                                                                                                                |
+| test.exclude       | ✅     | ✅ |                                                                                                                                                                                                                |
+| test.files         | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                         |
+| publish.include    | ✅     | ✅ |                                                                                                                                                                                                                |
+| publish.exclude    | ✅     | ✅ |                                                                                                                                                                                                                |
+| bench.include      | ✅     | ✅ |                                                                                                                                                                                                                |
+| bench.exclude      | ✅     | ✅ |                                                                                                                                                                                                                |
+| bench.files        | ⚠️     | ❌ | 已弃用                                                                                                                                                                                                         |
+| lock               | ✅     | ❌ | 每个解析器只能存在一个锁文件，每个工作区只能存在一个解析器，因此按包有条件地启用锁文件没有意义。                                                                                                               |
+| unstable           | ✅     | ❌ | 为了简单起见，我们不允许不稳定标志，因为很多 CLI 假设不稳定标志是不可变的并且对整个进程是全局的。此外，与 DENO_UNSTABLE_\* 标志的奇怪交互。                                                                    |
+| name               | ❌     | ✅ |                                                                                                                                                                                                                |
+| version            | ❌     | ✅ |                                                                                                                                                                                                                |
+| exports            | ❌     | ✅ |                                                                                                                                                                                                                |
+| workspace          | ✅     | ❌ | 不支持嵌套工作区。                                                                                                                                                                                             |

@@ -1,26 +1,28 @@
----
-title: "Lint 插件"
----
+```json
+{
+  "title": "Lint 插件"
+}
+```
 
 :::caution
 
 这是一个实验性功能，需要 Deno `2.2.0` 或更高版本。
 
-由于插件 API 未来可能会发生变化，目前被标记为“不稳定”。
+插件 API 目前标记为“不稳定”，因为它在未来可能会发生变化。
 
 :::
 
 内置的 linter 可以通过插件进行扩展，以添加自定义的 lint 规则。
 
 虽然 Deno 默认提供了
-[许多 lint 规则](/lint/)，但在某些情况下，你可能需要一个专门为你的项目定制的规则——无论是为了捕捉特定上下文中的问题，还是为了强制执行公司范围内的约定。
+[许多 lint 规则](/lint/)，但在某些情况下，您可能需要为您的项目量身定制一个特定的规则——无论是为了捕捉特定上下文中的问题，还是为了强制执行公司范围内的约定。
 
 这就是 lint 插件 API 的用武之地。
 
 lint 插件 API 有意模仿了
 [ESLint API](https://eslint.org/docs/latest/extend/custom-rules)。虽然这个 API
-并不提供 100% 的兼容性，但如果你过去编写过自定义的 [ESLint](https://eslint.org/)
-规则，现有的知识大部分都可以重用。
+并不提供 100% 的兼容性，但如果您过去编写过自定义的 [ESLint](https://eslint.org/)
+规则，那么大部分现有的知识都可以被重用。
 
 插件通过 `deno.json` 中的 `lint.plugins` 设置加载。
 
@@ -36,7 +38,7 @@ lint 插件 API 有意模仿了
 
 ## 示例插件
 
-插件始终具有相同的结构。它有一个默认导出，即你的插件对象。
+插件始终具有相同的结构。它有一个默认导出，即您的插件对象。
 
 :::info
 
@@ -47,14 +49,13 @@ Deno 为 lint 插件 API 提供了类型声明。
 :::
 
 ```ts title="my-plugin.ts"
-export default {
+const plugin: Deno.lint.Plugin = {
   // 插件的名称。将在错误输出中显示
   name: "my-plugin",
-  // 包含规则的对象。属性名是规则名称，
-  // 也将在错误输出中显示。
+  // 包含规则的对象。属性名是规则名称，也将在错误输出中显示。
   rules: {
     "my-rule": {
-      // 在 `create(context)` 方法中放置你的逻辑。
+      // 在 `create(context)` 方法中放置您的逻辑。
       // 当文件被 lint 时，它会被调用。
       create(context) {
         // 返回一个 AST 访问者对象
@@ -77,18 +78,19 @@ export default {
       },
     },
   },
-} satisfies Deno.lint.Plugin;
+};
+export default plugin;
 ```
 
 ## 使用选择器匹配节点
 
-如果你用纯 JavaScript
+如果您用纯 JavaScript
 编写代码来匹配特定节点，有时可能会变得有点繁琐。有时，这种匹配逻辑通过选择器来表达会更容易，类似于
 CSS
 选择器。通过在返回的访问者对象中使用字符串作为属性名，我们可以指定一个自定义选择器。
 
 ```ts title="my-plugin.ts"
-export default {
+const plugin: Deno.lint.Plugin = {
   name: "my-plugin",
   rules: {
     "my-rule": {
@@ -105,11 +107,12 @@ export default {
       },
     },
   },
-} satisfies Deno.lint.Plugin;
+};
+export default plugin;
 ```
 
 请注意，如果匹配逻辑过于复杂，无法仅通过选择器表达，我们始终可以在 JavaScript
-中进一步细化匹配。支持的选择器语法完整列表如下：
+中进一步细化匹配。选择器支持的完整语法列表如下：
 
 | 语法                   | 描述             |
 | ---------------------- | ---------------- |
@@ -117,7 +120,7 @@ export default {
 | `Foo > Bar`            | 子组合器         |
 | `Foo ~ Bar`            | 后续兄弟组合器   |
 | `Foo Bar`              | 后代组合器       |
-| `Foo[attr]`            | 属性存在性       |
+| `Foo[attr]`            | 属性存在         |
 | `Foo[attr.length < 2]` | 属性值比较       |
 | `:first-child`         | 第一个子伪类     |
 | `:last-child`          | 最后一个子伪类   |
@@ -125,13 +128,13 @@ export default {
 | `:not(> Bar)`          | 非伪类           |
 | `:is(> Bar)`           | 是伪类           |
 
-还有一个 `:exit` 伪类，它只在整个选择器的末尾有效。当它存在时，Deno 会在
+还有一个 `:exit` 伪类，它仅在整个选择器的末尾有效。当它存在时，Deno 将在
 **向上** 遍历树时调用该函数，而不是在向下遍历时调用。
 
 :::tip
 
 我们强烈建议在开发 lint 规则时使用
-[typescript-eslint playground](https://typescript-eslint.io/play/)。它允许你检查代码和生成的
+[typescript-eslint playground](https://typescript-eslint.io/play/)。它允许您检查代码和生成的
 AST 格式。这使得更容易看到哪些选择器匹配哪些节点。
 
 :::
@@ -142,7 +145,7 @@ AST 格式。这使得更容易看到哪些选择器匹配哪些节点。
 方法在运行 `deno lint --fix` 或通过 Deno LSP 从编辑器内部应用修复时被调用。
 
 `fix()` 方法接收一个 `fixer`
-实例，其中包含帮助方法，使创建修复更容易。修复由起始位置、结束位置和应放置在此范围内的新文本组成。
+实例，其中包含帮助方法，使创建修复更容易。修复由起始位置、结束位置和应放在此范围内的新文本组成。
 
 ```ts
 context.report({
@@ -154,7 +157,7 @@ context.report({
 });
 ```
 
-`fixer` 对象有以下方法：
+`fixer` 对象具有以下方法：
 
 - `insertTextAfter(node, text)`：在给定节点后插入文本。
 - `insertTextAfterRange(range, text)`：在给定范围后插入文本。
@@ -185,39 +188,39 @@ context.report({
 
 ## 运行清理代码
 
-如果你的插件需要在文件被 lint 后运行清理代码，你可以通过 `destroy()` 钩子连接到
-linter。它在文件被 lint 后，插件上下文被销毁之前调用。
+如果您的插件需要在文件被 lint 后运行清理代码，您可以通过 `destroy()` 钩子连接到
+linter。它在文件被 lint 后调用，就在插件上下文被销毁之前。
 
 ```ts title="my-plugin.ts"
-export default {
+const plugin: Deno.lint.Plugin = {
   name: "my-plugin",
   rules: {
     "my-rule": {
       create(context) {
         // ...
       },
-      // 可选：在文件 lint 完成后运行代码，
-      // 并且每个规则上下文被销毁。
+      // 可选：在文件 lint 完成后运行代码，并且每个规则上下文被销毁。
       destroy() {
         // 如果需要，可以做一些清理工作
       },
     },
   },
-} satisfies Deno.lint.Plugin;
+};
+export default plugin;
 ```
 
 :::caution
 
-不能假设你的插件代码会为每个被 lint 的文件再次执行。
+不能安全地假设您的插件代码会为每个被 lint 的文件再次执行。
 
-最好不要保持全局状态，并在 `destroy` 钩子中进行清理，以防 `deno lint`
+尽量不要保持全局状态，并在 `destroy` 钩子中进行清理，以防 `deno lint`
 决定重用现有的插件实例。
 
 :::
 
 ## 排除自定义规则
 
-与内置规则类似，你可以禁用插件提供的自定义规则。为此，将其添加到 `deno.json`
+与内置规则类似，您可以禁用插件提供的自定义规则。为此，请将其添加到 `deno.json`
 中的 `lint.rules.exclude` 键。自定义 lint 规则的格式始终为
 `<插件名称>/<规则名称>`。
 
@@ -235,22 +238,26 @@ export default {
 ## 测试插件
 
 `Deno.lint.runPlugin` API
-提供了一种方便的方式来测试你的插件。它允许你断言插件在给定特定输入时是否产生预期的诊断。
+提供了一种方便的方式来测试您的插件。它允许您断言插件在给定特定输入时会产生预期的诊断。
 
 让我们使用上面定义的示例插件：
 
-```ts title="my-plugin-test.ts"
-import { assert, assertEquals } from "jsr:@std/assert";
+```ts title="my-plugin_test.ts"
+import { assertEquals } from "jsr:@std/assert";
 import myPlugin from "./my-plugin.ts";
 
 Deno.test("my-plugin", () => {
-  const diagnostics = Deno.lint.runPlugin(plugin, "main.ts", "const _a = 'a';");
+  const diagnostics = Deno.lint.runPlugin(
+    myPlugin,
+    "main.ts", // 虚拟文件名，文件不需要存在。
+    "const _a = 'a';",
+  );
 
   assertEquals(diagnostics.length, 1);
   const d = diagnostics[0];
   assertEquals(d.id, "my-plugin/my-rule");
   assertEquals(d.message, "应该是 _b");
-  assert(typeof d.fix === "function");
+  assertEquals(d.fix, [{ range: [6, 8], text: "_b" }]);
 });
 ```
 
@@ -258,10 +265,10 @@ Deno.test("my-plugin", () => {
 
 `Deno.lint.runPlugin` API 仅在 `deno test` 和 `deno bench` 子命令中可用。
 
-尝试在其他子命令中使用它会抛出错误。
+尝试在任何其他子命令中使用它将抛出错误。
 
 :::
 
 有关 [`Deno.lint.runPlugin`](/api/deno/~/Deno.lint.runPlugin) 和
-[`Deno.lint.Diagnostic`](/api/deno/~/Deno.lint.runPlugin) 的更多信息，请参阅
+[`Deno.lint.Diagnostic`](/api/deno/~/Deno.lint.Diagnostic) 的更多信息，请参阅
 [API 参考](/api/deno/)。

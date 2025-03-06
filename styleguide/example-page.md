@@ -1,7 +1,7 @@
 ---
-title: Example Page
-description: This is an example page
+title: 示例页面
+description: 这是一个示例页面
 openGraphLayout: /open_graph/examples.jsx
 ---
 
-# Example Page
+# 示例页面

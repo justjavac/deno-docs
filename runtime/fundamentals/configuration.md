@@ -23,8 +23,8 @@ oldUrl:
 Deno 也支持 `package.json` 文件，以便与 Node.js 项目兼容。如果你有一个 Node.js
 项目，则无需创建 `deno.json` 文件。Deno 会使用 `package.json` 文件来配置项目。
 
-如果 `deno.json` 和 `package.json` 文件同时存在于同一目录中，Deno 会理解
-`deno.json` 和 `package.json` 中指定的依赖项；并使用 `deno.json` 文件进行 Deno
+如果同一目录中同时存在 `deno.json` 和 `package.json` 文件，Deno 会理解
+`deno.json` 和 `package.json` 中指定的依赖项，并使用 `deno.json` 文件进行 Deno
 特定的配置。了解更多关于
 [Deno 中的 Node 兼容性](/runtime/fundamentals/node/#node-compatibility)。
 
@@ -71,9 +71,9 @@ import express from "express";
 const app = express();
 ```
 
-请注意，这需要你运行 `deno install`。
+请注意，这将需要你运行 `deno install`。
 
-了解更多关于 [模块导入和依赖项](/runtime/fundamentals/modules/)
+了解更多关于 [模块导入和依赖项](/runtime/fundamentals/modules/)。
 
 ### 自定义路径映射
 
@@ -115,7 +115,7 @@ import * as bar from "bar/file.ts";
 import { MyUtil } from "/util.ts";
 ```
 
-这会导致以 `/` 开头的导入说明符相对于导入映射的 URL 或文件路径进行解析。
+这将使以 `/` 开头的导入说明符相对于导入映射的 URL 或文件路径进行解析。
 
 ## 任务
 
@@ -158,7 +158,7 @@ deno task build
 ## 代码检查
 
 `deno.json` 文件中的 `lint` 字段用于配置 Deno
-内置代码检查工具的行为。这允许你指定要包含或排除在代码检查之外的文件，并根据项目需求自定义代码检查规则。
+内置代码检查工具的行为。这允许你指定要包含或排除的文件，以及自定义代码检查规则以满足项目的需求。
 
 例如：
 
@@ -179,11 +179,11 @@ deno task build
 此配置将：
 
 - 仅检查 `src/` 目录中的文件，
-- 不会检查 `src/testdata/` 目录中的文件或 `src/fixtures/` 目录中的任何
-  TypeScript 文件。
+- 不检查 `src/testdata/` 目录中的文件或 `src/fixtures/` 目录中的任何 TypeScript
+  文件，
 - 指定应应用推荐的代码检查规则，
 - 添加 `ban-untagged-todo` 规则，
-- 移除 `no-unused-vars` 规则。
+- 排除 `no-unused-vars` 规则。
 
 你可以在 [规则列表](/lint/) 文档页面中找到完整的可用代码检查规则列表。
 
@@ -215,20 +215,19 @@ deno task build
 - 将行限制为 80 个字符，
 - 使用 4 个空格的缩进宽度，
 - 在语句末尾添加分号，
-- 对字符串使用单引号，
+- 使用单引号表示字符串，
 - 保留散文换行，
 - 格式化 `src/` 目录中的文件，
-- 排除 `src/testdata/` 目录中的文件以及 `src/fixtures/` 目录中的任何 TypeScript
+- 排除 `src/testdata/` 目录中的文件或 `src/fixtures/` 目录中的任何 TypeScript
   文件。
 
 了解更多关于
 [使用 Deno 格式化代码](/runtime/fundamentals/linting_and_formatting/)。
 
-## 锁定文件
+## 锁文件
 
-`deno.json` 文件中的 `lock` 字段用于指定 Deno 用于
-[确保依赖项完整性](/runtime/fundamentals/modules/#integrity-checking-and-lock-files)
-的锁定文件的配置。锁定文件记录了项目依赖的模块的确切版本和完整性哈希，确保每次运行项目时都使用相同的版本，即使依赖项在远程更新或更改。
+`deno.json` 文件中的 `lock` 字段用于指定 Deno 使用的锁文件的配置，以确保
+[依赖项的完整性](/runtime/fundamentals/modules/#integrity-checking-and-lock-files)。锁文件记录了项目依赖模块的确切版本和完整性哈希，确保每次运行项目时都使用相同的版本，即使依赖项在远程更新或更改。
 
 ```json title="deno.json"
 {
@@ -241,10 +240,10 @@ deno task build
 
 此配置将：
 
-- 指定锁定文件位置为 `./deno.lock`（这是默认值，可以省略）
+- 指定锁文件位置为 `./deno.lock`（这是默认值，可以省略），
 - 告诉 Deno 如果任何依赖项发生变化则报错
 
-Deno 默认使用锁定文件，你可以通过以下配置禁用它：
+Deno 默认使用锁文件，你可以通过以下配置禁用它：
 
 ```json title="deno.json"
 {
@@ -285,7 +284,7 @@ Deno 默认使用锁定文件，你可以通过以下配置禁用它：
 
 `deno.json` 文件中的 `compilerOptions` 字段用于为你的 Deno 项目配置
 [TypeScript 编译器设置](https://www.typescriptlang.org/tsconfig)。这允许你自定义
-TypeScript 代码的编译方式，确保其符合项目需求和编码标准。
+TypeScript 代码的编译方式，确保其符合项目的要求和编码标准。
 
 :::info
 
@@ -374,7 +373,7 @@ Deno 推荐使用默认的 TypeScript 配置。这将有助于共享代码。
 }
 ```
 
-有时你可能会发现你希望取消排除在顶级 exclude 中排除的路径或模式。在 Deno 1.41.2+
+有时你可能希望取消排除在顶级 exclude 中排除的路径或模式。在 Deno 1.41.2+
 中，你可以通过在更具体的配置中指定一个否定的 glob 来取消排除路径：
 
 ```jsonc
@@ -394,7 +393,7 @@ Deno 推荐使用默认的 TypeScript 配置。这将有助于共享代码。
 ### 发布 - 覆盖 .gitignore
 
 `.gitignore` 在 `deno publish` 命令中被考虑在内。在 Deno 1.41.2+
-中，你可以通过使用否定的 exclude glob 来选择不排除在 _.gitignore_ 中忽略的文件：
+中，你可以通过使用否定的 exclude glob 来选择不排除 _.gitignore_ 中忽略的文件：
 
 ```title=".gitignore"
 dist/
@@ -475,13 +474,13 @@ dist/
 
 ## JSON 模式
 
-编辑器可以使用 JSON 模式文件提供自动补全功能。该文件已版本化，可在以下位置获取：
+编辑器的自动补全功能可以使用 JSON 模式文件。该文件已版本化，可在以下位置获取：
 https://deno.land/x/deno/cli/schemas/config-file.v1.json
 
 ## 代理
 
 Deno 支持模块下载和 fetch API 的代理。代理配置从
-[环境变量](https://docs.denohub.com/runtime/reference/env_variables/#special-environment-variables)
+[环境变量](https://docs.deno.com/runtime/reference/env_variables/#special-environment-variables)
 中读取：HTTP_PROXY、HTTPS_PROXY 和 NO_PROXY。
 
 如果你使用的是 Windows - 如果未找到环境变量，Deno 会回退到从注册表中读取代理。

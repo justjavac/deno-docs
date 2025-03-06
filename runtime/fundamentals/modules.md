@@ -1,39 +1,41 @@
----
-title: "模块与依赖"
-oldUrl:
-  - /runtime/manual/basics/modules/
-  - /runtime/manual/basics/modules/integrity_checking/
-  - /runtime/manual/basics/modules/module_metadata/
-  - /runtime/manual/basics/modules/publishing_modules/
-  - /runtime/manual/basics/modules/reloading_modules/
-  - /runtime/manual/basics/vendoring/
-  - /runtime/manual/advanced/http_imports/
-  - /runtime/manual/advanced/publishing/dnt/
-  - /runtime/manual/advanced/publishing/
-  - /runtime/manual/examples/manage_dependencies
-  - /runtime/manual/node/cdns.md
-  - /runtime/manual/linking_to_external_code
-  - /runtime/manual/linking_to_external_code/reloading_modules
-  - /runtime/fundamentals/esm.sh
-  - /runtime/manual/basics/import_maps/
-  - /runtime/manual/advanced/private_repositories/
-  - /runtime/reference/private_repositories/
----
+```json
+{
+  "title": "模块与依赖",
+  "oldUrl": [
+    "/runtime/manual/basics/modules/",
+    "/runtime/manual/basics/modules/integrity_checking/",
+    "/runtime/manual/basics/modules/module_metadata/",
+    "/runtime/manual/basics/modules/publishing_modules/",
+    "/runtime/manual/basics/modules/reloading_modules/",
+    "/runtime/manual/basics/vendoring/",
+    "/runtime/manual/advanced/http_imports/",
+    "/runtime/manual/advanced/publishing/dnt/",
+    "/runtime/manual/advanced/publishing/",
+    "/runtime/manual/examples/manage_dependencies",
+    "/runtime/manual/node/cdns.md",
+    "/runtime/manual/linking_to_external_code",
+    "/runtime/manual/linking_to_external_code/reloading_modules",
+    "/runtime/fundamentals/esm.sh",
+    "/runtime/manual/basics/import_maps/",
+    "/runtime/manual/advanced/private_repositories/",
+    "/runtime/reference/private_repositories/"
+  ]
+}
+```
 
 Deno 使用
-[ECMAScript 模块](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules)
+[ECMAScript 模块](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
 作为其默认模块系统，以与现代 JavaScript
 标准保持一致，并促进更高效和一致的开发体验。它是 JavaScript
-模块的官方标准，允许更好的
-tree-shaking、改进的工具集成以及跨不同环境的原生支持。
+模块的官方标准，允许更好的树摇优化、改进的工具集成以及跨不同环境的原生支持。
 
 通过采用 ECMAScript 模块，Deno 确保了与不断发展的 JavaScript
-生态系统的兼容性。对于开发者来说，这意味着一个简化且可预测的模块系统，避免了与旧版模块格式（如
-CommonJS）相关的复杂性。
+生态系统的兼容性。对于开发者来说，这意味着一个简化且可预测的模块系统，避免了与
+CommonJS 等传统模块格式相关的复杂性。
 
 ## 导入模块
 
-在此示例中，`add` 函数从本地的 `calc.ts` 模块导入。
+在这个例子中，`add` 函数从本地的 `calc.ts` 模块中导入。
 
 ```ts title="calc.ts"
 export function add(a: number, b: number): number {
@@ -42,14 +44,14 @@ export function add(a: number, b: number): number {
 ```
 
 ```ts title="main.ts"
-// 导入与此文件相邻的 `calc.ts` 模块
+// 从当前文件旁边的 `calc.ts` 模块导入
 import { add } from "./calc.ts";
 
 console.log(add(1, 2)); // 3
 ```
 
-你可以通过在包含 `main.ts` 和 `calc.ts` 的目录中调用 `deno run main.ts`
-来运行此示例。
+你可以在包含 `main.ts` 和 `calc.ts` 的目录中通过调用 `deno run main.ts`
+来运行这个例子。
 
 使用 ECMAScript 模块时，本地导入说明符必须始终包含完整的文件扩展名，不能省略。
 
@@ -72,17 +74,17 @@ import { say } from "npm:cowsay@1.6.0";
 import { pascalCase } from "https://deno.land/x/case/mod.ts";
 ```
 
-Deno 推荐使用 [JSR](https://jsr.io)，这是现代的 JavaScript
-注册表，用于第三方模块。在那里，你可以找到许多为你的项目精心记录的 ES 模块，包括
-[Deno 标准库](/runtime/fundamentals/standard_library/)。
+Deno 推荐使用 [JSR](https://jsr.io)，这是一个现代的 JavaScript
+注册表，用于第三方模块。在那里，你可以找到许多为你的项目准备的、文档齐全的 ES
+模块，包括 [Deno 标准库](/runtime/fundamentals/standard_library/)。
 
 你可以
-[在此处阅读更多关于 Deno 对 npm 包的支持](/runtime/fundamentals/node/#using-npm-modules)。
+[在这里阅读更多关于 Deno 对 npm 包的支持](/runtime/fundamentals/node/#using-npm-modules)。
 
 ## 管理第三方模块和库
 
-在多个文件中导入模块时，输入带有完整版本说明符的模块名称可能会变得繁琐。你可以通过在
-`deno.json` 文件中的 `imports` 字段集中管理远程模块。我们将此 `imports` 字段称为
+在多个文件中导入模块时，完整版本说明符的输入可能会变得繁琐。你可以通过在
+`deno.json` 文件中的 `imports` 字段集中管理远程模块。我们称这个 `imports` 字段为
 **导入映射**，它基于 [导入映射标准]。
 
 [导入映射标准]: https://github.com/WICG/import-maps
@@ -107,7 +109,7 @@ import { pascalCase } from "cases";
 
 重新映射的名称可以是任何有效的说明符。这是 Deno
 中一个非常强大的功能，可以重新映射任何内容。了解更多关于导入映射的功能
-[在此处](/runtime/fundamentals/configuration/#dependencies)。
+[在这里](/runtime/fundamentals/configuration/#dependencies)。
 
 ## 区分 `deno.json` 中的 `imports` 或 `importMap` 与 `--import-map` 选项
 
@@ -126,9 +128,11 @@ import { pascalCase } from "cases";
 }
 ```
 
+在 `deno.json` 中通过 `importMap` 字段引用的 `import_map.json` 文件的行为与使用
+`--import-map` 选项完全相同，并且需要包含每个模块的两个条目，如上所示。
+
 相比之下，`deno.json` 扩展了导入映射标准。当你在 `deno.json` 中使用 `imports`
-字段或通过 `importMap` 字段引用 `import_map.json`
-文件时，你只需要指定模块说明符，而不需要尾部 `/`：
+字段时，你只需要指定模块说明符，而不需要尾部 `/`：
 
 ```json title="deno.json"
 {
@@ -140,8 +144,9 @@ import { pascalCase } from "cases";
 
 ## 使用 `deno add` 添加依赖项
 
-安装过程通过 `deno add` 子命令变得简单。它会自动将你请求的包的最新版本添加到
-`deno.json` 的 `imports` 部分。
+通过 `deno add`
+子命令，安装过程变得非常简单。它会自动将你请求的包的最新版本添加到 `deno.json`
+的 `imports` 部分。
 
 ```sh
 # 将模块的最新版本添加到 deno.json
@@ -184,7 +189,7 @@ Remove @luca/cases
 
 ## 包版本
 
-可以为导入的包指定一个版本范围。这是通过使用 `@`
+你可以为你导入的包指定一个版本范围。这是通过 `@`
 符号后跟一个版本范围说明符来完成的，并遵循 [semver](https://semver.org/)
 版本控制方案。
 
@@ -200,18 +205,18 @@ Remove @luca/cases
 
 以下是所有可以指定版本或范围的方式的概述：
 
-| 符号      | 描述                                                                                                        | 示例      |
-| --------- | ----------------------------------------------------------------------------------------------------------- | --------- |
-| `1.2.3`   | 确切版本。仅使用此特定版本。                                                                                | `1.2.3`   |
-| `^1.2.3`  | 与版本 1.2.3 兼容。允许不更改最左侧非零数字的更新。<br>例如，`1.2.4` 和 `1.3.0` 是允许的，但 `2.0.0` 不是。 | `^1.2.3`  |
-| `~1.2.3`  | 大约等同于版本 1.2.3。允许更新补丁版本。<br>例如，`1.2.4` 是允许的，但 `1.3.0` 不是。                       | `~1.2.3`  |
-| `>=1.2.3` | 大于或等于版本 1.2.3。允许任何版本 `1.2.3` 或更高。                                                         | `>=1.2.3` |
-| `<=1.2.3` | 小于或等于版本 1.2.3。允许任何版本 `1.2.3` 或更低。                                                         | `<=1.2.3` |
-| `>1.2.3`  | 大于版本 1.2.3。仅允许高于 `1.2.3` 的版本。                                                                 | `>1.2.3`  |
-| `<1.2.3`  | 小于版本 1.2.3。仅允许低于 `1.2.3` 的版本。                                                                 | `<1.2.3`  |
-| `1.2.x`   | 任何在次要版本 1.2 内的补丁版本。例如，`1.2.0`、`1.2.1` 等。                                                | `1.2.x`   |
-| `1.x`     | 任何在主版本 1 内的次要和补丁版本。例如，`1.0.0`、`1.1.0`、`1.2.0` 等。                                     | `1.x`     |
-| `*`       | 允许任何版本。                                                                                              | `*`       |
+| 符号      | 描述                                                                                                          | 示例      |
+| --------- | ------------------------------------------------------------------------------------------------------------- | --------- |
+| `1.2.3`   | 一个确切的版本。只会使用这个特定的版本。                                                                      | `1.2.3`   |
+| `^1.2.3`  | 与版本 1.2.3 兼容。允许不改变最左侧非零数字的更新。<br>例如，`1.2.4` 和 `1.3.0` 是允许的，但 `2.0.0` 不允许。 | `^1.2.3`  |
+| `~1.2.3`  | 大约等同于版本 1.2.3。允许更新补丁版本。<br>例如，`1.2.4` 是允许的，但 `1.3.0` 不允许。                       | `~1.2.3`  |
+| `>=1.2.3` | 大于或等于版本 1.2.3。允许任何 `1.2.3` 或更高的版本。                                                         | `>=1.2.3` |
+| `<=1.2.3` | 小于或等于版本 1.2.3。允许任何 `1.2.3` 或更低的版本。                                                         | `<=1.2.3` |
+| `>1.2.3`  | 大于版本 1.2.3。只允许高于 `1.2.3` 的版本。                                                                   | `>1.2.3`  |
+| `<1.2.3`  | 小于版本 1.2.3。只允许低于 `1.2.3` 的版本。                                                                   | `<1.2.3`  |
+| `1.2.x`   | 任何在次要版本 1.2 内的补丁版本。例如，`1.2.0`，`1.2.1` 等。                                                  | `1.2.x`   |
+| `1.x`     | 任何在主版本 1 内的次要和补丁版本。例如，`1.0.0`，`1.1.0`，`1.2.0` 等。                                       | `1.x`     |
+| `*`       | 允许任何版本。                                                                                                | `*`       |
 
 ## HTTPS 导入
 
@@ -221,7 +226,7 @@ Deno 还支持引用 HTTP/HTTPS URL 的导入语句，可以直接使用：
 import { Application } from "https://deno.land/x/oak/mod.ts";
 ```
 
-或作为 `deno.json` 导入映射的一部分：
+或者作为 `deno.json` 导入映射的一部分：
 
 ```json
 {
@@ -241,12 +246,12 @@ import { Application } from "https://deno.land/x/oak/mod.ts";
 HTTPS 导入在你有小型、通常是单文件的 Deno
 项目时非常有用，这些项目不需要任何其他配置。使用 HTTPS 导入，你可以完全避免使用
 `deno.json`
-文件。然而，不建议在大型应用程序中使用这种导入方式，因为你可能会遇到版本冲突（不同文件使用不同的版本说明符）。
+文件。然而，不建议在大型应用程序中使用这种导入方式，因为你可能会遇到版本冲突（即不同文件使用不同的版本说明符）。
 
 :::info
 
-谨慎使用 HTTPS 导入，并且 **仅从受信任的来源**
-导入。如果服务器被攻陷，它可能会向你的应用程序提供恶意代码。如果你在不同文件中导入不同版本，它们也可能导致版本问题。HTTPS
+谨慎使用 HTTPS 导入，并且只 **从受信任的来源**
+导入。如果服务器被攻破，它可能会向你的应用程序提供恶意代码。如果你在不同的文件中导入不同的版本，它们也可能导致版本问题。HTTPS
 导入仍然受支持，**但我们建议使用包注册表以获得最佳体验。**
 
 :::
@@ -256,14 +261,14 @@ HTTPS 导入在你有小型、通常是单文件的 Deno
 Deno
 提供了覆盖依赖项的机制，使开发者能够在开发或测试期间使用自定义或本地版本的库。
 
-注意：如果你需要缓存和修改依赖项以在构建中使用，请考虑
+注意：如果你需要缓存并在本地修改依赖项以在多个构建中使用，请考虑
 [远程模块的本地化](#vendoring-remote-modules)。
 
 ### 覆盖本地 JSR 包
 
 对于熟悉 Node.js 中 `npm link` 的开发者，Deno 通过 `deno.json` 中的 `patch`
 字段为本地 JSR
-包提供了类似的功能。这允许你在开发期间覆盖依赖项为本地版本，而无需发布它们。
+包提供了类似的功能。这允许你在开发期间覆盖依赖项，而无需发布它们。
 
 示例：
 
@@ -279,8 +284,8 @@ Deno
 
 - `patch` 字段接受包含 JSR
   包或工作区的目录路径。如果你引用工作区中的单个包，整个工作区将被包含。
-- 此功能仅在工作区根目录中有效。在其他地方使用 `patch` 将触发警告。
-- 目前，`patch` 仅限于 JSR 包。尝试覆盖 `npm` 包将导致警告且无效。
+- 此功能仅在工作区根目录中有效。在其他地方使用 `patch` 会触发警告。
+- 目前，`patch` 仅限于 JSR 包。尝试覆盖 `npm` 包将导致警告，但不会生效。
 
 限制：
 
@@ -291,7 +296,7 @@ Deno
 
 ### 覆盖 NPM 包
 
-我们计划支持上述描述的 `patch` 功能的 NPM 包，但在此之前，如果你有
+我们计划支持上述的 `patch` 功能来覆盖 NPM 包，但在此之前，如果你有一个
 `node_modules` 目录，可以使用 `npm link` 来实现相同的效果。这通常通过在
 `deno.json` 文件中设置 `{ "nodeModulesDir": "manual" }` 来完成。另请参阅
 [`node_modules` 文档](/runtime/fundamentals/node/#node_modules)。
@@ -299,7 +304,7 @@ Deno
 ### 覆盖 HTTPS 导入
 
 Deno 还允许通过 `deno.json` 中的 `importMap` 字段覆盖 HTTPS
-导入。此功能在将远程依赖项替换为本地修补版本以进行调试或临时修复时特别有用。
+导入。此功能在调试或临时修复时特别有用，可以用本地修补版本替换远程依赖项。
 
 示例：
 
@@ -319,7 +324,7 @@ Deno 还允许通过 `deno.json` 中的 `importMap` 字段覆盖 HTTPS
 关键点：
 
 - 导入映射中的 `scopes` 字段允许你将特定导入重定向到替代路径。
-- 这通常用于在测试或开发期间将远程依赖项覆盖为本地文件。
+- 这通常用于在测试或开发期间用本地文件覆盖远程依赖项。
 - 导入映射仅适用于项目的根目录。依赖项中的嵌套导入映射将被忽略。
 
 ## 远程模块的本地化
@@ -328,7 +333,7 @@ Deno 还允许通过 `deno.json` 中的 `importMap` 字段覆盖 HTTPS
 CI 服务器或 Docker
 容器中构建项目时特别有用，或者在对远程依赖项进行修补或其他修改时。
 
-Deno 通过 `deno.json` 文件中的设置提供此功能：
+Deno 通过 `deno.json` 文件中的设置提供了此功能：
 
 ```json
 {
@@ -350,8 +355,8 @@ deno install --entrypoint main.ts
 deno run main.ts
 ```
 
-本地化后，你可以使用 `--cached-only` 标志在没有互联网访问的情况下运行
-`main.ts`，该标志强制 Deno 仅使用本地可用的模块。
+在本地化之后，你可以使用 `--cached-only` 标志在没有互联网访问的情况下运行
+`main.ts`，这将强制 Deno 仅使用本地可用的模块。
 
 有关更高级的覆盖，例如在开发期间替换依赖项，请参阅
 [覆盖依赖项](#overriding-dependencies)。
@@ -361,7 +366,7 @@ deno run main.ts
 任何定义了导出的 Deno
 程序都可以作为模块发布。这允许其他开发者导入并在他们自己的项目中使用你的代码。模块可以发布到：
 
-- [JSR](https://jsr.io) - 推荐，原生支持 TypeScript 并自动为你生成文档
+- [JSR](https://jsr.io) - 推荐，原生支持 TypeScript 并自动生成文档
 - [npm](https://www.npmjs.com/) - 使用 [dnt](https://github.com/denoland/dnt)
   创建 npm 包
 - [deno.land/x](https://deno.com/add_module) - 对于 HTTPS 导入，如果可能，请使用
@@ -390,7 +395,7 @@ deno run --reload=jsr:@std/fs my_module.ts
 deno run --cached-only mod.ts
 ```
 
-如果 mod.ts 的依赖树中有任何尚未缓存的依赖项，此操作将失败。
+如果 mod.ts 的依赖树中有任何尚未缓存的依赖项，这将失败。
 
 ## 完整性检查和锁定文件
 
@@ -400,13 +405,13 @@ deno run --cached-only mod.ts
 `deno install --reload` 等命令）。
 
 但如果 `https://some.url/a.ts`
-的内容发生变化怎么办？这可能导致你的生产模块运行与本地模块不同的依赖代码。为了检测这一点，Deno
+的内容发生了变化怎么办？这可能导致你的生产模块运行与本地模块不同的依赖代码。为了检测这一点，Deno
 使用完整性检查和锁定文件。
 
-Deno 使用 `deno.lock` 文件来检查外部模块的完整性。要选择使用锁定文件，可以：
+Deno 使用 `deno.lock` 文件来检查外部模块的完整性。要启用锁定文件，可以：
 
 1. 在当前或祖先目录中创建一个 `deno.json` 文件，这将自动在 `deno.lock`
-   处创建一个附加锁定文件。
+   创建一个附加的锁定文件。
 
    注意，这可以通过在 deno.json 中指定以下内容来禁用：
 
@@ -420,13 +425,8 @@ Deno 使用 `deno.lock` 文件来检查外部模块的完整性。要选择使�
 
 ### 冻结锁定文件
 
-默认情况下，Deno 使用附加锁定文件，其中新依赖项会添加到锁定文件中，而不是报错。
+默认情况下，Deno
+使用附加的锁定文件，其中新的依赖项会添加到锁定文件中，而不是报错。
 
 在某些场景下（例如 CI 管道或生产环境），你可能希望 Deno
-在遇到从未见过的依赖项时报错。要启用此功能，你可以指定 `--frozen` 标志或在
-deno.json 文件中设置以下内容：
-
-```json title="deno.json"
-{
-  "lock": {
-```
+在遇到从未见过的依赖项时报错。要启用此功能
